@@ -23,7 +23,7 @@ Notes about the Code:
 ---------------------
 * Written in TextMate on Mac OS X  <http://macromates.com/>
 * Code is 125 chars wide, tabs at 8, as spaces. Why 125/8? When you View Source in Firefox, 125/8 is the sizes used to
-  display the code (1024x768). Using these sizes makes for good space, promotes less indenting, and views equally Firefox.
-  if you don't like this convention, get used to it. I spent almost a year on/off getting this far, it works.
+  display the code (1024x768). Using these sizes makes for good space, promotes less indenting, and views equally in Firefox.
+  If you don't like this convention, get used to it. I spent almost a year on/off getting this far, it works.
 
 === END OF LINE =============================================================================================================
