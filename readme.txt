@@ -16,7 +16,8 @@ Jax does this by giving the player a 'join key' when they start a game, which th
 who uses the key to join the game. Whilst you could have a lobby system and play against strangers; I don't want to play with
 asshats - the rest of the Internet will happily cater for them. Jax focuses solely on the friend vs. friend experience.
 
-Kroc Camen.
+Please contact me for more information on
+kroccamen@gmail.com
 
 =============================================================================================================================
 Notes about the Code:
