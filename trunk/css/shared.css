@@ -1,0 +1,55 @@
+/* >>>>>>>>>>>>>>>>> this work is licensed under the Creative Commons Attribution-ShareAlike 2.5 license <<<<<<<<<<<<<<<<< */
+/* =======================================================================================================================
+   css/shared.css - styles shared between all the games (chatcol, etc)
+   ======================================================================================================================= */
+
+#body   {width: 642px; max-width: 640px; height: 429px; overflow: hidden;}
+h1      {border-bottom: solid 1px #010801;}
+h1 span {visibility: hidden;}
+
+#shared-gamearea {float: left; width: 512px; height: 384px; overflow: hidden;}
+
+#page-title, #page-user, #page-join, #page-game
+	{display: none; width: 100%; height: 100%; overflow: hidden !important;}
+#page-title {display: block;}
+
+.hv  {position: absolute;}
+.hv1 {display: table; _position: relative; overflow: hidden;}
+.hv2 {_position: absolute; _top: 50%; display: table-cell; vertical-align: middle;}
+.hvt {_position: relative; _top: -50%;}
+
+#system-status        {top: 0; left: 0; width: 640px; height: 429px; background-image: url("../games/images/mask.png");}
+#system-status .hv1   {height: 450px; width: 640px;}
+#system-status-text   {font: normal 11px Arial; text-align: center; color: white;}
+
+#shared-chatcol           {width: 127px; height: 384px; float: left; border-left: solid 1px #010801; background-color: #dada96;}
+#shared-chat              {display: none; font-size: 11px; color: #6E654D;}
+#shared-chat-history      {height: 320px; overflow: auto;}
+#shared-chat p            {padding: 3px 2px 0 2px; margin: 0; font-style: italic; color: #7f7e45;}
+#shared-chat p em         {display: block; float: right;}
+#shared-chat p img        {vertical-align: middle;}
+#shared-chat blockquote   {margin: 0; padding: 0 3px 0 3px;}
+#shared-chat blockquote p {font-style: normal; padding: 0;}
+
+
+#shared-chat-text     {background-color: #393939;}
+#shared-chat-label    {position: absolute; width: 127px; margin-top: 16px; text-align: center; font: italic 10px Tahoma, sans-serif; cursor: text;}
+#shared-chat textarea {width: 125px; height: 42px; margin: 0; padding: 0 0 0 2px; border: 0; border-top: solid 1px #404040;
+                       font-family: Tahoma, sans-serif; font-size: 11px; color: #404040;
+                       background-image: url("../games/images/chatbg.png");}
+#shared-chat-text p   {width: 124px; height: 21px; padding: 0 3px 0 0; margin: 0;
+                       background-image: url("../games/images/barme.png"); text-align: right;}
+
+.chat-them {background-color: #caca86;}
+
+#shared-chat-emote      {cursor: pointer;}
+#shared-chat-emotes     {text-align: center; padding: 2px 0 2px 0; background-color: #171717;}
+#shared-chat-emotes img {padding: 2px; cursor: pointer;}
+
+#bsod        {display: none;}
+.bsod        {position:  absolute; top: 0; left: 0; width: 640px; height: 450px;
+	      text-align: center; background-color: #0000ac; -moz-opacity:  0.9;}
+.bsod p      {padding-top:  175px; font: bold 12px "Courier New", monospace; color: white;}
+.bsod strong {background-color: #ccc; color: #0000ac; padding: 2px 5px 2px 5px; text-transform: uppercase;}
+
+/* === end of line ======================================================================================================= */
