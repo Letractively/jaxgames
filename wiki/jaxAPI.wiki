@@ -6,13 +6,14 @@
   * {f} = Function
   * {o} = Object Literal
   * [a] = Array
+  * "s" = string
   * (n) = Number (any kind)
-  * <c> = Constant, a value to be considered read only to you
+  * 'k' = Constant, a value to be considered read only to you
   * {e} = Javascript Event Object
 
 = {c} Jax =
-== <c> version ==
-== <c> conn_id ==
+== 'k' version ==
+== 'k' conn_id ==
 == {f} open ==
 == {f} connect ==
 == {f} timerStart ==
