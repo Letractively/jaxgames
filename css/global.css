@@ -1,0 +1,21 @@
+/* >>>>>>>>>>>>>>>>> this work is licensed under the Creative Commons Attribution-ShareAlike 2.5 license <<<<<<<<<<<<<<<<< */
+/* =======================================================================================================================
+   css/global.css - the design shared between all pages on the site
+   ======================================================================================================================= */
+
+body, html {height: 100%, width: 100%; padding: 0; margin: 0; border: 0;
+            font: normal 12px Arial, sans-serif;}
+
+p     {padding: 5px; margin: 0;}
+p img {vertical-align: top;}
+
+a img {vertical-align: top; border: 0;}
+
+
+h1 {margin: 0; padding: 14px 0 0 5px; font: bold 24px Arial, sans-serif; height: 30px;
+    background-color: #A02; color: white;}
+
+input[type=text] {font: normal 12px "Courier New", Courier, Monospace;}
+
+
+/* === end of line ======================================================================================================= */
