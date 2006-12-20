@@ -1,0 +1,32 @@
+// >>>>>>>>>>>>>>>>> this work is licensed under the Creative Commons Attribution-ShareAlike 2.5 license <<<<<<<<<<<<<<<<<
+/* =======================================================================================================================
+   js/boot.js - load the libraries needed for the games
+   ======================================================================================================================= */
+/* note: in the distribution version, this page is replaced by a dojo-compressed version of the scripts below merged
+   ----------------------------------------------------------------------------------------------------------------------- */
+//third party libraries:
+//======================
+// Prototype     : extends core javascript facility to reduce the amount of genereal code everywhere
+// Scriptaculous : provides animation and effects
+// json          : turn an array/object in a string and back again - for sending and receiving javascript over AJAX
+
+//my libraries:
+//=============
+// jax.js        : establish a bridge between two computer users to send AJAX back and forth
+// shared.js     : shared code between all the games
+//
+/*document.write(' \
+\t<script type="text/javascript" src="../../js/libs/prototype.js"></script>\n \
+\t<script type="text/javascript" src="../../js/libs/scriptaculous.js?load=effects"></script>\n \
+\t<script type="text/javascript" src="../../js/libs/json.js"></script>\n \
+\t<script type="text/javascript" src="../../js/libs/jax.js"></script>\n \
+\t<script type="text/javascript" src="../../js/shared.js"></script>\n \
+');*/
+
+document.write(' \
+\t<script type="text/javascript" src="../../js/libs/compressed.165.js"></script>\n \
+\t<script type="text/javascript" src="../../js/libs/jax.js"></script>\n \
+\t<script type="text/javascript" src="../../js/shared.js"></script>\n \
+');
+
+//=== end of line ===========================================================================================================
