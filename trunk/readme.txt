@@ -8,13 +8,10 @@ Jax Games uses 'jax', a script to allow player-to-player communication via AJAX 
 about any turn-based game you would like can be implemented using the simple API to connect the two players together and then
 send messages from computer to computer.
 
-Jax Games aims to recreate the fun friend vs. friend games played over MSN Messenger using open source javascript. Jax Games
-specifically does not pit you against some random person on the net and does not have a lobby or other such things. Jax is
-aimed squarely at playing a game with a specific, chosen person (as over IM). Few, if any gaming websites cater for this.
-
 Jax does this by giving the player a 'join key' when they start a game, which they can then IM/e-mail/FedEx to their friend,
 who uses the key to join the game. Whilst you could have a lobby system and play against strangers; I don't want to play with
-asshats - the rest of the Internet will happily cater for them. Jax focuses solely on the friend vs. friend experience.
+asshats - the rest of the Internet will happily cater for them. Jax Games aims to recreate the fun friend vs. friend games
+played over MSN Messenger using open source javascript. Few, if any gaming websites cater for this.
 
 Please contact me for more information on
 kroccamen@gmail.com
@@ -26,5 +23,24 @@ Notes about the Code:
 * Code is 125 chars wide, tabs at 8, as spaces. Why 125/8? When you View Source in Firefox, 125/8 is the sizes used to
   display the code (1024x768). Using these sizes makes for good space, promotes less indenting, and views equally in Firefox.
   If you don't like this convention, get used to it. I spent almost a year on/off getting this far, it works.
+
+Dependencies:
+-------------
+* Prototype 1.50_rc0 or higher <http://prototype.conio.net/> (Provided with Script.aculo.us)
+* Script.aculo.us 1.6 or higher <http://script.aculo.us>
+* A Prototype-compatible version of json.js <http://www.unfocus.com/projects/source/Javascript/json.js> (included with jax)
+
+Compatibility:
+--------------
+* No debugging has been done for IE/Opera yet, that will come when Jax Games is in Beta, or if anybody feels compelled to
+  stress themselves out with IE's inadequacies. I don't have Visual Studio to do proper IE debugging. Please use Firefox /
+  Safari to run the project correctly, and any other browser if you wish to fix for it.
+* Once in Beta I would ideally like to target the following:
+  - IE 6 and above
+  - Firefox 1.0/1.5/2.0/Trunk
+  - Opera 9 and above
+  - Safari [Tiger]
+  This would be limited by Prototype/Script.aculo.us support and bugs of course, but should be attainable.
+
 
 === END OF LINE =============================================================================================================
