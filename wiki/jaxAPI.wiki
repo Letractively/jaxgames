@@ -2,7 +2,7 @@
 #labels Featured,Phase-Deploy
 = key =
   * {c} = Class
-  * {***} = Instance of a class
+  * {+} = Instance of a class
   * {f} = Function
   * {o} = Object Literal
   * [a] = Array
@@ -10,14 +10,14 @@
   * <c> = Constant, a value to be considered read only to you
   * {e} = Javascript Event Object
 
-= Jax =
-== version ==
-== conn_id ==
-== open ==
-== connect ==
-== timerStart ==
-== timerStop ==
-== listenFor ==
-== sendRequest ==
-== sendToQueue ==
-== disconnect ==
+= {c} Jax =
+== <c> version ==
+== <c> conn_id ==
+== {f} open ==
+== {f} connect ==
+== {f} timerStart ==
+== {f} timerStop ==
+== {f} listenFor ==
+== {f} sendRequest ==
+== {f} sendToQueue ==
+== {f} disconnect ==
