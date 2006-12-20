@@ -2,7 +2,7 @@
 #labels Featured,Phase-Deploy
 = key =
   * {c} = Class
-  * {**} = Instance of a class
+  * {***} = Instance of a class
   * {f} = Function
   * {o} = Object Literal
   * [a] = Array
