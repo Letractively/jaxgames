@@ -11,14 +11,14 @@
   * 'k' = Constant, a value to be considered read only to you
   * {e} = Javascript Event Object
 
-= {c} Jax =
-== 'k' version ==
-== 'k' conn_id ==
-== {f} open ==
-== {f} connect ==
-== {f} timerStart ==
-== {f} timerStop ==
-== {f} listenFor ==
-== {f} sendRequest ==
-== {f} sendToQueue ==
-== {f} disconnect ==
+= {c}: Jax =
+== 'k': version ==
+== 'k': conn_id ==
+== {f}: open ==
+== {f}: connect ==
+== {f}: timerStart ==
+== {f}: timerStop ==
+== {f}: listenFor ==
+== {f}: sendRequest ==
+== {f}: sendToQueue ==
+== {f}: disconnect ==
