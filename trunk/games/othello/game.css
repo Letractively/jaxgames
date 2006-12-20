@@ -1,0 +1,34 @@
+/* >>>>>>>>>>>>>>>>> this work is licensed under the Creative Commons Attribution-ShareAlike 2.5 license <<<<<<<<<<<<<<<<< */
+/* =======================================================================================================================
+   games/blacjax/game.css - styles specific for this game
+   ======================================================================================================================= */
+
+h1      {/*background-image: url("images/title.png");*/}
+
+#page-title, #page-user, #page-join
+	{padding: 15px; width: 482px; height: 354px;}
+
+#shared-gamearea {background-color: #008000; background-image: url("../images/felt.jpg");}
+
+#game-board       {text-align: center; padding-top: 32px;}
+#game-board-table {border-collapse: collapse; border: solid 1px black; margin: 0 auto;}
+#game-board .cell {width: 40px; height: 40px; padding: 0; margin: 0; border: solid 1px black;
+                   vertical-align: middle; text-align: center;}
+
+.game-player-status    {display: none; position: absolute; height: 21px; width: 512px; color: white;}
+.game-player-info      {height: 18px; padding: 3px 5px 0 5px; margin: 0;}
+.game-player-msg       {width: 512px; height: 63px; text-align: center; background-image: url("../images/barbg.png");}
+
+#game-status-them      {top: 45px; background-image: url("../images/barthem.png");}
+#game-status-them-info {text-align: right;} 
+
+#game-status-me        {top: 408px; background-image: url("../images/barme.png"); background-repeat: repeat-x;}
+
+
+#game-status      {top: 45px; left: 0; width: 512px; height: 384px;}
+#game-status .hv1 {width: 512px; height: 384px;}
+#game-status-text {font: normal 11px Arial; text-align: center; color: white;
+                   background-image: url("../images/mask.png");}
+                 
+
+/* === end of line ======================================================================================================= */

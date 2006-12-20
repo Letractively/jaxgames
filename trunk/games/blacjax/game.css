@@ -1,0 +1,56 @@
+/* >>>>>>>>>>>>>>>>> this work is licensed under the Creative Commons Attribution-ShareAlike 2.5 license <<<<<<<<<<<<<<<<< */
+/* =======================================================================================================================
+   games/blacjax/game.css - styles specific for this game
+   ======================================================================================================================= */
+
+h1      {background-image: url("images/title.png");}
+
+#page-title, #page-user, #page-join
+	{padding: 15px; width: 482px; height: 354px;}
+
+#shared-gamearea {background-color: #008000; background-image: url("../images/felt.jpg");}
+
+/* === player info ======================================================================================================= */
+.game-player-status     {display: none; position: absolute; height: 21px; width: 512px; color: white;}
+.game-player-info       {height: 18px; padding: 3px 5px 0 5px; margin: 0;}
+.game-player-msg        {width: 512px; height: 63px; text-align: center; background-image: url("../images/barbg.png");}
+
+.jax-game-player-name   {font-weight: bold;}
+
+#game-status-them       {top: 45px; background-image: url("../images/barthem.png");}
+#game-status-them-info  {text-align: right;} 
+#game-status-them-win   {float: left;}
+#game-status-them-score {float: left; margin-left: 8px;}
+
+#game-status-me         {top: 408px; background-image: url("../images/barme.png"); background-repeat: repeat-x;}
+#game-status-me-win     {float: right; text-align: right;}
+#game-status-me-score   {float: right; margin-right: 8px;}
+
+#game-status      {top: 45px; left: 0; width: 512px; height: 384px;}
+#game-status .hv1 {width: 512px; height: 384px;}
+#game-status-text {font: normal 11px Arial; text-align: center; color: white;
+                   background-image: url("../images/mask.png");}
+
+/* === game area ========================================================================================================= */
+#game-deck, #game-face, #game-run, #game-penalty
+                {position: absolute; top: 189px;}
+#game-deck      {left: 5px; width: 71px; height: 96px; background-image: url("../images/cards/back.png");}
+.game-deck-card {position: absolute;}
+#game-face      {left: 436px; width: 71px; height: 96px; background-image: url("../images/cards/place.png");}
+#game-penalty   {left: 5px; width: 71px; padding-top: 30px; font: bold 30px Arial, Helvetica, sans-serif; text-align: center;}
+#game-run       {left: 0; height: 96px; width: 430px;}
+#game-label     {position: absolute; width: 71px; top: 282px; padding: 2px 0 2px 0;
+                 border; solid 1px black; -moz-border-radius: 8px; -webkit-border-radius: 8px;
+                 font: normal 10px Tahoma; color: white; text-align: center; background-color: black; opacity: 0.75;}
+
+/*#temp {position: absolute; top: 189px; left: 84px; width: 344px; height: 96px; background-image: url("../images/mask.png");}
+#temp {position: absolute; top: 302px; left: 8px; width: 497px; height: 96px; background-image: url("../images/mask.png");}*/
+
+#game-nearhand, #game-farhand 
+               {position: absolute; left: 0; width: 512px; text-align: center; z-index: 50;}
+#game-farhand  {top: 76px;}
+#game-nearhand {top: 302px;}
+.card-hover    {top: -5px !important; padding-bottom: 20px; cursor: pointer;}
+.card-disabled {cursor: not-allowed;}
+
+/* === end of line ======================================================================================================= */
