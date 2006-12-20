@@ -1,5 +1,15 @@
-#labels Featured
-#API for using jax.js
+#summary API for using jax.js
+#labels Featured,Phase-Deploy
+= key =
+  * {c} = Class
+  * {*} = Instance of a class
+  * {f} = Function
+  * {o} = Object Literal
+  * [a] = Array
+  * (n) = Number (any kind)
+  * <c> = Constant, a value to be considered read only to you
+  * {e} = Javascript Event Object
+
 = Jax =
 == version ==
 == conn_id ==
