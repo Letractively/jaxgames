@@ -170,9 +170,6 @@ Jax.prototype = {
         sendRequest : function (s_type, o_request, f_onResponse) {
                 if (!f_onResponse) {f_onResponse = Prototype.emptyFunction;}  //default: no callback
                 
-                //if something special case is being sent, display it in the console
-                //?/if (s_type != "jax_check_queue") {debug.info("> " + s_type + " > " + json.stringify(o_request));}
-                
                 o_request.requesttype = s_type;
                 pars = $H(o_request).toQueryString ();
                 
@@ -207,7 +204,7 @@ Jax.prototype = {
                                         }
                                         if (response.error) {
                                                 //fatal server error!
-                                                debug.error (response.error);
+                                                console.error (response.error);
                                                 bsod ();
                                         } else {
                                                 f_onResponse (response);

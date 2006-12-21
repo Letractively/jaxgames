@@ -4,7 +4,7 @@
      ==================================================================================================================== -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
 <head>
-	<title>Blacjax</title>
+	<title>Jax Games</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<!-- === stylesheets ============================================================================================ -->
 	<link rel="stylesheet" type="text/css" href="../../css/global.css" /><!-- styles for all of the site ............ -->

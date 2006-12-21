@@ -1,13 +1,17 @@
-NEW : New feature / code | ADD : Addition/Change to existing code | FIX : Bug/problem fixed
+NEW : New feature/code | ADD : Addition/Change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+21.DEC.06
+    NEW: removed debug object (a wrapper for Firebug), and added Firebug Lite (see boot.js)
+    NEW: window title is now changed to reflect game status (game.setTitle)
+    NEW: Added .name and .version constants to game.js. The version info is debug.info'd on page load
 20.DEC.06
-    NEW: Created Google Code project and uploaded code to SVN
     NEW: This new changelog in the SVN
+    NEW: Created Google Code project and uploaded code to SVN
 19.DEC.06
     NEW: use Insertion methods instead of .innerHTML to put cards into the hand/run to reduce flicker. the .display methods
          have been removed from player*.hand and game.run! cards are now persistent up until being put on the discard
 17.DEC.06
-    FIX: O_o regex broken the . was being treated as any character, and not just .
+    FIX: 'O_o' regex broken, the . was being treated as any character, and not just .
     FIX: if typing in the chatbox when starting a new game, the <chat here> appears
 16.DEC.06
     FIX: >:) not working, being incorectly identified as :) first

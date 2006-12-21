@@ -26,9 +26,12 @@ var playerMe   = new Player (),  //the player on this computer
    ======================================================================================================================= */
 Object.extend (game,
 {
-        board  : new Board ("game-board", 8, 8),  //the game board (and size)
-        pieces : [],                              //the layout of pieces on the board
-        played : 0,                               //number of matches played
+        name    : "Othello",
+        version : "0.1",
+        
+        board   : new Board ("game-board", 8, 8),  //the game board (and size)
+        pieces  : [],                              //the layout of pieces on the board
+        played  : 0,                               //number of matches played
         
         //private storage
         _ : {

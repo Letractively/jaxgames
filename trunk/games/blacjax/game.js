@@ -39,9 +39,12 @@ var playerMe   = new Player ("game-nearhand", true),  //the player on this compu
    ======================================================================================================================= */
 Object.extend (game,
 {
-        pack   : new Pack (true),  //the pack of cards that decks are made from (include Jokers)
-        deck   : new Deck (),      //create a deck of cards
-        played : 0,                //number of matches played
+        name    : "Blacjax",
+        version : "0.5.0", 
+        
+        pack    : new Pack (true),  //the pack of cards that decks are made from (include Jokers)
+        deck    : new Deck (),      //create a deck of cards
+        played  : 0,                //number of matches played
         
         /* OBJECT > queue : when you receive ajax calls for cards the opponent clicked on, queue them for processing
            =============================================================================================================== */
@@ -127,9 +130,7 @@ Object.extend (game,
                 $("game-status-them").style.display = "block";
                 
                 //clear any cards on the table
-                this.run.clear ();
-                playerMe.hand.clear ();
-                playerThem.hand.clear ();
+                [this.run, playerMe.hand, playerThem.hand].invoke("clear");
                 
                 //if you're going first..
                 if (b_mefirst) {
@@ -179,6 +180,8 @@ Object.extend (game,
         /* > playTurn : take your turn
            =============================================================================================================== */
         playTurn : function () {
+                //set the chrome title
+                this.setTitle ("Your turn! - " + playerMe.name + " v. " + playerThem.name + " - ");
                 //clear the "other player's turn" message on screen if it's there
                 this.setPlayerStatus ();
                 
@@ -295,6 +298,8 @@ Object.extend (game,
                                 //was sent to declare which card, and the other player will run this same function,
                                 //pre-empting actions and ending up in this same place, but their go
                                 game.setPlayerStatus ("<p>Other Player's Turn, Please Wait&hellip;</p>");
+                                //set the chrome title
+                                game.setTitle ("Their turn - " + playerMe.name + " v. " + playerThem.name + " - ");
                                 
                                 //in the case that the opponent put down an Eight, Ace or Joker, you'll arrive here. they
                                 //will have placed another card, which will have been added to the queue. now that the
@@ -338,14 +343,16 @@ Object.extend (game,
                 //increase the number of games played
                 game.played ++;
                 if (b_winner) {
+                        this.setTitle ("YOU WIN! " + playerMe.name + " v. " + playerThem.name + " - ");
                         game.setPlayerStatus ("<p>YOU WIN<br />" + html);
                 } else {
+                        this.setTitle ("YOU LOSE! " + playerMe.name + " v. " + playerThem.name + " - ");
                         game.setPlayerStatus ("<p>YOU LOSE<br />" + html);
                 }
                 //update the player info display
-                winner.wins++;
-                $("game-status-me-wins").innerHTML     = playerMe.wins;
-                $("game-status-them-wins").innerHTML   = playerThem.wins;
+                winner.wins ++;
+                $("game-status-me-wins").innerHTML   = playerMe.wins;
+                $("game-status-them-wins").innerHTML = playerThem.wins;
                 
                 //listen out for the resign signal from the other person
                 /*jax.listenFor("jax_disconnect", function(o_response) {
