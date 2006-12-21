@@ -2,7 +2,7 @@
 /* =======================================================================================================================
    js/boot.js - load the libraries needed for the games
    ======================================================================================================================= */
-/* note: in the distribution version, this page is replaced by a dojo-compressed version of the scripts below merged
+/* note: in the distribution version, this page is replaced by a dojo-compressed version of the merged scripts below
    ----------------------------------------------------------------------------------------------------------------------- */
 //third party libraries:
 //======================
@@ -28,5 +28,11 @@ document.write(' \
 \t<script type="text/javascript" src="../../js/libs/jax.js"></script>\n \
 \t<script type="text/javascript" src="../../js/shared.js"></script>\n \
 ');
+//if Firebug is not installed in Firefox, use Firebug Lite
+//in the compressed distibution, firebugx.js would be included instead to ignore the console.* calls
+//therefore you can librarly use Firebug features in the code (except 'debugger();') without breaking the distribution
+if (!("console" in window) || !("firebug" in console)) {
+        document.write ('\t<script type="text/javascript" src="../../js/libs/firebug/firebug.js"></script>\n');
+}
 
 //=== end of line ===========================================================================================================

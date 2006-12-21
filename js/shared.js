@@ -59,31 +59,39 @@ var game = {
                                         playerMe.icon = "user";
                                         //first function: onGameInit. when the game starts, but the other player has not yet
                                         //joined, display the code for the other player to use to join with
-                                        game.setSystemStatus('<p>Copy the key code below and give it<br />to your friend so'+
+                                        this.setSystemStatus('<p>Copy the key code below and give it<br />to your friend so'+
                                         ' that they can join the game</p><p><input type="text" readonly="readonly" size="6"'+
-                                        ' value="' + jax.conn_id + '" /></p><p><br />Waiting for the other player to join'+
+                                        ' value="' + jax.conn_id + '" /></p><p><br />Waiting for the other player to join'  +
                                         '...</p><p><img src="../images/waiting.gif" width="16" height="16" alt="Waiting..."'+
                                         ' /></p>');
+                                        //set the chrome title
+                                        this.setTitle (jax.conn_id + " - ");
                                         
                                 } else {
                                         //!/start game or nickname failed
                                         enableNicknameBox(true);
                                 }
 
-                        }, function(o_response){  //-------------------------------------------------------------------------
+                        }.bind(this), function(o_response){  //--------------------------------------------------------------
                                 //second function: onGameStart. when the other player joins the game
                                 
                                 //the other player has joined the game.
                                 playerThem.name = o_response.data.name;
                                 playerThem.icon = o_response.data.icon;
                                 
-                                this.start();
+                                //set the chrome title
+                                this.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
+                                //start the game
+                                this.start ();
+                                
                         }.bind(this));
                         
                 } else {  //-------------------------------------------------------------------------------------------------
-                        this.setSystemStatus("<p>Joining Game</p><p>Please Wait&hellip;</p>");
+                        this.setTitle ("Joining Game... - ");
+                        this.setSystemStatus ("<p>Joining Game</p><p>Please Wait&hellip;</p>");
+                        
                         //connect to the other player
-                        jax.connect($F("join-key"), {        //the connection key the user pasted into the text box
+                        jax.connect ($F("join-key"), {       //the connection key the user pasted into the text box
                                 name : $F("user-nickname"),  //your nickname to send to the other player
                                 icon : "user_red"            //!/your chosen icon
                         }, function(o_response){
@@ -93,7 +101,11 @@ var game = {
                                 playerThem.name = o_response.data.name;
                                 playerThem.icon = o_response.data.icon;
                                 
-                                this.start();
+                                //set the chrome title
+                                this.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
+                                //start the game
+                                this.start ();
+                                
                         }.bind(this));
                 }
         },
@@ -143,7 +155,7 @@ var game = {
            =============================================================================================================== */
         setSystemStatus : function(s_html) {
                 var e = $("system-status"),  //reference to the element containing the message
-                    v = e.visible()          //if that element is visible or not
+                    v = e.visible ()         //if that element is visible or not
                 ;
                 if (s_html && v) {
                         //if the message is already visible, just update the text without animating
@@ -155,16 +167,24 @@ var game = {
                                 from        : (s_html?0:1),
                                 to          : (s_html?1:0),
                                 queue       : 'end',
-                                beforeStart : function(){
+                                beforeStart : function () {
                                         //before starting the animation, change the html
-                                        if(s_html){$("system-status-text").innerHTML = s_html; e.show();}
+                                        if (s_html) {$("system-status-text").innerHTML = s_html; e.show ();}
                                 },
-                                afterFinish : function(){
+                                afterFinish : function () {
                                         //hide and blank
-                                        if(!s_html){e.hide(); $("system-status-text").innerHTML = "";}
+                                        if (!s_html) {e.hide (); $("system-status-text").innerHTML = "";}
                                 }
                         });
                 }
+        },
+        
+        /* > setTitle : change the document title
+           ===============================================================================================================
+           params * s_title : the text to display in the title. the game's name is automatically appended
+           =============================================================================================================== */
+        setTitle : function (s_title) {
+                document.title = (game.name) ? s_title + game.name : game.name;
         }
 };
 
@@ -302,14 +322,14 @@ game.chat = {
            =============================================================================================================== */
         addMessage : function (s_name, s_icon, s_msg) {
                 //get the timestamp
-                var now       = new Date(),
-                    hours     = now.getHours(),
-                    minutes   = now.getMinutes(),
-                    timestamp = (hours>12?hours-12:hours)+":"+(minutes<10?"0":"")+minutes,
-                    timeid    = now.getTime()
+                var now       = new Date (),
+                    hours     = now.getHours (),
+                    minutes   = now.getMinutes (),
+                    timestamp = (hours > 12 ? hours - 12 : hours) + ":" + (minutes < 10 ? "0" : "") + minutes,
+                    timeid    = now.getTime ()
                 ;
                 //insert emoticon images in the message
-                s_msg = s_msg.escapeHTML();
+                s_msg = s_msg.escapeHTML ();
                 this.emotes.each (function(s_emote, n_index){
                         //replace the emote with the image
                         var emote = this.emotes[n_index];
@@ -329,7 +349,7 @@ game.chat = {
                                         '</strong></p><blockquote><p>'+s_msg+'</p></blockquote></div>'
                 );
                 //animate the message appearing (and scroll down to meet it)
-                new Effect.SlideDown("chat-"+timeid, {duration: 0.3, afterUpdate: function(){
+                new Effect.SlideDown ("chat-"+timeid, {duration: 0.3, afterUpdate: function(){
                         //scroll to the bottom of the chat history
                         e.scrollTop = e.scrollHeight;
                 }, afterFinish: function(){
@@ -351,15 +371,15 @@ game.events = {
                     perc   = ((320-height) / 320) * 100
                 ;
                 new Effect.Scale($("shared-chat-history"), (this.alt=="open"?perc:100), {
-                        scaleFrom    : (this.alt=="open"?100:perc),
+                        scaleFrom    : (this.alt == "open" ? 100 : perc),
                         duration     : 0.3,
                         scaleX       : false,                  //do not scale width
                         scaleContent : false,                  //do not scale insides
                         scaleMode    : {originalHeight: 320},  //base reference for %
                         afterFinish  : function(){
                                 var e = $("shared-chat-emote")
-                                e.title = (e.alt=="open") ? "Click to hide emotes" : "Click to show emotes";
-                                e.alt   = (e.alt=="open") ? "close" : "open";
+                                e.title = (e.alt == "open") ? "Click to hide emotes" : "Click to show emotes";
+                                e.alt   = (e.alt == "open") ? "close" : "open";
                         }
                 });
         },
@@ -368,11 +388,11 @@ game.events = {
            =============================================================================================================== */
         chatEmoteClick : function(){
                 var alt = this.alt;
-                game.chat.emotes.each(function(o_emote){
+                game.chat.emotes.each (function(o_emote){
                         if (o_emote.symbol == alt) {
                                 $("shared-chat-input").value += " " + o_emote.symbol + " ";
-                                $("shared-chat-input").focus();
-                                game.events.chatEmotesShow($("shared-chat-emote"));
+                                $("shared-chat-input").focus ();
+                                game.events.chatEmotesShow ($("shared-chat-emote"));
                         }
                 }); 
         }
@@ -382,42 +402,30 @@ game.events = {
    > when the page finishes loading all code...
    ======================================================================================================================= */
 Event.observe(window, 'load', function(){
+        //put the version info in the log
+        console.info ("Welcome to Jax Games | "+game.name+": "+game.version+" ["+Date()+"]\n"+
+                      "jax: "+jax.version+" - Script.aculo.us: "+Scriptaculous.Version+" - Prototype: "+Prototype.Version+"\n"
+        );
+        //change the chrome title (game.name is automatically appended)
+        game.setTitle ("Welcome to ");
         //hide the loading page and display the game's title screen
-        game.setSystemStatus();
+        game.setSystemStatus ();
         //firefox remembers the values in fields, even after refreshing, clear the chat box
         $("shared-chat-input").value = "";
         //run the load function defined in game.js for the game to handle some on load procedures of it's own
         game.load();
 });
 
-//listen out for the disconnect message when the other player leaves the game
+/* =======================================================================================================================
+   jax_disconnect < listen out for the disconnect message when the other player leaves the game
+   ======================================================================================================================= */
 jax.listenFor("jax_disconnect", function(o_response) {
         //if the player closed the window...
-        if (o_response.data.reason == "unload") {game.setSystemStatus(playerThem.name + " left the game");}
-});
-
-
-/* =======================================================================================================================
-   OBJECT debug : logging and debugging via the Firefox firebug extension (if present)
-   ======================================================================================================================= */
-debug = {
-        //logging functions in Firebug
-        log   : function(s_msg) {if (this.firebug()) {console.log(s_msg); }},
-        info  : function(s_msg) {if (this.firebug()) {console.info(s_msg);}},
-        warn  : function(s_msg) {if (this.firebug()) {console.warn(s_msg);}},
-        error : function(s_msg) {
-                if (jax) {jax.stopTimer();}
-                if (this.firebug()) {console.error(s_msg);} else {alert("Error: " + s_msg);}
-        },
-        
-        /* firebug : return true/false if firebug Firefox extension is present
-           =============================================================================================================== */
-        firebug : function() {
-                //Safari and IE have console objects (and console may have been defined by another script),
-                //check if console is available, and that it's Firebug there
-                return (typeof console != "undefined") ? (typeof console.debug != "undefined") : false;
+        if (o_response.data.reason == "unload") {
+                game.setTitle (playerThem.name + " left the game - ");
+                game.setSystemStatus (playerThem.name+" left the game");
         }
-};
+});
 
 function showStartGame() {
         //enable the nickname textbox as Gecko will keep it disabled if you refesh the page
@@ -459,7 +467,7 @@ function enableNicknameBox (b_enabled) {
 
 function bsod(message, url, line) {
         document.getElementById("jax-bsod").style.display = "block";
-        debug.warning(line + ": " + message);
+        console.warning(line + ": " + message);
         return true;
 }
 //!/window.onerror = bsod;
