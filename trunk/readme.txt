@@ -29,6 +29,7 @@ Dependencies:
 * Prototype 1.50_rc0 or higher <http://prototype.conio.net/> (Provided with Script.aculo.us)
 * Script.aculo.us 1.6 or higher <http://script.aculo.us>
 * A Prototype-compatible version of json.js <http://www.unfocus.com/projects/source/Javascript/json.js> (included with jax)
+* Firebug Lite <http://getfirebug.com/lite.html>
 
 Compatibility:
 --------------
