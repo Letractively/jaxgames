@@ -1,6 +1,8 @@
 NEW : New feature/code | ADD : Addition/Change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 22.DEC.06
+    FIX: "preempt failed" bug. When you took a penalty, but still had no playable cards
+    FIX: Some overlapping problems
     ADD: Prempt before checking for win - if the player puts down a 2/BJ as their last card, and the opponent has another
          2/BJ, then the penalty must be taken. Also if you put down a 2/BJ as last card, and the opponent places a Red Jack,
          the penalty is cancelled; then the winner is decided (can be opponent, if red jack was their last card)
