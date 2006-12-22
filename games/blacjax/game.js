@@ -46,6 +46,14 @@ Object.extend (game,
         deck    : new Deck (),      //create a deck of cards
         played  : 0,                //number of matches played
         
+        /* > load : called for you on page load (see element)
+           =============================================================================================================== */
+        load : function () {
+                //write out all the cards to the page to load the images ready for when they need to appear. this reduces
+                //flicker as the card images are cached and do not have to load on each new appearance
+                game.pack.cache ();
+        },
+        
         /* OBJECT > queue : when you receive ajax calls for cards the opponent clicked on, queue them for processing
            =============================================================================================================== */
         queue  : {
@@ -63,11 +71,6 @@ Object.extend (game,
                 opponentCardClick : function (s_card) {
                         //pluck the card from their hand, and move it onto the run
                         playerThem.hand.useCard (s_card, function(s_card){
-                                //their last card? you lost!
-                                if (!playerThem.hand.cards.length) {
-                                        game.end (false);
-                                        return true;
-                                }
                                 //decide course of action:
                                 //if the card played was a Two or Black Jack, the opponent will have to attack or defend
                                 if (game.pack.isArmed(s_card)) {
@@ -96,15 +99,7 @@ Object.extend (game,
                         });
                 }
         }, //end game.queue <
-        
-        /* > load : called for you on page load (see element)
-           =============================================================================================================== */
-        load : function () {
-                //write out all the cards to the page to load the images ready for when they need to appear. this reduces
-                //flicker as the card images are cached and do not have to load on each new appearance
-                game.pack.cache ();
-        },
-        
+                
         /* > start : begin playing
            ===============================================================================================================
            params * b_mefirst : who begins play (yourself, or the opponent)
@@ -112,7 +107,7 @@ Object.extend (game,
            =============================================================================================================== */
         start : function (b_mefirst, n_cards) {
                 if (b_mefirst == null) {b_mefirst = this.host;}  //default: host goes first
-                if (!n_cards)          {n_cards   = 7;}          //default: 7 cards each
+                if (!n_cards)          {n_cards   = 1;}          //default: 7 cards each
                 
                 //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
                 //entering their name / join key, game.connect is called. when a connection is established between the two
@@ -129,6 +124,8 @@ Object.extend (game,
                 $("jax-game-p2icon").src = "../images/icons/" + playerThem.icon + ".png";
                 $("game-status-them").style.display = "block";
                 
+                this.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
+                
                 //clear any cards on the table
                 [this.run, playerMe.hand, playerThem.hand].invoke("clear");
                 
@@ -137,6 +134,7 @@ Object.extend (game,
                         //prepare a new deck. the person who is going first shuffles a deck of cards and sends the order to
                         //the other player so that both players are playing off of the same order of cards
                         this.deck.cards.clear ();
+                        //note: if you want to setup a fake order of cards for forcing order of play, do it here
                         this.deck.addPack (
                                 this.pack,  //which pack to use in the deck
                                 1,          //add one pack to the deck
@@ -220,83 +218,89 @@ Object.extend (game,
            params * b_self : if you or them should be checked
            =============================================================================================================== */
         preempt : function (b_self) {
-                //this function is a 'switch box'. it is small and simple, but can confuse the hell out of you.
+                //this function is a 'switch box'. it is small and simple, but can confuse the hell out of you
                 
-                //the game used to send a signal to the other player at the end of each turn. whilst very simple to do, this
-                //was very slow. the opponent would have to wait for all your animation to finish before switching players.
-                //secondly, if you could not place a card and had to draw one instead, the opponent would have to wait until
-                //you had drawn the card before they could be known aware of it. in the situation where neither player
-                //could draw a card several times in a row, there would be a massive wait as the game switched from player
-                //to player only after each card was drawn.
-                
-                //to speed the gameplay up a lot, a signal is sent to the opponent as soon as you click on a card. each 
-                //player's computer will then run this function to determine the outcome of the chosen card - being:
-                // 1.  you / they placed a combo card (Eight, Ace or Joker), and will go again
-                // 2a. you / they have no playable cards, draw a card
-                // 2b. there is a penalty, you / they have no playable cards, take the penalty
-                // 3.  you / they played a valid card, now other person's go
-                
-                //in the case of 2a, or 2b, the function will call itself again, but assessing the opposite player. this 
-                //means that when neither player has a playable card, several times in a row, cards are automatically drawn
-                //without having to wait for the opposite player's computer to tell you so
-                //-----------------------------------------------------------------------------------------------------------
+                /* the game used to send a signal to the other player at the end of each turn. whilst very simple to do, this
+                   was very slow. the opponent would have to wait for all your animation to finish before switching players.
+                   secondly, if you could not place a card and had to draw one instead, the opponent would have to wait until
+                   you had drawn the card before they could be known aware of it. in the situation where neither player
+                   could draw a card several times in a row, there would be a massive wait as the game switched from player
+                   to player only after each card was drawn
+                *//*
+                   to speed the gameplay up a lot, a signal is sent to the opponent as soon as you click on a card. each 
+                   player's computer will then run this function to determine the outcome of the chosen card - being:
+                   + 1.  you / they placed a combo card (Eight, Ace or Joker), and will go again
+                   + 2a. you / they have no playable cards, draw a card
+                   + 2b. there is a penalty, you / they have no playable cards, take the penalty
+                   + 3.  you / they played a valid card, now other person's go
+                *//*
+                  in the case of 2a, or 2b, the function will call itself again, but assessing the opposite player. this 
+                  means that when neither player has a playable card, several times in a row, cards are automatically drawn
+                  without having to wait for the opposite player's computer to tell you so
+                //-------------------------------------------------------------------------------------------------------- */
                 
                 var player   = (b_self) ? playerMe : playerThem,  //the primary person being referred to
                     cards    = player.hand.playableCards (),      //which cards in the hand are playable
-                    armedrun = this.run.armed ()                  //if the run is topped by a Black Jack or Two
+                    armedrun = this.run.armed (),                 //if the run is topped by a Black Jack or Two
+                    count    = (armedrun ? this.run.penalty : 1)  //if there's a penalty, take that many cards
                 ;
                 
-                //if there's a penalty waiting (because of an armed run), that many cards will be taken instead of one
-                var count = (armedrun ? this.run.penalty : 1);
-                
-                //if you put down an Eight, Ace or Joker, it is a combo card, you may have another go
-                if (b_self && this.run.combo ()) {  //------------------------------------------------------------------------
-                        //if you have no playable cards to do so (e.g. put down an Ace of Spades, but have no more Spades) 
+                //an Eight, Ace or Joker was put down, it is a combo card, have another go:
+                if (b_self && this.run.combo ()) {  //-----------------------------------------------------------------------
+                        //if no playable cards to do so (e.g. put down an Ace of Spades, but have no more Spades)...
                         if (!cards.length) {
-                                //take a card from the deck
-                                player.hand.takeCard (count, function(){
-                                        //file the cards from the run onto the discard pile
-                                        game.run.fileCards (function(){
-                                                //it'll be the other player's go - check if they have any playable cards
-                                                game.preempt (!b_self);
-                                        });
-                                });
+                                //take a card from the deck, file the cards from the run onto the discard pile
+                                player.hand.takeCard (count, function(){ game.run.fileCards (function(){
+                                        //it'll be the other player's go - check if they have any playable cards
+                                        game.preempt (!b_self);
+                                }); });
                         } else {
-                                //else, you have a playable card, have your go
+                                //else, there is a playable card, have your go
                                 game.playTurn ();
                         }
+                                
+                } else if (!this.run.combo () && !armedrun &&
+                           (!playerMe.hand.cards.length || !playerThem.hand.cards.length)
+                ) {  //------------------------------------------------------------------------------------------------------
+                        /* either person has no cards left, and there is no continuation (armed / combo cards):
+                           there are some complex rules about the last card put down (to win the game)
+                           
+                           + if you put down a Black Jack or a Two as your last card, play switches to the opponent,
+                             > if they put down a Red Jack, the penalty is cancelled
+                               + if that was their last card, they win, otherwise you win
+                             > if they put down a Black Jack or Two you must take the penalty and continue playing
+                               + if that was their last card, they win
+                             > if they have no Red/Black Jack or Two then they take the penalty and you still win
+                           + if you put down a Joker, Ace or Eight as your last card you must take another card (as these
+                             cards must always be followed up by placing another card, or taking when no cards are playable)
+                        */
+                        game.end (!b_self);
                         
                 } else if (!cards.length) {  //------------------------------------------------------------------------------
                         //the player has no playable cards to use, preempt them taking the penalty / picking up a card, to
                         //save having to wait for a message to confirm the obvious from the opponent
-                        player.hand.takeCard (count, function(){
-                                //file the cards from the run onto the discard pile
-                                game.run.fileCards (function(){
-                                        if (armedrun) {
-                                                //if you take a penalty, it's your go
-                                                if (b_self) {
-                                                        game.playTurn ();
-                                                } else {
-                                                        //otherwise it's their go, premept if they have any playable cards
-                                                        game.preempt (b_self);
-                                                }
+                        player.hand.takeCard (count, function(){ game.run.fileCards (function(){
+                                if (armedrun) {
+                                        //if you took the penalty, it's your go
+                                        if (b_self) {
+                                                if (!playerThem.hand.cards.length) {game.end (false); return false}
+                                                game.playTurn ();
                                         } else {
-                                                //when someone takes a card, check if the other player can play too
-                                                game.preempt (!b_self);
+                                                //otherwise it's their go, premept if they have any playable cards
+                                                game.preempt (b_self);
                                         }
-                                });
-                                
-                        });
+                                } else {
+                                        //when someone takes a card, check if the other player can play too
+                                        game.preempt (!b_self);
+                                }
+                        }); });
                         
                 } else {  //-------------------------------------------------------------------------------------------------
-                        //there is a playable card; if this is you, it's your go, if not it's their go...
+                        //there is a playable card; if this is you - it's your go, if not it's their go...
                         if (b_self) {
                                 game.playTurn ();
                         } else {
-                                //change your display to say it's their turn. important note: no message needs to be sent to
-                                //the other player to say it's their turn, because as soon as you chose your card a message
-                                //was sent to declare which card, and the other player will run this same function,
-                                //pre-empting actions and ending up in this same place, but their go
+                                //change your display to say it's their turn
                                 game.setPlayerStatus ("<p>Other Player's Turn, Please Wait&hellip;</p>");
                                 //set the chrome title
                                 game.setTitle ("Their turn - " + playerMe.name + " v. " + playerThem.name + " - ");
@@ -516,11 +520,6 @@ Object.extend (game.events,
                 });
                 //take the chosen card out of the hand, and move it onto the run
                 playerMe.hand.useCard (cardname, function(s_card){
-                        //last card? you've won!
-                        if (!playerMe.hand.cards.length) {
-                                game.end (true);
-                                return true;
-                        }
                         //decide course of action:
                         //a: if armed, switch players
                         //b: if a combo, let the player continue
@@ -530,7 +529,6 @@ Object.extend (game.events,
                                 game.run.updatePenalty (
                                         game.run.penalty + (game.pack.value (s_card) == 2 ? 2 : 5)
                                 );
-                                //?/game.run.display();
                                 game.preempt (false);
 
                         } else if (game.pack.isCombo (s_card)) {

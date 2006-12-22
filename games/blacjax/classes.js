@@ -108,8 +108,6 @@ Hand.prototype = {
                                 $("game-deck").innerHTML = "";
                                 //if there's a penalty, take one from the penalty total
                                 if (game.run.penalty) {game.run.updatePenalty (game.run.penalty-1);}
-                                //display the new hand
-                                //?/this.display ();
                                 //more cards to draw?
                                 if (n_count > 1) {
                                         //take another card
