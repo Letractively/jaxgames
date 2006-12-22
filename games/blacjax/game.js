@@ -107,7 +107,7 @@ Object.extend (game,
            =============================================================================================================== */
         start : function (b_mefirst, n_cards) {
                 if (b_mefirst == null) {b_mefirst = this.host;}  //default: host goes first
-                if (!n_cards)          {n_cards   = 2;}          //default: 7 cards each
+                if (!n_cards)          {n_cards   = 7;}          //default: 7 cards each
                 
                 //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
                 //entering their name / join key, game.connect is called. when a connection is established between the two
