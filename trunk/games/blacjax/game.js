@@ -107,7 +107,7 @@ Object.extend (game,
            =============================================================================================================== */
         start : function (b_mefirst, n_cards) {
                 if (b_mefirst == null) {b_mefirst = this.host;}  //default: host goes first
-                if (!n_cards)          {n_cards   = 7;}          //default: 7 cards each
+                if (!n_cards)          {n_cards   = 2;}          //default: 7 cards each
                 
                 //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
                 //entering their name / join key, game.connect is called. when a connection is established between the two
@@ -135,6 +135,7 @@ Object.extend (game,
                         //the other player so that both players are playing off of the same order of cards
                         this.deck.cards.clear ();
                         //note: if you want to setup a fake order of cards for forcing order of play, do it here
+                        //?/this.deck.cards = ["AS", "4H", "5H", "2S", "3S", "6H", "7H", "3D", "4D", "5D"].reverse();
                         this.deck.addPack (
                                 this.pack,  //which pack to use in the deck
                                 1,          //add one pack to the deck
@@ -205,12 +206,6 @@ Object.extend (game,
                                 e.onclick     = game.events.cardClick;      //when you click the card you want to play
                         }
                 });
-                
-                //if no cards are playable...
-                if (!playable_cards.length) {
-                        alert ("preempt failed");
-                        game.preempt (true);
-                }
         },
         
         /* > preempt : switch players, but preempt certain actions (penalty / pickup cards)
@@ -281,10 +276,11 @@ Object.extend (game,
                         //save having to wait for a message to confirm the obvious from the opponent
                         player.hand.takeCard (count, function(){ game.run.fileCards (function(){
                                 if (armedrun) {
-                                        //if you took the penalty, it's your go
+                                        //if you took the penalty, it's your go (preempt for the rare occurance of picking
+                                        //up cards, yet not having any playable ones afterwards)
                                         if (b_self) {
                                                 if (!playerThem.hand.cards.length) {game.end (false); return false}
-                                                game.playTurn ();
+                                                game.preempt (b_self);
                                         } else {
                                                 //otherwise it's their go, premept if they have any playable cards
                                                 game.preempt (b_self);
