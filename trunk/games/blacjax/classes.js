@@ -177,7 +177,7 @@ Hand.prototype = {
                         game.run.cards.each (function(s_card,n_index){
                                 //assign an animation to each card
                                 $("game-run-"+s_card).style.zIndex = n_index + 1;
-                                var move_to = parseInt($("game-run-"+s_card).getStyle("left")) - cardpos[n_index];
+                                var move_to = cardpos[n_index] - parseInt($("game-run-"+s_card).getStyle("left"));
                                 new Effect.MoveBy ('game-run-'+s_card, 0, move_to);
                         }.bind(this));
                 }

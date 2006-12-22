@@ -1,6 +1,7 @@
 NEW : New feature/code | ADD : Addition/Change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 22.DEC.06
+    FIX: when there was five or more cards on the run they slid the wrong way to make room for the new card
     FIX: "preempt failed" bug. When you took a penalty, but still had no playable cards
     FIX: Some overlapping problems
     ADD: Prempt before checking for win - if the player puts down a 2/BJ as their last card, and the opponent has another
