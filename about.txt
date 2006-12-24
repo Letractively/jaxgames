@@ -30,6 +30,7 @@ Dependencies:
 * Script.aculo.us 1.6 or higher <http://script.aculo.us>
 * A Prototype-compatible version of json.js <http://www.unfocus.com/projects/source/Javascript/json.js> (included with jax)
 * Firebug Lite <http://getfirebug.com/lite.html>
+* jax (part of this project, but a reusable script)
 
 Compatibility:
 --------------
@@ -41,7 +42,32 @@ Compatibility:
   - Firefox 1.0/1.5/2.0/Trunk
   - Opera 9 and above
   - Safari [Tiger]
-  This would be limited by Prototype/Script.aculo.us support and bugs of course, but should be attainable.
+  This would be limited by Prototype/Scriptaculous support and bugs of course, but should be attainable.
 
+Acknowledgements:
+-----------------
+Without standing on the shoulders of these giants, this project would not have been possible.
+Many thanks go to these people, and their contributions:
+
+* The Mozilla Foundation, Mozilla Firefox <http://getfirefox.com>
+* Joe Hewitt <http://joehewitt.com> Firebug, Firebug Lite <http://getfirebug.com> 
+* Allan Odgaard, TextMate <http://macromates.com>
+* Sam Stephenson, Prototype javascript framework <http://prototype.conio.net>
+* Thomas Fuchs <http://mir.aculo.us> Scriptaculous javascript framework <http://script.aculo.us>
+* The blogger of unfocus.com for Prototype-compatible json.js <http://unfocus.com/projects/source/Javascript/json.js>
+* Jon Jensen, SQLiteDB: a PHP class for SQLite <http://code.jenseng.com/db/>
+* The PHP crew, Hypertext Preprocessor <http://php.net>
+
+* DarkCryst, SACK <http://twilightuniverse.com/resources/code/sack/> no longer used, but was integral to getting this far
+* Andrea Giammarchi, PHPSerializer <http://devpro.it/javascript_id_102.html> no longer used, but was integral early on
+
+* William Hollister, the original concept
+* Clint Franklin <http://theraje.com> testing, art, support
+* electricnet <http://electricnet.deviantart.com/> testing, support
+* Stacey W <http://staceyw.deviantart.com> testing, support
+* zeros-elipticus <http://zeros-elipticus.deviantart.com> support
+
+If you've contributed to the SVN, please add your name and URL/email below, thanks!
+*
 
 === END OF LINE =============================================================================================================
