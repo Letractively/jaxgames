@@ -58,7 +58,7 @@ function main () {
                 var end     = new Date(),
                     elapsed = Math.floor((end.getTime() - start.getTime()) / 1000)
                 ;
-                print ("  finished! ("+elapsed+"s "+codeComp.length+"/"+total+" "+Math.floor((codeComp.length/total)*100)+"%)");
+                print ("  finished! ("+elapsed+"s "+codeComp.length+" "+Math.floor((codeComp.length/total)*100)+"%)");
         }
 }
 
