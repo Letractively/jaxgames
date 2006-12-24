@@ -1,24 +1,46 @@
 #summary API for using jax.js
 #labels Featured,Phase-Deploy
 = key =
-  * {c} = Class
-  * {+} = Instance of a class
-  * {f} = Function
-  * {o} = Object Literal
-  * [a] = Array
-  * "s" = string
-  * (n) = Number (any kind)
-  * 'k' = Constant, a value to be considered read only to you
-  * {e} = Javascript Event Object
+  * [http://jaxgames.googlecode.com/svn/trunk/_rsc/wiki_images/Class.png] Class
+  * [http://jaxgames.googlecode.com/svn/trunk/_rsc/wiki_images/Instance.png] Instance of a class
+  * [http://jaxgames.googlecode.com/svn/trunk/_rsc/wiki_images/Function.png] Function
+  * [http://jaxgames.googlecode.com/svn/trunk/_rsc/wiki_images/Object.png] Object Literal
+  * [http://jaxgames.googlecode.com/svn/trunk/_rsc/wiki_images/Array.png] Array
+  * [http://jaxgames.googlecode.com/svn/trunk/_rsc/wiki_images/String.png] String
+  * [http://jaxgames.googlecode.com/svn/trunk/_rsc/wiki_images/Number.png] Number (any kind)
+  * [http://jaxgames.googlecode.com/svn/trunk/_rsc/wiki_images/Constant.png] Constant, a value to be considered read only to you
+  * [http://jaxgames.googlecode.com/svn/trunk/_rsc/wiki_images/Event.png] Javascript Event Object
 
-= {c}: Jax =
-== 'k': version ==
-== 'k': conn_id ==
-== {f}: open ==
-== {f}: connect ==
-== {f}: timerStart ==
-== {f}: timerStop ==
-== {f}: listenFor ==
-== {f}: sendRequest ==
-== {f}: sendToQueue ==
-== {f}: disconnect ==
+= 1. Jax =
+[http://jaxgames.googlecode.com/svn/trunk/_rsc/wiki_images/Class.png]
+jax itself is just a single class that manages the ajax calls to the server. It uses Prototype to provide a constructor, you can (optionally) provide the URL to jax's response.php page, relative to the html/php that the user is viewing. The default value is "server/response.php" assuming that your page is on webroot, and response.php is in a folder named server, as is provided by default with jax.
+
+*parameters*
+  * _*[http://jaxgames.googlecode.com/svn/trunk/_rsc/wiki_images/String.png] server* : the relative URL from your HTML file to the jax response.php page to deal with AJAX sever side_
+
+*Example:*
+{{{
+var jax = new Jax ();                          //use the default URL (server/response.php)
+var jax = new Jax ("../server/response.php");  //use a different URL to response.php
+}}}
+
+== 1.1 version ==
+[http://jaxgames.googlecode.com/svn/trunk/_rsc/wiki_images/Constant.png]
+Version number of jax. presented as "major.minor.revision.build.tag". Major and minor are as normal version numbers, e.g. '1.3', the revision is a security/bug release (e.g. '1.3.1'), build is the four digit build number, incremented at each new build and does not reset and finally the tag is for 'alpha', 'beta' or 'rc' status tags (always all lowercase please). Split the string by "." to extract each piece
+
+*Example:*
+{{{
+var jax = new Jax ();
+alert (jax.version);
+}}}
+
+== 1.2 "k": conn_id ==
+The unique connection ID given to you
+== 1.3 {f}: open ==
+== 1.4 {f}: connect ==
+== 1.5 {f}: timerStart ==
+== 1.6 {f}: timerStop ==
+== 1.7 {f}: listenFor ==
+== 1.8 {f}: sendRequest ==
+== 1.9 {f}: sendToQueue ==
+== 1.10 {f}: disconnect ==
