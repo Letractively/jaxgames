@@ -2,7 +2,7 @@
 /* =======================================================================================================================
    js/board.js - create and manage a game board
    ======================================================================================================================= */
-var Board = Class.create();
+var Board = Class.create ();
 Board.prototype = {
         element : "",  //html id to inject the board into
         width   : 0,   //number of columns in the table
@@ -10,6 +10,10 @@ Board.prototype = {
         cells   : [],  //an array of html content to go in each cell (as a two dimensional array, e.g. [x][y])
         
         /* > intialize : constructor function
+           ===============================================================================================================
+           params * s_element : html element id to inject the board into
+                    n_width   : width of the board in cells (1-based)
+                    n_height  : height of the board in cells (1-based)
            =============================================================================================================== */
         initialize : function (s_element, n_width, n_height) {
                 this.element = s_element;
@@ -17,15 +21,15 @@ Board.prototype = {
                 this.height  = n_height;
                 
                 //create the two-dimensional array to store html content for each cell. e.g. cells[x][y] = "blah";
-                this.clear();
+                this.clear ();
         },
         
         /* > clear: empty the board
            =============================================================================================================== */
-        clear : function() {
+        clear : function () {
                 this.cells = new Array (this.width);
                 for (var x=1; x<=this.width; x++) {
-                        this.cells[x] = new Array(this.height);
+                        this.cells[x] = new Array (this.height);
                         for (var y=1; y<=this.height; y++) {
                                 this.cells[x][y] = "";
                         }
@@ -33,13 +37,19 @@ Board.prototype = {
         },
         
         /* > getCell : return the html element id for a cell, given the x/y
+           ===============================================================================================================
+           params * n_x  : x cell reference
+                    n_y  : y cell reference
+           return * s_id : html element id of the cell requested 
            =============================================================================================================== */
         getCell : function (n_x, n_y) {
                 //String.fromCharCode is used to get the letter for the column number (e.g. 1=A, 2=B and so on)
-                return this.element+'-cell-'+String.fromCharCode(64+n_x)+n_y;
+                return this.element + '-cell-' + String.fromCharCode (64+n_x) + n_y;
         },
         
         /* > getCoordsFromId : return x/y position given a html id for a cell
+           ===============================================================================================================
+           params * s_id : html element id of the cell in question
            =============================================================================================================== */
         getCoordsFromId : function (s_id) {
                 var id  = s_id.split ("-").last (),              //get the cell reference from the cell id

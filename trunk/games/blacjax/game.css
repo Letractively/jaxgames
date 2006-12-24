@@ -37,7 +37,7 @@ h1      {background-image: url("images/title.png");}
 #game-deck      {left: 5px; width: 71px; height: 96px; background-image: url("../images/cards/back.png");}
 .game-deck-card {position: absolute;}
 #game-face      {left: 436px; width: 71px; height: 96px; background-image: url("../images/cards/place.png");}
-#game-penalty   {left: 5px; width: 71px; padding-top: 30px; font: bold 30px Arial, Helvetica, sans-serif; text-align: center;}
+#game-penalty   {left: 5px; width: 71px; height: 96px; padding-top: 30px; font: bold 30px Arial, Helvetica, sans-serif; text-align: center;}
 #game-run       {left: 0; height: 96px; width: 430px;}
 #game-label     {position: absolute; width: 71px; top: 282px; padding: 2px 0 2px 0; z-index: 50;
                  border; solid 1px black; -moz-border-radius: 8px; -webkit-border-radius: 8px;

@@ -1,3 +1,5 @@
+This folder contains resources used to create the project, but not needed for distribution / execution
+
 cards.pspimage and jax.pspimage are Paint Shop Pro X (and above) files
 http://www.corel.com/servlet/Satellite?c=Product_C1&cid=1155872554948&lc=en&pagename=uk%2FLayout
 

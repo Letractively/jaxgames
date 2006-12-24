@@ -284,7 +284,7 @@ game.run = {
         /* > combo : if the card on top of the run is a combo card (Ace, Eight or Joker)
            =============================================================================================================== */
         combo : function () {
-                return (this.cards.length) && (game.pack.isCombo (this.cards.last()));
+                return (this.cards.length) && game.pack.isCombo (this.cards.last());
         },
         
         /* > clear : clear everything in the run and set it back to default
@@ -368,7 +368,7 @@ game.run = {
                         var cardanims = [];
                         game.run.cards.each (function(s_card,n_index){
                                 var move_to = 436 - parseInt($("game-run-"+s_card).getStyle("left"));
-                                cardanims.push (new Effect.MoveBy ("game-run-"+s_card, 0, move_to));
+                                cardanims.push (new Effect.MoveBy("game-run-"+s_card, 0, move_to));
                         });
                         new Effect.Parallel (cardanims, {duration:0.5, queue:'end', afterFinish:function(){
                                 //put the old face card on the discard pile
