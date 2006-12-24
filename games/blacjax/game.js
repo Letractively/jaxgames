@@ -27,6 +27,7 @@ rules of play:
 
 TODO:
  + allow chaining of pairs
+ + tactical draws
 -------------------------------------------------------------------------------------------------------------------------- */
 
 //create the players (see classes.js)
@@ -112,6 +113,7 @@ Object.extend (game,
                 //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
                 //entering their name / join key, game.connect is called. when a connection is established between the two
                 //players, this function is called for you. playerMe & playerThem will have their details ready
+                this.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
                 
                 //display player 1's name / icon
                 $("jax-game-p1name").innerHTML = playerMe.name;
@@ -123,8 +125,6 @@ Object.extend (game,
                 $("jax-game-p2name").innerHTML = playerThem.name;
                 $("jax-game-p2icon").src = "../images/icons/" + playerThem.icon + ".png";
                 $("game-status-them").style.display = "block";
-                
-                this.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
                 
                 //clear any cards on the table
                 [this.run, playerMe.hand, playerThem.hand].invoke("clear");
@@ -199,7 +199,7 @@ Object.extend (game,
                                 ], {duration: 0.5});
                                 //use a no-sign(/) cursor (IE6, Firefox 1.5)
                                 e.addClassName ("card-disabled");
-
+                                
                         } else {
                                 e.onmouseover = game.events.cardMouseOver;  //for enabled cards, set the interactivity
                                 e.onmouseout  = game.events.cardMouseOut;   //on mouse out, go back down to normal
@@ -229,10 +229,21 @@ Object.extend (game,
                    + 2b. there is a penalty, you / they have no playable cards, take the penalty
                    + 3.  you / they played a valid card, now other person's go
                 *//*
-                  in the case of 2a, or 2b, the function will call itself again, but assessing the opposite player. this 
-                  means that when neither player has a playable card, several times in a row, cards are automatically drawn
-                  without having to wait for the opposite player's computer to tell you so
-                //-------------------------------------------------------------------------------------------------------- */
+                   in the case of 2a, or 2b, the function will call itself again, but assessing the opposite player. this 
+                   means that when neither player has a playable card, several times in a row, cards are automatically drawn
+                   without having to wait for the opposite player's computer to tell you so
+                *//*
+                   there are some complex rules about the last card put down (to win the game)
+                     
+                   + if you put down a Black Jack or a Two as your last card, play switches to the opponent,
+                     > if they put down a Red Jack, the penalty is cancelled
+                       + if that was their last card, they win, otherwise you win
+                     > if they put down a Black Jack or Two you must take the penalty and continue playing
+                       + if that was their last card, they win
+                     > if they have no Red/Black Jack or Two then they take the penalty and you still win
+                   + if you put down a Joker, Ace or Eight as your last card you must take another card (as these
+                     cards must always be followed up by placing another card, or taking when no cards are playable)
+                *///---------------------------------------------------------------------------------------------------------
                 
                 var player   = (b_self) ? playerMe : playerThem,  //the primary person being referred to
                     cards    = player.hand.playableCards (),      //which cards in the hand are playable
@@ -257,18 +268,8 @@ Object.extend (game,
                 } else if (!this.run.combo () && !armedrun &&
                            (!playerMe.hand.cards.length || !playerThem.hand.cards.length)
                 ) {  //------------------------------------------------------------------------------------------------------
-                        /* either person has no cards left, and there is no continuation (armed / combo cards):
-                           there are some complex rules about the last card put down (to win the game)
-                           
-                           + if you put down a Black Jack or a Two as your last card, play switches to the opponent,
-                             > if they put down a Red Jack, the penalty is cancelled
-                               + if that was their last card, they win, otherwise you win
-                             > if they put down a Black Jack or Two you must take the penalty and continue playing
-                               + if that was their last card, they win
-                             > if they have no Red/Black Jack or Two then they take the penalty and you still win
-                           + if you put down a Joker, Ace or Eight as your last card you must take another card (as these
-                             cards must always be followed up by placing another card, or taking when no cards are playable)
-                        */
+                        //either person has no cards left, and there is no continuation (armed / combo cards),
+                        //the other player has won in this situation
                         game.end (!b_self);
                         
                 } else if (!cards.length) {  //------------------------------------------------------------------------------
@@ -276,15 +277,12 @@ Object.extend (game,
                         //save having to wait for a message to confirm the obvious from the opponent
                         player.hand.takeCard (count, function(){ game.run.fileCards (function(){
                                 if (armedrun) {
-                                        //if you took the penalty, it's your go (preempt for the rare occurance of picking
-                                        //up cards, yet not having any playable ones afterwards)
                                         if (b_self) {
                                                 if (!playerThem.hand.cards.length) {game.end (false); return false}
-                                                game.preempt (b_self);
-                                        } else {
-                                                //otherwise it's their go, premept if they have any playable cards
-                                                game.preempt (b_self);
                                         }
+                                        //if you took the penalty, it's your go (preempt for the rare occurance of picking
+                                        //up cards, yet not having any playable ones afterwards)
+                                        game.preempt (b_self);
                                 } else {
                                         //when someone takes a card, check if the other player can play too
                                         game.preempt (!b_self);
