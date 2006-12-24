@@ -26,6 +26,7 @@ Notes about the Code:
 
 Dependencies:
 -------------
+* PHP 5, with SQLite module <http://php.net>
 * Prototype 1.50_rc0 or higher <http://prototype.conio.net/> (Provided with Script.aculo.us)
 * Script.aculo.us 1.6 or higher <http://script.aculo.us>
 * A Prototype-compatible version of json.js <http://www.unfocus.com/projects/source/Javascript/json.js> (included with jax)
@@ -65,7 +66,7 @@ Many thanks go to these people, and their contributions:
 * Clint Franklin <http://theraje.com> testing, art, support
 * electricnet <http://electricnet.deviantart.com/> testing, support
 * Stacey W <http://staceyw.deviantart.com> testing, support
-* zeros-elipticus <http://zeros-elipticus.deviantart.com> support
+* Elliott Sprehn <http://zeros-elipticus.deviantart.com> support
 
 If you've contributed to the SVN, please add your name and URL/email below, thanks!
 *
