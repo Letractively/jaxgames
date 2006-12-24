@@ -20,14 +20,14 @@ function main () {
                 ;
                 for (var i=0; i<argv.length-1; i++) {
                         read_file = readFile (argv[i]);
-                        print (" merging "+argv[i]+" ("+formatFileSize(read_file.length)+")");
+                        print ("  merging "+argv[i]+" ("+formatFileSize(read_file.length)+")");
                         total += read_file.length; 
                         codeRaw += read_file;
                 }
                 writer = java.io.FileWriter (outpath);
                 writer.write (codeRaw);
                 writer.close ();
-                print (" total: "+formatFileSize(total));
+                print ("  total: "+formatFileSize(total));
         }
 }
 

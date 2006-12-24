@@ -46,11 +46,11 @@ function main () {
                 ;
                 for (var i=0; i<argv.length-1; i++) {
                         read_file = readFile (argv[i]);
-                        print (" including "+argv[i]+" ("+read_file.length+" bytes)");
+                        print ("  including "+argv[i]+" ("+read_file.length+" bytes)");
                         total   += read_file.length;
                         codeRaw += read_file;
                 }
-                print (" starting compression...");
+                print ("  starting compression...");
                 codeComp = pack (codeRaw, 62, 1, 0);
                 writer = java.io.FileWriter (outpath);
                 writer.write (codeComp);
@@ -58,7 +58,7 @@ function main () {
                 var end     = new Date(),
                     elapsed = Math.floor((end.getTime() - start.getTime()) / 1000)
                 ;
-                print (" finished! ("+elapsed+"s "+codeComp.length+"/"+total+" "+Math.floor((codeComp.length/total)*100)+"%)");
+                print ("  finished! ("+elapsed+"s "+codeComp.length+"/"+total+" "+Math.floor((codeComp.length/total)*100)+"%)");
         }
 }
 
