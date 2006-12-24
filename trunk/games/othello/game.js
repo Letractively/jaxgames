@@ -9,7 +9,9 @@
 
 rules of play:
 --------------
- +
+ + each player takes turn to place a single piece on the board. you must place a piece on an empty square adjacent to an
+   opponent's piece, whereby another one of your own pieces is within line-of-sight (in one or more of the eight directions)
+ + once all spaces are filled the winner is the player with the most pieces
  
 -------------------------------------------------------------------------------------------------------------------------- */
 

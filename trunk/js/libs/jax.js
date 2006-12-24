@@ -205,6 +205,7 @@ Jax.prototype = {
                                         if (response.error) {
                                                 //fatal server error!
                                                 console.error (response.error);
+                                                alert (response.error);
                                                 bsod ();
                                         } else {
                                                 f_onResponse (response);

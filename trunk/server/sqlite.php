@@ -2,7 +2,7 @@
 	require_once "libs/SQLiteDB.php";
 	
 	$filename = "db/jax.sqlite";
-	if (!is_writable("db")) die("result=&error=".urlencode("No write permissions for DB"));
+	if (!is_writable("db")) die("result=&error=".urlencode("No write permissions for DB. Please chmod 777 the /server/db directory and contents"));
 	
 	//open the mini database
 	$database = new SQLiteDB($filename);
