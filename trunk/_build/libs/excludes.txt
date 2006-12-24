@@ -13,10 +13,5 @@ _*
 #exclude certain scripts, which will be replaced with a single compressed script
 /js/boot.js
 /js/shared.js
-/js/libs/prototype.js
-/js/libs/json.js
-/js/libs/scriptaculous**
-/js/libs/jax.js
+/js/libs
 
-#exclude firebug lite from the release
-/js/libs/firebug
