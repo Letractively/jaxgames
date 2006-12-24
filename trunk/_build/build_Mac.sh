@@ -1,5 +1,7 @@
 #!/bin/bash
 #Jax Games Build Script
+#change directory, to the directory of this script (because double clicking on this script uses home directory instead)
+cd "`dirname "$0"`"
 clear
 echo "==============================================================================="
 echo "jaxgames build process                                                     v0.1"
