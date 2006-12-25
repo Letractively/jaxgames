@@ -16,19 +16,21 @@
 cd "`dirname "$0"`"
 clear
 echo "==============================================================================="
-echo "jaxgames build process                                                   v0.2.1"
+echo "jaxgames build process                                                   v0.3.0"
 echo "==============================================================================="
-
+echo "* copy source to release directory"
+echo "-------------------------------------------------------------------------------"
+echo "  removing old release..."
+rm -rf ./release
 # copy the current source, to release directory using rsync
 # -v = verbose, show copying as it happens
 # -r = recurse into directories
 # -u = update: only copy files that have changed
 # -delete-excluded = delete any files in release folder that are no longer in the original
 # -exclude-from = list of files/folders to ignore when copying (read excludes.txt)
-echo "* copy source to release directory"
-echo "-------------------------------------------------------------------------------"
+echo "  copying new source..."
 mkdir ./release
-rsync -v -r -u --delete-excluded --exclude-from=./libs/excludes.txt ../ ./release
+rsync -r --delete-excluded --exclude-from=./libs/excludes.txt ../ ./release
 # make the database directory writeable, in case you want to run the release locally to test
 chmod -R 777 ./release/server/db
 echo "-------------------------------------------------------------------------------"
@@ -37,47 +39,42 @@ echo "--------------------------------------------------------------------------
 # libraries for the project (prototype / scriptaculous / json / jax / firebugx)
 echo "* merge libraries for boot.js"
 echo "-------------------------------------------------------------------------------"
-java -jar ./libs/custom_rhino.jar ./libs/merge.js ../js/libs/prototype.js ../js/libs/json.js ./headers/scriptaculous.165.js ../js/libs/scriptaculous/effects.js ../js/libs/firebug/firebugx.js ../js/libs/jax.js ../js/shared.js ./temp.js
+java -jar ./libs/custom_rhino.jar ./libs/merge.js ../js/libs/prototype.js ../js/libs/json.js ./headers/scriptaculous.165.js ../js/libs/scriptaculous/effects.js ../js/libs/firebug/firebugx.js ../js/libs/jax.js ../js/shared.js ./release/js/boot.js
 echo "-------------------------------------------------------------------------------"
 
 # run it through the dojo compressor, this will strip the comments and do other optimisations
-# if someone with l33t bash skills could do some kind of 'find all *.js' and compact routine, it would help
 echo "* compact scripts"
 echo "-------------------------------------------------------------------------------"
-echo "  compacting /js/boot.js..."
-java -jar ./libs/custom_rhino.jar -opt -1 -c ./temp.js > ./release/js/boot.js
-rm ./temp.js
-echo "  compacting /js/board.js..."
-java -jar ./libs/custom_rhino.jar -opt -1 -c ../js/board.js > ./release/js/board.js
-echo "  compacting /js/cards.js..."
-java -jar ./libs/custom_rhino.jar -opt -1 -c ../js/cards.js > ./release/js/cards.js
-echo "  compacting /games/blacjax/game.js..."
-java -jar ./libs/custom_rhino.jar -opt -1 -c ../games/blacjax/game.js > ./release/games/blacjax/game.js
-echo "  compacting /games/blacjax/classes.js..."
-java -jar ./libs/custom_rhino.jar -opt -1 -c ../games/blacjax/classes.js > ./release/games/blacjax/classes.js
-echo "  compacting /games/othello/game.js..."
-java -jar ./libs/custom_rhino.jar -opt -1 -c ../games/othello/game.js > ./release/games/othello/game.js
+# find all javascripts (ingoring folders starting with underscore) and compact them
+for FILE in `find ./release -regex "\.\/[^_]*\.js"`
+do
+        echo "  compacting $FILE..."
+        java -jar ./libs/custom_rhino.jar -opt -1 -c "$FILE" > "$FILE.temp"
+        mv -f "$FILE.temp" "$FILE"
+done
 echo "-------------------------------------------------------------------------------"
 
 # run the compressed scripts through Dean Edward's Packer for even more shrinkage
 # this will only be effective on larger scripts (cards.js is too short)
 echo "* compress scripts (this will take a long time)"
 echo "-------------------------------------------------------------------------------"
-java -jar ./libs/custom_rhino.jar ./libs/packer.js ./release/js/boot.js ./release/js/boot.js
-java -jar ./libs/custom_rhino.jar ./libs/packer.js ./release/games/blacjax/game.js ./release/games/blacjax/game.js
-java -jar ./libs/custom_rhino.jar ./libs/packer.js ./release/games/blacjax/classes.js ./release/games/blacjax/classes.js
-java -jar ./libs/custom_rhino.jar ./libs/packer.js ./release/games/othello/game.js ./release/games/othello/game.js
+# find all javascript files (ignoring files starting with underscore) at least 4000 bytes in size
+# the packer will generally producer _larger_ files when feeding it very small files to begin with
+for FILE in `find ./release -size +4000c -regex "\.\/[^_]*\.js"`
+do
+        java -jar ./libs/custom_rhino.jar ./libs/packer.js "$FILE" "$FILE"
+done
 echo "-------------------------------------------------------------------------------"
 
 # the compression will have removed all comments, add new headers and licence blocks
 echo "* add headers"
 echo "-------------------------------------------------------------------------------"
 java -jar ./libs/custom_rhino.jar ./libs/merge.js ./headers/boot.js ./release/js/boot.js ./release/js/boot.js
-java -jar ./libs/custom_rhino.jar ./libs/merge.js ./headers/jaxgames.js ./release/js/board.js ./release/js/board.js
-java -jar ./libs/custom_rhino.jar ./libs/merge.js ./headers/jaxgames.js ./release/js/cards.js ./release/js/cards.js
-java -jar ./libs/custom_rhino.jar ./libs/merge.js ./headers/jaxgames.js ./release/games/blacjax/game.js ./release/games/blacjax/game.js
-java -jar ./libs/custom_rhino.jar ./libs/merge.js ./headers/jaxgames.js ./release/games/blacjax/classes.js ./release/games/blacjax/classes.js
-java -jar ./libs/custom_rhino.jar ./libs/merge.js ./headers/jaxgames.js ./release/games/othello/game.js ./release/games/othello/game.js
+# find all javascript files (ignoring boot.js and folders starting with underscore). these use the standard header
+for FILE in `find ./release -regex "\.\/[^_]*[^(?:boot)]\.js"`
+do
+        java -jar ./libs/custom_rhino.jar ./libs/merge.js ./headers/jaxgames.js "$FILE" "$FILE"
+done
 echo "-------------------------------------------------------------------------------"
 
 # zip the release
