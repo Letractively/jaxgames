@@ -1,5 +1,5 @@
 =============================================================================================================================
-[ jaxgames ]
+jax games (c) copyright Kroc Camen 2005, 2006. licensed under the Creative Commons Attribution-ShareAlike 2.5 license
 =============================================================================================================================
 Think MSN one on one IM games; but without MSN, without registration, without Flash or Java plugins, without ads, without
 annoyances. Just one-on-one with your friends in various games, on any operating system, any common webbrowser, any time.
@@ -26,10 +26,10 @@ Notes about the Code:
 
 Dependencies:
 -------------
-* PHP 5, with SQLite module <http://php.net>
+* PHP 5, with SQLite module <http://php.net> (will run in XAMPP <http://apachefriends.org/en/xampp.html>)
 * Prototype 1.50_rc0 or higher <http://prototype.conio.net/> (Provided with Script.aculo.us)
 * Script.aculo.us 1.6 or higher <http://script.aculo.us>
-* A Prototype-compatible version of json.js <http://www.unfocus.com/projects/source/Javascript/json.js> (included with jax)
+* A Prototype-compatible version of json.js <http://unfocus.com/projects/source/Javascript/json.js> (included with jax)
 * Firebug Lite <http://getfirebug.com/lite.html>
 * jax (part of this project, but a reusable script)
 

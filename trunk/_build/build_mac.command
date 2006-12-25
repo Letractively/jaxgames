@@ -21,11 +21,11 @@ echo "==========================================================================
 echo "* copy source to release directory"
 echo "-------------------------------------------------------------------------------"
 echo "  removing old release..."
+# rm: remove files
+# -rf = recurse sub folders, and do not prompt to delete
 rm -rf ./release
 # copy the current source, to release directory using rsync
-# -v = verbose, show copying as it happens
 # -r = recurse into directories
-# -u = update: only copy files that have changed
 # -delete-excluded = delete any files in release folder that are no longer in the original
 # -exclude-from = list of files/folders to ignore when copying (read excludes.txt)
 echo "  copying new source..."

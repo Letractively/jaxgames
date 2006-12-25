@@ -1,6 +1,7 @@
 NEW : New feature/code | ADD : Addition/Change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 25.DEC.06
+    NEW: install.txt. Need Windows & Linux instructions
     ADD: improved build system to use Find command so that new JS files in the source can be handled automatically
 24.DEC.06
     NEW: Build system in _build. Uses Dojo's compressor, and Dean Edward's Packer to compress the scripts
