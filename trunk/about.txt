@@ -58,13 +58,14 @@ Many thanks go to these people, and their contributions:
 * The blogger of unfocus.com for Prototype-compatible json.js <http://unfocus.com/projects/source/Javascript/json.js>
 * Jon Jensen, SQLiteDB: a PHP class for SQLite <http://code.jenseng.com/db/>
 * The PHP crew, Hypertext Preprocessor <http://php.net>
+* Mark James, famfamfam silk icon set <http://famfamfam.com/lab/icons/silk/>
 
 * DarkCryst, SACK <http://twilightuniverse.com/resources/code/sack/> no longer used, but was integral to getting this far
 * Andrea Giammarchi, PHPSerializer <http://devpro.it/javascript_id_102.html> no longer used, but was integral early on
 
 * William Hollister, the original concept
 * Clint Franklin <http://theraje.com> testing, art, support
-* electricnet <http://electricnet.deviantart.com/> testing, support
+* electricnet <http://electricnet.deviantart.com/> testing, art, support
 * Stacey W <http://staceyw.deviantart.com> testing, support
 * Elliott Sprehn <http://zeros-elipticus.deviantart.com> support
 
