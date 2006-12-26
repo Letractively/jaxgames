@@ -1,5 +1,7 @@
 NEW : New feature/code | ADD : Addition/Change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+26.DEC.06
+    NEW: licence.txt
 25.DEC.06
     NEW: install.txt. Need Windows & Linux instructions
     ADD: improved build system to use Find command so that new JS files in the source can be handled automatically
