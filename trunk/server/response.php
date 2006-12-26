@@ -1,8 +1,10 @@
 <?php
-// >>>>>>>>>>>>>>>>> this work is licensed under the Creative Commons Attribution-ShareAlike 2.5 license <<<<<<<<<<<<<<<<<
 /* =======================================================================================================================
    server/response.php - handle all request/response traffic from the clients
-   ======================================================================================================================= */
+   =======================================================================================================================
+   licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+   jax, jax games (c) copyright Kroc Camen 2005-2007
+*/
 //do all the common startup
 require_once "startup.php";
 

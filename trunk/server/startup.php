@@ -1,8 +1,10 @@
 <?php
-// >>>>>>>>>>>>>>>>> this work is licensed under the Creative Commons Attribution-ShareAlike 2.5 license <<<<<<<<<<<<<<<<<
 /* =======================================================================================================================
    server/startup.php - Include a number of scripts of functions needed
-   ======================================================================================================================= */
+   =======================================================================================================================
+   licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+   jax, jax games (c) copyright Kroc Camen 2005-2007
+*/
 session_start();
 $session_id = session_id();
 
