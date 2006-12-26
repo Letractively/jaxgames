@@ -1,5 +1,5 @@
 =============================================================================================================================
-jax games (c) copyright Kroc Camen 2005, 2006. licensed under the Creative Commons Attribution-ShareAlike 2.5 license
+jax games
 =============================================================================================================================
 Here follows installation instructions for Jax Games.
 You've already completed the first step, which is to download and unzip Jax Games.
@@ -60,4 +60,6 @@ Coming soon, or sooner if someone contributes instructions.
 I have no idea. PHP inclusion/support will vary by distribution. Can someone contribute some instructions please?
 
 
-=== END OF LINE =============================================================================================================
+=== end of line =============================================================================================================
+licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+jax, jax games (c) copyright Kroc Camen 2005-2007

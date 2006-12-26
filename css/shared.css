@@ -1,7 +1,9 @@
-/* >>>>>>>>>>>>>>>>> this work is licensed under the Creative Commons Attribution-ShareAlike 2.5 license <<<<<<<<<<<<<<<<< */
 /* =======================================================================================================================
    css/shared.css - styles shared between all the games (chatcol, etc)
-   ======================================================================================================================= */
+   =======================================================================================================================
+   licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+   jax, jax games (c) copyright Kroc Camen 2005-2007
+*/
 
 #body   {width: 642px; max-width: 640px; height: 429px; overflow: hidden;}
 h1      {border-bottom: solid 1px #010801;}

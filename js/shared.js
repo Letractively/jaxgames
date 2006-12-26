@@ -1,6 +1,5 @@
-// >>>>>>>>>>>>>>>>> this work is licensed under the Creative Commons Attribution-ShareAlike 2.5 license <<<<<<<<<<<<<<<<<
 /* =======================================================================================================================
-   element - functions shared with all the games on the site
+   js/shared.js - functions shared with all the games on the site
    ======================================================================================================================= */
 
 //create an instance of jax, direct it to the PHP page to receive the AJAX calls
@@ -473,3 +472,5 @@ function bsod(message, url, line) {
 //!/window.onerror = bsod;
 
 //=== end of line ===========================================================================================================
+//licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+//jax, jax games (c) copyright Kroc Camen 2005-2007
