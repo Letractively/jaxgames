@@ -46,6 +46,9 @@ vi)  Other people on your LAN can use the same address to load Jax Games and pla
 Microsoft Windows users have two options for installing Jax Games, either using a regular PHP installation, or a portable
 XAMPP installation which will allow easy removal, or the running from a USB pen. (insta-LAN-parties!)
 
+i)   Jax Games does not work with Internet Explorer at the moment (compatibility is scheduled for beta-period). You will need
+     to download and install Mozilla Firefox from <http://getfirefox.com>
+
 A. Installing in XAMPP (for people who just want to play the thing without screwing up their machine)
 -----------------------------------------------------------------------------------------------------------------------------
 Coming soon, or sooner if someone contributes instructions.
