@@ -1,21 +1,15 @@
-// >>>>>>>>>>>>>>>>> this work is licensed under the Creative Commons Attribution-ShareAlike 2.5 license <<<<<<<<<<<<<<<<<
 /* =======================================================================================================================
    js/boot.js - load the libraries needed for the games
    ======================================================================================================================= */
-/* note: in the distribution version, this page is replaced by a dojo-compressed version of the merged scripts below
-   ----------------------------------------------------------------------------------------------------------------------- */
-//third party libraries:
-//======================
-// Prototype     : extends core javascript facility to reduce the amount of genereal code everywhere
-// Scriptaculous : provides animation and effects
-// json          : turn an array/object in a string and back again - for sending and receiving javascript over AJAX
-// Firebug Lite  : javascript logger and command line
+/* note: in the distribution version, this page is replaced by a compressed version of the merged scripts below
 
-//my libraries:
-//=============
-// jax.js        : establish a bridge between two computer users to send AJAX back and forth
-// shared.js     : shared code between all the games
-//
+   + Prototype     : extends core javascript facility to reduce the amount of genereal code everywhere
+   + Scriptaculous : provides animation and effects
+   + json          : turn an array/object in a string and back again - for sending and receiving javascript over AJAX
+   + Firebug Lite  : javascript logger and command line
+   + jax.js        : establish a bridge between two computer users to send AJAX back and forth
+   + shared.js     : shared code between all the games
+*/
 document.write(' \
 \t<script type="text/javascript" src="../../js/libs/prototype.js"></script>\n \
 \t<script type="text/javascript" src="../../js/libs/json.js"></script>\n \
@@ -32,3 +26,5 @@ if (!("console" in window) || !("firebug" in console)) {
 }
 
 //=== end of line ===========================================================================================================
+//licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+//jax, jax games (c) copyright Kroc Camen 2005-2007

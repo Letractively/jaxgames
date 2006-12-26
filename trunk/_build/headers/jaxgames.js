@@ -1,4 +1,4 @@
-/* =======================================================================================================================
-   jax games (c) copyright Kroc Camen 2005, 2006. licensed under the Creative Commons Attribution-ShareAlike 2.5 license
-   ======================================================================================================================= */
-// this is a compressed version, go to http://code.google.com/p/jaxgames/ for full source code
+/* jax, jax games (c) copyright Kroc Camen 2005-2007
+   licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+   this is a compressed version, go to http://code.google.com/p/jaxgames/ for full source code
+*/

@@ -1,4 +1,3 @@
-// >>>>>>>>>>>>>>>>> this work is licensed under the Creative Commons Attribution-ShareAlike 2.5 license <<<<<<<<<<<<<<<<<
 /* =======================================================================================================================
    games/blacjax/classes.js - extra classes unique to this game
    ======================================================================================================================= */
@@ -392,3 +391,5 @@ game.run = {
 };
 
 //=== end of line ===========================================================================================================
+//licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+//jax, jax games (c) copyright Kroc Camen 2005-2007

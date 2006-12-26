@@ -1,10 +1,10 @@
 /* jaxgames - boot.js - go to http://code.google.com/p/jaxgames/ for full source code
 =============================================================================================================================
-jaxgames, jax (c) copyright Kroc Camen 2005, 2006, licensed under the Creative Commons Attribution-ShareAlike 2.5 license
+jax, jax games (c) copyright Kroc Camen 2005-2007. licenced under the Creative Commons Attribution 2.5 License:
+http://creativecommons.org/licenses/by/2.5/
 
 Prototype JavaScript framework, version 1.5.0_rc1 (c) 2005 Sam Stephenson <sam@conio.net>
-Prototype is freely distributable under the terms of an MIT-style license.
-For details, see the Prototype web site: http://prototype.conio.net/
+http://prototype.conio.net/
      
 script.aculo.us scriptaculous.js v1.6.5, Wed Nov 08 14:17:49 CET 2006
 Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)

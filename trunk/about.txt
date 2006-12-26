@@ -1,5 +1,5 @@
 =============================================================================================================================
-jax games (c) copyright Kroc Camen 2005, 2006. licensed under the Creative Commons Attribution-ShareAlike 2.5 license
+jax games
 =============================================================================================================================
 Think MSN one on one IM games; but without MSN, without registration, without Flash or Java plugins, without ads, without
 annoyances. Just one-on-one with your friends in various games, on any operating system, any common webbrowser, any time.
@@ -31,7 +31,7 @@ Dependencies:
 * Script.aculo.us 1.6 or higher <http://script.aculo.us>
 * A Prototype-compatible version of json.js <http://unfocus.com/projects/source/Javascript/json.js> (included with jax)
 * Firebug Lite <http://getfirebug.com/lite.html>
-* jax (part of this project, but a reusable script)
+* Jax (part of this project, but a reusable script)
 
 Compatibility:
 --------------
@@ -72,4 +72,6 @@ Many thanks go to these people, and their contributions:
 If you've contributed to the SVN, please add your name and URL/email below, thanks!
 *
 
-=== END OF LINE =============================================================================================================
+=== end of line =============================================================================================================
+licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+jax, jax games (c) copyright Kroc Camen 2005-2007

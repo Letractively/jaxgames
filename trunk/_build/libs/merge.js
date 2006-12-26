@@ -22,7 +22,7 @@ function main () {
                         read_file = readFile (argv[i]);
                         print ("  merging "+argv[i]+" ("+formatFileSize(read_file.length)+")");
                         total += read_file.length; 
-                        codeRaw += read_file;
+                        codeRaw += read_file + "\n";
                 }
                 writer = java.io.FileWriter (outpath);
                 writer.write (codeRaw);

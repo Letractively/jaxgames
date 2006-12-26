@@ -1,11 +1,13 @@
 #!/bin/bash
 #============================================================================================================================
 # Jax Games Build Script - 'compiles' the game into a release folder with compressed scripts
-# this is a shell script for Mac OS X (similar to a .bat file in Windows)
-#
+# licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+# jax, jax games (c) copyright Kroc Camen 2005-2007
+#============================================================================================================================
 # HOW TO RUN THIS FILE:
+# this is a shell script for Mac OS X (similar to a .bat file in Windows)
 # you have to make this file executable before you can run it. simply double clicking won't work.
-# open the Terminal located in /applications/utilities/ and enter
+# open the Terminal located in /applications/utilities/ and enter
 #   cd /library/webserver/documents/jax_games/_build
 # (change the path to elsewhere if you checked-out jaxgames to a different location)
 # then enter
@@ -91,3 +93,5 @@ echo "--------------------------------------------------------------------------
 
 echo "build is complete"
 echo "==============================================================================="
+
+#=== end of line ============================================================================================================

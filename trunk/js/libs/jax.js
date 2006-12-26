@@ -1,23 +1,22 @@
-// >>>>>>>>>>>>>>>>> this work is licensed under the Creative Commons Attribution-ShareAlike 2.5 license <<<<<<<<<<<<<<<<<
 /* =======================================================================================================================
-   jax.js - user to user AJAX communication (via PHP)
+   jax.js - (c) copyright Kroc Camen 2005-2007
    ======================================================================================================================= */
-// REQUIRES: prototype 1.5.0, json.js
+// licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+// REQUIRES: prototype 1.5.0, Prototype-compatible json.js
 
 /* TODO:
-   + create script to automate compression of jax into a distribution folder
    + if the server responds with a 403, 404, 500 etc, display an error message
    + if the server times out, give a warning message and try again
 */
 
 /* =======================================================================================================================
-   CLASS Jax
+   CLASS Jax - user to user AJAX communication (via PHP)
    ======================================================================================================================= */
 var Jax = new Class.create ();
 Jax.prototype = {
         //--- public variables ----------------------------------------------------------------------------------------------
-        version : "0.4.0.0000.α",   //version number of jax in 'major.minor.revision.build.tag' format
-        conn_id : null,             //once you've opened/connected, this is the connection id for this instance
+        version : "0.4.0.0000.alpha",  //version number of jax in 'major.minor.revision.build.tag' format
+        conn_id : null,                //once you've opened/connected, this is the connection id for this instance
         
         //--- private variables ---------------------------------------------------------------------------------------------
         _ : {
@@ -107,6 +106,8 @@ Jax.prototype = {
         },
         
         /* > timerStart : begin the recurring timer
+           ===============================================================================================================
+           params * n_interval : number of milleseconds between AJAX calls
            =============================================================================================================== */
         timerStart : function (n_interval) {
                 if (!n_interval) {n_interval = 3000;}  //default: 3 seconds
@@ -154,10 +155,6 @@ Jax.prototype = {
                 
                 //set the callback function
                 this._.callbax[s_datatype] = f_callback;
-                if (!f_callback) {
-                        //if a function was unregistered, remove the array position entirely
-                        //?/this._.callbax = this._.callbax.compact();
-                }
         },
 
         /* > sendRequest : send a direct request to the server (to setup and join games, etc.)
@@ -206,7 +203,6 @@ Jax.prototype = {
                                                 //fatal server error!
                                                 console.error (response.error);
                                                 alert (response.error);
-                                                bsod ();
                                         } else {
                                                 f_onResponse (response);
                                                 f_onResponse = null;
@@ -234,11 +230,11 @@ Jax.prototype = {
                 }, f_onSent);
         },
         
-        /* disconnect : 
+        /* disconnect : tell the other person you've left, and stop the AJAX
+           ===============================================================================================================
+           params * o_data : data (as object literal) to send the other person
            =============================================================================================================== */
-        disconnect : function(o_data, f_onComplete) {
-                if (!f_onComplete) {f_onComplete = Prototype.emptyFunction;}  //default: no callback
-                
+        disconnect : function(o_data) {
                 //ignore if the user hasn't actually connected yet (e.g. closing a window before connecting)
                 if (!this._.local_id) {return false;}
                 //stop the local timer

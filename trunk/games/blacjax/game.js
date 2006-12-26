@@ -1,4 +1,3 @@
-// >>>>>>>>>>>>>>>>> this work is licensed under the Creative Commons Attribution-ShareAlike 2.5 license <<<<<<<<<<<<<<<<<
 /* =======================================================================================================================
    games/blacjax/game.js - the logic for this game
    ======================================================================================================================= */
@@ -560,3 +559,5 @@ jax.listenFor ("game_card_chosen", function(o_response){
 });
 
 //=== end of line ===========================================================================================================
+//licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+//jax, jax games (c) copyright Kroc Camen 2005-2007
