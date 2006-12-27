@@ -3,7 +3,7 @@
    ======================================================================================================================= */
 /* note: in the distribution version, this page is replaced by a compressed version of the merged scripts below
 
-   + Prototype     : extends core javascript facility to reduce the amount of genereal code everywhere
+   + Prototype     : extends core javascript functionality to reduce the amount of genereal code everywhere
    + Scriptaculous : provides animation and effects
    + json          : turn an array/object in a string and back again - for sending and receiving javascript over AJAX
    + Firebug Lite  : javascript logger and command line
@@ -20,7 +20,7 @@ document.write(' \
 
 //if Firebug is not installed in Firefox, use Firebug Lite
 //in the compressed distibution, firebugx.js would be included instead to ignore the console.* calls
-//therefore you can librarly use Firebug features in the code (except 'debugger();') without breaking the distribution
+//therefore you can liberally use Firebug features in the code (except 'debugger();') without breaking the distribution
 if (!("console" in window) || !("firebug" in console)) {
         document.write ('\t<script type="text/javascript" src="../../js/libs/firebug/firebug.js"></script>\n');
 }

@@ -24,10 +24,15 @@ ii)  Open the .tar.gz file (may happen automatically if you're using Safari)
 iii) Move the jaxgames folder that you unzipped/checked-out (and are looking at now ) to
      'Macintosh HD > Library > WebServer > Documents'.
 
-iv)  Open System Preferences either from the dock, or 'Apple Menu > System Preferences...' and click on 'Sharing'
-     Tick the box labelled 'Personal Web Sharing'.
+iv)  The database folder must be write-able for Jax Games to function. Navigate into the 'server' folder.
+     Ctrl-Click on the 'db' folder and select Get Info. Expand the 'Ownership & Permissions' section, and expand the
+     'Details' section within. Change The three drop down boxes for Access to all say "Read & Write", then click the
+     'Apply to enclosed items' button. Enter your password as prompted. Once done, dismiss the info window
+
+v)   Open System Preferences either from the dock, or 'Apple Menu > System Preferences...' and click on 'Sharing'.
+     Tick the box labelled 'Personal Web Sharing'
      
-v)   At the top of the Sharing preferences window is your computer's name, underneath that is your local address
+vi)  At the top of the Sharing preferences window is your computer's name, underneath that is your local address
      "Other computers on your local subnet can access your computer at mymac.local" where 'mymac' is the name you've
      given the computer. If you've not assigned a sensible name, now would be a good time. You could use tree names, pet 
      names or character names from Monty Python films, for example.
@@ -36,9 +41,9 @@ v)   At the top of the Sharing preferences window is your computer's name, under
      computer). If all is well, you should be presented with the games list. If not, seek help, er, somewhere; we don't 
      have forums yet :P
      
-vi)  Other people on your LAN can use the same address to load Jax Games and play. To make your installation playable over
+vii) Other people on your LAN can use the same address to load Jax Games and play. To make your installation playable over
      the Internet involves opening port 80 on your router but is outside the scope of this document. Seek help from your
-     favourite Forum.
+     favourite Forum
      
 
 2. Instructions for Microsoft Windows users:
