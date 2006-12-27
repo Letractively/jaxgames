@@ -1,5 +1,7 @@
 NEW : New feature/code | ADD : Addition/Change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+27.DEC.06
+    ADD: Slow week. Added section to install.txt for changing the db folder permissions
 26.DEC.06
     NEW: licence.txt
 25.DEC.06
