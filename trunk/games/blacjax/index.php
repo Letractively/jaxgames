@@ -4,16 +4,10 @@
      ==================================================================================================================== -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
 <head>
-	<title>Loading...</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<!-- === stylesheets ============================================================================================ -->
-	<link rel="stylesheet" type="text/css" href="../../css/global.css" /><!-- styles for all of the site ............ -->
-	<link rel="stylesheet" type="text/css" href="../../css/shared.css" /><!-- styles for all of the games ........... -->
+	<?php include ("../../server/inc/head.html");?>
+	<!-- === this game ============================================================================================== -->
 	<link rel="stylesheet" type="text/css" href="game.css" /><!-- ........... styles for this game .................. -->
-	<!-- === libraries ============================================================================================== -->
-	<script type="text/javascript" src="../../js/boot.js">/* ................ include all base libraries .... */</script>
 	<script type="text/javascript" src="../../js/cards.js">/* ............... playing cards classes ......... */</script>
-	<!-- === game scripts =========================================================================================== -->
 	<script type="text/javascript" src="classes.js">/* ...................... game classes .................. */</script>
 	<script type="text/javascript" src="game.js">/* ......................... game logic .................... */</script>
 </head>
