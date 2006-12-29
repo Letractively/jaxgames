@@ -109,10 +109,10 @@ Object.extend (game,
                 for (var y=1; y<=8; y++) { for (var x=1; x<=8; x++) {
                         switch (this.pieces[x][y]) {
                                 case "X":
-                                        game.board.cells[x][y] = "X";
+                                        game.board.cells[x][y] = '<img src="images/black.png" width="40" height="40" alt="White" />';
                                         break;
                                 case "O":
-                                        game.board.cells[x][y] = "O";
+                                        game.board.cells[x][y] = '<img src="images/white.png" width="40" height="40" alt="White" />';
                                         break;
                                 default:
                                         game.board.cells[x][y] = "";
@@ -128,7 +128,7 @@ Object.extend (game,
                 //clear the "other player's turn" message on screen if it's there
                 this.setPlayerStatus ();
                 
-                //find playable moves
+                //find playable moves (loop all cells in the table...)
                 for (var y=1; y<=8; y++) { for (var x=1; x<=8; x++) {
                         //is this your piece?
                         if (this.pieces[x][y] == playerMe.piece) {
@@ -140,7 +140,9 @@ Object.extend (game,
                                         if (result) {
                                                 //put a mark in the cell to show it as playable
                                                 var e = $(game.board.getCell(result.x,result.y));
-                                                e.innerHTML = "+";
+                                                e.innerHTML = '<img src="images/spot.png" width="3" height="3" alt="Click '+
+                                                              'to place your piece here" />'
+                                                ;
                                                 //make the empty cell clickable so you can choose that spot
                                                 e.onclick = game.events.playableCellClick;
                                         }
@@ -225,14 +227,31 @@ Object.extend (game,
            params * b_self : if you or them should be checked
            =============================================================================================================== */
         preempt : function (b_self) {
-                //!/check for available moves
-                if (b_self) {
+                var playable_cells = [],
+                    piece          = (b_self) ? playerMe.piece : playerThem.piece
+                ;
+                
+                //check for available moves (loop all cells in the table...)
+                for (var y=1; y<=8; y++) { for (var x=1; x<=8; x++) {
+                        //is this the player's piece
+                        if (this.pieces[x][y] == piece) {
+                                //check all 8 directions...
+                                for (var n=0; n<8; n++) {
+                                        //test this direction for a possible playable move
+                                        var result = this.findBridge (b_self, x, y, n);
+                                        //if there is a move...
+                                        if (result) {playable_cells.push (result);}
+                                }
+                        }
+                } }
+                
+                if (playable_cells.length) {
                         //other player's go
                         game.setPlayerStatus ("<p>Other Player's Turn, Please Wait&hellip;</p>");
                         
                 } else {
                         //your go
-                        game.playTurn();
+                        game.playTurn ();
                 }
         },
         
@@ -250,42 +269,24 @@ Object.extend (game,
                 game.played ++;
                 if (b_winner) {
                         playerMe.wins ++;  //increase your tally
-                        game.setPlayerStatus("<p>YOU WIN<br />" + html);
+                        game.setPlayerStatus ("<p>YOU WIN<br />"+html);
                 } else {
                         playerThem.wins ++;  //increase their tally
-                        game.setPlayerStatus("<p>YOU LOSE<br />" + html);
+                        game.setPlayerStatus ("<p>YOU LOSE<br />"+html);
                 }
                 $("game-status-me-wins").innerHTML   = playerMe.wins;
                 $("game-status-them-wins").innerHTML = playerThem.wins;
                 
-                var anims = [];
-                var whodo = (playerMe.hand.cards.length) ? playerMe.hand : playerThem.hand;
+                var anims = [],
+                    whodo = (playerMe.hand.cards.length) ? playerMe.hand : playerThem.hand
+                ;
                 if (whodo.cards.length) {
                         whodo.cards.each(function(s_card,n_index){
                                 var elid = whodo.element + '-' + s_card;
                                 anims.push(new Effect.DropOut(elid, {delay: (n_index/8)}));
                         });
-                        new Effect.Parallel(anims, {queue: 'end'});
+                        new Effect.Parallel (anims, {queue: 'end'});
                 }
-                
-                //listen out for the resign signal from the other person
-                /*jax.listenFor("jax_disconnect", function(o_response) {
-                        //if the opponent resigned
-                        if (o_response.data.reason = "resign") {
-                                game.setStatus();
-                                game.setSystemStatus(playerThem.name + " resigned");
-                                var anims = [];
-                                
-                                var whodo = (playerMe.hand.cards.length) ? playerMe.hand : playerThem.hand;
-                                if (whodo.cards.length) {
-                                        whodo.cards.each(function(s_name,n_index){
-                                                var elid = whdo.element + '-' + (n_index+1);
-                                                anims.push(new Effect.DropOut(elid, {delay: (n_index/8)}));
-                                        });
-                                        new Effect.Parallel(anims, {queue: 'end'});
-                                }
-                        }
-                });*/
                 
                 //listen out for the 'play again' signal from the other person
                 jax.listenFor("game_again", function(o_response){

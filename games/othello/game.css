@@ -12,10 +12,10 @@ h1      {/*background-image: url("images/title.png");*/}
 
 #shared-gamearea {background-color: #008000; background-image: url("../images/felt.jpg");}
 
-#game-board       {text-align: center; padding-top: 32px;}
-#game-board-table {border-collapse: collapse; border: solid 1px black; margin: 0 auto;}
-#game-board .cell {width: 40px; height: 40px; padding: 0; margin: 0; border: solid 1px black;
-                   vertical-align: middle; text-align: center;}
+#game-board       {text-align: center; margin-top: 26px; width: 512px; height: 384px;
+                   background-image: url("images/board.png"); background-repeat: no-repeat; background-position: top center;}
+#game-board-table {margin-left: 95px; margin-top: 5px; width: 321px; border-collapse: collapse; border: 0;}
+#game-board .cell {width: 40px; height: 40px; padding: 0; margin: 0; border: 0; vertical-align: middle; text-align: center;}
 
 .game-player-status    {display: none; position: absolute; height: 21px; width: 512px; color: white;}
 .game-player-info      {height: 18px; padding: 3px 5px 0 5px; margin: 0;}
@@ -31,6 +31,5 @@ h1      {/*background-image: url("images/title.png");*/}
 #game-status .hv1 {width: 512px; height: 384px;}
 #game-status-text {font: normal 11px Arial; text-align: center; color: white;
                    background-image: url("../images/mask.png");}
-                 
 
 /* === end of line ======================================================================================================= */
