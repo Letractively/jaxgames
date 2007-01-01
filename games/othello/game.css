@@ -5,17 +5,25 @@
    jax, jax games (c) copyright Kroc Camen 2005-2007
 */
 
-h1      {/*background-image: url("images/title.png");*/}
+h1      {background-image: url("images/title.png");}
 
 #page-title, #page-user, #page-join
 	{padding: 15px; width: 482px; height: 354px;}
 
 #shared-gamearea {background-color: #008000; background-image: url("../images/felt.jpg");}
 
-#game-board       {text-align: center; margin-top: 26px; width: 512px; height: 384px;
-                   background-image: url("images/board.png"); background-repeat: no-repeat; background-position: top center;}
-#game-board-table {margin-left: 95px; margin-top: 5px; width: 321px; border-collapse: collapse; border: 0;}
-#game-board .cell {width: 40px; height: 40px; padding: 0; margin: 0; border: 0; vertical-align: middle; text-align: center;}
+#game-board        {text-align: center; margin-top: 13px; width: 512px; height: 384px;
+                    background-image: url("images/board.png"); background-repeat: no-repeat; background-position: top center;}
+#game-board-table  {margin-left: 95px; margin-top: 18px; width: 321px; border-collapse: collapse; border: 0;}
+#game-board .cell  {width: 40px; height: 40px; padding: 0; margin: 0; border: 0; vertical-align: middle; text-align: center;}
+#game-board .hover {background-image: url("images/hover.png"); background-repeat: no-repeat;}
+
+.game-paper        {text-align: center;}
+#game-paper-me     {position: absolute; top: 266px; left: 0; width: 86px; height: 163px; padding: 30px 6px 0 0;
+                    background-image: url("images/paperme.png"); background-repeat: no-repeat;}
+#game-paper-them   {position: absolute; top: 45px; left: 420px; width: 86px; height: 163px; padding: 40px 0 0 6px;
+                    background-image: url("images/paperthem.png"); background-repeat: no-repeat;}
+.game-paper-pieces {font: normal 32px/52px Georgia, serif;}
 
 .game-player-status    {display: none; position: absolute; height: 21px; width: 512px; color: white;}
 .game-player-info      {height: 18px; padding: 3px 5px 0 5px; margin: 0;}

@@ -1,5 +1,16 @@
 NEW : New feature/code | ADD : Addition/Change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+01.DEC.07
+    FIX: Othello: as the html table is not being recreated every time, the mouse events were not being removed after a click
+    NEW: Othello now highlights which cells will be captured when hovering over a playable cell
+    NEW: year
+30.DEC.06
+    ADD: board.js Board class no longer recreates the HTML table every update. This will avoid flicker caused by having to
+         load all the piece graphics every update. The class now only updates the html in a cell if it has changed
+    NEW: Othello: Piece counts on the sides
+    ADD: Othello: Switched to Black goes first (instead of white), as per official rules.
+    FIX: Properly fixed Othello's preempt routine. It was not working as previously advertised. The preempt also now checks
+         for a winner, and if a player is totally wiped off the board
 28.DEC.06
     NEW: Graphics for Othello: board and pieces
     NEW: Othello preempts if a player cannot take a go (not tested fully though, and some kind of message will need to be
@@ -8,7 +19,7 @@ NEW : New feature/code | ADD : Addition/Change to existing code | FIX : Bug/prob
     ADD: Changed the default location of response.php in Jax from server/response.php to just response.php to be more
          generic and not force people to use a /server folder. It is more likely that response.php may just be put in webroot
          or the same folder as the calling javascript
-    ADD: Slow week. Added section to install.txt for changing the db folder permissions
+    ADD: Slow week. Added section to install.txt for changing the db folder permissions (Mac OS)
 26.DEC.06
     NEW: licence.txt
 25.DEC.06
