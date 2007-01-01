@@ -58,6 +58,14 @@
 		<!-- === game = the main game display =================================================================== -->
 		<div id="page-game">
 		        <div id="game-board"></div>
+		        <div id="game-paper-me" class="game-paper">
+		                <div id="game-paper-me-pieces" class="game-paper-pieces"></div>
+		                <div id="game-paper-me-piece"></div>
+		        </div>
+		        <div id="game-paper-them" class="game-paper">
+		                <div id="game-paper-them-piece"></div>
+	                        <div id="game-paper-them-pieces" class="game-paper-pieces"></div>
+		        </div>
 		</div>
 		<!-- === common game elements =========================================================================== -->
 		<div id="game-status-them" class="game-player-status">
