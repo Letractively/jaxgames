@@ -2,13 +2,13 @@
    js/shared.js - functions shared with all the games on the site
    ======================================================================================================================= */
 
-//create an instance of jax, direct it to the PHP page to receive the AJAX calls
-var jax = new Jax("../../server/response.php");
+//create an instance of Jax, direct it to the PHP page to receive the AJAX calls
+var jax = new Jax ("../../server/response.php");
 
 /* =======================================================================================================================
    CLASS Player - a base class, your game can extend this to add more player properties
    ======================================================================================================================= */
-var Player = Class.create();
+var Player = Class.create ();
 Player.prototype = {
         //override this in your game to add a constructor function to your player's classes
         initialize : Prototype.emptyFunction,
@@ -38,74 +38,75 @@ var game = {
            ===============================================================================================================
            params * b_host : if you are the host (start game) or opponent (join game)
            =============================================================================================================== */
-        connect : function(b_host) {
+        connect : function (b_host) {
                 //display the game board
-                this.showPage("game");
+                this.showPage ("game");
                 
                 //disable the 'Start Game' button
-                enableNicknameBox(false);
+                enableNicknameBox (false);
                 
-                if (b_host) {
+                //get your name and chosen icon from the screen
+                playerMe.name = $F("user-nickname");
+                playerMe.icon = "user_red";
+                
+                //if you are the host, or opponent:
+                if (b_host) {    //------------------------------------------------------------------------------------------
                         //create the game on the server
                         jax.open({
-                                name : $F("user-nickname"),  //your chosen name
-                                icon : "user"                //!/your chosen icon
-                        }, function(o_response){  //-------------------------------------------------------------------------
+                                name : playerMe.name,  //your chosen name
+                                icon : playerMe.icon   //TODO: your chosen icon
+                        }, function(o_response){
                                 //if the server okay'd the new slot
                                 if (o_response.result) {
-                                         //the nickname/game was registered on the server, it can be remembered locally
-                                        playerMe.name = $F("user-nickname");
-                                        playerMe.icon = "user";
                                         //first function: onGameInit. when the game starts, but the other player has not yet
                                         //joined, display the code for the other player to use to join with
-                                        this.setSystemStatus('<p>Copy the key code below and give it<br />to your friend so'+
-                                        ' that they can join the game</p><p><input type="text" readonly="readonly" size="6"'+
-                                        ' value="' + jax.conn_id + '" /></p><p><br />Waiting for the other player to join'  +
-                                        '...</p><p><img src="../images/waiting.gif" width="16" height="16" alt="Waiting..."'+
-                                        ' /></p>');
+                                        this.setSystemStatus ('<p>Copy the key code below and give it<br />to your friend ' +
+                                        'so that they can join the game</p><p><input type="text" readonly="readonly" '      +
+                                        'size="6" value="' + jax.conn_id + '" /></p><p><br />Waiting for the other player ' +
+                                        'to join...</p><p><img src="../images/waiting.gif" width="16" height="16" '         +
+                                        'alt="Waiting..." /></p>');
                                         //set the chrome title
                                         this.setTitle (jax.conn_id + " - ");
                                         
                                 } else {
-                                        //!/start game or nickname failed
-                                        enableNicknameBox(true);
+                                        //TODO: start game or nickname failed
+                                        enableNicknameBox (true);
                                 }
-
-                        }.bind(this), function(o_response){  //--------------------------------------------------------------
-                                //second function: onGameStart. when the other player joins the game
-                                
-                                //the other player has joined the game.
-                                playerThem.name = o_response.data.name;
-                                playerThem.icon = o_response.data.icon;
-                                
-                                //set the chrome title
-                                this.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
-                                //start the game
-                                this.start ();
-                                
-                        }.bind(this));
+                        }.bind(this), preStart.bind(this));  //second function: when the other player joins the game
                         
                 } else {  //-------------------------------------------------------------------------------------------------
                         this.setTitle ("Joining Game... - ");
                         this.setSystemStatus ("<p>Joining Game</p><p>Please Wait&hellip;</p>");
                         
                         //connect to the other player
-                        jax.connect ($F("join-key"), {       //the connection key the user pasted into the text box
-                                name : $F("user-nickname"),  //your nickname to send to the other player
-                                icon : "user_red"            //!/your chosen icon
-                        }, function(o_response){
-                                //you've joined the game
-                                playerMe.name   = $F("user-nickname");
-                                playerMe.icon   = "user_red";
-                                playerThem.name = o_response.data.name;
-                                playerThem.icon = o_response.data.icon;
-                                
-                                //set the chrome title
-                                this.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
-                                //start the game
-                                this.start ();
-                                
-                        }.bind(this));
+                        jax.connect ($F("join-key"), {  //the connection key the user pasted into the text box
+                                name : playerMe.name,   //your nickname to send to the other player
+                                icon : playerMe.icon    //TODO: your chosen icon
+                        }, preStart.bind(this));
+                }
+                
+                /* PRIVATE > preStart : a hidden function available only to game.connect
+                   ======================================================================================================= */
+                function preStart (o_response) {
+                        //the other player has joined the game.
+                        playerThem.name = o_response.data.name;
+                        playerThem.icon = o_response.data.icon;
+                        
+                        //display player 1's name / icon
+                        $("jax-game-p1name").innerHTML = playerMe.name;
+                        $("jax-game-p1icon").src = "../images/icons/" + playerMe.icon + ".png";
+                        $("game-status-me").style.display = "block";
+                        this.setPlayerStatus ();
+
+                        //display player 2's name / icon
+                        $("jax-game-p2name").innerHTML = playerThem.name;
+                        $("jax-game-p2icon").src = "../images/icons/" + playerThem.icon + ".png";
+                        $("game-status-them").style.display = "block";
+                        
+                        //set the chrome title
+                        this.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
+                        //start the game
+                        this.start ();
                 }
         },
         
@@ -125,7 +126,7 @@ var game = {
                 } else if ((s_html && !v) || (!s_html && v)) {
                         //otherwise, if there's a message to show, and it's not visible, or if the message is being cleared
                         //and it is currently visible, then animate sliding open/closed
-                        new Effect.Parallel([
+                        new Effect.Parallel ([
                                 /*!/new Effect.Scale($("game-status-me"), (s_html?scale*100:100), {  //scale to %
                                         scaleFrom    : (s_html?100:scale*100),                   //scale from %
                                         scaleX       : false,                                    //do not scale width
@@ -161,16 +162,16 @@ var game = {
                         $("system-status-text").innerHTML = s_html;
                         
                 } else if ((s_html && !v) || (!s_html && v)) {
-                        new Effect.Opacity(e, {
+                        new Effect.Opacity (e, {
                                 duration    : 0.3,
                                 from        : (s_html?0:1),
                                 to          : (s_html?1:0),
                                 queue       : 'end',
-                                beforeStart : function () {
+                                beforeStart : function(){
                                         //before starting the animation, change the html
                                         if (s_html) {$("system-status-text").innerHTML = s_html; e.show ();}
                                 },
-                                afterFinish : function () {
+                                afterFinish : function(){
                                         //hide and blank
                                         if (!s_html) {e.hide (); $("system-status-text").innerHTML = "";}
                                 }
@@ -218,18 +219,23 @@ game.chat = {
 
         /* > show : make the chat section visible
            =============================================================================================================== */
-        show : function(){        
+        show : function(){
+                var e_shared_chat_input  = $("shared-chat-input"),
+                    e_shared_chat_label  = $("shared-chat-label"),
+                    e_shared_chat_emotes = $("shared-chat-emotes")
+                ;
+                
                 //make the chat section visible
                 $("shared-chat").style.display = "block";
                 //clear the chatbox textarea as Firefox will remember the field value on refresh
-                if (!$("shared-chat-input").value) {
-                        $("shared-chat-input").value = "";
-                        $("shared-chat-label").style.display = "block";
+                if (!e_shared_chat_input.value) {
+                        e_shared_chat_input.value = "";
+                        e_shared_chat_label.style.display = "block";
                 }
                 
                 var html = "";
                 //create the emote list
-                this.emotes.each(function(o_emote){
+                this.emotes.each (function(o_emote){
                         //emotes can be hidden so that they do not show in the panel, but still function when typed
                         if (!o_emote.hide) {
                                 //add the emoticon image to the collection
@@ -239,10 +245,10 @@ game.chat = {
                         }
                 });
                 //put the images into the panel
-                $("shared-chat-emotes").innerHTML = html;
+                e_shared_chat_emotes.innerHTML = html;
                 
                 //add an onclick event to each of the emotes in the panel
-                $A($("shared-chat-emotes").getElementsByTagName("img")).each(function(o_element){
+                $A(e_shared_chat_emotes.getElementsByTagName("img")).each (function(o_element){
                         o_element.onclick = game.events.chatEmoteClick;
                 });
                 
@@ -250,38 +256,37 @@ game.chat = {
                 $("shared-chat-emote").onclick = game.events.chatEmotesShow;
                 
                 //respond to chat messages
-                jax.listenFor("game_chat_message", function(o_response){
+                jax.listenFor ("game_chat_message", function(o_response){
                         //display the chat message received...
-                        this.addMessage(playerThem.name, playerThem.icon, o_response.data.msg);
+                        this.addMessage (playerThem.name, playerThem.icon, o_response.data.msg);
                 }.bind(this));
 
                 //when the user clicks on the textbox, hide the label
-                Event.observe ("shared-chat-input", "focus", function(e_event){
-                        $("shared-chat-label").style.display = "none";
+                Event.observe (e_shared_chat_input, "focus", function(e_event){
+                        e_shared_chat_label.style.display = "none";
                 });
                 //when focus on the textbox is lost, put the label back if the textbox is empty
-                Event.observe ("shared-chat-input", "blur", function(e_event){
-                        if (!$("shared-chat-input").value.replace(/^\s*|\s*$/g,"")) {
-                                $("shared-chat-label").style.display = "block";
+                Event.observe (e_shared_chat_input, "blur", function(e_event){
+                        if (!e_shared_chat_input.value.replace(/^\s*|\s*$/g,"")) {
+                                e_shared_chat_label.style.display = "block";
                         }
                 });
                 //if the user clicks on the label itself, pass focus to the textbox
-                Event.observe ("shared-chat-label", "click", function(e_event){
-                        $("shared-chat-input").focus();
+                Event.observe (e_shared_chat_input, "click", function(e_event){
+                        e_shared_chat_input.focus ();
                 });
 
                 //trap keypresses to the input field
-                Event.observe ("shared-chat-input", "keypress", function(e_event){
+                Event.observe (e_shared_chat_input, "keypress", function(e_event){
                         //if they press Return
                         if(e_event.keyCode == 13) {
                                 //disable the chat textbox and send the message...
-                                var e   = $("shared-chat-input"),
-                                    msg = e.value.replace(/^\s*|\s*$/g,"");
+                                var msg = e_shared_chat_input.value.replace (/^\s*|\s*$/g,"");
                                 ;
-                                e.value = "";
+                                e_shared_chat_input.value = "";
                                 if (msg.length) {
-                                        e.readOnly = true;
-                                        this.sendMessage(msg);
+                                        e_shared_chat_input.readOnly = true;
+                                        this.sendMessage (msg);
                                 }
                         }
                 }.bind(this));
@@ -289,12 +294,12 @@ game.chat = {
 
         /* > hide : make the chat section invisible
            =============================================================================================================== */
-        hide : function(){
+        hide : function () {
                 //hide the container
                 $("shared-chat").style.display = "none";
 
                 //stop listening for keypresses
-                Event.stopObserving("shared-chat-input", "keypress");
+                Event.stopObserving ("shared-chat-input", "keypress");
         },
 
         /* > sendMessage : send a chat message to the server for the other player
@@ -303,13 +308,13 @@ game.chat = {
            =============================================================================================================== */
         sendMessage : function (s_msg) {
                 //echo locally
-                this.addMessage(playerMe.name, playerMe.icon, s_msg);
+                this.addMessage (playerMe.name, playerMe.icon, s_msg);
 
                 //send the message to the server
-                jax.sendToQueue("game_chat_message", {msg:s_msg}, function(o_response){
+                jax.sendToQueue ("game_chat_message", {msg:s_msg}, function(o_response){
                         var e = $("shared-chat-input");
                         e.readOnly = false;
-                        e.focus();
+                        e.focus ();
                 });
         },
 
@@ -364,12 +369,12 @@ game.chat = {
 game.events = {
         /* > chatEmotesShow : slide open/closed the emoticon panel
            =============================================================================================================== */
-        chatEmotesShow : function(){
+        chatEmotesShow : function () {
                 //slide up the panel (by shrinking the chatlog)
-                var height = $("shared-chat-emotes").getDimensions().height,
-                    perc   = ((320-height) / 320) * 100
+                var height = $("shared-chat-emotes").getDimensions ().height,
+                    perc   = ((320 - height) / 320) * 100
                 ;
-                new Effect.Scale($("shared-chat-history"), (this.alt=="open"?perc:100), {
+                new Effect.Scale ($("shared-chat-history"), (this.alt=="open"?perc:100), {
                         scaleFrom    : (this.alt == "open" ? 100 : perc),
                         duration     : 0.3,
                         scaleX       : false,                  //do not scale width
@@ -385,7 +390,7 @@ game.events = {
         
         /* > chatEmoteClick : when you click on an emote in the emoticon panel
            =============================================================================================================== */
-        chatEmoteClick : function(){
+        chatEmoteClick : function () {
                 var alt = this.alt;
                 game.chat.emotes.each (function(o_emote){
                         if (o_emote.symbol == alt) {
@@ -400,7 +405,7 @@ game.events = {
 /* =======================================================================================================================
    > when the page finishes loading all code...
    ======================================================================================================================= */
-Event.observe(window, 'load', function(){
+Event.observe (window, 'load', function(){
         //put the version info in the log
         console.info ("Welcome to Jax Games | "+game.name+": "+game.version+" ["+Date()+"]\n"+
                       "jax: "+jax.version+" - Script.aculo.us: "+Scriptaculous.Version+" - Prototype: "+Prototype.Version+"\n"
@@ -412,13 +417,13 @@ Event.observe(window, 'load', function(){
         //firefox remembers the values in fields, even after refreshing, clear the chat box
         $("shared-chat-input").value = "";
         //run the load function defined in game.js for the game to handle some on load procedures of it's own
-        game.load();
+        game.load ();
 });
 
 /* =======================================================================================================================
    jax_disconnect < listen out for the disconnect message when the other player leaves the game
    ======================================================================================================================= */
-jax.listenFor("jax_disconnect", function(o_response) {
+jax.listenFor ("jax_disconnect", function(o_response) {
         //if the player closed the window...
         if (o_response.data.reason == "unload") {
                 game.setTitle (playerThem.name + " left the game - ");
@@ -426,30 +431,29 @@ jax.listenFor("jax_disconnect", function(o_response) {
         }
 });
 
-function showStartGame() {
+function showStartGame () {
         //enable the nickname textbox as Gecko will keep it disabled if you refesh the page
-        enableNicknameBox(true);
+        enableNicknameBox (true);
         $("join-game").style.display = "none";
         
         game.host = true;
-        game.showPage("user");
+        game.showPage ("user");
 }
 
-function showJoinGame() {
+function showJoinGame () {
         //enable the nickname textbox as Gecko will keep it disabled if you refesh the page
-        enableNicknameBox(true);
+        enableNicknameBox (true);
         $("join-game").style.display = "block";
         
         game.host = false;
-        game.showPage("user");
+        game.showPage ("user");
 }
 
 function enableNicknameBox (b_enabled) {
         var e;
         if (b_enabled) {
                 //enable the nickname text box
-                e = $("user-nickname");
-                e.disabled = "";
+                $("user-nickname").disabled = "";
                 e = $("user-submit");
                 e.disabled = "";
                 e.value = "Start Game";
@@ -459,14 +463,13 @@ function enableNicknameBox (b_enabled) {
                 e.disabled = "disabled";
                 e.value = "checking...";
                 //disable the nickname text box
-                e = $("user-nickname");
-                e.disabled = "";
+                $("user-nickname").disabled = "";
         }
 }
 
-function bsod(message, url, line) {
-        document.getElementById("jax-bsod").style.display = "block";
-        console.warning(line + ": " + message);
+function bsod (message, url, line) {
+        document.getElementById ("jax-bsod").style.display = "block";
+        console.warning (line + ": " + message);
         return true;
 }
 //!/window.onerror = bsod;

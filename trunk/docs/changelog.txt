@@ -1,5 +1,7 @@
 NEW : New feature/code | ADD : Addition/Change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+02.DEC.07
+    ADD: game.connect now sets the name/icon in the player info bars so that duplicate code is not needed in games/*/game.js
 01.DEC.07
     FIX: Othello: as the html table is not being recreated every time, the mouse events were not being removed after a click
     NEW: Othello now highlights which cells will be captured when hovering over a playable cell

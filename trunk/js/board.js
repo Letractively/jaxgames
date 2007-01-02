@@ -57,7 +57,7 @@ Board.prototype = {
                                 //chequer the board by alternating classes horizontally and vertically
                                 var chequer = (y%2 + x%2 == 1) ? "B" : "A";  
                                 //create the table cell and put the content in
-                                html += '\t\t\t\t\t<td id="'+this.getCell(x,y)+'" class="cell '+chequer+'">'+
+                                html += '\t\t\t\t\t<td id="'+this.getCellId(x,y)+'" class="cell '+chequer+'">'+
                                         this.cells[x][y]+'</td>\n'
                                 ;
                         }
@@ -70,13 +70,13 @@ Board.prototype = {
                 $(this.element).innerHTML = html;
         },
         
-        /* > getCell : return the html element id for a cell, given the x/y
+        /* > getCellId : return the html element id for a cell, given the x/y
            ===============================================================================================================
            params * n_x  : x cell reference
                     n_y  : y cell reference
            return * s_id : html element id of the cell requested 
            =============================================================================================================== */
-        getCell : function (n_x, n_y) {
+        getCellId : function (n_x, n_y) {
                 //'String.fromCharCode' is used to get the letter for the column number (e.g. 1=A, 2=B and so on)
                 return this.element + '-cell-' + String.fromCharCode (64+n_x) + n_y;
         },
@@ -102,7 +102,7 @@ Board.prototype = {
                 //loop over each row...              //loop over each column...
                 for (var y=1; y<=this.height; y++) { for (var x=1; x<=this.width; x++) {
                         //get the html element for this cell (x, y)
-                        var e = $(this.getCell (x, y));
+                        var e = $(this.getCellId (x, y));
                         //if the html in the cell is not the same as in memory, update it
                         if (e.innerHTML != this.cells[x][y]) {e.innerHTML = this.cells[x][y];}
                 } }

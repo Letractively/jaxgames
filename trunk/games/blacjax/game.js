@@ -106,34 +106,24 @@ Object.extend (game,
                     n_cards   : number of cards to draw for each player (default 7)
            =============================================================================================================== */
         start : function (b_mefirst, n_cards) {
+                //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
+                //entering their name / join key, game.connect is called. when a connection is established between the two
+                //players, this function is called for you
+                
                 if (b_mefirst == null) {b_mefirst = this.host;}  //default: host goes first
                 if (!n_cards)          {n_cards   = 7;}          //default: 7 cards each
                 
-                //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
-                //entering their name / join key, game.connect is called. when a connection is established between the two
-                //players, this function is called for you. playerMe & playerThem will have their details ready
                 this.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
                 
-                //display player 1's name / icon
-                $("jax-game-p1name").innerHTML = playerMe.name;
-                $("jax-game-p1icon").src = "../images/icons/" + playerMe.icon + ".png";
-                $("game-status-me").style.display = "block";
-                this.setPlayerStatus ();
-                
-                //display player 2's name / icon
-                $("jax-game-p2name").innerHTML = playerThem.name;
-                $("jax-game-p2icon").src = "../images/icons/" + playerThem.icon + ".png";
-                $("game-status-them").style.display = "block";
-                
                 //clear any cards on the table
-                [this.run, playerMe.hand, playerThem.hand].invoke("clear");
+                [this.run, playerMe.hand, playerThem.hand].invoke ("clear");
                 
                 //if you're going first..
                 if (b_mefirst) {
                         //prepare a new deck. the person who is going first shuffles a deck of cards and sends the order to
                         //the other player so that both players are playing off of the same order of cards
                         this.deck.cards.clear ();
-                        //note: if you want to setup a fake order of cards for forcing order of play, do it here
+                        //note: if you want to setup a fake deck of cards for forcing order of play, do it here
                         //?/this.deck.cards = ["AS", "4H", "5H", "2S", "3S", "6H", "7H", "3D", "4D", "5D"].reverse();
                         this.deck.addPack (
                                 this.pack,  //which pack to use in the deck
@@ -214,8 +204,8 @@ Object.extend (game,
         preempt : function (b_self) {
                 //this function is a 'switch box'. it is small and simple, but can confuse the hell out of you
                 
-                /* the game used to send a signal to the other player at the end of each turn. whilst very simple to do, this
-                   was very slow. the opponent would have to wait for all your animation to finish before switching players.
+                /* the game originally sent a signal to the other player at the end of each turn. whilst very simple to do,
+                   it was very slow. the opponent would have to wait for your animation to finish before switching players.
                    secondly, if you could not place a card and had to draw one instead, the opponent would have to wait until
                    you had drawn the card before they could be known aware of it. in the situation where neither player
                    could draw a card several times in a row, there would be a massive wait as the game switched from player
@@ -436,7 +426,7 @@ Object.extend (game.events,
            =============================================================================================================== */
         cardMouseOver : function () {
                 //on mouse over, nudge the card up a little by using a CSS class
-                if (!this.hasClassName ("card-hover")) {this.addClassName ("card-hover");}
+                this.addClassName ("card-hover");
                 
                 //the card's name is stored in the img tag's alt property
                 var card = this.alt,
@@ -470,7 +460,7 @@ Object.extend (game.events,
            =============================================================================================================== */
         cardMouseOut : function () {
                 //remove the CSS class to move it back to normal position
-                if (this.hasClassName ("card-hover")) {this.removeClassName ("card-hover");}
+                this.removeClassName ("card-hover");
                 //hide the label (for action cards)
                 $("game-label").hide ();
         },
