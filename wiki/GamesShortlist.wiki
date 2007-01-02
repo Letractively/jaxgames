@@ -23,3 +23,9 @@ Add here suggestions for games suitable for inclusion in Jax Games. Please bear 
 
   * *Battleships*
   A guessing game whereby the player must sink the battleships hidden in the opponents grid by giving cell references to attack. [http://en.wikipedia.org/wiki/Battleship_%28game%29 Wikipedia]
+
+  * *Chess*
+  Doesn't really need a description. [http://en.wikipedia.org/wiki/Chess Wikipedia]
+
+  * *Blokus*
+  A modern puzzle game where players must dispatch of up to 21 unique shapes by placing them so that no sides touch another existing piece. [http://en.wikipedia.org/wiki/Blokus Wikipedia]
