@@ -1,0 +1,22 @@
+#summary Games being made / should be made
+#labels Phase-Requirements
+
+= Currently In Production =
+  * *Blacjax (British Black Jack)*
+  Also known as Crazy 8's or Put Down. A card game similar to Uno, played with standard playing cards. Players have to get rid of all their cards, by matching suit or rank with the card on top of the discard pile. [http://en.wikipedia.org/wiki/Crazy_Eights Wikipedia]
+  * *Othello*
+  Originally 'Reversi', invented in 1880 in England, and became massively popular in Japan in the 1970's named Othello (after the Shakesperian play). Players must capture opponent pieces in order to have the most pieces once the board is full. [http://en.wikipedia.org/wiki/Reversi Wikipedia]
+
+
+= Suggestions =
+Add here suggestions for games suitable for inclusion in Jax Games. Please bear in mind:
+   # Some games are copyrighted, and possibly patented. In most cases, a game extends from original versions hundreds of years old and a differently named clone can be produced.
+   # This is HTML and Javascript, not Flash. Games must be turn based and practical to implement
+   # Not all games translate to web pages very well. There should be an element of strategy, and not just a random factor (like Dice)
+
+
+  * *Four-in-a-row (as Connect 4)*
+  Players take turns placing pieces to achieve four in a row to win. The board has simulated gravity, meaning that players cannot play anywhere, but only on the bottom of an empty column, or on top of pieces already in a column. [http://en.wikipedia.org/wiki/Connect_Four Wikipedia]
+
+  * *Checkers*
+  The American version of British Draughts, played on a smaller (and more practical for the Internet) board of 8x8. Players move their pieces to the other side of the board, capturing opponent pieces by jumping over them. [http://en.wikipedia.org/wiki/Draughts Wikipedia]
