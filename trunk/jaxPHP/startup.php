@@ -5,6 +5,8 @@
    licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
    jax, jax games (c) copyright Kroc Camen 2005-2007
 */
+require_once "config.php";
+
 session_start();
 $session_id = session_id();
 
