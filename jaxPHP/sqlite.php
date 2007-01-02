@@ -5,10 +5,10 @@
    licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
    jax, jax games (c) copyright Kroc Camen 2005-2007
 */	
-	require_once "libs/SQLiteDB.php";
+require_once "libs/SQLiteDB.php";
 
-$filename = "db/jax.sqlite";
-if (!is_writable("db")) die("result=&error=".urlencode("No write permissions for DB. Please chmod 777 the /server/db directory and contents"));
+$filename = $config['db_path'].$config['db_name'];
+if (!is_writable("db")) die("result=&error=".urlencode("No write permissions for DB. Please chmod 777 the ".$config['db_path']." directory and contents"));
 
 //open the mini database
 $database = new SQLiteDB($filename);
