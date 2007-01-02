@@ -4,7 +4,7 @@
      ==================================================================================================================== -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
 <head>
-	<?php include ("../../server/inc/head.html");?>
+	<?php include ("../inc/head.html");?>
 	<!-- === this game ============================================================================================== -->
 	<link rel="stylesheet" type="text/css" href="game.css" /><!-- ........... styles for this game .................. -->
 	<script type="text/javascript" src="../../js/cards.js">/* ............... playing cards classes ......... */</script>
@@ -86,6 +86,6 @@
                		<div id="game-status-text" class="hvt"></div>
                	</div></div></div>-->
 	</div>
-	<?php include ("../../server/inc/footer.html")?>
+	<?php include ("../inc/footer.html")?>
 </div></body>
 <!-- === end of line ============================================================================================= --></html>
