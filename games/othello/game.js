@@ -9,8 +9,9 @@
 
 rules of play:
 --------------
- + each player takes turn to place a single piece on the board. you must place a piece on an empty square adjacent to an
+ + each player takes turn to place a single piece on the board. you must place a piece on an empty square, adjacent to an
    opponent's piece, whereby another one of your own pieces is within line-of-sight (in one or more of the eight directions)
+   the opponents pieces then become yours and play changes sides
  + the winner is the player with the most pieces once all squares are filled, or when the opponent has no pieces remaining
  
 -------------------------------------------------------------------------------------------------------------------------- */
@@ -63,22 +64,13 @@ Object.extend (game,
            params * b_mefirst : who begins play (yourself, or the opponent)
            =============================================================================================================== */
         start : function (b_mefirst) {
-                if (b_mefirst == null) {b_mefirst = this.host;}  //default: host goes first
-                
                 //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
                 //entering their name / join key, game.connect is called. when a connection is established between the two
-                //players, this function is called for you. playerMe & playerThem will have their details ready
+                //players, this function is called for you
                 
-                //display player 1's name / icon
-                $("jax-game-p1name").innerHTML = playerMe.name;
-                $("jax-game-p1icon").src = "../images/icons/" + playerMe.icon + ".png";
-                $("game-status-me").style.display = "block";
-                this.setPlayerStatus ();
+                if (b_mefirst == null) {b_mefirst = this.host;}  //default: host goes first
                 
-                //display player 2's name / icon
-                $("jax-game-p2name").innerHTML = playerThem.name;
-                $("jax-game-p2icon").src = "../images/icons/" + playerThem.icon + ".png";
-                $("game-status-them").style.display = "block";
+                this.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
                 
                 //set which piece each player is using. the host always plays black, and goes first
                 playerMe.piece   = (this.host) ? "X" : "O";
@@ -124,7 +116,7 @@ Object.extend (game,
         updateBoard : function () {
                 //loop through the array holding the pieces, and put the relevant html into the board cells
                 for (var y=1; y<=8; y++) { for (var x=1; x<=8; x++) {
-                        var e = $(this.board.getCell(x, y));
+                        var e = $(this.board.getCellId(x, y));
                         //remove the hover effect from any cells
                         e.removeClassName ("hover");
                         //remove mouse events from any cells
@@ -135,7 +127,7 @@ Object.extend (game,
                         switch (this.pieces[x][y]) {
                                 case "X":
                                         //black
-                                        game.board.cells[x][y] = '<img src="images/black.png" width="40" height="40" alt="White" />';
+                                        game.board.cells[x][y] = '<img src="images/black.png" width="40" height="40" alt="Black" />';
                                         break;
                                 case "O":
                                         //white
@@ -167,7 +159,7 @@ Object.extend (game,
                                         //if there is a move...
                                         if (result) {
                                                 //put a mark in the cell to show it as playable
-                                                var e = $(game.board.getCell(result.x, result.y));
+                                                var e = $(game.board.getCellId(result.x, result.y));
                                                 e.innerHTML = '<img src="images/spot.png" width="3" height="3" alt="Click '+
                                                               'to place your piece here" />'
                                                 ;
@@ -213,7 +205,7 @@ Object.extend (game,
                 //if a callback function is provided as f_piece, it will be called on each opponent piece encountered along
                 //the way - *even if the specified direction does not turn out to be playable*. therefore you should first
                 //call this function without a callback to see if the direction is playable, before repeating with the
-                //callback. example of use in this game are: flipping the pieces over and highlighting the cells
+                //callback. examples of use in this game are: flipping the pieces over and highlighting the cells
                 
                 if (!n_distance) {n_distance = 0;}                        //default: start counting number of steps
                 if (!f_piece)    {f_piece    = Prototype.emptyFunction;}  //default: no callback
@@ -276,7 +268,8 @@ Object.extend (game,
            params * b_self : if you or them should be checked (true = you)
            =============================================================================================================== */
         preempt : function (b_self) {
-                var piece          = (b_self ? playerMe : playerThem).piece,  //the player's piece (X or O)
+                //the player's piece (X or O)
+                var piece          = (b_self ? playerMe : playerThem).piece,
                     count          = {
                             moves  : 0,  //number of playable moves on the board (for the player specified)
                             me     : 0,  //number of squares occupied by you
@@ -286,7 +279,7 @@ Object.extend (game,
                 ;
                 //check for available moves (loop all cells in the table...)
                 for (var y=1; y<=8; y++) { for (var x=1; x<=8; x++) {
-                        //count this cell (the totals used to determine the winner)
+                        //count this cell (the totals are used to determine the winner)
                         switch (this.pieces[x][y]) {
                                 case playerMe.piece   : count.me     ++; break;  //occupied by you
                                 case playerThem.piece : count.them   ++; break;  //occupied by them
@@ -352,28 +345,28 @@ Object.extend (game,
                 
                 //listen out for the 'play again' signal from the other person
                 jax.listenFor("game_again", function(o_response){
-                        game.start(!b_winner);
+                        game.start (!b_winner);
                 });
                 
         },
         
         playAgain : function (b_winner) {
                 //stop listening for the play again signal from the other player
-                jax.listenFor("game_again");
+                jax.listenFor ("game_again");
                 //if you won, the loser starts, display a message whilst you wait for them to start
                 if (b_winner) {
                         game.setSystemStatus ("Waiting for the other player to start, Please Wait...");
                 }
                 //notify the opponent that the game is starting again
-                jax.sendToQueue("game_again", {winner: b_winner});
+                jax.sendToQueue ("game_again", {winner: b_winner});
                 //start the game for yourself (loser goes first)
-                game.start(!b_winner);
+                game.start (!b_winner);
         },
         
         resign : function () {
-                jax.disconnect({reason: "unload"});
-                game.setPlayerStatus();
-                game.setSystemStatus();
+                jax.disconnect ({reason: "unload"});
+                game.setPlayerStatus ();
+                game.setSystemStatus ();
         }
         
         /* > setStatus : the box in the game for status, like 'other player's turn, please wait'
@@ -440,14 +433,14 @@ Object.extend (game.events,
                 //get the x/y location of the cell clicked
                 var position = game.board.getCoordsFromId (this.id);
                 
-                $(game.board.getCell(position.x, position.y)).addClassName ("hover");
+                $(game.board.getCellId(position.x, position.y)).addClassName ("hover");
                 
                 for (var dir=0; dir<8; dir++) {
                         if (game.findBridge (true, position.x, position.y, dir, null, true)) {
                                 var endcap = game.findBridge (true, position.x, position.y, dir, function(n_dir,n_x,n_y,n_dist){
-                                        $(game.board.getCell(n_x, n_y)).addClassName ("hover");
+                                        $(game.board.getCellId(n_x, n_y)).addClassName ("hover");
                                 }, true);
-                                $(game.board.getCell(endcap.x, endcap.y)).addClassName ("hover");
+                                $(game.board.getCellId(endcap.x, endcap.y)).addClassName ("hover");
                         }
                 }
         },
@@ -458,14 +451,14 @@ Object.extend (game.events,
                 //get the x/y location of the cell clicked
                 var position = game.board.getCoordsFromId (this.id);
                 
-                $(game.board.getCell(position.x, position.y)).removeClassName ("hover");
+                $(game.board.getCellId(position.x, position.y)).removeClassName ("hover");
                 
                 for (var dir=0; dir<8; dir++) {
                         if (game.findBridge (true, position.x, position.y, dir, null, true)) {
                                 var endcap = game.findBridge (true, position.x, position.y, dir, function(n_dir,n_x,n_y,n_dist){
-                                        $(game.board.getCell(n_x, n_y)).removeClassName ("hover");
+                                        $(game.board.getCellId(n_x, n_y)).removeClassName ("hover");
                                 }, true);
-                                $(game.board.getCell(endcap.x, endcap.y)).removeClassName ("hover");
+                                $(game.board.getCellId(endcap.x, endcap.y)).removeClassName ("hover");
                         }
                 }
         }
