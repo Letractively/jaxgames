@@ -20,3 +20,6 @@ Add here suggestions for games suitable for inclusion in Jax Games. Please bear 
 
   * *Checkers*
   The American version of British Draughts, played on a smaller (and more practical for the Internet) board of 8x8. Players move their pieces to the other side of the board, capturing opponent pieces by jumping over them. [http://en.wikipedia.org/wiki/Draughts Wikipedia]
+
+  * *Battleships*
+  A guessing game whereby the player must sink the battleships hidden in the opponents grid by giving cell references to attack. [http://en.wikipedia.org/wiki/Battleship_%28game%29 Wikipedia]
