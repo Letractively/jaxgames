@@ -1,7 +1,7 @@
 NEW : New feature/code | ADD : Addition/Change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 02.DEC.07
-    ADD: changed /server folder to /jaxPHP. jax.js (and the PHP backend) will eventually become a separate, reusable script
+    ADD: changed /server folder to /jax_php. jax.js (and the PHP backend) will eventually become a separate, reusable script
          and distributed on the site by itself as well as with JaxGames.
     NEW: added CONFIG.php so that users can change the database path without having to edit JaxPHP directly.
     ADD: game.connect now sets the name/icon in the player info bars so that duplicate code is not needed in games/*/game.js
