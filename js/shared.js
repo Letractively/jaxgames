@@ -3,7 +3,7 @@
    ======================================================================================================================= */
 
 //create an instance of Jax, direct it to the PHP page to receive the AJAX calls
-var jax = new Jax ("../../jaxPHP/response.php");
+var jax = new Jax ("../../jax_php/response.php");
 
 /* =======================================================================================================================
    CLASS Player - a base class, your game can extend this to add more player properties
