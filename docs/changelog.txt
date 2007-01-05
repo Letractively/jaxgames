@@ -2,11 +2,15 @@
 jaxgames changelog | NEW : New feature/code | ADD : Addition/Change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 05.JAN.07
+    ADD: Renamed /games/images/ to /games/- and moved games/inc to /games/-/inc. with this name, the images folder stands
+         out from the folders containing games, there are no longer two folders not related to games there, and "-" will
+         always stay at the top of the list when alphabetically sorted. Also, less letters in the CSS/HTMl saving a few bytes
+         for what it's worth
     ADD: removed the ability for users to choose icons. user's icons will be according to what game they are playing to
          better remind them of which piece they are, and to simplify the code / speed up starting games. this is blue vs.
          red for the moment until icons have been made for each of the current games
     ADD: Some CSS cleaning and reorganisation
-    NEW: games/fourinarow, completely non functional at the moment
+    NEW: /games/fourinarow, completely non functional at the moment
     NEW: /docs/todo.txt to detail main tasks
     FIX: Player.wins default was "" not 0
     FIX: Play Again not working on othello, this.start was in the wrong scope (see game.end)

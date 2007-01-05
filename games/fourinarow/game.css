@@ -5,11 +5,11 @@
    jax, jax games (c) copyright Kroc Camen 2005-2007
 */
 
-h1      {/*background-image: url("images/title.png");*/}
+h1      {/*background-image: url("-/title.png");*/}
 
 #page-title, #page-user, #page-join
 	{padding: 15px; width: 482px; height: 354px;}
 
-#shared-gamearea {background-color: #008000; background-image: url("../images/felt.jpg");}
+#shared-gamearea {background-color: #008000; background-image: url("../-/felt.jpg");}
 
 /* === end of line ======================================================================================================= */

@@ -104,7 +104,7 @@ var game = {
                         e.onmouseout  = Prototype.emptyFuncyion;
                         
                         //update the html for the cell (in memory)
-                        this.board.cells[x][y] = (this.pieces[x][y] == "") ? "" : '<img width="40" height="40" src="images/'+
+                        this.board.cells[x][y] = (this.pieces[x][y] == "") ? "" : '<img width="40" height="40" src="-/'+
                                                  (this.pieces[x][y]=="X"?'black.png" alt="Black':'white.png" alt="White')+'" />'
                         ;
                 } }

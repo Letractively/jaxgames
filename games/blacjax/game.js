@@ -612,7 +612,7 @@ game.run = {
         /* > displayFace : update just the face card
            =============================================================================================================== */
         displayFace : function () {
-                $("game-face").innerHTML = (this.face) ? '<img src="../images/cards/'+this.face+'.png" width="71" height="96" alt="Face" />' : "";
+                $("game-face").innerHTML = (this.face) ? '<img src="../-/cards/'+this.face+'.png" width="71" height="96" alt="Face" />' : "";
         },
 
         /* > getCardPositions : return the positions for each card, given a number of cards to fit into the run

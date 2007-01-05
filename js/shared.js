@@ -66,7 +66,7 @@ var shared = {
                                         this.setSystemStatus ('<p>Copy the key code below and give it<br />to your friend ' +
                                         'so that they can join the game</p><p><input type="text" readonly="readonly" '      +
                                         'size="6" value="' + jax.conn_id + '" /></p><p><br />Waiting for the other player ' +
-                                        'to join...</p><p><img src="../images/waiting.gif" width="16" height="16" '         +
+                                        'to join...</p><p><img src="../-/waiting.gif" width="16" height="16" '         +
                                         'alt="Waiting..." /></p>');
                                         //set the chrome title
                                         this.setTitle (jax.conn_id + " - ");
@@ -96,13 +96,13 @@ var shared = {
                         
                         //display player 1's name / icon
                         $("jax-game-p1name").innerHTML = playerMe.name;
-                        $("jax-game-p1icon").src = "../images/icons/" + playerMe.icon + ".png";
+                        $("jax-game-p1icon").src = "../-/icons/" + playerMe.icon + ".png";
                         $("player-status-me").style.display = "block";
                         this.setPlayerStatus ();
 
                         //display player 2's name / icon
                         $("jax-game-p2name").innerHTML = playerThem.name;
-                        $("jax-game-p2icon").src = "../images/icons/" + playerThem.icon + ".png";
+                        $("jax-game-p2icon").src = "../-/icons/" + playerThem.icon + ".png";
                         $("player-status-them").style.display = "block";
                         
                         //set the chrome title
@@ -195,7 +195,7 @@ var shared = {
    OBJECT shared.chat - manage the chatbox aside the game
    ======================================================================================================================= */
 shared.chat = {
-        /* list of emotes. the file name matches the image file name (sans extension) in /games/images/emotes/
+        /* list of emotes. the file name matches the image file name (sans extension) in /games/-/emotes/
            refer to: http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Guide:Regular_Expressions for regex rules
         */
         emotes : [
@@ -241,7 +241,7 @@ shared.chat = {
                         //emotes can be hidden so that they do not show in the panel, but still function when typed
                         if (!o_emote.hide) {
                                 //add the emoticon image to the collection
-                                html += '<img src="../images/emotes/'+o_emote.file+'.png" width="16" height="16" '+
+                                html += '<img src="../-/emotes/'+o_emote.file+'.png" width="16" height="16" '+
                                         'alt="'+o_emote.symbol+'" title="'+o_emote.symbol+'" />'
                                 ;
                         }
@@ -337,7 +337,7 @@ shared.chat = {
                 s_msg = s_msg.escapeHTML ();
                 this.emotes.each (function(o_emote, n_index){
                         //replace the emote with the image
-                        s_msg = s_msg.replace (o_emote.regex, '<img src="../images/emotes/'+o_emote.file+'.png" width="16" '+
+                        s_msg = s_msg.replace (o_emote.regex, '<img src="../-/emotes/'+o_emote.file+'.png" width="16" '+
                                                'height="16" alt="'+o_emote.symbol+'" title="'+o_emote.symbol+'" />'
                         );
                 }.bind(this));
@@ -346,7 +346,7 @@ shared.chat = {
                 //multiple messages coming in at the same time don't overwrite each other
                 var e = $("shared-chat-history");
                 new Insertion.Bottom (e, '<div id="chat-'+timeid+'" class="chat-'+(s_name==playerMe.name?"me":"them")+'" '+
-                                         'style="display: none;"><p><em>'+timestamp+'</em> <img src="../images/icons/'+
+                                         'style="display: none;"><p><em>'+timestamp+'</em> <img src="../-/icons/'+
                                          s_icon+'.png" width="16" height="16" alt="User icon" /> <strong>'+s_name+
                                          '</strong></p><blockquote><p>'+s_msg+'</p></blockquote></div>'
                 );

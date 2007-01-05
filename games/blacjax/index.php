@@ -4,7 +4,7 @@
      ==================================================================================================================== -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
 <head>
-	<?php include ("../inc/head.html");?>
+	<?php include ("../-/inc/head.html");?>
 	<!-- === this game ============================================================================================== -->
 	<link rel="stylesheet" type="text/css" href="game.css" /><!-- ........... styles for this game .................. -->
 	<script type="text/javascript" src="../../js/cards.js">/* ............... playing cards classes ......... */</script>
@@ -42,16 +42,16 @@
 		<!-- === common game elements =========================================================================== -->
 		<div id="player-status-them" class="player-status">
 		        <div id="player-status-them-info" class="player-info">
-		                <div id="player-status-them-win"><img src="../images/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /> <strong>Wins:</strong> <span id="player-status-them-wins">0</span></div>
-		                <div id="player-status-them-score"><img src="../images/icons/coins.png" width="16" height="16" align="top" alt="Points" /> <strong>Points:</strong> <span id="player-status-them-points">0</span></div>
-			        <span id="jax-game-p2name" class="player-name">Player 2</span> <img src="../images/icons/user_red.png" id="jax-game-p2icon" width="16" height="16" alt="User Icon" align="top" />
+		                <div id="player-status-them-win"><img src="../-/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /> <strong>Wins:</strong> <span id="player-status-them-wins">0</span></div>
+		                <div id="player-status-them-score"><img src="../-/icons/coins.png" width="16" height="16" align="top" alt="Points" /> <strong>Points:</strong> <span id="player-status-them-points">0</span></div>
+			        <span id="jax-game-p2name" class="player-name">Player 2</span> <img src="../-/icons/user_red.png" id="jax-game-p2icon" width="16" height="16" alt="User Icon" align="top" />
 			</div>
 		</div>
 		<div id="player-status-me" class="player-status">
 		        <div id="player-status-me-info" class="player-info">
-		                <div id="player-status-me-win"><strong>Wins:</strong> <span id="player-status-me-wins">0</span> <img src="../images/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /></div>
-		                <div id="player-status-me-score"><strong>Points:</strong> <span id="player-status-me-points">0</span> <img src="../images/icons/coins.png" width="16" height="16" align="top" alt="Points" /></div>
-			        <img src="../images/icons/user.png" id="jax-game-p1icon" width="16" height="16" alt="User Icon" align="top" /> <span id="jax-game-p1name" class="player-name">Player 1</span>
+		                <div id="player-status-me-win"><strong>Wins:</strong> <span id="player-status-me-wins">0</span> <img src="../-/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /></div>
+		                <div id="player-status-me-score"><strong>Points:</strong> <span id="player-status-me-points">0</span> <img src="../-/icons/coins.png" width="16" height="16" align="top" alt="Points" /></div>
+			        <img src="../-/icons/user.png" id="jax-game-p1icon" width="16" height="16" alt="User Icon" align="top" /> <span id="jax-game-p1name" class="player-name">Player 1</span>
 			</div><div id="player-status-me-msg" class="player-msg" style="display: none;">
 			        &nbsp;
 			</div>
@@ -60,6 +60,6 @@
                		<div id="game-status-text" class="hvt"></div>
                	</div></div></div>-->
 	</div>
-	<?php include ("../inc/footer.html")?>
+	<?php include ("../-/inc/footer.html")?>
 </div></body>
 <!-- === end of line ============================================================================================= --></html>
