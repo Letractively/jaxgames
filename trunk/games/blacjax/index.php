@@ -24,32 +24,6 @@
 			<p><a href="javascript:shared.showPage('title');">&laquo; Back</a></p>
 			<p><label for="user-nickname">Enter a desired nickname:</label></p>
 			<p><input type="text" name="user-nickname" id="user-nickname" maxlength="20" /></p>
-			<fieldset style="background-image: url('../images/mask.png');"><legend>Choose an icon for yourself</legend>
-			    <table id="user-icon-select">
-			        <tr>
-			                <td><img id="user-icon-user" src="../images/icons/user.png" width="16" height="16" alt="User" /></td>
-			                <td><img id="user-icon-user_red" src="../images/icons/user_red.png" width="16" height="16" alt="User" /></td>
-			                <td><img id="user-icon-user_green" src="../images/icons/user_green.png" width="16" height="16" alt="User" /></td>
-			                <td><img id="user-icon-user_female" src="../images/icons/user_female.png" width="16" height="16" alt="User" /></td>
-			                <td><img id="user-icon-user_suit" src="../images/icons/user_suit.png" width="16" height="16" alt="User" /></td>
-			                <td><img id="user-icon-user_gray" src="../images/icons/user_gray.png" width="16" height="16" alt="User" /></td>
-			        </tr><tr>
-			                <td><img id="user-icon-flag_blue" src="../images/icons/flag_blue.png" width="16" height="16" alt="User" /></td>
-			                <td><img id="user-icon-flag_red" src="../images/icons/flag_red.png" width="16" height="16" alt="User" /></td>
-			                <td><img id="user-icon-flag_green" src="../images/icons/flag_green.png" width="16" height="16" alt="User" /></td>
-			                <td><img id="user-icon-flag_yellow" src="../images/icons/flag_yellow.png" width="16" height="16" alt="User" /></td>
-			                <td><img id="user-icon-male" src="../images/icons/male.png" width="16" height="16" alt="User" /></td>
-			                <td><img id="user-icon-female" src="../images/icons/female.png" width="16" height="16" alt="User" /></td>
-			        </tr><tr>
-			                <td><img id="user-icon-star" src="../images/icons/star.png" width="16" height="16" alt="User" /></td>
-			                <td><img id="user-icon-heart" src="../images/icons/heart.png" width="16" height="16" alt="User" /></td>
-			                <td><img id="user-icon-cup" src="../images/icons/cup.png" width="16" height="16" alt="User" /></td>
-			                <td><img id="user-icon-house" src="../images/icons/house.png" width="16" height="16" alt="User" /></td>
-			                <td><img id="user-icon-gb" src="../images/icons/gb.png" width="16" height="16" alt="User" /></td>
-			                <td><img id="user-icon-us" src="../images/icons/us.png" width="16" height="16" alt="User" /></td>
-			        </tr>
-			    </table>
-			</fieldset>
 			<div id="join-game">
 				<p>Paste the key code your friend has given you into the box below to join the game.</p>
 				<p><input type="text" name="join-key" id="join-key" size="6" maxlength="6" /></p>
@@ -66,19 +40,19 @@
 			<div id="game-nearhand"></div>
 		</div>
 		<!-- === common game elements =========================================================================== -->
-		<div id="game-status-them" class="game-player-status">
-		        <div id="game-status-them-info" class="game-player-info">
-		                <div id="game-status-them-win"><img src="../images/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /> <strong>Wins:</strong> <span id="game-status-them-wins">0</span></div>
-		                <div id="game-status-them-score"><img src="../images/icons/coins.png" width="16" height="16" align="top" alt="Points" /> <strong>Points:</strong> <span id="game-status-them-points">0</span></div>
-			        <span id="jax-game-p2name" class="jax-game-player-name">Player 2</span> <img src="../images/icons/user_red.png" id="jax-game-p2icon" width="16" height="16" alt="User Icon" align="top" />
+		<div id="player-status-them" class="player-status">
+		        <div id="player-status-them-info" class="player-info">
+		                <div id="player-status-them-win"><img src="../images/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /> <strong>Wins:</strong> <span id="player-status-them-wins">0</span></div>
+		                <div id="player-status-them-score"><img src="../images/icons/coins.png" width="16" height="16" align="top" alt="Points" /> <strong>Points:</strong> <span id="player-status-them-points">0</span></div>
+			        <span id="jax-game-p2name" class="player-name">Player 2</span> <img src="../images/icons/user_red.png" id="jax-game-p2icon" width="16" height="16" alt="User Icon" align="top" />
 			</div>
 		</div>
-		<div id="game-status-me" class="game-player-status">
-		        <div id="game-status-me-info" class="game-player-info">
-		                <div id="game-status-me-win"><strong>Wins:</strong> <span id="game-status-me-wins">0</span> <img src="../images/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /></div>
-		                <div id="game-status-me-score"><strong>Points:</strong> <span id="game-status-me-points">0</span> <img src="../images/icons/coins.png" width="16" height="16" align="top" alt="Points" /></div>
-			        <img src="../images/icons/user.png" id="jax-game-p1icon" width="16" height="16" alt="User Icon" align="top" /> <span id="jax-game-p1name" class="jax-game-player-name">Player 1</span>
-			</div><div id="game-status-me-msg" class="game-player-msg" style="display: none;">
+		<div id="player-status-me" class="player-status">
+		        <div id="player-status-me-info" class="player-info">
+		                <div id="player-status-me-win"><strong>Wins:</strong> <span id="player-status-me-wins">0</span> <img src="../images/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /></div>
+		                <div id="player-status-me-score"><strong>Points:</strong> <span id="player-status-me-points">0</span> <img src="../images/icons/coins.png" width="16" height="16" align="top" alt="Points" /></div>
+			        <img src="../images/icons/user.png" id="jax-game-p1icon" width="16" height="16" alt="User Icon" align="top" /> <span id="jax-game-p1name" class="player-name">Player 1</span>
+			</div><div id="player-status-me-msg" class="player-msg" style="display: none;">
 			        &nbsp;
 			</div>
 		</div>

@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- ====================================================================================================================
-     othello - copyright (c) Kroc Camen 2006, 2007
+     fourinarow - copyright (c) Kroc Camen 2007
      ==================================================================================================================== -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
 <head>
@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="game.js">/* ......................... game logic .................... */</script>
 </head>
 <body><div id="body">
-	<h1><span>Othello</span></h1>
+	<h1><span>Four In A Row</span></h1>
 	<div id="shared-gamearea">
 		<!-- === title = title screen, start or join a game ===================================================== -->
 		<div id="page-title">
@@ -31,15 +31,7 @@
 		</div>
 		<!-- === game = the main game display =================================================================== -->
 		<div id="page-game">
-		        <div id="game-board"></div>
-		        <div id="game-paper-me" class="game-paper">
-		                <div id="game-paper-me-pieces" class="game-paper-pieces"></div>
-		                <div id="game-paper-me-piece"></div>
-		        </div>
-		        <div id="game-paper-them" class="game-paper">
-		                <div id="game-paper-them-piece"></div>
-	                        <div id="game-paper-them-pieces" class="game-paper-pieces"></div>
-		        </div>
+		        <div id="game-grid"></div>
 		</div>
 		<!-- === common game elements =========================================================================== -->
 		<div id="player-status-them" class="player-status">

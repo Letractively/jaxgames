@@ -1,22 +1,15 @@
 /* =======================================================================================================================
-   css/global.css - the defaults that should have been
+   games/fourinarow/game.css - styles specific for this game
    =======================================================================================================================
    licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
    jax, jax games (c) copyright Kroc Camen 2005-2007
 */
 
-body, html {height: 100%, width: 100%; padding: 0; margin: 0; border: 0;
-            font: normal 12px Arial, sans-serif;}
+h1      {/*background-image: url("images/title.png");*/}
 
-p     {padding: 5px; margin: 0;}
-p img {vertical-align: top;}
+#page-title, #page-user, #page-join
+	{padding: 15px; width: 482px; height: 354px;}
 
-a img {vertical-align: top; border: 0;}
-
-h1 {margin: 0; padding: 14px 0 0 5px; font: bold 24px Arial, sans-serif; height: 30px;
-    background-color: #A02; color: white;}
-
-input[type=text] {font: normal 12px "Courier New", Courier, Monospace;}
-
+#shared-gamearea {background-color: #008000; background-image: url("../images/felt.jpg");}
 
 /* === end of line ======================================================================================================= */

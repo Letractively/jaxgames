@@ -20,34 +20,56 @@ h1 span {visibility: hidden;}
 .hv2 {_position: absolute; _top: 50%; display: table-cell; vertical-align: middle;}
 .hvt {_position: relative; _top: -50%;}
 
-#system-status        {top: 0; left: 0; width: 640px; height: 429px; background-image: url("../games/images/mask.png");}
-#system-status .hv1   {height: 450px; width: 640px;}
-#system-status-text   {font: normal 11px Arial; text-align: center; color: white;}
+/* === player info ======================================================================================================= */
+.player-status            {display: none; position: absolute; height: 21px; width: 512px; color: white;}
+.player-info              {height: 18px; padding: 3px 5px 0 5px; margin: 0;}
+.player-msg               {width: 512px; height: 63px; text-align: center; background-image: url("../games/images/barbg.png");}
 
-#shared-chatcol           {width: 127px; height: 384px; float: left; border-left: solid 1px #010801; background-color: #dada96;}
+.player-name              {font-weight: bold;}
+
+#player-status-them       {top: 45px; background-image: url("../games/images/barthem.png");}
+#player-status-them-info  {text-align: right;} 
+#player-status-them-win   {float: left;}
+#player-status-them-score {float: left; margin-left: 8px;}
+
+#player-status-me         {top: 408px; background-image: url("../games/images/barme.png"); background-repeat: repeat-x;}
+#player-status-me-win     {float: right; text-align: right;}
+#player-status-me-score   {float: right; margin-right: 8px;}
+
+/* === screen overlay ==================================================================================================== */
+#system-status            {top: 0; left: 0; width: 640px; height: 429px; background-image: url("../games/images/mask.png");}
+#system-status .hv1       {height: 450px; width: 640px;}
+#system-status-text       {font: normal 11px Arial; text-align: center; color: white;}
+
+/* === chat ============================================================================================================== */
+#shared-chatcol           {float: left; width: 127px; height: 384px; border-left: solid 1px #010801; background-color: #dada96;}
 #shared-chat              {display: none; font-size: 11px; color: #6E654D;}
 #shared-chat-history      {height: 320px; overflow: auto;}
+
+/* --- the individual messages --- */
 #shared-chat p            {padding: 3px 2px 0 2px; margin: 0; font-style: italic; color: #7f7e45;}
 #shared-chat p em         {display: block; float: right;}
 #shared-chat p img        {vertical-align: middle;}
 #shared-chat blockquote   {margin: 0; padding: 0 3px 0 3px;}
 #shared-chat blockquote p {font-style: normal; padding: 0;}
+.chat-them                {background-color: #caca86;}
 
+/* --- the input area --- */
+#shared-chat-text         {background-color: #393939;}
+#shared-chat-label        {position: absolute; width: 127px; margin-top: 16px;
+                           text-align: center; font: italic 10px Tahoma, sans-serif; cursor: text;}
+#shared-chat textarea     {width: 125px; height: 42px; margin: 0; padding: 0 0 0 2px; border: 0;
+                           border-top: solid 1px #404040; font-family: Tahoma, sans-serif; font-size: 11px; color: #404040;
+                           background-image: url("../games/images/chatbg.png");}
+#shared-chat-text p       {width: 124px; height: 21px; padding: 0 3px 0 0; margin: 0;
+                           background-image: url("../games/images/barme.png"); text-align: right;}
 
-#shared-chat-text     {background-color: #393939;}
-#shared-chat-label    {position: absolute; width: 127px; margin-top: 16px; text-align: center; font: italic 10px Tahoma, sans-serif; cursor: text;}
-#shared-chat textarea {width: 125px; height: 42px; margin: 0; padding: 0 0 0 2px; border: 0; border-top: solid 1px #404040;
-                       font-family: Tahoma, sans-serif; font-size: 11px; color: #404040;
-                       background-image: url("../games/images/chatbg.png");}
-#shared-chat-text p   {width: 124px; height: 21px; padding: 0 3px 0 0; margin: 0;
-                       background-image: url("../games/images/barme.png"); text-align: right;}
+/* --- emote list --- */
+#shared-chat-emote        {cursor: pointer;}
+#shared-chat-emotes       {text-align: center; padding: 2px 0 2px 0; background-color: #171717;}
+#shared-chat-emotes img   {padding: 2px; cursor: pointer;}
 
-.chat-them {background-color: #caca86;}
-
-#shared-chat-emote      {cursor: pointer;}
-#shared-chat-emotes     {text-align: center; padding: 2px 0 2px 0; background-color: #171717;}
-#shared-chat-emotes img {padding: 2px; cursor: pointer;}
-
+/* === error screen ====================================================================================================== */
 #bsod        {display: none;}
 .bsod        {position:  absolute; top: 0; left: 0; width: 640px; height: 450px;
 	      text-align: center; background-color: #0000ac; -moz-opacity:  0.9;}
