@@ -329,8 +329,8 @@ var game = {
                 shared.setPlayerStatus ("<p>"+(b_winner?"YOU WIN":"YOU LOSE")+"<br />"+html);
                 //update the player info display
                 winner.wins ++;
-                $("game-status-me-wins").innerHTML   = playerMe.wins;
-                $("game-status-them-wins").innerHTML = playerThem.wins;
+                $("player-status-me-wins").innerHTML   = playerMe.wins;
+                $("player-status-them-wins").innerHTML = playerThem.wins;
                 
                 //listen out for the resign signal from the other person
                 /*jax.listenFor("jax_disconnect", function(o_response) {

@@ -334,8 +334,8 @@ var game = {
                 shared.played ++;
                 (b_winner?playerMe:playerThem).wins ++;  //increase the tally for the winner
                 shared.setPlayerStatus ("<p>"+(b_winner?"YOU WIN":"YOU LOSE")+"<br />"+html);
-                $("game-status-me-wins").innerHTML   = playerMe.wins;
-                $("game-status-them-wins").innerHTML = playerThem.wins;
+                $("player-status-me-wins").innerHTML   = playerMe.wins;
+                $("player-status-them-wins").innerHTML = playerThem.wins;
                 
                 //listen out for the 'play again' signal from the other person
                 jax.listenFor("game_again", function(o_response){

@@ -1,5 +1,5 @@
 /* =======================================================================================================================
-   games/blacjax/game.css - styles specific for this game
+   games/othello/game.css - styles specific for this game
    =======================================================================================================================
    licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
    jax, jax games (c) copyright Kroc Camen 2005-2007
@@ -12,12 +12,14 @@ h1      {background-image: url("images/title.png");}
 
 #shared-gamearea {background-color: #008000; background-image: url("../images/felt.jpg");}
 
+/* === board ============================================================================================================= */
 #game-board        {text-align: center; margin-top: 13px; width: 512px; height: 384px;
                     background-image: url("images/board.png"); background-repeat: no-repeat; background-position: top center;}
 #game-board-table  {margin-left: 95px; margin-top: 18px; width: 321px; border-collapse: collapse; border: 0;}
 #game-board .cell  {width: 40px; height: 40px; padding: 0; margin: 0; border: 0; vertical-align: middle; text-align: center;}
-#game-board .hover {background-image: url("images/hover.png"); background-repeat: no-repeat;}
+#game-board .hover {background-image: url("images/hover.png"); background-repeat: no-repeat; cursor: pointer;}
 
+/* === piece counts ====================================================================================================== */
 .game-paper        {text-align: center;}
 #game-paper-me     {position: absolute; top: 266px; left: 0; width: 86px; height: 163px; padding: 30px 6px 0 0;
                     background-image: url("images/paperme.png"); background-repeat: no-repeat;}
@@ -25,19 +27,10 @@ h1      {background-image: url("images/title.png");}
                     background-image: url("images/paperthem.png"); background-repeat: no-repeat;}
 .game-paper-pieces {font: normal 32px/52px Georgia, serif;}
 
-.game-player-status    {display: none; position: absolute; height: 21px; width: 512px; color: white;}
-.game-player-info      {height: 18px; padding: 3px 5px 0 5px; margin: 0;}
-.game-player-msg       {width: 512px; height: 63px; text-align: center; background-image: url("../images/barbg.png");}
 
-#game-status-them      {top: 45px; background-image: url("../images/barthem.png");}
-#game-status-them-info {text-align: right;} 
-
-#game-status-me        {top: 408px; background-image: url("../images/barme.png"); background-repeat: repeat-x;}
-
-
-#game-status      {top: 45px; left: 0; width: 512px; height: 384px;}
+/*#game-status      {top: 45px; left: 0; width: 512px; height: 384px;}
 #game-status .hv1 {width: 512px; height: 384px;}
 #game-status-text {font: normal 11px Arial; text-align: center; color: white;
-                   background-image: url("../images/mask.png");}
+                   background-image: url("../images/mask.png");}*/
 
 /* === end of line ======================================================================================================= */

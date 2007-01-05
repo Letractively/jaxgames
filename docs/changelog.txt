@@ -2,6 +2,11 @@
 jaxgames changelog | NEW : New feature/code | ADD : Addition/Change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 05.JAN.07
+    ADD: removed the ability for users to choose icons. user's icons will be according to what game they are playing to
+         better remind them of which piece they are, and to simplify the code / speed up starting games. this is blue vs.
+         red for the moment until icons have been made for each of the current games
+    ADD: Some CSS cleaning and reorganisation
+    NEW: games/fourinarow, completely non functional at the moment
     NEW: /docs/todo.txt to detail main tasks
     FIX: Player.wins default was "" not 0
     FIX: Play Again not working on othello, this.start was in the wrong scope (see game.end)

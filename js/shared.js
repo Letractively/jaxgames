@@ -49,16 +49,15 @@ var shared = {
                 //disable the 'Start Game' button
                 enableNicknameBox (false);
                 
-                //get your name and chosen icon from the screen
-                playerMe.name = $F("user-nickname");
-                playerMe.icon = "user_red";
+                playerMe.name   = $F("user-nickname");
+                playerMe.icon   = b_host ? "user" : "user_red";
+                playerThem.icon = b_host ? "user_red" : "user";
                 
                 //if you are the host, or opponent:
                 if (b_host) {    //------------------------------------------------------------------------------------------
                         //create the game on the server
                         jax.open({
                                 name : playerMe.name,  //your chosen name
-                                icon : playerMe.icon   //TODO: your chosen icon
                         }, function(o_response){
                                 //if the server okay'd the new slot
                                 if (o_response.result) {
@@ -83,10 +82,10 @@ var shared = {
                         this.setSystemStatus ("<p>Joining Game</p><p>Please Wait&hellip;</p>");
                         
                         //connect to the other player
-                        jax.connect ($F("join-key"), {  //the connection key the user pasted into the text box
-                                name : playerMe.name,   //your nickname to send to the other player
-                                icon : playerMe.icon    //TODO: your chosen icon
-                        }, preStart.bind(this));
+                        jax.connect ($F("join-key"),         //the connection key the user pasted into the text box
+                                    {name : playerMe.name},  //your nickname to send to the other player
+                                    preStart.bind(this)
+                        );
                 }
                 
                 /* PRIVATE > preStart : a hidden function available only to shared.connect
@@ -94,18 +93,17 @@ var shared = {
                 function preStart (o_response) {
                         //the other player has joined the game.
                         playerThem.name = o_response.data.name;
-                        playerThem.icon = o_response.data.icon;
                         
                         //display player 1's name / icon
                         $("jax-game-p1name").innerHTML = playerMe.name;
                         $("jax-game-p1icon").src = "../images/icons/" + playerMe.icon + ".png";
-                        $("game-status-me").style.display = "block";
+                        $("player-status-me").style.display = "block";
                         this.setPlayerStatus ();
 
                         //display player 2's name / icon
                         $("jax-game-p2name").innerHTML = playerThem.name;
                         $("jax-game-p2icon").src = "../images/icons/" + playerThem.icon + ".png";
-                        $("game-status-them").style.display = "block";
+                        $("player-status-them").style.display = "block";
                         
                         //set the chrome title
                         this.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
@@ -120,7 +118,7 @@ var shared = {
            =============================================================================================================== */
         setPlayerStatus : function (s_html) {
                 var scale = 2                         //size to expand the player section to (in 100's %)
-                    e     = $("game-status-me-msg"),  //reference to the element containing the message
+                    e     = $("player-status-me-msg"),  //reference to the element containing the message
                     v     = e.visible ()              //if that element is visible or not
                 ;
                 if (s_html && v) {
@@ -131,14 +129,14 @@ var shared = {
                         //otherwise, if there's a message to show, and it's not visible, or if the message is being cleared
                         //and it is currently visible, then animate sliding open/closed
                         new Effect.Parallel ([
-                                /*!/new Effect.Scale($("game-status-me"), (s_html?scale*100:100), {  //scale to %
+                                /*!/new Effect.Scale($("player-status-me"), (s_html?scale*100:100), {  //scale to %
                                         scaleFrom    : (s_html?100:scale*100),                   //scale from %
                                         scaleX       : false,                                    //do not scale width
                                         scaleContent : false,                                    //do not scale insides
                                         scaleMode    : {originalHeight: 21}                      //base reference for %
                                 }),*/
                                 //also move the bar at the same time (so that it effectively slides upwards)
-                                new Effect.MoveBy($("game-status-me"), (s_html?-(21*(scale)):21*(scale)), 0)
+                                new Effect.MoveBy($("player-status-me"), (s_html?-(21*(scale)):21*(scale)), 0)
                         ], {
                                 duration    : 0.5,
                                 beforeStart : function(){
