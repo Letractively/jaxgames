@@ -14,15 +14,19 @@ Player.prototype = {
         initialize : Prototype.emptyFunction,
         
         name : "",  //display name
-        icon : ""   //the little avatar of the person
+        icon : "",  //the little avatar of the person
+        wins : 0    //number of games won by the player
 };
 
 /* =======================================================================================================================
-   OBJECT game - functions/properties shared by different games on the site
+   OBJECT shared - functions/properties shared by different games on the site
    ======================================================================================================================= */
-var game = {
+var shared = {
         host  : false,                      //true = you are the host, false = you are the opponent
         pages : ["title", "user", "game"],  //the screens in the game, override this in game.js to add more
+        
+        //number of matches played
+        played : 0,
         
         /* > showPage : display a particular page in a game (like the titlescreen, join page etc)
            ===============================================================================================================
@@ -85,7 +89,7 @@ var game = {
                         }, preStart.bind(this));
                 }
                 
-                /* PRIVATE > preStart : a hidden function available only to game.connect
+                /* PRIVATE > preStart : a hidden function available only to shared.connect
                    ======================================================================================================= */
                 function preStart (o_response) {
                         //the other player has joined the game.
@@ -106,7 +110,7 @@ var game = {
                         //set the chrome title
                         this.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
                         //start the game
-                        this.start ();
+                        game.start ();
                 }
         },
         
@@ -190,9 +194,9 @@ var game = {
 
 
 /* ========================================================================================================================
-   OBJECT game.chat - manage the chatbox aside the game
+   OBJECT shared.chat - manage the chatbox aside the game
    ======================================================================================================================= */
-game.chat = {
+shared.chat = {
         /* list of emotes. the file name matches the image file name (sans extension) in /games/images/emotes/
            refer to: http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Guide:Regular_Expressions for regex rules
         */
@@ -220,9 +224,10 @@ game.chat = {
         /* > show : make the chat section visible
            =============================================================================================================== */
         show : function(){
-                var e_shared_chat_input  = $("shared-chat-input"),
-                    e_shared_chat_label  = $("shared-chat-label"),
-                    e_shared_chat_emotes = $("shared-chat-emotes")
+                var e_shared_chat_input  = $("shared-chat-input"),   //the textarea you type your message in
+                    e_shared_chat_label  = $("shared-chat-label"),   //the "<chat here>" message
+                    e_shared_chat_emotes = $("shared-chat-emotes"),  //the emote list holder
+                    html                 = ""                        //used to put together the emote list
                 ;
                 
                 //make the chat section visible
@@ -233,7 +238,6 @@ game.chat = {
                         e_shared_chat_label.style.display = "block";
                 }
                 
-                var html = "";
                 //create the emote list
                 this.emotes.each (function(o_emote){
                         //emotes can be hidden so that they do not show in the panel, but still function when typed
@@ -249,11 +253,11 @@ game.chat = {
                 
                 //add an onclick event to each of the emotes in the panel
                 $A(e_shared_chat_emotes.getElementsByTagName("img")).each (function(o_element){
-                        o_element.onclick = game.events.chatEmoteClick;
+                        o_element.onclick = shared.events.chatEmoteClick;
                 });
                 
                 //function the emote button to open the emote panel
-                $("shared-chat-emote").onclick = game.events.chatEmotesShow;
+                $("shared-chat-emote").onclick = shared.events.chatEmotesShow;
                 
                 //respond to chat messages
                 jax.listenFor ("game_chat_message", function(o_response){
@@ -282,7 +286,6 @@ game.chat = {
                         if(e_event.keyCode == 13) {
                                 //disable the chat textbox and send the message...
                                 var msg = e_shared_chat_input.value.replace (/^\s*|\s*$/g,"");
-                                ;
                                 e_shared_chat_input.value = "";
                                 if (msg.length) {
                                         e_shared_chat_input.readOnly = true;
@@ -334,23 +337,20 @@ game.chat = {
                 ;
                 //insert emoticon images in the message
                 s_msg = s_msg.escapeHTML ();
-                this.emotes.each (function(s_emote, n_index){
+                this.emotes.each (function(o_emote, n_index){
                         //replace the emote with the image
-                        var emote = this.emotes[n_index];
-                        s_msg = s_msg.replace (
-                                emote.regex,
-                                '<img src="../images/emotes/'+emote.file+'.png" width="16" height="16" alt="'+
-                                emote.symbol+'" title="'+emote.symbol+'" />'
+                        s_msg = s_msg.replace (o_emote.regex, '<img src="../images/emotes/'+o_emote.file+'.png" width="16" '+
+                                               'height="16" alt="'+o_emote.symbol+'" title="'+o_emote.symbol+'" />'
                         );
                 }.bind(this));
                 
                 //add the message to the chat history. 'Insertion.Bottom' is used (instead of '.innerHTML+=') so that 
                 //multiple messages coming in at the same time don't overwrite each other
                 var e = $("shared-chat-history");
-                new Insertion.Bottom(e, '<div id="chat-'+timeid+'" class="chat-'+(s_name==playerMe.name?"me":"them")+'" '+
-                                        'style="display: none;"><p><em>'+timestamp+'</em> <img src="../images/icons/'+
-                                        s_icon+'.png" width="16" height="16" alt="User icon" /> <strong>'+s_name+
-                                        '</strong></p><blockquote><p>'+s_msg+'</p></blockquote></div>'
+                new Insertion.Bottom (e, '<div id="chat-'+timeid+'" class="chat-'+(s_name==playerMe.name?"me":"them")+'" '+
+                                         'style="display: none;"><p><em>'+timestamp+'</em> <img src="../images/icons/'+
+                                         s_icon+'.png" width="16" height="16" alt="User icon" /> <strong>'+s_name+
+                                         '</strong></p><blockquote><p>'+s_msg+'</p></blockquote></div>'
                 );
                 //animate the message appearing (and scroll down to meet it)
                 new Effect.SlideDown ("chat-"+timeid, {duration: 0.3, afterUpdate: function(){
@@ -364,9 +364,9 @@ game.chat = {
 },
 
 /* =======================================================================================================================
-   OBJECT game.events - storage for element events (so that one function pointer can be used for multiple element events)
+   OBJECT shared.events - storage for element events (so that one function pointer can be used for multiple element events)
    ======================================================================================================================= */
-game.events = {
+shared.events = {
         /* > chatEmotesShow : slide open/closed the emoticon panel
            =============================================================================================================== */
         chatEmotesShow : function () {
@@ -392,11 +392,11 @@ game.events = {
            =============================================================================================================== */
         chatEmoteClick : function () {
                 var alt = this.alt;
-                game.chat.emotes.each (function(o_emote){
+                shared.chat.emotes.each (function(o_emote){
                         if (o_emote.symbol == alt) {
                                 $("shared-chat-input").value += " " + o_emote.symbol + " ";
                                 $("shared-chat-input").focus ();
-                                game.events.chatEmotesShow ($("shared-chat-emote"));
+                                shared.events.chatEmotesShow ($("shared-chat-emote"));
                         }
                 }); 
         }
@@ -411,10 +411,10 @@ Event.observe (window, 'load', function(){
                       "jax: "+jax.version+" - Script.aculo.us: "+Scriptaculous.Version+" - Prototype: "+Prototype.Version+"\n"
         );
         //change the chrome title (game.name is automatically appended)
-        game.setTitle ("Welcome to ");
+        shared.setTitle ("Welcome to ");
         //hide the loading page and display the game's title screen
-        game.setSystemStatus ();
-        //firefox remembers the values in fields, even after refreshing, clear the chat box
+        shared.setSystemStatus ();
+        //Firefox remembers the values in fields, even after refreshing, clear the chat box
         $("shared-chat-input").value = "";
         //run the load function defined in game.js for the game to handle some on load procedures of it's own
         game.load ();
@@ -426,8 +426,8 @@ Event.observe (window, 'load', function(){
 jax.listenFor ("jax_disconnect", function(o_response) {
         //if the player closed the window...
         if (o_response.data.reason == "unload") {
-                game.setTitle (playerThem.name + " left the game - ");
-                game.setSystemStatus (playerThem.name+" left the game");
+                shared.setTitle (playerThem.name + " left the game - ");
+                shared.setSystemStatus (playerThem.name+" left the game");
         }
 });
 
@@ -436,8 +436,8 @@ function showStartGame () {
         enableNicknameBox (true);
         $("join-game").style.display = "none";
         
-        game.host = true;
-        game.showPage ("user");
+        shared.host = true;
+        shared.showPage ("user");
 }
 
 function showJoinGame () {
@@ -445,8 +445,8 @@ function showJoinGame () {
         enableNicknameBox (true);
         $("join-game").style.display = "block";
         
-        game.host = false;
-        game.showPage ("user");
+        shared.host = false;
+        shared.showPage ("user");
 }
 
 function enableNicknameBox (b_enabled) {

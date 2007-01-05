@@ -34,7 +34,7 @@ echo "  copying new source..."
 # -exclude-from = list of files/folders to ignore when copying (read excludes.txt)
 rsync -r --delete-excluded --exclude-from=./libs/excludes.txt ../ ./release/jaxgames
 # make the database directory writeable, in case you want to run the release locally to test
-chmod -R 777 ./release/jaxgames/server/db
+chmod -R 777 ./release/jaxgames/jax_php/db
 echo "-------------------------------------------------------------------------------"
 
 # merge together all the scripts needed for boot.js. this means we can load one javascript file to include all of the

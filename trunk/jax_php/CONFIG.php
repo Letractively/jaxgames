@@ -3,7 +3,7 @@
    server/CONFIG.php - configuration options for Jax server side
    =======================================================================================================================
    licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
-   jax, jax games (c) copyright Kroc Camen 2005-2007
+   jax (c) copyright Kroc Camen 2005-2007
 */
 
 $config = array (

@@ -5,8 +5,9 @@
    author : Kroc Camen | kroccamen@gmail.com | kroc.deviantart.com
    type   : board game
    desc   : also known in America as 'Reversi', and sometimes 'Turncoat'.
-            each player is in competition to have the most pieces remaining at the end
-
+            each player is in competition to have the most pieces remaining at the end.
+            the straight forward nature of this game makes it an ideal sample for programming your own Jax Games
+            
 rules of play:
 --------------
  + each player takes turn to place a single piece on the board. you must place a piece on an empty square, adjacent to an
@@ -16,25 +17,25 @@ rules of play:
  
 -------------------------------------------------------------------------------------------------------------------------- */
 
-Player.prototype.piece = "";  //add to the Player class the ability to set who plays white "O" and who plays black "X"
-Player.prototype.wins  = 0;   //number of games won by the player
+//add to the Player class the ability to set who plays white "O" and who plays black "X"
+Player.prototype.piece = "";
 
-//create the players
+//create the players. they must use these names, as they are referenced in shared.js. the reason the Player instances are not
+//created automatically for you, is because you could extend the Player class to include a constructor function requiring
+//parameters. an example of this can be seen in /games/blacjax/classes.js
 var playerMe   = new Player (),  //the player on this computer
     playerThem = new Player ()   //the opponent is always the opposite player from either end
 ;
 
 /* =======================================================================================================================
-   OBJECT game : this game, extends the object in shared.js which provides shared functions between all the games
+   OBJECT game : this game
    ======================================================================================================================= */
-Object.extend (game,
-{
-        name    : "Othello",
+var game = {
+        name    : "Othello",  //a user-seen name for your game. required, as used in shared.js
         version : "0.2.0",
         
-        board   : new Board ("game-board"),  //the game board (default size of 8x8 will be used)
+        board   : new Board ("game-board"),  //the game board (default size of 8x8 will be used), see board.js
         pieces  : [],                        //the layout of pieces on the board
-        played  : 0,                         //number of matches played
         
         //private storage
         _ : {
@@ -54,9 +55,9 @@ Object.extend (game,
         /* > load : called for you on page load (see shared.js)
            =============================================================================================================== */
         load : function () {
-                /*game.showPage ("game"); game.start (true);*/
+                /*shared.showPage ("game"); this.start (true);*/
                 //create the empty board
-                game.board.injectHTML ();
+                this.board.injectHTML ();
         },
                 
         /* > start : begin playing
@@ -65,22 +66,22 @@ Object.extend (game,
            =============================================================================================================== */
         start : function (b_mefirst) {
                 //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
-                //entering their name / join key, game.connect is called. when a connection is established between the two
+                //entering their name / join key, shared.connect is called. when a connection is established between the two
                 //players, this function is called for you
                 
-                if (b_mefirst == null) {b_mefirst = this.host;}  //default: host goes first
+                if (b_mefirst == null) {b_mefirst = shared.host;}  //default: host goes first
                 
-                this.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
+                shared.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
                 
                 //set which piece each player is using. the host always plays black, and goes first
-                playerMe.piece   = (this.host) ? "X" : "O";
-                playerThem.piece = (this.host) ? "O" : "X";
+                playerMe.piece   = (shared.host) ? "X" : "O";
+                playerThem.piece = (shared.host) ? "O" : "X";
                 //put your/their piece in the piece-count sections (the paper)
-                $("game-paper-me-piece").update ('<img src="images/'+(this.host?"black":"white")+'.png" width="40" height'+
-                                                 '="40" alt="You are playing '+(this.host?"black":"white")+' pieces" />'
+                $("game-paper-me-piece").update ('<img src="images/'+(shared.host?"black":"white")+'.png" width="40" height'+
+                                                 '="40" alt="You are playing '+(shared.host?"black":"white")+' pieces" />'
                 );
-                $("game-paper-them-piece").update ('<img src="images/'+(this.host?"white":"black")+'.png" width="40" height'+
-                                                   '="40" alt="You are playing '+(this.host?"white":"black")+' pieces" />'
+                $("game-paper-them-piece").update ('<img src="images/'+(shared.host?"white":"black")+'.png" width="40" height'+
+                                                   '="40" alt="You are playing '+(shared.host?"white":"black")+' pieces" />'
                 );
                 
                 //blank the two dimensional array holding the location of the pieces on the board
@@ -95,19 +96,20 @@ Object.extend (game,
                 this.pieces[5][4] = "X";
                 this.pieces[4][5] = "X";
                 this.pieces[5][5] = "O";
+                //!/this.pieces = ["",["","O","X","","X","X","X","X","X"],["","O","X","X","","O","O","X","X"],["","X","O","X","O","X","X","X","X"],["","X","X","O","X","O","X","X","X"],["","X","X","X","X","O","X","X","X"],["","X","X","X","O","X","O","X","X"],["","X","X","O","X","X","X","X","X"],["","X","X","X","X","X","X","O","O"]];
                 this.updateBoard ();
                 
                 //reset the piece counters to 2 a piece
                 $("game-paper-me-pieces").innerHTML   = "2";
                 $("game-paper-them-pieces").innerHTML = "2";
                 
-                game.setSystemStatus ();  //hide any status messages being displayed
-                game.chat.show ();        //show the chat box
+                shared.setSystemStatus ();  //hide any status messages being displayed
+                shared.chat.show ();        //show the chat box
                 
                 if (b_mefirst) {
-                        game.playTurn ();
+                        this.playTurn ();
                 } else {
-                        game.setPlayerStatus ("<p>Other Player's Turn, Please Wait&hellip;</p>");
+                        shared.setPlayerStatus ("<p>Other Player's Turn, Please Wait&hellip;</p>");
                 }
         },
         
@@ -116,6 +118,7 @@ Object.extend (game,
         updateBoard : function () {
                 //loop through the array holding the pieces, and put the relevant html into the board cells
                 for (var y=1; y<=8; y++) { for (var x=1; x<=8; x++) {
+                        //get the html element for this cell
                         var e = $(this.board.getCellId(x, y));
                         //remove the hover effect from any cells
                         e.removeClassName ("hover");
@@ -124,29 +127,20 @@ Object.extend (game,
                         e.onmouseover = Prototype.emptyFunction;
                         e.onmouseout  = Prototype.emptyFuncyion;
                         
-                        switch (this.pieces[x][y]) {
-                                case "X":
-                                        //black
-                                        game.board.cells[x][y] = '<img src="images/black.png" width="40" height="40" alt="Black" />';
-                                        break;
-                                case "O":
-                                        //white
-                                        game.board.cells[x][y] = '<img src="images/white.png" width="40" height="40" alt="White" />';
-                                        break;
-                                default:
-                                        //empty cell
-                                        game.board.cells[x][y] = "";
-                                        break;
-                        }
+                        //update the html for the cell (in memory)
+                        this.board.cells[x][y] = (this.pieces[x][y] == "") ? "" : '<img width="40" height="40" src="images/'+
+                                                 (this.pieces[x][y]=="X"?'black.png" alt="Black':'white.png" alt="White')+'" />'
+                        ;
                 } }
-                game.board.display ();
+                //reflect any changes on the cells
+                this.board.display ();
         },
         
         /* > playTurn : take your turn
            =============================================================================================================== */
         playTurn : function () {
                 //clear the "other player's turn" message on screen if it's there
-                this.setPlayerStatus ();
+                shared.setPlayerStatus ();
                 
                 //find playable moves (loop all cells in the table...)
                 for (var y=1; y<=8; y++) { for (var x=1; x<=8; x++) {
@@ -159,15 +153,16 @@ Object.extend (game,
                                         //if there is a move...
                                         if (result) {
                                                 //put a mark in the cell to show it as playable
-                                                var e = $(game.board.getCellId(result.x, result.y));
+                                                var e = $(this.board.getCellId(result.x, result.y));
                                                 e.innerHTML = '<img src="images/spot.png" width="3" height="3" alt="Click '+
                                                               'to place your piece here" />'
                                                 ;
-                                                //make the empty cell clickable so you can choose that spot
-                                                e.onclick     = game.events.playableCellClick;
+                                                //make the empty cell clickable so you can choose that square
+                                                //see game.events further down to continue following program flow
+                                                e.onclick     = this.events.playableCellClick;
                                                 //when you hover over the cell
-                                                e.onmouseover = game.events.playableCellMouseOver;
-                                                e.onmouseout  = game.events.playableCellMouseOut; 
+                                                e.onmouseover = this.events.playableCellMouseOver;
+                                                e.onmouseout  = this.events.playableCellMouseOut;
                                         }
                                 }
                         }
@@ -203,25 +198,33 @@ Object.extend (game,
                 //    this is used when you click on a playable cell, to then flip the opponent pieces along the way
                 
                 //if a callback function is provided as f_piece, it will be called on each opponent piece encountered along
-                //the way - *even if the specified direction does not turn out to be playable*. therefore you should first
-                //call this function without a callback to see if the direction is playable, before repeating with the
-                //callback. examples of use in this game are: flipping the pieces over and highlighting the cells
+                //the way - *only if the specified direction turns out to be playable*. therefore you do not need to check
+                //beforehand if the direction is playable, before using this function with the callback. examples of use in
+                //this game are: flipping the pieces over and highlighting the cells on mouseover
                 
                 if (!n_distance) {n_distance = 0;}                        //default: start counting number of steps
                 if (!f_piece)    {f_piece    = Prototype.emptyFunction;}  //default: no callback
                 
                 var piece_me   = (b_self) ? playerMe.piece : playerThem.piece,  //are you playing white or black?
                     piece_them = (b_self) ? playerThem.piece : playerMe.piece,  //and conversely...
-                    new_x      = n_x + this._.directions[n_dir].x,              //X location after step forward
-                    new_y      = n_y + this._.directions[n_dir].y               //Y location after step forward
+                    new_x      = n_x + this._.directions[n_dir].x,              //x location after step forward
+                    new_y      = n_y + this._.directions[n_dir].y               //y location after step forward
                 ;
                 //is the next step out of range?
                 if ((new_x > 0 && new_x < 9) && (new_y > 0 && new_y < 9)) {
                         switch (this.pieces[new_x][new_y]) {
                                 //if the next square is the opponents, keep searching
                                 case piece_them:
-                                        f_piece (n_dir, new_x, new_y, n_distance)  //call the callback for this piece
-                                        return this.findBridge (b_self, new_x, new_y, n_dir, f_piece, b_reverse, n_distance+1);
+                                        //get the result of proceeding to the next sqaure
+                                        var result = this.findBridge (b_self, new_x, new_y, n_dir, f_piece, b_reverse, n_distance+1);
+                                        //if this direction yields a playable square then this function will fold back down
+                                        //the recursion, executing the callback function for each cell
+                                        if (result) {
+                                                //call the callback for this piece
+                                                f_piece (n_dir, new_x, new_y, n_distance);
+                                        }
+                                        //fold back to the previous recursive call of this function (reverse march!)
+                                        return result;
                                         
                                 case piece_me:
                                         //bumped into one of your own pieces, this direction is already bridged
@@ -251,14 +254,11 @@ Object.extend (game,
                 
                 //search all directions for bridges built, and change the pieces between into your own
                 for (var dir=0; dir<8; dir++) {
-                        //if this is a bridge...
-                        if (this.findBridge (b_self, n_x, n_y, dir, null, true)) {
-                                //repeat the step through, but flip each piece on the way
-                                this.findBridge (b_self, n_x, n_y, dir, function(n_dir,n_x,n_y,n_dist){
-                                        this.pieces[n_x][n_y] = whodunit.piece;
-                                        this.updateBoard ();
-                                }.bind(this), true);
-                        }
+                        //flip each piece in each direction that yields a valid move
+                        this.findBridge (b_self, n_x, n_y, dir, function(n_dir,n_x,n_y,n_dist){
+                                this.pieces[n_x][n_y] = whodunit.piece;
+                                this.updateBoard ();
+                        }.bind(this), true);
                 }
                 this.preempt (!b_self);
         },
@@ -274,7 +274,7 @@ Object.extend (game,
                             moves  : 0,  //number of playable moves on the board (for the player specified)
                             me     : 0,  //number of squares occupied by you
                             them   : 0,  //number of squares occupied by them
-                            spaces : 0   //number of empty squares
+                            spaces : 0   //number of empty squares on the board
                     }
                 ;
                 //check for available moves (loop all cells in the table...)
@@ -302,10 +302,10 @@ Object.extend (game,
                 
                 if (!count.spaces) {
                         //TODO: draw condition
-                        game.end ((count.me>count.them));
+                        this.end ((count.me>count.them));
                         
                 } else if (count.me==0 || count.them==0) {
-                        game.end ((count.me>0));
+                        this.end ((count.me>0));
                         
                 } else if (!count.moves) {
                         //TODO: apparently there is a rare condition where neither player can play
@@ -313,11 +313,11 @@ Object.extend (game,
                         
                 } else if (b_self) {
                         //your go
-                        game.playTurn ();
+                        this.playTurn ();
                         
                 } else {
                         //other player's go
-                        game.setPlayerStatus ("<p>Other Player's Turn, Please Wait&hellip;</p>");
+                        shared.setPlayerStatus ("<p>Other Player's Turn, Please Wait&hellip;</p>");
                 }
         },
         
@@ -330,24 +330,18 @@ Object.extend (game,
                 var html = '<a href="javascript:game.playAgain('+b_winner+');">Play Again?</a> ' +
                            '<a href="javascript:game.resign();">Resign</a></p>'
                 ;
-                
                 //increase the number of games played
-                game.played ++;
-                if (b_winner) {
-                        playerMe.wins ++;  //increase your tally
-                        game.setPlayerStatus ("<p>YOU WIN<br />"+html);
-                } else {
-                        playerThem.wins ++;  //increase their tally
-                        game.setPlayerStatus ("<p>YOU LOSE<br />"+html);
-                }
+                shared.played ++;
+                (b_winner?playerMe:playerThem).wins ++;  //increase the tally for the winner
+                shared.setPlayerStatus ("<p>"+(b_winner?"YOU WIN":"YOU LOSE")+"<br />"+html);
                 $("game-status-me-wins").innerHTML   = playerMe.wins;
                 $("game-status-them-wins").innerHTML = playerThem.wins;
                 
                 //listen out for the 'play again' signal from the other person
                 jax.listenFor("game_again", function(o_response){
+                        jax.listenFor ("game_again");
                         game.start (!b_winner);
                 });
-                
         },
         
         playAgain : function (b_winner) {
@@ -355,18 +349,18 @@ Object.extend (game,
                 jax.listenFor ("game_again");
                 //if you won, the loser starts, display a message whilst you wait for them to start
                 if (b_winner) {
-                        game.setSystemStatus ("Waiting for the other player to start, Please Wait...");
+                        shared.setSystemStatus ("Waiting for the other player to start, Please Wait...");
                 }
                 //notify the opponent that the game is starting again
                 jax.sendToQueue ("game_again", {winner: b_winner});
                 //start the game for yourself (loser goes first)
-                game.start (!b_winner);
+                this.start (!b_winner);
         },
         
         resign : function () {
                 jax.disconnect ({reason: "unload"});
-                game.setPlayerStatus ();
-                game.setSystemStatus ();
+                shared.setPlayerStatus ();
+                shared.setSystemStatus ();
         }
         
         /* > setStatus : the box in the game for status, like 'other player's turn, please wait'
@@ -398,7 +392,7 @@ Object.extend (game,
                         }
                 } 
         }*/
-});
+};
 
 /* =======================================================================================================================
    < game_square_chosen : the other player clicked on a square
@@ -411,8 +405,7 @@ jax.listenFor ("game_square_chosen", function(o_response){
 /* =======================================================================================================================
    OBJECT game.events : event functions, so that multiple elements may use a single function pointer
    ======================================================================================================================= */
-Object.extend (game.events,
-{
+game.events = {
         /* > playableCellClick : when you click on a cell to make a move 
            =============================================================================================================== */
         playableCellClick : function () {
@@ -430,39 +423,49 @@ Object.extend (game.events,
         /* > playableCellMouseOver : when you hover over an available cell
            =============================================================================================================== */
         playableCellMouseOver : function () {
-                //get the x/y location of the cell clicked
-                var position = game.board.getCoordsFromId (this.id);
-                
-                $(game.board.getCellId(position.x, position.y)).addClassName ("hover");
-                
-                for (var dir=0; dir<8; dir++) {
-                        if (game.findBridge (true, position.x, position.y, dir, null, true)) {
-                                var endcap = game.findBridge (true, position.x, position.y, dir, function(n_dir,n_x,n_y,n_dist){
-                                        $(game.board.getCellId(n_x, n_y)).addClassName ("hover");
-                                }, true);
-                                $(game.board.getCellId(endcap.x, endcap.y)).addClassName ("hover");
-                        }
-                }
+                //refer this to a function to handle both states
+                game.events.playableCellMouseHover (this.id, true);
         },
         
         /* > playableCellMouseOut : when you move the mouse out of a playable cell
            =============================================================================================================== */
         playableCellMouseOut : function () {
-                //get the x/y location of the cell clicked
-                var position = game.board.getCoordsFromId (this.id);
-                
-                $(game.board.getCellId(position.x, position.y)).removeClassName ("hover");
-                
-                for (var dir=0; dir<8; dir++) {
-                        if (game.findBridge (true, position.x, position.y, dir, null, true)) {
-                                var endcap = game.findBridge (true, position.x, position.y, dir, function(n_dir,n_x,n_y,n_dist){
-                                        $(game.board.getCellId(n_x, n_y)).removeClassName ("hover");
-                                }, true);
-                                $(game.board.getCellId(endcap.x, endcap.y)).removeClassName ("hover");
-                        }
-                }
-        }
-});
+                //refer this to a function to handle both states
+                game.events.playableCellMouseHover (this.id, false);
+        },
+        
+        /* > playableCellMouseHover : when you hover over an available cell
+           ===============================================================================================================
+           params * s_cellid    : html element id of the cell to highlight from
+                    b_highlight : whether to highlight the cells, or remove existing highlighting
+           =============================================================================================================== */
+       playableCellMouseHover : function (s_cellid, b_highlight) {
+               var position = game.board.getCoordsFromId (s_cellid),  //get the x/y location of the cell passed
+                   cells    = []                                      //array of cells to highlight
+               ;
+               //the initial cell will be highlighted
+               cells.push (position);
+               //proceed checking for playable moves in the eight directions
+               for (var dir=0; dir<8; dir++) {
+                       //run a function for each cell traversed in the process (if the direction is a valid move)
+                       var result = game.findBridge (true, position.x, position.y, dir, function(n_dir,n_x,n_y,n_dist){
+                               //add this cell's location to the array of cells to highlight. this callback function is
+                               //only called on cells from a direction yielding a valid move
+                               cells.push ({x: n_x, y: n_y});
+                       }, true);
+                       if (result) {cells.push (result);}
+               }
+               //turn each of the cell locations into the element reference for that cell
+               cells.collect (function(o_cell){
+                       //given the x, y of a the cell, return the element reference
+                       return $(game.board.getCellId(o_cell.x, o_cell.y));
+               }).invoke (
+                       //depending whether highlighting is being enabled or not, invoke "addClassName" or "removeClassName"
+                       //function on each of the html elements in the array using the .hover CSS class (see game.css)
+                       (b_highlight?"add":"remove")+"ClassName", "hover"
+               );
+       }
+};
 
 //=== end of line ===========================================================================================================
 //licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/

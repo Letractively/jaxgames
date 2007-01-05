@@ -31,7 +31,7 @@ Jax.prototype = {
            =============================================================================================================== */
         initialize : function (s_server) {
                 //set the server location for AJAX calls
-                if (!s_server) {s_server = "response.php";}  //default: same folder (assumedly webroot)
+                if (!s_server) {s_server = "jax_php/response.php";}  //default: same folder (assumedly webroot)
                 this._.request_file = s_server;
                 
                 //when the user closes the window or navigates away from the website

@@ -3,7 +3,7 @@
    ======================================================================================================================= */
 
 /* =======================================================================================================================
-   EXTEND CLASS Pack - add BlackJack specific functions to the standard pack class
+   EXTEND CLASS Pack - add Black Jack specific functions to the standard pack class
    ======================================================================================================================= */
 /* isCombo : is the card a wild card?
    =======================================================================================================================
@@ -40,7 +40,6 @@ Player.prototype.initialize = function (s_element, b_host) {
 };
 //cards in hand, needs to be set to a new instance of game_hand class below, done for you if you create a new Player class
 Player.prototype.hand   = null;
-Player.prototype.wins   = 0;     //keep track of number of wins
 Player.prototype.points = 0;     //number of points earnt
 
 /* =======================================================================================================================
@@ -250,143 +249,6 @@ Hand.prototype = {
                         }
                 });
                 return results;
-        }
-}; 
-
-/* =======================================================================================================================
-   OBJECT game.run - the run of cards in the centre
-   ======================================================================================================================= */
-game.run = {
-        cards   : [],  //the cards currently in the run
-        face    : "",  //the top card on the discard pile (the face) to match against
-        penalty : 0,   //current card penalty in play
-        
-        //the spacing in pixels between each card on the run, given the number of cards present. these numbers allow for the
-        //cards on the run to get compact together to always stay within the run's area. this could be calculated as needed
-        //in .getCardPositions, but I couldn't get the math right
-        spacing : [
-                0, 5, 5, 5, 5,  //0, no spacing. 1-4 cards, normal spacing between cards
-                -2.8,    /* 5  cards */  -16.3,  /* 6  cards */  -25.5,  /* 7  cards */  -32,    /* 8 cards */
-                -36.9,   /* 9  cards */  -40.7,  /* 10 cards */  -43.7,  /* 11 cards */  -46.2,  /* 12 cards */
-                -48.25,  /* 13 cards */  -50,    /* 14 cards */  -51.5   /* 15 cards */
-        ],
-        
-        /* > armed : if the card on top of the run is a Two or a Black Jack
-           =============================================================================================================== */
-        armed : function () {
-                return (this.cards.length) && (
-                        game.pack.value (this.cards.last()) == 11 ||
-                        game.pack.value (this.cards.last()) == 2
-                );
-        },
-        
-        /* > combo : if the card on top of the run is a combo card (Ace, Eight or Joker)
-           =============================================================================================================== */
-        combo : function () {
-                return (this.cards.length) && game.pack.isCombo (this.cards.last());
-        },
-        
-        /* > clear : clear everything in the run and set it back to default
-           =============================================================================================================== */
-        clear : function () {
-                //remove any existing cards in the html
-                this.cards.each (function(s_card,n_index){
-                        $("game-run-"+s_card).remove ();
-                });
-                //clear the cards in memory
-                this.cards.clear ();
-                //clear the face
-                this.face = "";
-                this.displayFace ();
-                //clear the penalty
-                this.updatePenalty (0);
-        },
-        
-        /* > updatePenalty : change the penalty value (and automatically display / hide it accordingly)
-           =============================================================================================================== */
-        updatePenalty : function (n_value) {
-                //if setting to directly to 0 (i.e. cancelling a penalty with a Red Jack) then animate it dropping
-                if (!n_value && this.penalty) {
-                        new Effect.DropOut ("game-penalty", {afterFinish:function(){
-                                $("game-penalty").innerHTML = "";
-                        }});
-                        
-                } else {
-                        //update the penalty
-                        if (!n_value) {
-                                //if 0, hide the penalty, don't need to display "0"
-                                $("game-penalty").hide ();
-                        } else {
-                                $("game-penalty").innerHTML = n_value;
-                                $("game-penalty").show ();
-                        }
-                }
-                this.penalty = n_value;
-        },
-        
-        /* > displayFace : update just the face card
-           =============================================================================================================== */
-        displayFace : function () {
-                $("game-face").innerHTML = (this.face) ? '<img src="../images/cards/'+this.face+'.png" width="71" height="96" alt="Face" />' : "";
-        },
-
-        /* > getCardPositions : return the positions for each card, given a number of cards to fit into the run
-           ===============================================================================================================
-           params * n_count     : how many cards (1-based) to return the positions for
-           return * a_positions : an array containing the X position of each card
-           =============================================================================================================== */
-        getCardPositions : function (n_count) {
-                //defaults
-                if (!n_count) {n_count = this.cards.length;}  //default: current number of cards in run
-                
-                var result  = [],
-                    spacing = this.spacing[n_count],  //space between each card
-                    pos     = 357                     //position of the first card
-                ;
-                //calculate the X position of each card
-                for (var i=0; i<n_count; i++) {
-                        result[i] = pos;        //store the position
-                        pos -= (71 + spacing);  //move onto the next card
-                }
-                return result;
-        },
-        
-        /* > fileCards : file the cards from the run onto the discard, and set the new face card
-           ===============================================================================================================
-           params * f_onComplete : function to call once the animation is complete
-           =============================================================================================================== */
-        fileCards : function (f_onComplete) {
-                if (!f_onComplete) {f_onComplete = Prototype.emptyFunction;}  //defualt: no callback
-
-                //are there any cards in the run anywho?
-                if (!game.run.cards.length) {
-                        //no, just callback
-                        f_onComplete ();
-                } else {
-                        //animate all cards in the run sliding onto the discard pile
-                        var cardanims = [];
-                        game.run.cards.each (function(s_card,n_index){
-                                var move_to = 436 - parseInt($("game-run-"+s_card).getStyle("left"));
-                                cardanims.push (new Effect.MoveBy("game-run-"+s_card, 0, move_to));
-                        });
-                        new Effect.Parallel (cardanims, {duration:0.5, queue:'end', afterFinish:function(){
-                                //put the old face card on the discard pile
-                                if (game.run.face) {game.deck.cards.unshift (game.run.face);}
-                                //take the card on top of the run and set as the new face card
-                                game.run.face = game.run.cards.last ();
-                                //update the face card on screen
-                                game.run.displayFace ();
-                                //remove the cards from the run
-                                game.run.cards.each (function(s_card,n_index){
-                                        $("game-run-"+s_card).remove ();
-                                        game.deck.cards.unshift (s_card);
-                                });
-                                game.run.cards.clear ();
-                                
-                                //once eveything is done, call the function passed
-                                f_onComplete ();
-                        }});
-                }
         }
 };
 
