@@ -37,14 +37,12 @@ var playerMe   = new Player ("game-nearhand", true),  //the player on this compu
 /* =======================================================================================================================
    OBJECT game : this game, extends the object in gloabl.js which provides shared functions between all the games
    ======================================================================================================================= */
-Object.extend (game,
-{
+var game = {
         name    : "Blacjax",
         version : "0.5.0", 
         
         pack    : new Pack (true),  //the pack of cards that decks are made from (include Jokers)
         deck    : new Deck (),      //create a deck of cards
-        played  : 0,                //number of matches played
         
         /* > load : called for you on page load (see element)
            =============================================================================================================== */
@@ -107,13 +105,13 @@ Object.extend (game,
            =============================================================================================================== */
         start : function (b_mefirst, n_cards) {
                 //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
-                //entering their name / join key, game.connect is called. when a connection is established between the two
+                //entering their name / join key, shared.connect is called. when a connection is established between the two
                 //players, this function is called for you
                 
-                if (b_mefirst == null) {b_mefirst = this.host;}  //default: host goes first
-                if (!n_cards)          {n_cards   = 7;}          //default: 7 cards each
+                if (b_mefirst == null) {b_mefirst = shared.host;}  //default: host goes first
+                if (!n_cards)          {n_cards   = 7;}            //default: 7 cards each
                 
-                this.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
+                shared.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
                 
                 //clear any cards on the table
                 [this.run, playerMe.hand, playerThem.hand].invoke ("clear");
@@ -145,8 +143,8 @@ Object.extend (game,
                         //number of cards each player starts with
                         var cards = (!b_mefirst) ? o_response.data.cards : n_cards;
                         
-                        game.setSystemStatus ();  //hide any status messages being displayed
-                        game.chat.show ();        //show the chat box
+                        shared.setSystemStatus ();  //hide any status messages being displayed
+                        shared.chat.show ();        //show the chat box
                         
                         //draw the face card to start with
                         game.run.face = game.deck.drawCard ();
@@ -169,9 +167,9 @@ Object.extend (game,
            =============================================================================================================== */
         playTurn : function () {
                 //set the chrome title
-                this.setTitle ("Your turn! - " + playerMe.name + " v. " + playerThem.name + " - ");
+                shared.setTitle ("Your turn! - " + playerMe.name + " v. " + playerThem.name + " - ");
                 //clear the "other player's turn" message on screen if it's there
-                this.setPlayerStatus ();
+                shared.setPlayerStatus ();
                 
                 //disable cards that cannot be played
                 var playable_cards = playerMe.hand.playableCards ();
@@ -284,9 +282,9 @@ Object.extend (game,
                                 game.playTurn ();
                         } else {
                                 //change your display to say it's their turn
-                                game.setPlayerStatus ("<p>Other Player's Turn, Please Wait&hellip;</p>");
+                                shared.setPlayerStatus ("<p>Other Player's Turn, Please Wait&hellip;</p>");
                                 //set the chrome title
-                                game.setTitle ("Their turn - " + playerMe.name + " v. " + playerThem.name + " - ");
+                                shared.setTitle ("Their turn - " + playerMe.name + " v. " + playerThem.name + " - ");
                                 
                                 //in the case that the opponent put down an Eight, Ace or Joker, you'll arrive here. they
                                 //will have placed another card, which will have been added to the queue. now that the
@@ -304,11 +302,9 @@ Object.extend (game,
            =============================================================================================================== */
         end : function (b_winner) {
                 //!/TODO: this
-                var html = '<a href="javascript:game.playAgain('+b_winner+');">Play Again?</a> ' +
-                           '<a href="javascript:game.resign();">Resign</a></p>'
-                ;
-                
-                var anims  = [],
+                var html   = '<a href="javascript:game.playAgain('+b_winner+');">Play Again?</a> ' +
+                             '<a href="javascript:game.resign();">Resign</a></p>',
+                    anims  = [],
                     winner = b_winner ? playerMe : playerThem,
                     loser  = b_winner ? playerThem : playerMe
                 ;
@@ -328,14 +324,9 @@ Object.extend (game,
                 }
                 
                 //increase the number of games played
-                game.played ++;
-                if (b_winner) {
-                        this.setTitle ("YOU WIN! " + playerMe.name + " v. " + playerThem.name + " - ");
-                        game.setPlayerStatus ("<p>YOU WIN<br />" + html);
-                } else {
-                        this.setTitle ("YOU LOSE! " + playerMe.name + " v. " + playerThem.name + " - ");
-                        game.setPlayerStatus ("<p>YOU LOSE<br />" + html);
-                }
+                shared.played ++;
+                shared.setTitle ((b_winner?"YOU WIN":"YOU LOSE") + playerMe.name + " v. " + playerThem.name + " - ");
+                shared.setPlayerStatus ("<p>"+(b_winner?"YOU WIN":"YOU LOSE")+"<br />"+html);
                 //update the player info display
                 winner.wins ++;
                 $("game-status-me-wins").innerHTML   = playerMe.wins;
@@ -346,7 +337,7 @@ Object.extend (game,
                         //if the opponent resigned
                         if (o_response.data.reason = "resign") {
                                 game.setStatus();
-                                game.setSystemStatus(playerThem.name + " resigned");
+                                shared.setSystemStatus(playerThem.name + " resigned");
                                 var anims = [];
                                 
                                 var whodo = (playerMe.hand.cards.length) ? playerMe.hand : playerThem.hand;
@@ -372,7 +363,7 @@ Object.extend (game,
                 jax.listenFor ("game_again");
                 //if you won, the loser starts, display a message whilst you wait for them to start
                 if (b_winner) {
-                        game.setSystemStatus ("Waiting for the other player to start, Please Wait...");
+                        shared.setSystemStatus ("Waiting for the other player to start, Please Wait...");
                 }
                 //notify the opponent that the game is starting again
                 jax.sendToQueue ("game_again", {winner: b_winner});
@@ -382,8 +373,8 @@ Object.extend (game,
         
         resign : function () {
                 jax.disconnect ({reason: "unload"});
-                game.setPlayerStatus ();
-                game.setSystemStatus ();
+                shared.setPlayerStatus ();
+                shared.setSystemStatus ();
         }
         
         /* > setStatus : the box in the game for status, like 'other player's turn, please wait'
@@ -415,13 +406,12 @@ Object.extend (game,
                         }
                 } 
         }*/
-});
+};
 
 /* =======================================================================================================================
    OBJECT game.events : event functions, so that multiple elements may use a single pointer
    ======================================================================================================================= */
-Object.extend (game.events,
-{
+game.events = {
         /* > cardMouseOver : when the player moves the mouse on a card (in their hand)
            =============================================================================================================== */
         cardMouseOver : function () {
@@ -534,7 +524,7 @@ Object.extend (game.events,
                         }
                 });
         }
-});
+};
 
 /* =======================================================================================================================
    < game_card_chosen : the other player clicked on a card, mirror the animation locally
@@ -547,6 +537,143 @@ jax.listenFor ("game_card_chosen", function(o_response){
         //after each card has completed its action, the next one will be taken (see game.preempt)
         if (game.queue.cards.length == 1) {game.queue.doNext ();}
 });
+
+/* =======================================================================================================================
+   OBJECT game.run - the run of cards in the centre
+   ======================================================================================================================= */
+game.run = {
+        cards   : [],  //the cards currently in the run
+        face    : "",  //the top card on the discard pile (the face) to match against
+        penalty : 0,   //current card penalty in play
+        
+        //the spacing in pixels between each card on the run, given the number of cards present. these numbers allow for the
+        //cards on the run to get compact together to always stay within the run's area. this could be calculated as needed
+        //in .getCardPositions, but I couldn't get the math right
+        spacing : [
+                0, 5, 5, 5, 5,  //0, no spacing. 1-4 cards, normal spacing between cards
+                -2.8,    /* 5  cards */  -16.3,  /* 6  cards */  -25.5,  /* 7  cards */  -32,    /* 8 cards */
+                -36.9,   /* 9  cards */  -40.7,  /* 10 cards */  -43.7,  /* 11 cards */  -46.2,  /* 12 cards */
+                -48.25,  /* 13 cards */  -50,    /* 14 cards */  -51.5   /* 15 cards */
+        ],
+        
+        /* > armed : if the card on top of the run is a Two or a Black Jack
+           =============================================================================================================== */
+        armed : function () {
+                return (this.cards.length) && (
+                        game.pack.value (this.cards.last()) == 11 ||
+                        game.pack.value (this.cards.last()) == 2
+                );
+        },
+        
+        /* > combo : if the card on top of the run is a combo card (Ace, Eight or Joker)
+           =============================================================================================================== */
+        combo : function () {
+                return (this.cards.length) && game.pack.isCombo (this.cards.last());
+        },
+        
+        /* > clear : clear everything in the run and set it back to default
+           =============================================================================================================== */
+        clear : function () {
+                //remove any existing cards in the html
+                this.cards.each (function(s_card,n_index){
+                        $("game-run-"+s_card).remove ();
+                });
+                //clear the cards in memory
+                this.cards.clear ();
+                //clear the face
+                this.face = "";
+                this.displayFace ();
+                //clear the penalty
+                this.updatePenalty (0);
+        },
+        
+        /* > updatePenalty : change the penalty value (and automatically display / hide it accordingly)
+           =============================================================================================================== */
+        updatePenalty : function (n_value) {
+                //if setting to directly to 0 (i.e. cancelling a penalty with a Red Jack) then animate it dropping
+                if (!n_value && this.penalty) {
+                        new Effect.DropOut ("game-penalty", {afterFinish:function(){
+                                $("game-penalty").innerHTML = "";
+                        }});
+                        
+                } else {
+                        //update the penalty
+                        if (!n_value) {
+                                //if 0, hide the penalty, don't need to display "0"
+                                $("game-penalty").hide ();
+                        } else {
+                                $("game-penalty").innerHTML = n_value;
+                                $("game-penalty").show ();
+                        }
+                }
+                this.penalty = n_value;
+        },
+        
+        /* > displayFace : update just the face card
+           =============================================================================================================== */
+        displayFace : function () {
+                $("game-face").innerHTML = (this.face) ? '<img src="../images/cards/'+this.face+'.png" width="71" height="96" alt="Face" />' : "";
+        },
+
+        /* > getCardPositions : return the positions for each card, given a number of cards to fit into the run
+           ===============================================================================================================
+           params * n_count     : how many cards (1-based) to return the positions for
+           return * a_positions : an array containing the X position of each card
+           =============================================================================================================== */
+        getCardPositions : function (n_count) {
+                //defaults
+                if (!n_count) {n_count = this.cards.length;}  //default: current number of cards in run
+                
+                var result  = [],
+                    spacing = this.spacing[n_count],  //space between each card
+                    pos     = 357                     //position of the first card
+                ;
+                //calculate the X position of each card
+                for (var i=0; i<n_count; i++) {
+                        result[i] = pos;        //store the position
+                        pos -= (71 + spacing);  //move onto the next card
+                }
+                return result;
+        },
+        
+        /* > fileCards : file the cards from the run onto the discard, and set the new face card
+           ===============================================================================================================
+           params * f_onComplete : function to call once the animation is complete
+           =============================================================================================================== */
+        fileCards : function (f_onComplete) {
+                if (!f_onComplete) {f_onComplete = Prototype.emptyFunction;}  //defualt: no callback
+
+                //are there any cards in the run anywho?
+                if (!game.run.cards.length) {
+                        //no, just callback
+                        f_onComplete ();
+                } else {
+                        //animate all cards in the run sliding onto the discard pile
+                        var cardanims = [];
+                        game.run.cards.each (function(s_card,n_index){
+                                var move_to = 436 - parseInt($("game-run-"+s_card).getStyle("left"));
+                                cardanims.push (new Effect.MoveBy("game-run-"+s_card, 0, move_to));
+                        });
+                        new Effect.Parallel (cardanims, {duration:0.5, queue:'end', afterFinish:function(){
+                                //put the old face card on the discard pile
+                                if (game.run.face) {game.deck.cards.unshift (game.run.face);}
+                                //take the card on top of the run and set as the new face card
+                                game.run.face = game.run.cards.last ();
+                                //update the face card on screen
+                                game.run.displayFace ();
+                                //remove the cards from the run
+                                game.run.cards.each (function(s_card,n_index){
+                                        $("game-run-"+s_card).remove ();
+                                        game.deck.cards.unshift (s_card);
+                                });
+                                game.run.cards.clear ();
+                                
+                                //once eveything is done, call the function passed
+                                f_onComplete ();
+                        }});
+                }
+        }
+};
 
 //=== end of line ===========================================================================================================
 //licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/

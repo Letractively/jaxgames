@@ -1,0 +1,68 @@
+=============================================================================================================================
+jaxgames to do list - please keep this as organised and structured as possible, no endless lists of requests
+=============================================================================================================================
+Note: This document is not final and will be continually expanded to suit progression
+
+P1 - Priority 1, a requirement that must be met. cannot continue without
+P2 - A requirement that should be met, but may change or be re-factored
+P3 - A likely feature given timeframe and workload, could continue without
+P4 - An improvement
+P5 - A niggle
+
+
+[1] Requirements for Beta:
+=============================================================================================================================
+Shared:
+-----------------------------------------------------------------------------------------------------------------------------
+* P1 * Entering the join key should not be case sensitive. Join key must be validated locally and on server
+* P2 * 4 games created
+* P3 * Players can choose an icon before starting/joining a game
+* P3 * Hyperlinks in chat messages clickable. Due to the length of URLs, they should be replaced with "[link]" instead
+* P4 * Start Game button should say Join Game instead when join game was chosen on the title screen
+* P5 * O, and 0 look similar in join key. create keys without 0
+
+Blacjax:
+-----------------------------------------------------------------------------------------------------------------------------
+* P1 * Title screen graphics
+* P2 * Announcements for actions taken / seen in the game
+
+Othello:
+-----------------------------------------------------------------------------------------------------------------------------
+* P1 * Title screen graphics
+* P1 * Draw condition
+* P2 * Piece flipping animation
+* P2 * Announcement when a player cannot take a turn and has to forfeit their turn
+
+QA, Testing and Compatibility:
+-----------------------------------------------------------------------------------------------------------------------------
+* P1 * A catch screen for if the user is using an unsupported browser
+* P2 * IE6, 7 / Firefox 1.5, 2.0 compatibility
+
+
+[2] Requirements for Release Candidate:
+=============================================================================================================================
+Shared:
+-----------------------------------------------------------------------------------------------------------------------------
+* P2 * 6 games created, and working
+
+Blacjax:
+-----------------------------------------------------------------------------------------------------------------------------
+* P2 * Rules screen
+* P3 * About screen
+
+Othello:
+-----------------------------------------------------------------------------------------------------------------------------
+* P2 * Rules screen
+* P3 * About screen
+
+QA, Testing and Compatibility:
+-----------------------------------------------------------------------------------------------------------------------------
+* P1 * A catch screen for if the user is using an unsupported browser (updated)
+* P2 * IE6, 7 / Firefox 1.0, 1.5, 2.0, Minefield / Opera 9 compatibility verified
+
+
+[3] Feature Suggestions:
+=============================================================================================================================
+* A (Mac OS X Tiger) Dashboard Widget version that can play on a LAN hosted server, or public Internet server
+
+=== end of line =============================================================================================================

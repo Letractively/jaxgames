@@ -20,7 +20,7 @@
 		</div>
 		<!-- === user = let the user enter a name =============================================================== -->
 		<div id="page-user">
-			<p><a href="javascript:game.showPage('title');">&laquo; Back</a></p>
+			<p><a href="javascript:shared.showPage('title');">&laquo; Back</a></p>
 			<p><label for="user-nickname">Enter a desired nickname:</label></p>
 			<p><input type="text" name="user-nickname" id="user-nickname" maxlength="20" /></p>
 			<fieldset style="background-image: url('../images/mask.png');"><legend>Choose an icon for yourself</legend>
@@ -53,7 +53,7 @@
 				<p>Paste the key code your friend has given you into the box below to join the game.</p>
 				<p><input type="text" name="join-key" id="join-key" size="6" maxlength="6" /></p>
 			</div>
-			<p><input type="button" id="user-submit" value="Start Game" onclick="javascript:game.connect(game.host);" /></p>
+			<p><input type="button" id="user-submit" value="Start Game" onclick="javascript:shared.connect(shared.host);" /></p>
 		</div>
 		<!-- === game = the main game display =================================================================== -->
 		<div id="page-game">

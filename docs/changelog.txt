@@ -1,13 +1,31 @@
-NEW : New feature/code | ADD : Addition/Change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
-02.DEC.07
+jaxgames changelog | NEW : New feature/code | ADD : Addition/Change to existing code | FIX : Bug/problem fixed
+=============================================================================================================================
+05.JAN.07
+    NEW: /docs/todo.txt to detail main tasks
+    FIX: Player.wins default was "" not 0
+    FIX: Play Again not working on othello, this.start was in the wrong scope (see game.end)
+04.JAN.07
+    ADD: shared.js now uses an object called shared, instead of game. the game object is now game specific, in game.js
+         this is done so there is less confusion over references to this.xxxx where xxxx is in shared.js and not game.js,
+         and to allow shadow functions in shared.js to then elevate to game.js. For example, disconnect messages can be
+         handled at the shared level, before being passed on to the game, something not (easily) possible before
+    ADD: game.findBridge will now only call the callback function on directions that yield a valid move. The function no
+         longer needs to be called twice to first check for a valid move in a direction, and then again to execute the 
+         callback for each cell. This improves speed and LOC
+    ADD: playableCellMouseOver/Out uses new playableCellMouseHover function to avoid duplicating the same code, bar one
+         function name. Uses Prototype .invoke to dynamically call the relevant function
+02.JAN.07
+    NEW: docs folder in jax_php + licence.txt. added so that Jax could be distributed separately
+    ADD: Changed the default location of response.php in jax.js from response.php to jax_php/response.php to reflect the new
+         folder layout
     ADD: moved inc folder in jax_php to games/inc as it contained some PHP includes that are specific to JaxGames. the
          jax_php folder is meant to be solely for jax as this will form the basis of a re-distributable package for Jax.
     ADD: changed /server folder to /jax_php. jax.js (and the PHP backend) will eventually become a separate, reusable script
          and distributed on the site by itself as well as with JaxGames.
     NEW: added CONFIG.php so that users can change the database path without having to edit JaxPHP directly.
     ADD: game.connect now sets the name/icon in the player info bars so that duplicate code is not needed in games/*/game.js
-01.DEC.07
+01.JAN.07
     FIX: Othello: as the html table is not being recreated every time, the mouse events were not being removed after a click
     NEW: Othello now highlights which cells will be captured when hovering over a playable cell
     NEW: year
@@ -104,3 +122,5 @@ NEW : New feature/code | ADD : Addition/Change to existing code | FIX : Bug/prob
     ADD: modified jax.js to not include jaxgames specific code, still more to do 
 11.NOV.06
     NEW: Started this log. Very late in the game, as jax has already been in development for many months
+
+=== end of line =============================================================================================================

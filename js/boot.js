@@ -10,7 +10,7 @@
    + jax.js        : establish a bridge between two computer users to send AJAX back and forth
    + shared.js     : shared code between all the games
 */
-document.write(' \
+document.write(' \n \
 \t<script type="text/javascript" src="../../js/libs/prototype.js"></script>\n \
 \t<script type="text/javascript" src="../../js/libs/json.js"></script>\n \
 \t<script type="text/javascript" src="../../js/libs/scriptaculous/scriptaculous.js?load=effects"></script>\n \
@@ -20,7 +20,7 @@ document.write(' \
 
 //if Firebug is not installed in Firefox, use Firebug Lite
 //in the compressed distibution, firebugx.js would be included instead to ignore the console.* calls
-//therefore you can liberally use Firebug features in the code (except 'debugger();') without breaking the distribution
+//therefore you can liberally use Firebug features in the code (except 'debugger;') without breaking the distribution
 if (!("console" in window) || !("firebug" in console)) {
         document.write ('\t<script type="text/javascript" src="../../js/libs/firebug/firebug.js"></script>\n');
 }
