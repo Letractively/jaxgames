@@ -23,21 +23,21 @@ h1 span {visibility: hidden;}
 /* === player info ======================================================================================================= */
 .player-status            {display: none; position: absolute; height: 21px; width: 512px; color: white;}
 .player-info              {height: 18px; padding: 3px 5px 0 5px; margin: 0;}
-.player-msg               {width: 512px; height: 63px; text-align: center; background-image: url("../games/images/barbg.png");}
+.player-msg               {width: 512px; height: 63px; text-align: center; background-image: url("../games/-/barbg.png");}
 
 .player-name              {font-weight: bold;}
 
-#player-status-them       {top: 45px; background-image: url("../games/images/barthem.png");}
+#player-status-them       {top: 45px; background-image: url("../games/-/barthem.png");}
 #player-status-them-info  {text-align: right;} 
 #player-status-them-win   {float: left;}
 #player-status-them-score {float: left; margin-left: 8px;}
 
-#player-status-me         {top: 408px; background-image: url("../games/images/barme.png"); background-repeat: repeat-x;}
+#player-status-me         {top: 408px; background-image: url("../games/-/barme.png"); background-repeat: repeat-x;}
 #player-status-me-win     {float: right; text-align: right;}
 #player-status-me-score   {float: right; margin-right: 8px;}
 
 /* === screen overlay ==================================================================================================== */
-#system-status            {top: 0; left: 0; width: 640px; height: 429px; background-image: url("../games/images/mask.png");}
+#system-status            {top: 0; left: 0; width: 640px; height: 429px; background-image: url("../games/-/mask.png");}
 #system-status .hv1       {height: 450px; width: 640px;}
 #system-status-text       {font: normal 11px Arial; text-align: center; color: white;}
 
@@ -60,9 +60,9 @@ h1 span {visibility: hidden;}
                            text-align: center; font: italic 10px Tahoma, sans-serif; cursor: text;}
 #shared-chat textarea     {width: 125px; height: 42px; margin: 0; padding: 0 0 0 2px; border: 0;
                            border-top: solid 1px #404040; font-family: Tahoma, sans-serif; font-size: 11px; color: #404040;
-                           background-image: url("../games/images/chatbg.png");}
+                           background-image: url("../games/-/chatbg.png");}
 #shared-chat-text p       {width: 124px; height: 21px; padding: 0 3px 0 0; margin: 0;
-                           background-image: url("../games/images/barme.png"); text-align: right;}
+                           background-image: url("../games/-/barme.png"); text-align: right;}
 
 /* --- emote list --- */
 #shared-chat-emote        {cursor: pointer;}

@@ -69,11 +69,11 @@ Pack.prototype = {
            =============================================================================================================== */
         cache : function () {
                 var html = '\t<div style="position: absolute; top: -4999px;">\n'
-                         + '\t\t<img src="../images/cards/back.png" width="71" height="96" alt="back" />\n'    //back of card
-                         + '\t\t<img src="../images/cards/place.png" width="71" height="96" alt="place" />\n'  //place holder
+                         + '\t\t<img src="../-/cards/back.png" width="71" height="96" alt="back" />\n'    //back of card
+                         + '\t\t<img src="../-/cards/place.png" width="71" height="96" alt="place" />\n'  //place holder
                 ;
                 this.cards.each (function(s_card){
-                        html += '\t\t<img src="../images/cards/'+s_card+'.png" width="71" height="96" alt="'+s_card+'" />\n';
+                        html += '\t\t<img src="../-/cards/'+s_card+'.png" width="71" height="96" alt="'+s_card+'" />\n';
                 });
                 html += "\t</div>\n";
                 new Insertion.Top ("body", html);

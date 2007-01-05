@@ -16,7 +16,6 @@ Shared:
 -----------------------------------------------------------------------------------------------------------------------------
 * P1 * Entering the join key should not be case sensitive. Join key must be validated locally and on server
 * P2 * 4 games created
-* P3 * Players can choose an icon before starting/joining a game
 * P3 * Hyperlinks in chat messages clickable. Due to the length of URLs, they should be replaced with "[link]" instead
 * P4 * Start Game button should say Join Game instead when join game was chosen on the title screen
 * P5 * O, and 0 look similar in join key. create keys without 0
@@ -64,5 +63,6 @@ QA, Testing and Compatibility:
 [3] Feature Suggestions:
 =============================================================================================================================
 * A (Mac OS X Tiger) Dashboard Widget version that can play on a LAN hosted server, or public Internet server
+* A localisation system using PHP/JS to define the strings
 
 === end of line =============================================================================================================
