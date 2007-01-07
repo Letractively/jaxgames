@@ -24,6 +24,10 @@ Player.prototype = {
 var shared = {
         host  : false,                      //true = you are the host, false = you are the opponent
         pages : ["title", "user", "game"],  //the screens in the game, override this in game.js to add more
+        icons : {
+                host     : "../-/icons/user.png",
+                opponent : "../-/icons/user_red.png"
+        },
         
         //number of matches played
         played : 0,
@@ -50,32 +54,35 @@ var shared = {
                 enableNicknameBox (false);
                 
                 playerMe.name   = $F("user-nickname");
-                playerMe.icon   = b_host ? "user" : "user_red";
-                playerThem.icon = b_host ? "user_red" : "user";
+                playerMe.icon   = b_host ? this.icons.host : this.icons.opponent;
+                playerThem.icon = b_host ? this.icons.opponent : this.icons.host;
                 
                 //if you are the host, or opponent:
                 if (b_host) {    //------------------------------------------------------------------------------------------
                         //create the game on the server
-                        jax.open({
-                                name : playerMe.name,  //your chosen name
-                        }, function(o_response){
-                                //if the server okay'd the new slot
-                                if (o_response.result) {
-                                        //first function: onGameInit. when the game starts, but the other player has not yet
-                                        //joined, display the code for the other player to use to join with
-                                        this.setSystemStatus ('<p>Copy the key code below and give it<br />to your friend ' +
-                                        'so that they can join the game</p><p><input type="text" readonly="readonly" '      +
-                                        'size="6" value="' + jax.conn_id + '" /></p><p><br />Waiting for the other player ' +
-                                        'to join...</p><p><img src="../-/waiting.gif" width="16" height="16" '         +
-                                        'alt="Waiting..." /></p>');
-                                        //set the chrome title
-                                        this.setTitle (jax.conn_id + " - ");
+                        jax.open(
+                                {name : playerMe.name},  //your chosen name
+                                function(o_response){    //when the game starts, but the other player has not yet joined
+                                        //if the server okay'd the new slot
+                                        if (o_response.result) {
+                                                //display the code for the other player to use to join with
+                                                this.setSystemStatus (
+                                                        '<p>Copy the key code below and give it<br />to your friend so that'+
+                                                        ' they can join the game</p><p><input type="text" readonly="readonl'+
+                                                        'y" size="6" value="' + jax.conn_id + '" /></p><p><br />Waiting for'+
+                                                        ' the other player to join...</p><p><img src="../-/waiting.gif" wid'+
+                                                        'th="16" height="16" alt="Waiting..." /></p>'
+                                                );
+                                                //set the chrome title
+                                                this.setTitle (jax.conn_id + " - ");
                                         
-                                } else {
-                                        //TODO: start game or nickname failed
-                                        enableNicknameBox (true);
-                                }
-                        }.bind(this), preStart.bind(this));  //second function: when the other player joins the game
+                                        } else {
+                                                //TODO: start game or nickname failed
+                                                enableNicknameBox (true);
+                                        }
+                                }.bind(this),
+                                preStart.bind(this)  //second function: when the other player joins the game
+                        );
                         
                 } else {  //-------------------------------------------------------------------------------------------------
                         this.setTitle ("Joining Game... - ");
@@ -84,7 +91,7 @@ var shared = {
                         //connect to the other player
                         jax.connect ($F("join-key"),         //the connection key the user pasted into the text box
                                     {name : playerMe.name},  //your nickname to send to the other player
-                                    preStart.bind(this)
+                                    preStart.bind(this)      //function to call once you've joined the game (see below)
                         );
                 }
                 
@@ -96,13 +103,13 @@ var shared = {
                         
                         //display player 1's name / icon
                         $("jax-game-p1name").innerHTML = playerMe.name;
-                        $("jax-game-p1icon").src = "../-/icons/" + playerMe.icon + ".png";
+                        $("jax-game-p1icon").src = playerMe.icon;
                         $("player-status-me").style.display = "block";
                         this.setPlayerStatus ();
 
                         //display player 2's name / icon
                         $("jax-game-p2name").innerHTML = playerThem.name;
-                        $("jax-game-p2icon").src = "../-/icons/" + playerThem.icon + ".png";
+                        $("jax-game-p2icon").src = playerThem.icon;
                         $("player-status-them").style.display = "block";
                         
                         //set the chrome title
@@ -346,9 +353,9 @@ shared.chat = {
                 //multiple messages coming in at the same time don't overwrite each other
                 var e = $("shared-chat-history");
                 new Insertion.Bottom (e, '<div id="chat-'+timeid+'" class="chat-'+(s_name==playerMe.name?"me":"them")+'" '+
-                                         'style="display: none;"><p><em>'+timestamp+'</em> <img src="../-/icons/'+
-                                         s_icon+'.png" width="16" height="16" alt="User icon" /> <strong>'+s_name+
-                                         '</strong></p><blockquote><p>'+s_msg+'</p></blockquote></div>'
+                                         'style="display: none;"><p><em>'+timestamp+'</em> <img src="'+s_icon+'" '+
+                                         'width="16" height="16" alt="User icon" /> <strong>'+s_name+'</strong></p>'+
+                                         '<blockquote><p>'+s_msg+'</p></blockquote></div>'
                 );
                 //animate the message appearing (and scroll down to meet it)
                 new Effect.SlideDown ("chat-"+timeid, {duration: 0.3, afterUpdate: function(){
@@ -397,6 +404,23 @@ shared.events = {
                                 shared.events.chatEmotesShow ($("shared-chat-emote"));
                         }
                 }); 
+        },
+        
+        /* > titleButtonClick : to deal with the Start or Join Game button on the title screen
+           =============================================================================================================== */
+        titleButtonClick : function (e_event, b_host) {
+                //enable the nickname textbox as Gecko will keep it disabled if you refesh the page
+                enableNicknameBox (true);
+                $("join-game").style.display = b_host ? "none" : "block";
+
+                shared.host = b_host;
+                shared.showPage ("user");
+        },
+        
+        /* > userSubmitClick : when you click the Start/Join Game button
+           =============================================================================================================== */
+        userSubmitClick : function () {
+                shared.connect (shared.host);
         }
 };
 
@@ -414,6 +438,14 @@ Event.observe (window, 'load', function(){
         shared.setSystemStatus ();
         //Firefox remembers the values in fields, even after refreshing, clear the chat box
         $("shared-chat-input").value = "";
+        
+        //the buttons on the title screen
+        $("title-start-game").onclick = shared.events.titleButtonClick.bindAsEventListener (this, true);
+        $("title-join-game").onclick  = shared.events.titleButtonClick.bindAsEventListener (this, false);
+        
+        //when the user clicks the Start/Join Game button (on the user page)
+        $("user-submit").onclick = shared.events.userSubmitClick;
+        
         //run the load function defined in game.js for the game to handle some on load procedures of it's own
         game.load ();
 });
@@ -428,24 +460,6 @@ jax.listenFor ("jax_disconnect", function(o_response) {
                 shared.setSystemStatus (playerThem.name+" left the game");
         }
 });
-
-function showStartGame () {
-        //enable the nickname textbox as Gecko will keep it disabled if you refesh the page
-        enableNicknameBox (true);
-        $("join-game").style.display = "none";
-        
-        shared.host = true;
-        shared.showPage ("user");
-}
-
-function showJoinGame () {
-        //enable the nickname textbox as Gecko will keep it disabled if you refesh the page
-        enableNicknameBox (true);
-        $("join-game").style.display = "block";
-        
-        shared.host = false;
-        shared.showPage ("user");
-}
 
 function enableNicknameBox (b_enabled) {
         var e;

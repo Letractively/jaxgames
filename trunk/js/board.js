@@ -8,6 +8,19 @@ Board.prototype = {
         height  : 0,   //number of rows
         cells   : [],  //an array of html content to go in each cell (as a two dimensional array, e.g. [x][y])
         
+        //this is a set of vectors to move in the eight directions. you can use this in your own logic to traverse the 
+        //board for your own reasons. refer to othello for good examples
+        directions : [
+                {x:  0, y: -1},  //0 - up
+                {x:  1, y: -1},  //1 - right-up
+                {x:  1, y:  0},  //2 - right
+                {x:  1, y:  1},  //3 - right-down
+                {x:  0, y:  1},  //4 - down
+                {x: -1, y:  1},  //5 - left-down
+                {x: -1, y:  0},  //6 - left
+                {x: -1, y: -1}   //7 - left-up
+        ],
+        
         /* > intialize : constructor function
            ===============================================================================================================
            params * s_element : html element id to inject the board into
@@ -83,7 +96,11 @@ Board.prototype = {
         
         /* > getCoordsFromId : return x/y position given a html id for a cell
            ===============================================================================================================
-           params * s_id : html element id of the cell in question
+           params * s_id       : html element id of the cell in question
+           return * o_position : {
+                                         x : column of cell
+                                         y : row of cell
+                                 }
            =============================================================================================================== */
         getCoordsFromId : function (s_id) {
                 var id  = s_id.split ("-").last (),              //get the cell reference from the cell id

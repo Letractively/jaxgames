@@ -25,6 +25,9 @@ if (!("console" in window) || !("firebug" in console)) {
         document.write ('\t<script type="text/javascript" src="../../js/libs/firebug/firebug.js"></script>\n');
 }
 
+//include Shuns excellent dump script. use dump (any var, true); to get a block display of a variable. can be object/function
+document.write('\t<script type="text/javascript" src="../../js/libs/dump_src.js"></script>\n');
+
 //=== end of line ===========================================================================================================
 //licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
 //jax, jax games (c) copyright Kroc Camen 2005-2007
