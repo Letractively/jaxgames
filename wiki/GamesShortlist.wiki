@@ -29,3 +29,6 @@ Add here suggestions for games suitable for inclusion in Jax Games. Please bear 
 
   * *Blokus*
   A modern puzzle game where players must dispatch of up to 21 unique shapes by placing them so that no sides touch another existing piece. [http://en.wikipedia.org/wiki/Blokus Wikipedia]
+  
+  * *Minesweeper Flags*
+  A two player version of Minesweeper as seen on MSN Messenger. The players take turns trying to find the mines. Empty squares reveal a number stating how many mines surround that square [http://en.wikipedia.org/wiki/Minesweeper_%28computer_game%29 Wikipedia]
