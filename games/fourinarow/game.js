@@ -33,27 +33,12 @@ var game = {
         grid   : new Board ("game-grid", 7, 6),  //the game grid, a board of 7x6. see board.js
         pieces  : [],                            //the layout of pieces on the grid
         
-        //private storage
-        _ : {
-                //this is a set of vectors to move in the eight possible directions
-                directions : [
-                        {x:  0, y: -1},  //0 - up
-                        {x:  1, y: -1},  //1 - right-up
-                        {x:  1, y:  0},  //2 - right
-                        {x:  1, y:  1},  //3 - right-down
-                        {x:  0, y:  1},  //4 - down
-                        {x: -1, y:  1},  //5 - left-down
-                        {x: -1, y:  0},  //6 - left
-                        {x: -1, y: -1}   //7 - left-up
-                ]
-        },
-        
         /* > load : called for you on page load (see shared.js)
            =============================================================================================================== */
         load : function () {
                 /*shared.showPage ("game"); this.start (true);*/
                 /*//create the empty board
-                this.board.injectHTML ();*/
+                this.grid.injectHTML ();*/
         },
                 
         /* > start : begin playing

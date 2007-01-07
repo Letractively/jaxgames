@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- ====================================================================================================================
-     fourinarow - copyright (c) Kroc Camen 2007
+     four-in-a-row - copyright (c) Kroc Camen 2007
      ==================================================================================================================== -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
 <head>
@@ -11,12 +11,12 @@
 	<script type="text/javascript" src="game.js">/* ......................... game logic .................... */</script>
 </head>
 <body><div id="body">
-	<h1><span>Four In A Row</span></h1>
+	<h1><span>Four-in-a-Row</span></h1>
 	<div id="shared-gamearea">
 		<!-- === title = title screen, start or join a game ===================================================== -->
 		<div id="page-title">
-			<p><a href="javascript:showStartGame();">Start Game</a></p>
-			<p><a href="javascript:showJoinGame();">Join Game</a></p>
+			<p><a id="title-start-game" href="#page-user">Start Game</a></p>
+			<p><a id="title-join-game" href="#page-user">Join Game</a></p>
 		</div>
 		<!-- === user = let the user enter a name =============================================================== -->
 		<div id="page-user">
@@ -27,7 +27,7 @@
 				<p>Paste the key code your friend has given you into the box below to join the game.</p>
 				<p><input type="text" name="join-key" id="join-key" size="6" maxlength="6" /></p>
 			</div>
-			<p><input type="button" id="user-submit" value="Start Game" onclick="javascript:shared.connect(shared.host);" /></p>
+			<p><input type="button" id="user-submit" value="Start Game" /></p>
 		</div>
 		<!-- === game = the main game display =================================================================== -->
 		<div id="page-game">

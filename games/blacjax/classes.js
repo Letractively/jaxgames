@@ -92,12 +92,12 @@ Hand.prototype = {
                     card_id = this.element + '-' + card
                 ;
                 new Insertion.Top (this.element, '<img id="'+card_id+'" style="position: absolute; left: 5px; top: ' +
-                                   (this.host?-113:113)+'px;" src="../images/cards/back.png" width="71" height="96" '+
+                                   (this.host?-113:113)+'px;" src="../-/cards/back.png" width="71" height="96" '+
                                    'alt="'+card+'" />'
                 );
                 cardanims.push (new Effect.MoveBy (card_id, 0, cardpos[0], {mode:'absolute', afterFinish:function(o_effect){
                         //flip the card over by switching to the face image (playerMe only)
-                        if (this.host) {$(o_effect.element.id).src = "../images/cards/" + card + ".png";}
+                        if (this.host) {$(o_effect.element.id).src = "../-/cards/" + card + ".png";}
                 }.bind(this)}));
                 
                 new Effect.Parallel (cardanims, {
@@ -211,7 +211,7 @@ Hand.prototype = {
                                 $(this.element+"-"+chosencard).id = "game-run-"+chosencard;
 
                                 //flip the card over by switching to the face image (your cards are already face up)
-                                if (!this.host) {$("game-run-"+chosencard).src = "../images/cards/" + chosencard + ".png";}
+                                if (!this.host) {$("game-run-"+chosencard).src = "../-/cards/" + chosencard + ".png";}
 
                                 f_onComplete (chosencard);
                         }.bind(this)});

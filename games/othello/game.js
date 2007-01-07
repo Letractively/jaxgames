@@ -37,25 +37,13 @@ var game = {
         board   : new Board ("game-board"),  //the game board (default size of 8x8 will be used), see board.js
         pieces  : [],                        //the layout of pieces on the board
         
-        //private storage
-        _ : {
-                //this is a set of vectors to move in the eight possible directions
-                directions : [
-                        {x:  0, y: -1},  //0 - up
-                        {x:  1, y: -1},  //1 - right-up
-                        {x:  1, y:  0},  //2 - right
-                        {x:  1, y:  1},  //3 - right-down
-                        {x:  0, y:  1},  //4 - down
-                        {x: -1, y:  1},  //5 - left-down
-                        {x: -1, y:  0},  //6 - left
-                        {x: -1, y: -1}   //7 - left-up
-                ]
-        },
-        
         /* > load : called for you on page load (see shared.js)
            =============================================================================================================== */
         load : function () {
                 /*shared.showPage ("game"); this.start (true);*/
+                //set the icons for the players that will be used in this game (replacing the default Blue vs. Red ones)
+                shared.icons.host     = "images/iconblack.png";
+                shared.icons.opponent = "images/iconwhite.png";
                 //create the empty board
                 this.board.injectHTML ();
         },
@@ -207,8 +195,8 @@ var game = {
                 
                 var piece_me   = (b_self) ? playerMe.piece : playerThem.piece,  //are you playing white or black?
                     piece_them = (b_self) ? playerThem.piece : playerMe.piece,  //and conversely...
-                    new_x      = n_x + this._.directions[n_dir].x,              //x location after step forward
-                    new_y      = n_y + this._.directions[n_dir].y               //y location after step forward
+                    new_x      = n_x + this.board.directions[n_dir].x,          //x location after step forward
+                    new_y      = n_y + this.board.directions[n_dir].y           //y location after step forward
                 ;
                 //is the next step out of range?
                 if ((new_x > 0 && new_x < 9) && (new_y > 0 && new_y < 9)) {

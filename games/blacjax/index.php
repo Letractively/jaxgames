@@ -16,8 +16,8 @@
 	<div id="shared-gamearea">
 		<!-- === title = title screen, start or join a game ===================================================== -->
 		<div id="page-title">
-			<p><a href="javascript:showStartGame();">Start Game</a></p>
-			<p><a href="javascript:showJoinGame();">Join Game</a></p>
+			<p><a id="title-start-game" href="#page-user">Start Game</a></p>
+			<p><a id="title-join-game" href="#page-user">Join Game</a></p>
 		</div>
 		<!-- === user = let the user enter a name =============================================================== -->
 		<div id="page-user">
@@ -28,7 +28,7 @@
 				<p>Paste the key code your friend has given you into the box below to join the game.</p>
 				<p><input type="text" name="join-key" id="join-key" size="6" maxlength="6" /></p>
 			</div>
-			<p><input type="button" id="user-submit" value="Start Game" onclick="javascript:shared.connect(shared.host);" /></p>
+			<p><input type="button" id="user-submit" value="Start Game" /></p>
 		</div>
 		<!-- === game = the main game display =================================================================== -->
 		<div id="page-game">

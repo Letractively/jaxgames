@@ -1,7 +1,17 @@
 =============================================================================================================================
-jaxgames changelog | NEW : New feature/code | ADD : Addition/Change to existing code | FIX : Bug/problem fixed
+jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+06.JAN.07
+    NEW: Shuns Dump script www.netgrow.com.au/files added. see /js/libs/dump_src.js. I'm working on greatly improving this
+         script. use dump(any var); in the console/firebug to use
+    FIX: Blacjax: Play Again links staying on screen when starting new game
+    FIX: Card images not displaying in blacjax
+    FIX: Points not adding when winning in blacjax
 05.JAN.07
+    ADD: removed the onclick events from the HTML, and moved to shared.js
+    ADD: moved /games/othello/game.js:game._.directions to Board class (board.js) so that multiple games don't need to
+         repeat these vectors
+    NEW: Othello uses Black & White piece user icons
     ADD: Renamed /games/images/ to /games/- and moved games/inc to /games/-/inc. with this name, the images folder stands
          out from the folders containing games, there are no longer two folders not related to games there, and "-" will
          always stay at the top of the list when alphabetically sorted. Also, less letters in the CSS/HTMl saving a few bytes
