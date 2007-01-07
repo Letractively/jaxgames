@@ -4,8 +4,8 @@
 # licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
 # jax, jax games (c) copyright Kroc Camen 2005-2007
 #============================================================================================================================
-# HOW TO RUN THIS FILE:
-# this is a shell script for Mac OS X (similar to a .bat file in Windows)
+# HOW TO RUN THIS FILE: (TextMate users can press Cmd+R to run this file!)
+# ------------------------------------------------------------------------
 # you have to make this file executable before you can run it. simply double clicking won't work.
 # open the Terminal located in /applications/utilities/ and enter
 #   cd /library/webserver/documents/jax_games/_build
@@ -47,7 +47,7 @@ echo "--------------------------------------------------------------------------
 # run it through the dojo compressor, this will strip the comments and do other optimisations
 echo "* compact scripts"
 echo "-------------------------------------------------------------------------------"
-# find all javascripts (ingoring folders starting with underscore) and compact them
+# find all javascripts (ignoring folders starting with underscore) and compact them
 for FILE in `find ./release/jaxgames -regex "\.\/[^_]*\.js"`
 do
         echo "  compacting $FILE..."

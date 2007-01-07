@@ -18,14 +18,16 @@ document.write(' \n \
 \t<script type="text/javascript" src="../../js/shared.js"></script>\n \
 ');
 
+/* developer only tools:
+   ======================================================================================================================= */
 //if Firebug is not installed in Firefox, use Firebug Lite
-//in the compressed distibution, firebugx.js would be included instead to ignore the console.* calls
-//therefore you can liberally use Firebug features in the code (except 'debugger;') without breaking the distribution
+//in the compressed released, firebugx.js would be included instead to ignore the console.* calls therefore you can liberally
+//use Firebug features in the code (except 'debugger;') without breaking the release version
 if (!("console" in window) || !("firebug" in console)) {
         document.write ('\t<script type="text/javascript" src="../../js/libs/firebug/firebug.js"></script>\n');
 }
 
-//include Shuns excellent dump script. use dump (any var, true); to get a block display of a variable. can be object/function
+//include Shuns excellent dump script. use dump (any var); to get a block display of a variable. can be object/array
 document.write('\t<script type="text/javascript" src="../../js/libs/dump_src.js"></script>\n');
 
 //=== end of line ===========================================================================================================

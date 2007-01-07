@@ -42,6 +42,7 @@ function formatFileSize (n_bytes) {
         }
 }
 
+//---------------------------------------------------------------------------------------------------------------------------
 /* This script is Copyright (c) Paul McFedries and 
 Logophilia Limited (http://www.mcfedries.com/).
 Permission is granted to use this script as long as 
