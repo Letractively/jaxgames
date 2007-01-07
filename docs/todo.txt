@@ -10,8 +10,12 @@ P4 - An improvement
 P5 - A niggle
 
 
-[1] Requirements for Beta:
+[1] Requirements for Public Beta:
 =============================================================================================================================
+Website:
+-----------------------------------------------------------------------------------------------------------------------------
+* P2 * Technical and Developer focused website
+
 Shared:
 -----------------------------------------------------------------------------------------------------------------------------
 * P1 * Entering the join key should not be case sensitive. Join key must be validated locally and on server
@@ -36,6 +40,7 @@ QA, Testing and Compatibility:
 -----------------------------------------------------------------------------------------------------------------------------
 * P1 * A catch screen for if the user is using an unsupported browser
 * P2 * IE6, 7 / Firefox 1.5, 2.0 compatibility
+* P2 * Windows Installation Instructions for Developers
 
 
 [2] Requirements for Release Candidate:
@@ -60,7 +65,14 @@ QA, Testing and Compatibility:
 * P2 * IE6, 7 / Firefox 1.0, 1.5, 2.0, Minefield / Opera 9 compatibility verified
 
 
-[3] Feature Suggestions:
+[3] Requirements for Public 1.0 Release:
+=============================================================================================================================
+Website:
+-----------------------------------------------------------------------------------------------------------------------------
+* P1 * Non-technical website
+
+
+[4] Feature Suggestions:
 =============================================================================================================================
 * A (Mac OS X Tiger) Dashboard Widget version that can play on a LAN hosted server, or public Internet server
 * A localisation system using PHP/JS to define the strings

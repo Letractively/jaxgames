@@ -1,6 +1,18 @@
 =============================================================================================================================
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+07.JAN.07
+    NEW: /docs/acknowledgements.txt
+    FIX: Improvements to Dump
+         + _lots_ of code cleaning
+         + ignore Prototype functions
+         + window height/width arguments
+         + uses a CSS block instead of inline CSS (removed the huge _dumpStyles function)
+         + strings are braced by speech marks to make numbers stored as a string / nullstrings obvious
+         + no longer polutes the global namespace with outside functions. all functions are internal
+         + functions are shown in <pre> blocks with horizontal scrollbar if needed
+         + html in functions does not break. this can be massively improved
+         + IE/Safari/Opera support is broken, will work on this
 06.JAN.07
     NEW: Shuns Dump script www.netgrow.com.au/files added. see /js/libs/dump_src.js. I'm working on greatly improving this
          script. use dump(any var); in the console/firebug to use
@@ -14,7 +26,7 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
     NEW: Othello uses Black & White piece user icons
     ADD: Renamed /games/images/ to /games/- and moved games/inc to /games/-/inc. with this name, the images folder stands
          out from the folders containing games, there are no longer two folders not related to games there, and "-" will
-         always stay at the top of the list when alphabetically sorted. Also, less letters in the CSS/HTMl saving a few bytes
+         always stay at the top of the list when alphabetically sorted. Also, less letters in the CSS/HTML saving a few bytes
          for what it's worth
     ADD: removed the ability for users to choose icons. user's icons will be according to what game they are playing to
          better remind them of which piece they are, and to simplify the code / speed up starting games. this is blue vs.
