@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- ====================================================================================================================
-     four-in-a-row - copyright (c) Kroc Camen 2007
+     quadrop - copyright (c) Kroc Camen 2007
      ==================================================================================================================== -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
 <head>
@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="game.js">/* ......................... game logic .................... */</script>
 </head>
 <body><div id="body">
-	<h1><span>Four-in-a-Row</span></h1>
+	<h1><span>Quadrop</span></h1>
 	<div id="shared-gamearea">
 		<!-- === title = title screen, start or join a game ===================================================== -->
 		<div id="page-title">
