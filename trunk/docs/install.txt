@@ -24,7 +24,7 @@ ii)  Open the .tar.gz file (may happen automatically if you're using Safari)
 iii) Move the jaxgames folder that you unzipped/checked-out (and are looking at now ) to
      'Macintosh HD > Library > WebServer > Documents'.
 
-iv)  The database folder must be write-able for Jax Games to function. Navigate into the 'server' folder.
+iv)  The database folder must be write-able for Jax Games to function. Navigate into the 'jax_php' folder.
      Ctrl-Click on the 'db' folder and select Get Info. Expand the 'Ownership & Permissions' section, and expand the
      'Details' section within. Change The three drop down boxes for Access to all say "Read & Write", then click the
      'Apply to enclosed items' button. Enter your password as prompted. Once done, dismiss the info window
@@ -38,8 +38,8 @@ vi)  At the top of the Sharing preferences window is your computer's name, under
      names or character names from Monty Python films, for example.
       
      Open Safari or Firefox and navigate to http://mymac.local/jaxgames/ (where 'mymac' is the name you've assigned your
-     computer). If all is well, you should be presented with the games list. If not, seek help, er, somewhere; we don't 
-     have forums yet :P
+     computer). If all is well, you should be presented with the games list. If not, seek help in the Jax Games forum at
+     <http://groups.google.com/group/jaxgames>
      
 vii) Other people on your LAN can use the same address to load Jax Games and play. To make your installation playable over
      the Internet involves opening port 80 on your router but is outside the scope of this document. Seek help from your
