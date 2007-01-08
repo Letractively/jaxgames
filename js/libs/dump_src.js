@@ -2,7 +2,7 @@
 // Author: Shuns (www.netgrow.com.au/files)
 
 /* Updated by Kroc Camen (http://kroc.deviantart.com)
-+ _lots_ of code cleaning +
++ _lots_ of code cleaning
 + ignore Prototype functions
 + window height/width arguments
 + uses a CSS block instead of inline CSS (removed the huge _dumpStyles function)

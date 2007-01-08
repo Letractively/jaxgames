@@ -55,8 +55,7 @@ var game = {
         start : function (b_mefirst) {
                 //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
                 //entering their name / join key, shared.connect is called. when a connection is established between the two
-                //players, this function is called for you
-                
+                //players, game.start is called for you
                 if (b_mefirst == null) {b_mefirst = shared.host;}  //default: host goes first
                 
                 shared.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
