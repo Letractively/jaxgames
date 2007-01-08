@@ -1,7 +1,7 @@
 /* =======================================================================================================================
-   games/fourinarow/game.js - the logic for this game
+   games/quadrop/game.js - the logic for this game
    ======================================================================================================================= */
-/* name   : four in a row
+/* name   : Quadrop
    author : Kroc Camen | kroccamen@gmail.com | kroc.deviantart.com
    type   : board game
    desc   : as known as 'Connect 4'
@@ -27,7 +27,7 @@ var playerMe   = new Player (),  //the player on this computer
    OBJECT game : this game
    ======================================================================================================================= */
 var game = {
-        name    : "Four-in-a-Row",
+        name    : "Quadrop",
         version : "0.1.0",
         
         grid   : new Board ("game-grid", 7, 6),  //the game grid, a board of 7x6. see board.js

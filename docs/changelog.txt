@@ -1,6 +1,8 @@
 =============================================================================================================================
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+08.JAN.07
+    ADD: Four-in-a-Row is now 'Quadrop'
 07.JAN.07
     NEW: /docs/acknowledgements.txt
     FIX: Improvements to Dump
