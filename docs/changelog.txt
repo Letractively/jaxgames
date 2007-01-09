@@ -2,6 +2,8 @@
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 08.JAN.07
+    ADD: Build script now downloads custom_rhino.jar if not present so that it doesn't have to be included in our SVN
+    NEW: Some initial title screen graphics for Othello, more to come
     ADD: Four-in-a-Row is now 'Quadrop'
 07.JAN.07
     NEW: /docs/acknowledgements.txt
