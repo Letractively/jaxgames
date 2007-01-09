@@ -18,8 +18,27 @@
 cd "`dirname "$0"`"
 clear
 echo "==============================================================================="
-echo "jaxgames build process                                                   v0.3.1"
+echo "jaxgames build process                                                   v0.3.2"
 echo "==============================================================================="
+
+# [1]:
+# Rhino is a java implementation of Javascript. Dojo <dojotoolkit.org> uses a custom version of Rhino to compact javascript
+# files into a smaller space. this will also make them more compatible with Dean Edward's packer.
+# if custom_rhino.jar does not exist, download it... (saves us 700Kb in our SVN)
+if ! [[ -e ./libs/custom_rhino.jar ]]
+then
+        echo "* downloading custom_rhino.jar"
+        echo "-------------------------------------------------------------------------------"
+        # curl: download a file
+        # -o = save to disk
+        # -S = show errors on screen
+        # -# = show a progress bar instead of details
+        # -A = set the user-agent to use, in this case we want to alert Dojo that this script is doing a direct download
+        curl -o ./libs/custom_rhino.jar -S -\# -A "Mozilla/4.0 (Jax Games Build Script - http://code.google.com/p/jaxgames)" "http://svn.dojotoolkit.org/dojo/trunk/buildscripts/lib/custom_rhino.jar"
+        echo "-------------------------------------------------------------------------------"
+fi
+
+# [2]:
 echo "* copy source to release directory"
 echo "-------------------------------------------------------------------------------"
 echo "  removing old release..."
@@ -37,6 +56,7 @@ rsync -r --delete-excluded --exclude-from=./libs/excludes.txt ../ ./release/jaxg
 chmod -R 777 ./release/jaxgames/jax_php/db
 echo "-------------------------------------------------------------------------------"
 
+# [3]:
 # merge together all the scripts needed for boot.js. this means we can load one javascript file to include all of the
 # libraries for the project (prototype / scriptaculous / json / jax / firebugx)
 echo "* merge libraries for boot.js"
@@ -44,6 +64,7 @@ echo "--------------------------------------------------------------------------
 java -jar ./libs/custom_rhino.jar ./libs/merge.js ../js/libs/prototype.js ../js/libs/json.js ./headers/scriptaculous.165.js ../js/libs/scriptaculous/effects.js ../js/libs/firebug/firebugx.js ../js/libs/jax.js ../js/shared.js ./release/jaxgames/js/boot.js
 echo "-------------------------------------------------------------------------------"
 
+# [4]:
 # run it through the dojo compressor, this will strip the comments and do other optimisations
 echo "* compact scripts"
 echo "-------------------------------------------------------------------------------"
@@ -56,7 +77,8 @@ do
 done
 echo "-------------------------------------------------------------------------------"
 
-# run the compressed scripts through Dean Edward's Packer for even more shrinkage
+# [5]:
+# run the compacted scripts through Dean Edward's Packer for even more shrinkage
 echo "* compress scripts (this will take a long time)"
 echo "-------------------------------------------------------------------------------"
 # find all javascript files (ignoring folders starting with underscore) at least 4000 bytes in size
@@ -67,6 +89,7 @@ do
 done
 echo "-------------------------------------------------------------------------------"
 
+# [6]:
 # the compression will have removed all comments, add new headers and licence blocks
 echo "* add headers"
 echo "-------------------------------------------------------------------------------"
@@ -79,6 +102,7 @@ do
 done
 echo "-------------------------------------------------------------------------------"
 
+# [7]:
 # zip the release
 # -r = recurse subdirectories
 # -X = exclude Mac OS only file attributes (MS-DOS Compatible)

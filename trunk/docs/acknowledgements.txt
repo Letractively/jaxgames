@@ -5,42 +5,43 @@ Without standing on the shoulders of these giants, this project would not have b
 Many thanks go to these people, and their contributions:
 
 [Software]
-* The Mozilla Foundation, Mozilla Firefox <http://getfirefox.com>
-* Joe Hewitt <http://joehewitt.com> Firebug, Firebug Lite <http://getfirebug.com> 
-* Allan Odgaard, TextMate <http://macromates.com>
+* The Mozilla Foundation, Mozilla Firefox <getfirefox.com>
+* Joe Hewitt <joehewitt.com> Firebug, Firebug Lite <getfirebug.com> 
+* Allan Odgaard, TextMate <macromates.com>
+* Jasc, Corel, Paint Shop Pro 7, X <paintshoppro.com>
 
 [Javascript]
-* Sam Stephenson, Prototype javascript framework <http://prototype.conio.net> and contributors
-* Thomas Fuchs <http://mir.aculo.us> Scriptaculous javascript framework <http://script.aculo.us> and contributors
-* The blogger of unfocus.com for Prototype-compatible json.js <http://unfocus.com/projects/source/Javascript/json.js>
+* Sam Stephenson, Prototype javascript framework <prototype.conio.net> and contributors
+* Thomas Fuchs <http://mir.aculo.us> Scriptaculous javascript framework <script.aculo.us> and contributors
+* The blogger of unfocus.com for Prototype-compatible json.js <unfocus.com/projects/source/Javascript/json.js>
 * Shuns, Dump <www.netgrow.com.au/files>
 
 [Content]
-* Mark James, famfamfam silk icon set <http://famfamfam.com/lab/icons/silk/>
-* Matthew Gillow, Moderne Gold Emoticon Pack <http://www.deviantart.com/deviation/459382/>
+* Mark James, famfamfam silk icon set <famfamfam.com/lab/icons/silk/>
+* Matthew Gillow, Moderne Gold Emoticon Pack <deviantart.com/deviation/459382/>
 
 [Server]
-* Jon Jensen, SQLiteDB: a PHP class for SQLite <http://code.jenseng.com/db/>
-* The PHP crew, Hypertext Preprocessor <http://php.net>
-* SQLite, <http://sqlite.org/>
+* Jon Jensen, SQLiteDB: a PHP class for SQLite <code.jenseng.com/db/>
+* The PHP crew, Hypertext Preprocessor <php.net>
+* SQLite, <sqlite.org>
 
 [Build]
-* The Mozilla Foundation, Rhino <http://mozilla.org/rhino/>
-* Dojo <http://dojotoolkit.org/>, custom_rhino.jar <http://alex.dojotoolkit.org/shrinksafe/>
-* David McNab <david@rebirthing.co.nz>, Rhino port of Dean Edward's Packer <http://dean.edwards.name/packer>
-* and Sun Microsystems for Java, which Rhino runs upon <http://java.com>
+* The Mozilla Foundation, Rhino <mozilla.org/rhino/>
+* Dojo <dojotoolkit.org>, custom_rhino.jar <alex.dojotoolkit.org/shrinksafe/>
+* David McNab <david@rebirthing.co.nz>, Rhino port of Dean Edward's Packer <dean.edwards.name/packer>
+* and Sun Microsystems for Java, which Rhino runs upon <java.com>
 
 [Depreciated]
-* DarkCryst, SACK <http://twilightuniverse.com/resources/code/sack/> no longer used, but was integral to getting this far
-* Andrea Giammarchi, PHPSerializer <http://devpro.it/javascript_id_102.html> no longer used, but was integral early on
-* Thomas Peri, htmlEncode.js <http://tumuski.com> used for html escapement before switching to Prototype
+* DarkCryst, SACK <twilightuniverse.com/resources/code/sack/> no longer used, but was integral to getting this far
+* Andrea Giammarchi, PHPSerializer <devpro.it/javascript_id_102.html> no longer used, but was integral early on
+* Thomas Peri, htmlEncode.js <tumuski.com> used for html escapement before switching to Prototype
 
 [People]
 * William Hollister, the original concept
-* Clint Franklin <http://theraje.com> testing, art, support
-* electricnet <http://electricnet.deviantart.com/> testing, art, support
-* Stacey W <http://staceyw.deviantart.com> testing, support
-* Elliott Sprehn <http://zeros-elipticus.deviantart.com> support
+* Clint Franklin <theraje.com> testing, art, support
+* electricnet <electricnet.deviantart.com> testing, art, support
+* Stacey W <staceyw.deviantart.com> testing, support
+* Elliott Sprehn <zeros-elipticus.deviantart.com> support
 
 If you've contributed to the SVN, please add your name and URL/email below, thanks!
 *

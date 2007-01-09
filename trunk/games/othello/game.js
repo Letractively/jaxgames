@@ -46,6 +46,8 @@ var game = {
                 shared.icons.opponent = "images/iconwhite.png";
                 //create the empty board
                 this.board.injectHTML ();
+                //animate the title screen
+                this.events.clouds.start ();
         },
                 
         /* > start : begin playing
@@ -57,6 +59,9 @@ var game = {
                 //entering their name / join key, shared.connect is called. when a connection is established between the two
                 //players, game.start is called for you
                 if (b_mefirst == null) {b_mefirst = shared.host;}  //default: host goes first
+                
+                //animate the title screen
+                this.events.clouds.stop ();
                 
                 shared.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
                 
@@ -450,7 +455,27 @@ game.events = {
                        //depending whether highlighting is being enabled or not, invoke "addClassName" or "removeClassName"
                        //function on each of the html elements in the array using the .hover CSS class (see game.css)
                        (b_highlight?"add":"remove")+"ClassName", "hover"
+
                );
+       },
+       
+       clouds : {
+               start : function () {
+                        new Effect.MoveBy ("title-cloud", 0, -501, {
+                                duration    : 60,
+                                mode        : 'absolute',
+                                transition  : Effect.Transitions.linear,
+                                queue       : {position: 'end', scope: 'clouds'},
+                                afterFinish : function(){
+                                        Effect.MoveBy ("title-cloud", 0, 0, {mode:'absolute',duration:0,queue:{position:'end',scope:'clouds'}});
+                                        game.events.clouds.start ();
+                                }
+                       });
+               }, 
+               stop : function () {
+                       var queue = Effect.Queues.get('clouds');
+                       queue.each (function(e){e.cancel();});
+               }
        }
 };
 

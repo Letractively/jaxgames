@@ -15,8 +15,13 @@
 	<div id="shared-gamearea">
 		<!-- === title = title screen, start or join a game ===================================================== -->
 		<div id="page-title">
-			<p><a id="title-start-game" href="#page-user">Start Game</a></p>
-			<p><a id="title-join-game" href="#page-user">Join Game</a></p>
+			<div id="title-clouds"><div id="title-cloud"></div></div>
+			<div id="title-fg">
+				<div id="title-board">
+					<p><a id="title-start-game" href="#page-user">Start Game</a></p>
+					<p><a id="title-join-game" href="#page-user">Join Game</a></p>
+				</div>
+			</div>
 		</div>
 		<!-- === user = let the user enter a name =============================================================== -->
 		<div id="page-user">
