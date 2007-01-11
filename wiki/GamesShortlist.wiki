@@ -32,3 +32,9 @@ Add here suggestions for games suitable for inclusion in Jax Games. Please bear 
   
   * *Minesweeper Flags*
   A two player version of Minesweeper as seen on MSN Messenger. The players take turns trying to find the mines. Empty squares reveal a number stating how many mines surround that square [http://en.wikipedia.org/wiki/Minesweeper_%28computer_game%29 Wikipedia]
+
+  * *Jigsaw puzzle*
+  Maybe a puzzle where the player who can place the most pieces wins? [http://en.wikipedia.org/wiki/Jigsaw_puzzle Wikipedia]
+
+  * *Maze*
+  Each player could start in a corner, moving to the center. This could be used in two ways, I think. The users could compete about who could get to the center first, or they could work together on beating the time (would have to have some kind of global highscore) it takes for them to meet in the middle. [http://en.wikipedia.org/wiki/Maze Wikipedia]
