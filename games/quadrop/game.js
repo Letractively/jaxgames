@@ -12,7 +12,7 @@
 rules of play:
 --------------
 
- 
+
 -------------------------------------------------------------------------------------------------------------------------- */
 
 //add to the Player class the ability to set who plays red "R" and who plays yellow "Y"
@@ -58,10 +58,10 @@ var game = {
                 playerThem.piece = (shared.host) ? "R" : "Y";
                 
                 //blank the two dimensional array holding the location of the pieces on the board
-                this.pieces = new Array (8);
-                for (var x=1; x<=8; x++) {
-                        this.pieces[x] = new Array (8);
-                        for (var y=1; y<=8; y++) {this.pieces[x][y] = "";}
+                this.pieces = new Array (7);
+                for (var x=1; x<=7; x++) {
+                        this.pieces[x] = new Array (6);
+                        for (var y=1; y<=6; y++) {this.pieces[x][y] = "";}
                 }
                 
                 shared.setSystemStatus ();  //hide any status messages being displayed
@@ -102,6 +102,14 @@ var game = {
         playTurn : function () {
                 //clear the "other player's turn" message on screen if it's there
                 shared.setPlayerStatus ();
+                
+                //check each column to see which are playable
+                for (var x=1; x<=7; x++) {
+                        //if the top cell is empty, it can be played
+                        if (this.pieces[x][1] == "") {
+                                $(this.grid.element+"-col-"+x).setStyle("background-color","red");
+                        }
+                }
         },
         
         /* > preempt : switch players, but preempt the rare occassion of not being able to take a turn

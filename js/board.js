@@ -1,6 +1,18 @@
 /* =======================================================================================================================
    js/board.js - create and manage a game board
    ======================================================================================================================= */
+/* css guide:
+   ----------
+   when you create an instance of the board class, you must provide an id of an html element that currently exists (ideally
+   a div) that the baord table will be injected into. the board will use the following html ids for the various table
+   elements, where 'element' is the html id you created the board class with.
+   
+   where "var board = new Board ('element');":
+   <table> = #element-table
+   <col>   = #element-col-X    (where X is column letter - A, B, C etc)
+   <tr>    = #element-row-y    (where y is the row number 1 to number of rows)
+   <td>    = #element-cell-Xy  (where x is the column letter - A, B, C... and y is the row number. e.g. #element-cell-C6)
+*/
 var Board = Class.create ();
 Board.prototype = {
         element : "",  //html id to inject the board into
@@ -55,18 +67,23 @@ Board.prototype = {
         /* > injectHTML : inserts the initial empty html table for the board
            =============================================================================================================== */
         injectHTML : function () {
-                //this function cannot be called in initialize() because html cannot be editied before the page has 
+                //this function cannot be called in initialize () because html cannot be editied before the page has 
                 //finished loading. you can either call this function when you need it, or it will be called automatically
-                //in display() if the table is not already present
+                //in display () if the table is not already present
                 
                 //start the table
-                var html = '<table id="'+this.element+'-table" class="board"><tbody>\n';
+                var html = '<table id="'+this.element+'-table" class="board"><cols>\n';
+                //add the cols (so that you can style a whole coulmn in one go)
+                for (x=1; x<=this.width; x++) {
+                        html += '\t\t\t\t<col id="'+this.element+'-col-'+String.fromCharCode (64+x)+'"></col>\n';
+                }
+                html += '\t\t\t</cols><tbody>\n';
                 //loop over each row...
                 for (var y=1; y<=this.height; y++) {
                         //create the row
                         html += '\t\t\t\t<tr id="'+this.element+'-row-'+y+'" class="row">\n';
                         //loop over each column...
-                        for (var x=1; x<=this.width; x++) {
+                        for (x=1; x<=this.width; x++) {
                                 //chequer the board by alternating classes horizontally and vertically
                                 var chequer = (y%2 + x%2 == 1) ? "B" : "A";  
                                 //create the table cell and put the content in
@@ -79,8 +96,10 @@ Board.prototype = {
                 }
                 //finish the table
                 html += "\t\t\t</tbody></table>";
-                //put the table to screen
-                $(this.element).innerHTML = html;
+                //put the table to screen. the Prototype .update function is used instead of .innerHTML so that it will work
+                //in IE (which has no .innerHTML for some elements) also as a bonus for l33t programmers, any <script> blocks
+                //in any cells will be executed (but not included)
+                $(this.element).update (html);
         },
         
         /* > getCellId : return the html element id for a cell, given the x/y
