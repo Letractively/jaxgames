@@ -292,14 +292,19 @@ var game = {
                 $("game-paper-me-pieces").innerHTML   = count.me;
                 $("game-paper-them-pieces").innerHTML = count.them;
                 
+                //if there is no spaces left, someone has won
                 if (!count.spaces) {
                         //TODO: draw condition
+                        //(count.me>count.them) will return true if you win, false if they win
                         this.end ((count.me>count.them));
                         
-                } else if (count.me==0 || count.them==0) {
+                } else if (!count.me || !count.them) {
+                        //if either player has no pieces left, they've been wiped out
+                        //(count.me>0) will return true if you have any pieces left, false if not
                         this.end ((count.me>0));
                         
                 } else if (!count.moves) {
+                        //if there are no playable moves, skip go
                         //TODO: apparently there is a rare condition where neither player can play
                         this.preempt (!b_self);
                         
@@ -455,28 +460,39 @@ game.events = {
                        //depending whether highlighting is being enabled or not, invoke "addClassName" or "removeClassName"
                        //function on each of the html elements in the array using the .hover CSS class (see game.css)
                        (b_highlight?"add":"remove")+"ClassName", "hover"
-
                );
        },
        
+       /* OBJECT > clouds : the clouds on the title screen
+          ================================================================================================================ */
        clouds : {
+               /* start : start the animation, and keep it going
+                  ======================================================================================================== */
                start : function () {
-                        new Effect.MoveBy ("title-cloud", 0, -501, {
-                                duration    : 60,
-                                mode        : 'absolute',
-                                transition  : Effect.Transitions.linear,
-                                queue       : {position: 'end', scope: 'clouds'},
-                                afterFinish : function(){
-                                        Effect.MoveBy ("title-cloud", 0, 0, {mode:'absolute',duration:0,queue:{position:'end',scope:'clouds'}});
-                                        game.events.clouds.start ();
-                                }
+                       //move the cloud back (there's two side by side)
+                       new Effect.MoveBy ("title-cloud", 0, -501, {
+                               duration    : 60,
+                               mode        : 'absolute',
+                               transition  : Effect.Transitions.linear,          //do not speed-up/slow-down at start/end
+                               queue       : {position: 'end', scope: 'clouds'}, //reference it (to be able to cancel)
+                               afterFinish : function(){
+                                       //move the cloud back to the starting position
+                                       Effect.MoveBy ("title-cloud", 0, 0, {mode:'absolute',duration:0,queue:{position:'end',scope:'clouds'}});
+                                       //repeat the animation
+                                       game.events.clouds.start ();
+                               }
                        });
-               }, 
+               },
+               
+               /* stop : stop the animation
+                  ======================================================================================================== */
                stop : function () {
-                       var queue = Effect.Queues.get('clouds');
-                       queue.each (function(e){e.cancel();});
+                       //get the animation queue for the clouds
+                       var queue = Effect.Queues.get ('clouds');
+                       //cancel each animation in the queue
+                       queue.each (function(o_item){o_item.cancel ();});
                }
-       }
+       } //end game.events.clouds <
 };
 
 //=== end of line ===========================================================================================================
