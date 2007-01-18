@@ -11,10 +11,10 @@ Many thanks go to these people, and their contributions:
 * Jasc, Corel, Paint Shop Pro 7, X <paintshoppro.com>
 
 [Javascript]
-* Sam Stephenson, Prototype javascript framework <prototype.conio.net> and contributors
-* Thomas Fuchs <http://mir.aculo.us> Scriptaculous javascript framework <script.aculo.us> and contributors
+* Sam Stephenson, Prototype javascript framework <prototypejs.org> and contributors
+* Thomas Fuchs <mir.aculo.us> Scriptaculous javascript framework <script.aculo.us> and contributors
 * The blogger of unfocus.com for Prototype-compatible json.js <unfocus.com/projects/source/Javascript/json.js>
-* Shuns, Dump <www.netgrow.com.au/files>
+* Shuns, Dump <netgrow.com.au/files>
 
 [Content]
 * Mark James, famfamfam silk icon set <famfamfam.com/lab/icons/silk/>

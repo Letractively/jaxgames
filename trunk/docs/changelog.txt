@@ -1,6 +1,9 @@
 =============================================================================================================================
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+18.JAN.07
+    ADD: Updated to Prototype.js v1.5.0 release! http://prototypejs.org
+    NEW: /docs/standards.html: some preliminary documentation on coding style used throughout
 09.JAN.07
     ADD: board.js now includes <cols> so you can use CSS/JS to style a vertical column (useful for Quadrop)
 08.JAN.07

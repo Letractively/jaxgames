@@ -122,7 +122,7 @@ var game = {
                         //the other player so that both players are playing off of the same order of cards
                         this.deck.cards.clear ();
                         //note: if you want to setup a fake deck of cards for forcing order of play, do it here
-                        //?/this.deck.cards = ["AS", "4H", "5H", "2S", "3S", "6H", "7H", "3D", "4D", "5D"].reverse();
+                        //?/this.deck.cards = ["AS", "4H", "5H", "2S", "3S", "6H", "7H", "3D", "4D", "5D"].reverse ();
                         this.deck.addPack (
                                 this.pack,  //which pack to use in the deck
                                 1,          //add one pack to the deck
@@ -618,7 +618,7 @@ game.run = {
         /* > getCardPositions : return the positions for each card, given a number of cards to fit into the run
            ===============================================================================================================
            params * n_count     : how many cards (1-based) to return the positions for
-           return * a_positions : an array containing the X position of each card
+           return * a_positions : an array containing the x position of each card
            =============================================================================================================== */
         getCardPositions : function (n_count) {
                 //defaults
