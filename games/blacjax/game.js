@@ -265,7 +265,7 @@ var game = {
                         player.hand.takeCard (count, function(){ game.run.fileCards (function(){
                                 if (armedrun) {
                                         if (b_self) {
-                                                if (!playerThem.hand.cards.length) {game.end (false); return false}
+                                                if (!playerThem.hand.cards.length) {game.end (false); return false;}
                                         }
                                         //if you took the penalty, it's your go (preempt for the rare occurance of picking
                                         //up cards, yet not having any playable ones afterwards)

@@ -3,7 +3,7 @@
    ======================================================================================================================= */
 
 //create an instance of Jax, direct it to the PHP page to receive the AJAX calls
-var jax = new Jax ("../../jax_php/response.php");
+var jax = new Jax ("../../"+config.jax_path);
 
 /* =======================================================================================================================
    CLASS Player - a base class, your game can extend this to add more player properties
@@ -124,9 +124,9 @@ var shared = {
            params * s_html : html to display, send nothing to hide the display
            =============================================================================================================== */
         setPlayerStatus : function (s_html) {
-                var scale = 2                         //size to expand the player section to (in 100's %)
+                var scale = 2,                          //size to expand the player section to (in 100's %)
                     e     = $("player-status-me-msg"),  //reference to the element containing the message
-                    v     = e.visible ()              //if that element is visible or not
+                    v     = e.visible ()                //if that element is visible or not
                 ;
                 if (s_html && v) {
                         //if the message is already visible, just update the text without animating
@@ -366,7 +366,7 @@ shared.chat = {
                         e.scrollTop = e.scrollHeight;
                 }});
         }
-},
+};
 
 /* =======================================================================================================================
    OBJECT shared.events - storage for element events (so that one function pointer can be used for multiple element events)
@@ -386,7 +386,7 @@ shared.events = {
                         scaleContent : false,                  //do not scale insides
                         scaleMode    : {originalHeight: 320},  //base reference for %
                         afterFinish  : function(){
-                                var e = $("shared-chat-emote")
+                                var e = $("shared-chat-emote");
                                 e.title = (e.alt == "open") ? "Click to hide emotes" : "Click to show emotes";
                                 e.alt   = (e.alt == "open") ? "close" : "open";
                         }

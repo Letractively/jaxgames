@@ -9,7 +9,7 @@
    
    where "var board = new Board ('element');":
    <table> = #element-table
-   <col>   = #element-col-X    (where X is column letter - A, B, C etc)
+   <col>   = #element-col-X    (where X is column number - 1, 2, 3 etc)
    <tr>    = #element-row-y    (where y is the row number 1 to number of rows)
    <td>    = #element-cell-Xy  (where x is the column letter - A, B, C... and y is the row number. e.g. #element-cell-C6)
 */
@@ -75,7 +75,7 @@ Board.prototype = {
                 var html = '<table id="'+this.element+'-table" class="board"><cols>\n';
                 //add the cols (so that you can style a whole coulmn in one go)
                 for (x=1; x<=this.width; x++) {
-                        html += '\t\t\t\t<col id="'+this.element+'-col-'+String.fromCharCode (64+x)+'"></col>\n';
+                        html += '\t\t\t\t<col id="'+this.element+'-col-'+x+'"></col>\n';
                 }
                 html += '\t\t\t</cols><tbody>\n';
                 //loop over each row...

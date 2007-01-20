@@ -61,7 +61,7 @@ echo "--------------------------------------------------------------------------
 # libraries for the project (prototype / scriptaculous / json / jax / firebugx)
 echo "* merge libraries for boot.js"
 echo "-------------------------------------------------------------------------------"
-java -jar ./libs/custom_rhino.jar ./libs/merge.js ../js/libs/prototype.js ../js/libs/json.js ./headers/scriptaculous.165.js ../js/libs/scriptaculous/effects.js ../js/libs/firebug/firebugx.js ../js/libs/jax.js ../js/shared.js ./release/jaxgames/js/boot.js
+java -jar ./libs/custom_rhino.jar ./libs/makeboot.js
 echo "-------------------------------------------------------------------------------"
 
 # [4]:

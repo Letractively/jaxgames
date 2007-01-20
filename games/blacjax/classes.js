@@ -157,7 +157,7 @@ Hand.prototype = {
                                    param * s_card : name of chosen card
            =============================================================================================================== */
         useCard : function (s_card, f_onComplete) {
-                if (!f_onComplete) {f_onComplete = Prototype.emptyFunction}  //default: no callback
+                if (!f_onComplete) {f_onComplete = Prototype.emptyFunction;}  //default: no callback
                 
                 var card_id = this.cards.indexOf (s_card),
                     elid    = this.element + '-' + s_card,           //the html id of the card
