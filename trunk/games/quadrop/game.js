@@ -4,7 +4,7 @@
 /* name   : Quadrop
    author : Kroc Camen | kroccamen@gmail.com | kroc.deviantart.com
    type   : board game
-   desc   : as known as 'Connect 4'
+   desc   : as known as 'Connect 4™'
             each player is in competition to get four pieces in a row in the 7x6 grid. the grid has simulated gravity,
             meaning that players cannot play anywhere, but only on the bottom of an empty column, or on top of pieces already
             in a column
@@ -78,7 +78,7 @@ var game = {
            =============================================================================================================== */
         updateBoard : function () {
                 //loop through the array holding the pieces, and put the relevant html into the board cells
-                for (var y=1; y<=8; y++) { for (var x=1; x<=8; x++) {
+                for (var y=1; y<7; y++) { for (var x=1; x<8; x++) {
                         //get the html element for this cell
                         var e = $(this.board.getCellId(x, y));
                         //remove the hover effect from any cells
@@ -104,10 +104,10 @@ var game = {
                 shared.setPlayerStatus ();
                 
                 //check each column to see which are playable
-                for (var x=1; x<=7; x++) {
+                for (var x=1; x<8; x++) {
                         //if the top cell is empty, it can be played
-                        if (this.pieces[x][1] == "") {
-                                $(this.grid.element+"-col-"+x).setStyle("background-color","red");
+                        if (!this.pieces[x][1]) {
+                                console.log($(this.grid.getCellId(x,1)).className);
                         }
                 }
         },

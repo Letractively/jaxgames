@@ -1,10 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- ====================================================================================================================
+     jaxgames - coding standards
+     ==================================================================================================================== -->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <title>standards</title>
+        <title>jaxgames - coding standards</title>
         <style type="text/css">
-                pre     {background-color: #eee; padding: 5px; border: dotted 1px #666;}
+                pre     {background-color: #eee; padding: 5px; border: dotted 1px #666;
+                         font: normal 13px/14px Courier, "Courier New", monospace;}
                 pre ins {background-color: #cfc; border-bottom: dotted 1px #080; text-decoration: none;}
                 pre del {background-color: #fcc; border-bottom: dotted 1px #800; text-decoration: none;}
                 pre .k  {color: #008;}
@@ -26,12 +30,6 @@
         <h2>Spacing</h2>
         <ul>
                 <li>
-                        <em>Do</em> place a space between functions and their parameters<br />
-                        <pre><span class="k">function</span> <ins>f (</ins>a, b, c) {<br />        <span class="c">//statements...</span><br />}</pre>
-                        
-                        <em>Except</em> for functions that are parameters to another function (e.g. Prototype's 'each' function)<br />
-                        <pre>f (a, b, <ins><span class="k">function</span>(</ins>x){<br />        <span class="c">//statements...</span><br />});</pre>
-                </li><li>
                         <em>Do</em> place a space between operators<br />
                         <pre>i<ins> </ins><span class="o">++</span>;<br />a<ins> </ins><span class="o">=</span><ins> </ins>b<ins> </ins><span class="o">+</span><ins> </ins>(c<ins> </ins><span class="o">-</span><ins> </ins>d);</pre>
                         
@@ -43,21 +41,17 @@
         <h2>Functions</h2>
         <ul>
                 <li>
-                        All functions <em>must</em> be camel case with the first letter lower<br />
-                        <pre><span class="k">function</span> <ins>myFunctionWithAName</ins> () {<br />        <span class="c">//statements...</span><br />}</pre>
-                </li>
-        </ul>
-        <!-- ============================================================================================================ -->
-        <h2>Variables</h2>
-        <ul>
-                <li>
-                        All variables <em>must</em> be lower case with underscores for word boundaries<br />
-                        <pre><span class="k">var</span> <ins>the_meaning_of_life</ins> <span class="o">=</span> 42;</pre>
+                        <em>Do</em> place a space between functions and their parameters<br />
+                        <pre><span class="k">function</span> <ins>f (</ins>a, b, c) {<br />        <span class="c">//statements...</span><br />}</pre>
+                        
+                        <em>Except</em> for functions that are parameters to another function (e.g. Prototype's 'each' function)<br />
+                        <pre>f (a, b, <ins><span class="k">function</span>(</ins>x){<br />        <span class="c">//statements...</span><br />});</pre>
+                        
+                        Also <em>except</em> for Prototype utility functions:<br />
+                        <pre><ins>$(</ins>"element");<br /><ins>$F(</ins>"form-element");<br /><ins>$H(</ins>['a', 'b', 'c']);</pre>
                 </li><li>
-                        Multiple variables <em>must</em> be defined in block layout, with each additional variable indented
-                        four spaces. The terminator appears on its own line. You <em>should</em> align the equal signs where
-                        practical, for code readability<br />
-                        <pre><span class="k">var</span> suit <ins> </ins><span class="o">=</span> "Spades",<br /><ins>    </ins>face <ins> </ins><span class="o">=</span> "A",<br /><ins>    </ins>value <span class="o">=</span> 1<br />;</pre>
+                        All function names <em>must</em> be camel case with the first letter lower<br />
+                        <pre><span class="k">function</span> <ins>myFunctionWithAName</ins> () {<br />        <span class="c">//statements...</span><br />}</pre>
                 </li>
         </ul>
         <!-- ============================================================================================================ -->
@@ -71,35 +65,46 @@
                         <pre>f (a, b, <span class="k">function</span>(x<ins>,</ins>y<ins>,</ins>z){<br />        <span class="c">//statements...</span><br />});</pre>
                 </li><li>
                         Parameter names <em>must</em> state their intended type using a prefix as listed below.<br />
-<pre>
-<span class="k">function</span> f (s_variable,  <span class="c">//string</span>
-            n_variable,  <span class="c">//number</span>
-            a_variable,  <span class="c">//array, e.g. ['a', 'b', 'c']</span>
-            o_variable,  <span class="c">//object literal, e.g. {name1: 'value1', name2: 'value2'}</span>
-            f_function   <span class="c">//function (when you pass a function as a parameter, e.g. Prototype's 'each' function)</span>
-) {
-        <span class="c">//statements...</span>
-}
-</pre>
+                        <pre><span class="k">function</span> f (<ins>s_</ins>variable,  <span class="c">//string</span><br />            <ins>n_</ins>variable,  <span class="c">//number</span><br />            <ins>a_</ins>variable,  <span class="c">//array, e.g. ['a', 'b', 'c']</span><br />            <ins>o_</ins>variable,  <span class="c">//object literal, e.g. {suit: 'Spades', value: 8}</span><br />            <ins>f_</ins>function   <span class="c">//function (when you pass a function as a parameter, e.g. Prototype's 'each' function)</span><br />) {<br />        <span class="c">//statements...</span><br />}</pre>
                 </li><li>
-                        Parameter names <em>must</em> be all lower case, without any underscores, <em>except</em> the one
-                        underscore used to define the intended type, as above<br />
+                        Parameter names <em>must</em> be all lower case, without any underscores, (excluding the one
+                        underscore used to define the type), <em>except</em> for parameters that are functions, which
+                        use camelCase<br />
+                        <pre><span class="k">function</span> f (s_<ins>mystring</ins>   <span class="c">//correct</span><br />            s_<del>my_string</del>, <span class="c">//no underscores in variable name (excluding the prefix)</span><br />            s_<del>myString</del>,  <span class="c">//no camelcase,</span><br />            f_<ins>myFunction</ins> <span class="c">//except for functions as parameters</span><br />) {<br />        <span class="c">//statements...</span><br />}</pre>
+                </li>
+        </ul>
+        <!-- ============================================================================================================ -->
+        <h2>Variables</h2>
+        <ul>
+                <li>
+                        All variables <em>must</em> be defined with <tt>var</tt>. Internet Explorer will generate errors in
+                        certain cases of variables not being implicitly defined<br />
+                        
+                        <pre><span class="k"><ins>var</ins></span> r <span class="o">=</span> f (a, b, c);<br /><span class="k">for</span> (<span class="k"><ins>var</ins></span> i<span class="o">=</span>0; i<span class="o">&lt;</span>10; i<span class="o">++</span>) {<br />        <span class="c">//statements...</span><br />}</pre>
+                </li><li>
+                        All variables <em>must</em> be lower case with underscores for word boundaries<br />
+                        <pre><span class="k">var</span> <ins>the_meaning_of_life</ins> <span class="o">=</span> 42;</pre>
+                </li><li>
+                        Multiple variables <em>must</em> be defined in block layout, with each additional variable indented
+                        four spaces. The terminator appears on its own line. You <em>should</em> align the equal signs where
+                        practical. This is done for code readability, as well as smaller file size when the javascript is 
+                        compressed (they are all defined in one <tt>var</tt> command)<br />
+                        <pre><span class="k">var</span> suit <ins> </ins><span class="o">=</span> "Spades",<br /><ins>    </ins>face <ins> </ins><span class="o">=</span> "A",<br /><ins>    </ins>value <span class="o">=</span> 1<br /><ins>;</ins></pre>
                 </li>
         </ul>
         <!-- ============================================================================================================ -->
         <h2>Comments</h2>
         <ul>
                 <li>
-                        A comment on the same line as a statinsent <em>must</em> be at least two spaces apart<br />
-                        <pre>i<span class="o">++</span>;<ins>  </ins><span class="c">//add one to i</span></pre>
-                </li><li>
-                        Comments <em>must</em> not terminate in a full stop. full stops in the middle are allowed<br />
-                        <pre>f (a, b, c);  <span class="c">//call f with a and b<ins>.</ins> note that c might be null<del>.</del></span></pre>
-                </li><li>
                         Comments <em>must</em> always be lower case, <em>except</em> for important references referring to
                         function names in the code, or other important nouns<br />
                         <pre><ins class="c">//if the chosen card is an Ace, Eight or Joker</ins><br /><span class="k">return</span> (value <span class="o">==</span> 1 <span class="o">||</span> value <span class="o">==</span> 8 <span class="o">||</span> value <span class="o">==</span> 11);</pre>
+                </li><li>
+                        Comments <em>must not</em> terminate in a full stop. full stops in the middle are allowed<br />
+                        <pre>f (a, b, c);  <span class="c">//call f with a and b<ins>.</ins> note that c might be null<del>.</del></span></pre>
+                </li><li>
+                        A comment on the same line as a statement <em>must</em> be at least two spaces apart<br />
+                        <pre>i<span class="o">++</span>;<ins>  </ins><span class="c">//add one to i</span></pre>
                 </li>
         </ul>
-</body>
-</html>
+</body><!-- === end of line ====================================================================================== --></html>

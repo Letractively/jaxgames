@@ -9,16 +9,15 @@
 + strings are braced by speech marks to make numbers stored as a string / nullstrings obvious
 + no longer polutes the global namespace with outside functions. all functions are internal
 + functions are shown in <pre> blocks with horizontal scrollbar if needed
-+ html in functions does not break. this can be massively improved
++ html in functions does not break. this can be massively improved (now uses Prototype if present to encode into HTML)
 + IE/Safari/Opera support is broken, will work on this
 
 If using this script in Jax Games, cd to _build in the terminal and execute these commands to compress this script
   java -jar ./libs/custom_rhino.jar -opt -1 -c ../js/libs/dump_src/js > ../js/libs/dump.js
   java -jar ./libs/custom_rhino.jar ./libs/packer.js ../js/libs/dump.js ../js/libs/dump.js
 */
-var dump = function(o_var, b_showtypes, b_prototype, n_width, n_height) {
+var dump = function(o_var, b_showtypes, n_width, n_height) {
 	if (b_showtypes == null) {b_showtypes = false;}  //default: hide the variable types
-	if (b_prototype == null) {b_prototype = true;}   //default: hide Prototype functions
 	if (!n_width)  {n_width  = 760;}
 	if (!n_height) {n_height = 500;}
 
@@ -28,7 +27,7 @@ var dump = function(o_var, b_showtypes, b_prototype, n_width, n_height) {
 	    leftPos = screen.width  ? (screen.width  - n_width)  / 2 : 0,
 	    topPos  = screen.height ? (screen.height - n_height) / 2 : 0,
 	    //list of Prototype functions to ignore. there may be a way to generate this automatically
-	    protos  = /each|eachSlice|all|any|collect|detect|findAll|grep|include|inGroupsOf|inject|invoke|max|min|partition|pluck|reject|sortBy|toArray|zip|inspect|find|select|member|entries|_reverse|clear|first|last|compact|flatten|without|reduce|uniq|clone/,
+	    proto   = (!Prototype) ? "" : /each|eachSlice|all|any|collect|detect|findAll|grep|include|inGroupsOf|inject|invoke|max|min|partition|pluck|reject|sortBy|toArray|zip|inspect|find|select|member|entries|_reverse|clear|first|last|compact|flatten|without|reduce|uniq|clone|size/,
 	    //the javascript in the popup to open/close the blocks when you click them
 	    script  = 'function tRow(s){t=s.parentNode.lastChild;tTarget(t,tSource(s));}function tTable(s){var switchToState=tSource(s);var table=s.parentNode.parentNode;for (var i=1;i<table.childNodes.length;i++){t=table.childNodes[i];if(t.style){tTarget(t,switchToState);}}}function tSource(s){if(s.style.fontStyle=="italic"||s.style.fontStyle==null){s.style.fontStyle="normal";s.title="click to collapse";return "open";}else{s.style.fontStyle="italic";s.title="click to expand";return "closed";}}function tTarget(t,switchToState){if(switchToState=="open"){t.style.display="";}else{t.style.display="none";}}',
 	    //the CSS in the popup
@@ -80,7 +79,7 @@ var dump = function(o_var, b_showtypes, b_prototype, n_width, n_height) {
 				var a    = o.toString ().match (/^.*function.*?\((.*?)\)/im),
 				    args = (a == null || typeof a[1] == 'undefined' || a[1] == '') ? 'none' : a[1]
 				;
-				r += '<tr><th'+th+'>'+t+'</th></tr><tr><td colspan="2"'+tdv+'><table><tr><td class="arguments key"><i>Arguments: </i></td><td'+tdv+'>'+args+'</td></tr><tr><td class="arguments key"><i>Function: </i></td><td'+tdv+'><pre>'+o.toString().replace(/</g, "&lt;")+'</pre></td></tr></table>';
+				r += '<tr><th'+th+'>'+t+'</th></tr><tr><td colspan="2"'+tdv+'><table><tr><td class="arguments key"><i>Arguments: </i></td><td'+tdv+'>'+args+'</td></tr><tr><td class="arguments key"><i>Function: </i></td><td'+tdv+'><pre>'+(!proto ? (o.toString().replace(/</g, "&lt;")) : o.toString().escapeHTML())+'</pre></td></tr></table>';
 				j++;
 				break;
 			case 'domelement':
@@ -104,7 +103,7 @@ var dump = function(o_var, b_showtypes, b_prototype, n_width, n_height) {
 					r += '<tr><td'+tdk+'>'+i+(b_showtypes?' ['+t+']':'')+'</td><td'+tdv+'>'+recurse(o[i])+'</td></tr>';	
 				} else if (typeof o[i] == 'function') {
 					//ignore the Prototype functions
-					if (!b_prototype || (b_prototype && !protos.test(i))) {
+					if (!proto || (proto && !proto.test(i))) {
 						r += '<tr><td'+tdk+'>'+i+(b_showtypes?' ['+t+']':'')+'</td><td'+tdv+'>'+recurse(o[i])+'</td></tr>';
 					}
 				} else {
@@ -190,8 +189,8 @@ var dump = function(o_var, b_showtypes, b_prototype, n_width, n_height) {
 		var agent   = navigator.userAgent.toLowerCase();
 		var browser = agent.replace(/.*ms(ie[\/ ][^ $]+).*/, '$1').replace(/ /, '');
 		
-		//instead of lots of ifs, this will pack into a much smaller space
-		return typeof window.opera != 'undefined' 
+		//instead of lots of ifs, this packs into a much smaller space
+		return typeof window.opera != 'undefined'
 			? 'opera'
 			: (typeof document.all != 'undefined'
 				? (typeof document.getElementById != 'undefined'

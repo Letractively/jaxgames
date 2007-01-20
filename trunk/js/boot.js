@@ -10,25 +10,39 @@
    + jax.js        : establish a bridge between two computer users to send AJAX back and forth
    + shared.js     : shared code between all the games
 */
-document.write(' \n \
-\t<script type="text/javascript" src="../../js/libs/prototype.js"></script>\n \
-\t<script type="text/javascript" src="../../js/libs/json.js"></script>\n \
-\t<script type="text/javascript" src="../../js/libs/scriptaculous/scriptaculous.js?load=effects"></script>\n \
-\t<script type="text/javascript" src="../../js/libs/jax.js"></script>\n \
-\t<script type="text/javascript" src="../../js/shared.js"></script>\n \
-');
+var i,
+    boot_files = []
+;
+if (config.scriptaculous.use_provided) {
+        boot_files.push ("js/libs/prototype.js");
+        boot_files.push ("js/libs/scriptaculous/effects.js");
+} else {
+        var boot_path = "js/libs/scriptaculous/scriptaculous-js-" + Scriptaculous.Version;
+        boot_files.push (boot_path+"/lib/prototype.js");
+        for (i=0; i<config.boot_scripts.length; i++) {
+                boot_files.push (boot_path+"/src/"+scriptaculous.includes[i]+".js");
+        }
+}
+for (i=0; i<config.boot_scripts.length; i++) {
+        boot_files.push (config.boot_scripts[i]);
+}
 
 /* developer only tools:
    ======================================================================================================================= */
 //if Firebug is not installed in Firefox, use Firebug Lite
-//in the compressed released, firebugx.js would be included instead to ignore the console.* calls therefore you can liberally
+//in the compressed release, firebugx.js would be included instead to ignore the console.* calls therefore you can liberally
 //use Firebug features in the code (except 'debugger;') without breaking the release version
 if (!("console" in window) || !("firebug" in console)) {
-        document.write ('\t<script type="text/javascript" src="../../js/libs/firebug/firebug.js"></script>\n');
+        boot_files.push ("js/libs/firebug/firebug.js");
 }
 
 //include Shuns excellent dump script. use dump (any var); to get a block display of a variable. can be object/array
-document.write('\t<script type="text/javascript" src="../../js/libs/dump_src.js"></script>\n');
+boot_files.push ("js/libs/dump_src.js");
+
+//---------------------------------------------------------------------------------------------------------------------------
+for (i=0; i<boot_files.length; i++) {
+        document.write('\t<script type="text/javascript" src="../../'+boot_files[i]+'"></script>\n');
+}
 
 //=== end of line ===========================================================================================================
 //licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
