@@ -65,7 +65,7 @@ var game = {
                 //animate the title screen
                 this.events.clouds.stop ();
                 
-                shared.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
+                shared.setTitle (playerMe.name+" v. "+playerThem.name+" - ");
                 
                 //set which piece each player is using. the host always plays black, and goes first
                 playerMe.piece   = (shared.host) ? "X" : "O";
@@ -79,18 +79,18 @@ var game = {
                 );
                 
                 //blank the two dimensional array holding the location of the pieces on the board
-                this.pieces = new Array (8);
-                for (var x=1; x<=8; x++) {
-                        this.pieces[x] = new Array (8);
-                        for (var y=1; y<=8; y++) {this.pieces[x][y] = "";}
+                this.pieces = new Array (game.board.width-1);
+                for (var x=0; x<game.board.width; x++) {
+                        this.pieces[x] = new Array (game.board.height-1);
+                        for (var y=0; y<game.board.height; y++) {this.pieces[x][y] = "";}
                 }
                 
                 //put in the starting pieces
+                this.pieces[3][3] = "O";
+                this.pieces[4][3] = "X";
+                this.pieces[3][4] = "X";
                 this.pieces[4][4] = "O";
-                this.pieces[5][4] = "X";
-                this.pieces[4][5] = "X";
-                this.pieces[5][5] = "O";
-                //!/this.pieces = ["",["","O","X","","X","X","X","X","X"],["","O","X","X","","O","O","X","X"],["","X","O","X","O","X","X","X","X"],["","X","X","O","X","O","X","X","X"],["","X","X","X","X","O","X","X","X"],["","X","X","X","O","X","O","X","X"],["","X","X","O","X","X","X","X","X"],["","X","X","X","X","X","X","O","O"]];
+                //!/this.pieces = [["O","X","","X","X","X","X","X"],["O","X","X","","O","O","X","X"],["X","O","X","O","X","X","X","X"],["X","X","O","X","O","X","X","X"],["X","X","X","X","O","X","X","X"],["X","X","X","O","X","O","X","X"],["X","X","O","X","X","X","X","X"],["X","X","X","X","X","X","O","O"]];
                 this.updateBoard ();
                 
                 //reset the piece counters to 2 a piece
@@ -111,15 +111,15 @@ var game = {
            =============================================================================================================== */
         updateBoard : function () {
                 //loop through the array holding the pieces, and put the relevant html into the board cells
-                for (var y=1; y<=8; y++) { for (var x=1; x<=8; x++) {
+                for (var y=0; y<this.board.height; y++) { for (var x=0; x<this.board.width; x++) {
                         //get the html element for this cell
-                        var e = $(this.board.getCellId(x, y));
+                        var e = $(this.board.getCellId(x,y));
                         //remove the hover effect from any cells
                         e.removeClassName ("hover");
                         //remove mouse events from any cells
                         e.onclick     = Prototype.emptyFunction;
                         e.onmouseover = Prototype.emptyFunction;
-                        e.onmouseout  = Prototype.emptyFuncyion;
+                        e.onmouseout  = Prototype.emptyFunction;
                         
                         //update the html for the cell (in memory)
                         this.board.cells[x][y] = (this.pieces[x][y] == "") ? "" : '<img width="40" height="40" src="images/'+
@@ -137,7 +137,7 @@ var game = {
                 shared.setPlayerStatus ();
                 
                 //find playable moves (loop all cells in the table...)
-                for (var y=1; y<=8; y++) { for (var x=1; x<=8; x++) {
+                for (var y=0; y<this.board.height; y++) { for (var x=0; x<this.board.width; x++) {
                         //is this your piece?
                         if (this.pieces[x][y] == playerMe.piece) {
                                 //check all 8 directions...
@@ -205,7 +205,7 @@ var game = {
                     new_y      = n_y + this.board.directions[n_dir].y           //y location after step forward
                 ;
                 //is the next step out of range?
-                if ((new_x > 0 && new_x < 9) && (new_y > 0 && new_y < 9)) {
+                if ((new_x >= 0 && new_x < this.board.width) && (new_y >= 0 && new_y < this.board.height)) {
                         switch (this.pieces[new_x][new_y]) {
                                 //if the next square is the opponents, keep searching
                                 case piece_them:
@@ -272,7 +272,7 @@ var game = {
                     }
                 ;
                 //check for available moves (loop all cells in the table...)
-                for (var y=1; y<=8; y++) { for (var x=1; x<=8; x++) {
+                for (var y=0; y<this.board.height; y++) { for (var x=0; x<this.board.width; x++) {
                         //count this cell (the totals are used to determine the winner)
                         switch (this.pieces[x][y]) {
                                 case playerMe.piece   : count.me     ++; break;  //occupied by you

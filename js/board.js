@@ -21,7 +21,7 @@ Board.prototype = {
         cells   : [],  //an array of html content to go in each cell (as a two dimensional array, e.g. [x][y])
         
         //this is a set of vectors to move in the eight directions. you can use this in your own logic to traverse the 
-        //board for your own reasons. refer to othello for good examples
+        //board for your own reasons. refer to othello for good examples. it isn't used internally at all.
         directions : [
                 {x:  0, y: -1},  //0 - up
                 {x:  1, y: -1},  //1 - right-up
@@ -55,12 +55,10 @@ Board.prototype = {
            =============================================================================================================== */
         clear : function () {
                 //create the two dimensional array to represent the html content of each cell
-                //index 0 of each row/column is not actually used. the table is 1-based (so that the top left cell is
-                //'this.cells[1][1]' and not [0][0]). this is done so your own code is simpler and more direct
-                this.cells = new Array (this.width);
-                for (var x=1; x<=this.width; x++) {
-                        this.cells[x] = new Array (this.height);
-                        for (var y=1; y<=this.height; y++) {this.cells[x][y] = "";}
+                this.cells = new Array (this.width-1);
+                for (var x=0; x<this.width; x++) {
+                        this.cells[x] = new Array (this.height-1);
+                        for (var y=0; y<this.height; y++) {this.cells[x][y] = "";}
                 }
         },
         
@@ -74,16 +72,16 @@ Board.prototype = {
                 //start the table
                 var html = '<table id="'+this.element+'-table" class="board"><cols>\n';
                 //add the cols (so that you can style a whole coulmn in one go)
-                for (x=1; x<=this.width; x++) {
+                for (x=0; x<this.width; x++) {
                         html += '\t\t\t\t<col id="'+this.element+'-col-'+x+'"></col>\n';
                 }
                 html += '\t\t\t</cols><tbody>\n';
                 //loop over each row...
-                for (var y=1; y<=this.height; y++) {
+                for (var y=0; y<this.height; y++) {
                         //create the row
                         html += '\t\t\t\t<tr id="'+this.element+'-row-'+y+'">\n';
                         //loop over each column...
-                        for (x=1; x<=this.width; x++) {
+                        for (x=0; x<this.width; x++) {
                                 //chequer the board by alternating classes horizontally and vertically
                                 var chequer = (y%2 + x%2 == 1) ? "B" : "A";  
                                 //create the table cell and put the content in
@@ -109,8 +107,7 @@ Board.prototype = {
            return * s_id : html element id of the cell requested 
            =============================================================================================================== */
         getCellId : function (n_x, n_y) {
-                //'String.fromCharCode' is used to get the letter for the column number (e.g. 1=A, 2=B and so on)
-                return this.element + '-cell-' + String.fromCharCode (64+n_x) + n_y;
+                return this.element + '-cell-' + n_x + "x" + n_y;
         },
         
         /* > getCoordsFromId : return x/y position given a html id for a cell
@@ -122,9 +119,9 @@ Board.prototype = {
                                  }
            =============================================================================================================== */
         getCoordsFromId : function (s_id) {
-                var id  = s_id.split ("-").last (),              //get the cell reference from the cell id
-                    col = id.substr (0, 1).charCodeAt (0) - 64,  //the first letter is the col, convert A=1, B=2 and so on
-                    row = parseInt (id.substr(1))                //row is the second letter onwards (e.g. B15)
+                var id  = s_id.split ("-").last (),          //get the cell reference from the cell id
+                    col = parseInt (id.split("x").first()),  //the first reference is the col
+                    row = parseInt (id.split("x").last())    //row is the second reference
                 ;
                 return {x: col, y: row};
         },
@@ -136,9 +133,9 @@ Board.prototype = {
                 if (!$(this.element)) {this.injectHTML ();}
                 
                 //loop over each row...              //loop over each column...
-                for (var y=1; y<=this.height; y++) { for (var x=1; x<=this.width; x++) {
+                for (var y=0; y<this.height; y++) { for (var x=0; x<this.width; x++) {
                         //get the html element for this cell (x, y)
-                        var e = $(this.getCellId (x, y));
+                        var e = $(this.getCellId(x,y));
                         //if the html in the cell is not the same as in memory, update it
                         if (e.innerHTML != this.cells[x][y]) {e.innerHTML = this.cells[x][y];}
                 } }
