@@ -36,9 +36,12 @@ var game = {
         /* > load : called for you on page load (see shared.js)
            =============================================================================================================== */
         load : function () {
-                shared.showPage ("game"); this.start (true); $("player-status-me").style.display = "block"; $("player-status-them").style.display = "block";
                 //create the empty board
                 this.grid.injectHTML ();
+                
+                shared.showPage ("game");
+                $("player-status-me").style.display = "block"; $("player-status-them").style.display = "block";
+                this.start (true);
         },
                 
         /* > start : begin playing
@@ -51,17 +54,17 @@ var game = {
                 //players, game.start is called for you
                 if (b_mefirst == null) {b_mefirst = shared.host;}  //default: host goes first
                 
-                shared.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
+                shared.setTitle (playerMe.name+" v. "+playerThem.name+" - ");
                 
                 //set which piece each player is using. the host always plays black, and goes first
                 playerMe.piece   = (shared.host) ? "Y" : "R";
                 playerThem.piece = (shared.host) ? "R" : "Y";
                 
                 //blank the two dimensional array holding the location of the pieces on the board
-                this.pieces = new Array (7);
-                for (var x=1; x<=7; x++) {
-                        this.pieces[x] = new Array (6);
-                        for (var y=1; y<=6; y++) {this.pieces[x][y] = "";}
+                this.pieces = new Array (this.grid.width);
+                for (var x=1; x<=this.grid.width; x++) {
+                        this.pieces[x] = new Array (this.grid.height);
+                        for (var y=1; y<=this.grid.height; y++) {this.pieces[x][y] = "";}
                 }
                 
                 shared.setSystemStatus ();  //hide any status messages being displayed
@@ -78,7 +81,7 @@ var game = {
            =============================================================================================================== */
         updateBoard : function () {
                 //loop through the array holding the pieces, and put the relevant html into the board cells
-                for (var y=1; y<7; y++) { for (var x=1; x<8; x++) {
+                for (var y=1; y<=this.grid.height; y++) { for (var x=1; x<=this.grid.width; x++) {
                         //get the html element for this cell
                         var e = $(this.board.getCellId(x, y));
                         //remove the hover effect from any cells
@@ -89,8 +92,8 @@ var game = {
                         e.onmouseout  = Prototype.emptyFuncyion;
                         
                         //update the html for the cell (in memory)
-                        this.board.cells[x][y] = (this.pieces[x][y] == "") ? "" : '<img width="40" height="40" src="-/'+
-                                                 (this.pieces[x][y]=="X"?'black.png" alt="Black':'white.png" alt="White')+'" />'
+                        this.grid.cells[x][y] = (this.pieces[x][y] == "") ? "" : '<img width="40" height="40" src="-/'+
+                                                (this.pieces[x][y]=="X"?'black.png" alt="Black':'white.png" alt="White')+'" />'
                         ;
                 } }
                 //reflect any changes on the cells
@@ -104,10 +107,17 @@ var game = {
                 shared.setPlayerStatus ();
                 
                 //check each column to see which are playable
-                for (var x=1; x<8; x++) {
-                        //if the top cell is empty, it can be played
+                for (var x=1; x<=this.grid.width; x++) {
+                        //if the top cell is empty, the column can be played
                         if (!this.pieces[x][1]) {
-                                console.log($(this.grid.getCellId(x,1)).className);
+                                //enable the whole column
+                                for (var y=1; y<=this.grid.height; y++) {
+                                        var e = $(this.grid.getCellId(x,y));
+                                        //highlight the cell
+                                        e.onmouseclick = null;
+                                        e.onmouseover  = null;
+                                        e.mouseout     = null;
+                                }
                         }
                 }
         },

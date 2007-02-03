@@ -38,8 +38,8 @@ Pack.prototype = {
            return * s_value : the value of the card (Ace is low, Joker is 0)
            =============================================================================================================== */
         value : function (s_card) {
-                //the index of the card in the faces array is it's value
-                return parseInt (this.faces.indexOf(s_card.substr(0, 1))) + 1;
+                //the index of the card in the faces array, is it's value
+                return parseInt (this.faces.indexOf(s_card.substr(0,1))) + 1;
         },
         
         /* > suit : given a card, return what suit it is
@@ -58,9 +58,9 @@ Pack.prototype = {
            return * s_colour : the colour as the word "black" or "red"
            =============================================================================================================== */
         colour : function (s_card) {
-                var suit = this.suit(s_card);
+                var suit = this.suit (s_card);
                 //if the suit comes back as J (Joker), then check for Red Joker vs Black Joker
-                return (suit == "J") ? (s_card.substr(0,1)  == "B" ? "black" : "red")
+                return (suit == "J") ? (s_card.substr (0,1) == "B" ? "black" : "red")
                                      : (suit == "S" || suit == "C" ? "black" : "red")  //else Spades or Clubs = Black
                 ;
         },
@@ -128,7 +128,7 @@ Deck.prototype = {
         shuffle : function () {
                 var i = this.cards.length, j, t;
                 while (i) {
-                        j = Math.floor ((i--) * Math.random());
+                        j = Math.floor ((i--) * Math.random ());
                         t = this.cards[i];
                         this.cards[i] = this.cards[j];
                         this.cards[j] = t;

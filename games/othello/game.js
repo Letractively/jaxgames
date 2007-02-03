@@ -13,7 +13,7 @@ rules of play:
  + each player takes turn to place a single piece on the board. you must place a piece on an empty square, adjacent to an
    opponent's piece, whereby another one of your own pieces is within line-of-sight (in one or more of the eight directions)
    the opponents pieces then become yours and play changes sides
- + the winner is the player with the most pieces once all squares are filled, or when the opponent has no pieces remaining
+ + the winner is the player with the most pieces when neither player can place or when the opponent has no pieces remaining.
  
 -------------------------------------------------------------------------------------------------------------------------- */
 
@@ -40,7 +40,6 @@ var game = {
         /* > load : called for you on page load (see shared.js)
            =============================================================================================================== */
         load : function () {
-                /*shared.showPage ("game"); this.start (true);*/
                 //set the icons for the players that will be used in this game (replacing the default Blue vs. Red ones)
                 shared.icons.host     = "images/iconblack.png";
                 shared.icons.opponent = "images/iconwhite.png";
@@ -48,6 +47,9 @@ var game = {
                 this.board.injectHTML ();
                 //animate the title screen
                 this.events.clouds.start ();
+                
+                //!/debug: leap straight into the game screen
+                /*shared.showPage ("game"); this.start (true);*/
         },
                 
         /* > start : begin playing

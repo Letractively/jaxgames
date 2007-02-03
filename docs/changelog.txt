@@ -1,6 +1,9 @@
 =============================================================================================================================
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+21.JAN.07
+    NEW: Build system now zips the source code for easy distribution for those without SVN
+    NEW: Build system stops if any of the steps errors, returning an error code equal to the step that failed
 20.JAN.07
     NEW: I'm really struggling with the direction of this project now, some real help would be appreciated
     NEW: boot.js uses config to dynamically build the list of files to include. the build system now uses makeboot.js to load
@@ -9,7 +12,6 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
          running browser, and the build system
 19.JAN.07
     NEW: CONFIG.js, configuration script, lets you specify what version of Scriptaculous to use
-    ADD: Upgraded to Scriptaculous 1.7.0! http://script.aculo.us
     FIX: dump() now ignores the new size function from Prototype. Also no longer uses a parameter to include Prototype
          functions in the output. Prototype is detected, and automatically ignored in the output as needed
 18.JAN.07

@@ -13,19 +13,22 @@
 var i,
     boot_files = []
 ;
+//load Scriptaculous (and Prototype)
 if (config.scriptaculous.use_provided) {
+        //use the provided Scriptaculous bundled with jax (stable)
         boot_files.push ("js/libs/prototype.js");
         boot_files.push ("js/libs/scriptaculous/effects.js");
 } else {
+        //use user-provided scriptaculous version unzipped into /js/scriptaculous/...
         var boot_path = "js/libs/scriptaculous/scriptaculous-js-" + Scriptaculous.Version;
         boot_files.push (boot_path+"/lib/prototype.js");
         for (i=0; i<config.boot_scripts.length; i++) {
                 boot_files.push (boot_path+"/src/"+scriptaculous.includes[i]+".js");
         }
 }
-for (i=0; i<config.boot_scripts.length; i++) {
-        boot_files.push (config.boot_scripts[i]);
-}
+//load the rest of the boot scripts (see CONFIG.js)
+for (i=0; i<config.boot_scripts.length; i++) {boot_files.push (config.boot_scripts[i]);}
+
 
 /* developer only tools:
    ======================================================================================================================= */

@@ -60,7 +60,7 @@ var shared = {
                 //if you are the host, or opponent:
                 if (b_host) {    //------------------------------------------------------------------------------------------
                         //create the game on the server
-                        jax.open(
+                        jax.open (
                                 {name : playerMe.name},  //your chosen name
                                 function(o_response){    //when the game starts, but the other player has not yet joined
                                         //if the server okay'd the new slot
@@ -113,7 +113,7 @@ var shared = {
                         $("player-status-them").style.display = "block";
                         
                         //set the chrome title
-                        this.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
+                        this.setTitle (playerMe.name+" v. "+playerThem.name+" - ");
                         //start the game
                         game.start ();
                 }
@@ -475,7 +475,7 @@ function enableNicknameBox (b_enabled) {
                 e.disabled = "disabled";
                 e.value = "checking...";
                 //disable the nickname text box
-                $("user-nickname").disabled = "";
+                $("user-nickname").disabled = "disabled";
         }
 }
 
