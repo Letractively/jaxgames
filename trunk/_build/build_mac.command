@@ -18,13 +18,13 @@
 cd "`dirname "$0"`"
 clear
 echo "==============================================================================="
-echo "jaxgames build process                                                   v0.3.2"
+echo "jaxgames build process                                                   v0.3.3"
 echo "==============================================================================="
 
 # [1]:
-# Rhino is a java implementation of Javascript. Dojo <dojotoolkit.org> uses a custom version of Rhino to compact javascript
+# Rhino is a java implementation of javascript. Dojo <dojotoolkit.org> uses a custom version of Rhino to compact javascript
 # files into a smaller space. this will also make them more compatible with Dean Edward's packer.
-# if custom_rhino.jar does not exist, download it... (saves us 700Kb in our SVN)
+# if custom_rhino.jar does not exist, download it... (saves us 700 kb in our SVN)
 if ! [[ -e ./libs/custom_rhino.jar ]]
 then
         echo "* downloading custom_rhino.jar"
@@ -35,6 +35,7 @@ then
         # -# = show a progress bar instead of details
         # -A = set the user-agent to use, in this case we want to alert Dojo that this script is doing a direct download
         curl -o ./libs/custom_rhino.jar -S -\# -A "Mozilla/4.0 (Jax Games Build Script - http://code.google.com/p/jaxgames)" "http://svn.dojotoolkit.org/dojo/trunk/buildscripts/lib/custom_rhino.jar"
+        if [ $? -gt 0 ]; then echo "! downloading of custom_rhino.jar failed"; exit 1; fi
         echo "-------------------------------------------------------------------------------"
 fi
 
@@ -52,19 +53,37 @@ echo "  copying new source..."
 # -delete-excluded = delete any files in release folder that are no longer in the original
 # -exclude-from = list of files/folders to ignore when copying (read excludes.txt)
 rsync -r --delete-excluded --exclude-from=./libs/excludes.txt ../ ./release/jaxgames
+if [ $? -gt 0 ]; then echo "! copying of source to release directory failed"; exit 2; fi
 # make the database directory writeable, in case you want to run the release locally to test
 chmod -R 777 ./release/jaxgames/jax_php/db
 echo "-------------------------------------------------------------------------------"
 
 # [3]:
+# zip the source. distributing the source code to somebody who hasn't got SVN can be difficult. simply zipping the directory
+# will also include all the hidden .svn folders and a lot of unnecessary files bloating the zip file massively. for your
+# convenience this build script will zip the source code up ready for easy sending, however '/_build' will not be included
+# -r = recurse subdirectories
+# -X = exclude Mac OS only file attributes (MS-DOS Compatible)
+# -9 = maximum compression
+# -x \*.db = exclude Windows Thumbs.db files
+# -x \*.sqlite = exclude the sqlite database
+echo "* create zip file of source"
+echo "-------------------------------------------------------------------------------"
+rm ./release/JaxGamesSource.zip
+zip -r -X -9 ./release/JaxGamesSource.zip ./release/jaxgames -x \*.db -x \*.sqlite
+if [ $? -gt 0 ]; then echo "! creation of source zip file failed"; exit 3; fi
+echo "-------------------------------------------------------------------------------"
+
+# [4]:
 # merge together all the scripts needed for boot.js. this means we can load one javascript file to include all of the
 # libraries for the project (prototype / scriptaculous / json / jax / firebugx)
 echo "* merge libraries for boot.js"
 echo "-------------------------------------------------------------------------------"
 java -jar ./libs/custom_rhino.jar ./libs/makeboot.js
+if [ $? -gt 0 ]; then echo "! merging of libraries for boot.js failed"; exit 4; fi
 echo "-------------------------------------------------------------------------------"
 
-# [4]:
+# [5]:
 # run it through the dojo compressor, this will strip the comments and do other optimisations
 echo "* compact scripts"
 echo "-------------------------------------------------------------------------------"
@@ -73,11 +92,12 @@ for FILE in `find ./release/jaxgames -regex "\.\/[^_]*\.js"`
 do
         echo "  compacting $FILE..."
         java -jar ./libs/custom_rhino.jar -opt -1 -c "$FILE" > "$FILE.temp"
+        if [ $? -gt 0 ]; then echo "! compacting of $FILE failed"; exit 5; fi
         mv -f "$FILE.temp" "$FILE"
 done
 echo "-------------------------------------------------------------------------------"
 
-# [5]:
+# [6]:
 # run the compacted scripts through Dean Edward's Packer for even more shrinkage
 echo "* compress scripts (this will take a long time)"
 echo "-------------------------------------------------------------------------------"
@@ -86,10 +106,11 @@ echo "--------------------------------------------------------------------------
 for FILE in `find ./release/jaxgames -size +4000c -regex "\.\/[^_]*\.js"`
 do
         java -jar ./libs/custom_rhino.jar ./libs/packer.js "$FILE" "$FILE"
+        if [ $? -gt 0 ]; then echo "! compressing of $FILE failed"; exit 6; fi
 done
 echo "-------------------------------------------------------------------------------"
 
-# [6]:
+# [7]:
 # the compression will have removed all comments, add new headers and licence blocks
 echo "* add headers"
 echo "-------------------------------------------------------------------------------"
@@ -99,20 +120,22 @@ java -jar ./libs/custom_rhino.jar ./libs/merge.js ./headers/boot.js ./release/ja
 for FILE in `find ./release/jaxgames -regex "\.\/[^_]*[^(?:boot)]\.js"`
 do
         java -jar ./libs/custom_rhino.jar ./libs/merge.js ./headers/jaxgames.js "$FILE" "$FILE"
+        if [ $? -gt 0 ]; then echo "! adding header to $FILE failed"; exit 7; fi
 done
 echo "-------------------------------------------------------------------------------"
 
-# [7]:
+# [8]:
 # zip the release
 # -r = recurse subdirectories
 # -X = exclude Mac OS only file attributes (MS-DOS Compatible)
 # -9 = maximum compression
 # -x \*.db = exclude Windows Thumbs.db files
 # -x \*.sqlite = exclude the sqlite database
-echo "* create zip file"
+echo "* create zip file of release"
 echo "-------------------------------------------------------------------------------"
 rm ./release/JaxGames.zip
 zip -r -X -9 ./release/JaxGames.zip ./release/jaxgames -x \*.db -x \*.sqlite
+if [ $? -gt 0 ]; then echo "! creating zip of release failed"; exit 8; fi
 echo "-------------------------------------------------------------------------------"
 
 echo "build is complete"

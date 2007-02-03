@@ -4,7 +4,7 @@
 .*
 *.db
 
-#ignore anything starting with an underscore. _build, _rsc etc.
+#ignore anything starting with an underscore. e.g. _build etc.
 _*
 
 #don't include the sqlite database

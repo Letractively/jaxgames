@@ -1,5 +1,5 @@
 /* =======================================================================================================================
-   js/board.js - create and manage a game board
+   js/board.js - create and manage a game board/grid
    ======================================================================================================================= */
 /* css guide:
    ----------
@@ -8,10 +8,10 @@
    elements, where 'element' is the html id you created the board class with.
    
    where "var board = new Board ('element');":
-   <table> = #element-table
-   <col>   = #element-col-X    (where X is column number - 1, 2, 3 etc)
+   <table> = #element-table    (class: '.board')
+   <col>   = #element-col-x    (where x is column number - 1, 2, 3 etc)
    <tr>    = #element-row-y    (where y is the row number 1 to number of rows)
-   <td>    = #element-cell-Xy  (where x is the column letter - A, B, C... and y is the row number. e.g. #element-cell-C6)
+   <td>    = #element-cell-Xy  (where X is the column letter - A, B, C... and y is the row number. e.g. #element-cell-C6)
 */
 var Board = Class.create ();
 Board.prototype = {
@@ -81,13 +81,13 @@ Board.prototype = {
                 //loop over each row...
                 for (var y=1; y<=this.height; y++) {
                         //create the row
-                        html += '\t\t\t\t<tr id="'+this.element+'-row-'+y+'" class="row">\n';
+                        html += '\t\t\t\t<tr id="'+this.element+'-row-'+y+'">\n';
                         //loop over each column...
                         for (x=1; x<=this.width; x++) {
                                 //chequer the board by alternating classes horizontally and vertically
                                 var chequer = (y%2 + x%2 == 1) ? "B" : "A";  
                                 //create the table cell and put the content in
-                                html += '\t\t\t\t\t<td id="'+this.getCellId(x,y)+'" class="cell '+chequer+'">'+
+                                html += '\t\t\t\t\t<td id="'+this.getCellId(x,y)+'" class="'+chequer+'">'+
                                         this.cells[x][y]+'</td>\n'
                                 ;
                         }

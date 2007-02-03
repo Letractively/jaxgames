@@ -1,4 +1,5 @@
 #!/usr/bin/env rhino
+; //this semilcolon is here to allow the script to pass JSLint, which thinks the bang above is a javascript line
 
 load ('../js/CONFIG.js');
 
