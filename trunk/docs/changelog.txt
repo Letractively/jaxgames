@@ -1,6 +1,9 @@
 =============================================================================================================================
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+03.FEB.07
+    ADD: Changed board.js to be 0-based instead of 1-based because json was incorrectly encoding the cells array without the
+         first undefined element in each; therefore a board layout would not reconstruct from the json correctly.
 21.JAN.07
     NEW: Build system now zips the source code for easy distribution for those without SVN
     NEW: Build system stops if any of the steps errors, returning an error code equal to the step that failed

@@ -61,10 +61,10 @@ var game = {
                 playerThem.piece = (shared.host) ? "R" : "Y";
                 
                 //blank the two dimensional array holding the location of the pieces on the board
-                this.pieces = new Array (this.grid.width);
-                for (var x=1; x<=this.grid.width; x++) {
-                        this.pieces[x] = new Array (this.grid.height);
-                        for (var y=1; y<=this.grid.height; y++) {this.pieces[x][y] = "";}
+                this.pieces = new Array (this.grid.width -1);
+                for (var x=0; x<this.grid.width; x++) {
+                        this.pieces[x] = new Array (this.grid.height - 1);
+                        for (var y=0; y<this.grid.height; y++) {this.pieces[x][y] = "";}
                 }
                 
                 shared.setSystemStatus ();  //hide any status messages being displayed
@@ -81,7 +81,7 @@ var game = {
            =============================================================================================================== */
         updateBoard : function () {
                 //loop through the array holding the pieces, and put the relevant html into the board cells
-                for (var y=1; y<=this.grid.height; y++) { for (var x=1; x<=this.grid.width; x++) {
+                for (var y=0; y<this.grid.height; y++) { for (var x=0; x<this.grid.width; x++) {
                         //get the html element for this cell
                         var e = $(this.board.getCellId(x, y));
                         //remove the hover effect from any cells
@@ -107,11 +107,11 @@ var game = {
                 shared.setPlayerStatus ();
                 
                 //check each column to see which are playable
-                for (var x=1; x<=this.grid.width; x++) {
+                for (var x=0; x<this.grid.width; x++) {
                         //if the top cell is empty, the column can be played
                         if (!this.pieces[x][1]) {
                                 //enable the whole column
-                                for (var y=1; y<=this.grid.height; y++) {
+                                for (var y=0; y<this.grid.height; y++) {
                                         var e = $(this.grid.getCellId(x,y));
                                         //highlight the cell
                                         e.onmouseclick = null;
