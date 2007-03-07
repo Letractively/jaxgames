@@ -14,7 +14,9 @@
 #   chmod +x build_mac.command
 # now you can double click this file in the Finder to run it
 #============================================================================================================================
-# change directory, to the directory of this script (because double clicking on this script uses home directory instead)
+
+# change directory, to the directory of this script
+# (because double clicking on this script uses home directory instead)
 cd "`dirname "$0"`"
 clear
 echo "==============================================================================="
@@ -116,6 +118,7 @@ echo "* add headers"
 echo "-------------------------------------------------------------------------------"
 # boot.js has its own header as it contains all the third party libraries
 java -jar ./libs/custom_rhino.jar ./libs/merge.js ./headers/boot.js ./release/jaxgames/js/boot.js ./release/jaxgames/js/boot.js
+if [ $? -gt 0 ]; then echo "! adding header to boot.js failed"; exit 7; fi
 # find all javascript files (ignoring boot.js and folders starting with underscore). these use the standard header
 for FILE in `find ./release/jaxgames -regex "\.\/[^_]*[^(?:boot)]\.js"`
 do

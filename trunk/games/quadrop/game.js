@@ -46,7 +46,7 @@ var game = {
                 
         /* > start : begin playing
            ===============================================================================================================
-           params * b_mefirst : who begins play (yourself, or the opponent)
+           params * (b_mefirst) : who begins play (yourself, or the opponent). default: whoever is host
            =============================================================================================================== */
         start : function (b_mefirst) {
                 //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
@@ -61,11 +61,7 @@ var game = {
                 playerThem.piece = (shared.host) ? "R" : "Y";
                 
                 //blank the two dimensional array holding the location of the pieces on the board
-                this.pieces = new Array (this.grid.width -1);
-                for (var x=0; x<this.grid.width; x++) {
-                        this.pieces[x] = new Array (this.grid.height - 1);
-                        for (var y=0; y<this.grid.height; y++) {this.pieces[x][y] = "";}
-                }
+                this.pieces = create2DArray (this.grid.width, this.grid.height, "");
                 
                 shared.setSystemStatus ();  //hide any status messages being displayed
                 shared.chat.show ();        //show the chat box
@@ -89,7 +85,7 @@ var game = {
                         //remove mouse events from any cells
                         e.onclick     = Prototype.emptyFunction;
                         e.onmouseover = Prototype.emptyFunction;
-                        e.onmouseout  = Prototype.emptyFuncyion;
+                        e.onmouseout  = Prototype.emptyFunction;
                         
                         //update the html for the cell (in memory)
                         this.grid.cells[x][y] = (this.pieces[x][y] == "") ? "" : '<img width="40" height="40" src="-/'+
@@ -110,13 +106,13 @@ var game = {
                 for (var x=0; x<this.grid.width; x++) {
                         //if the top cell is empty, the column can be played
                         if (!this.pieces[x][1]) {
-                                //enable the whole column
+                                //enable the whole column...
                                 for (var y=0; y<this.grid.height; y++) {
+                                        //enable mouse events for each cell in the column
                                         var e = $(this.grid.getCellId(x,y));
-                                        //highlight the cell
-                                        e.onmouseclick = null;
-                                        e.onmouseover  = null;
-                                        e.mouseout     = null;
+                                        e.onmouseclick = this.events.playableCellClick;
+                                        e.onmouseover  = this.events.playableCellMouseOver;
+                                        e.mouseout     = this.events.playableCellMouseOut;
                                 }
                         }
                 }
@@ -182,6 +178,30 @@ jax.listenFor ("game_square_chosen", function(o_response){
    OBJECT game.events : event functions, so that multiple elements may use a single function pointer
    ======================================================================================================================= */
 game.events = {
+        /* > playableCellMouseOver
+           =============================================================================================================== */
+        playableCellMouseOver :  function () {
+                //highlight the column
+                var position = game.grid.getCoordsFromId (this.id);
+                for (var y=0; y<game.grid.height; y++) {
+                        $(game.grid.getCellId(position.x,y)).addClassName ("hover");
+                }
+        },
+        
+        /* > playableCellMouseOut
+           =============================================================================================================== */
+        playableCellMouseOut : function () {
+                var position = game.grid.getCoordsFromId (this.id);
+                for (var y=0; y<game.grid.height; y++) {
+                        $(game.grid.getCellId(position.x,y)).removeClassName ("hover");
+                }
+        },
+        
+        /* > playableCellClick
+           =============================================================================================================== */
+        playableCellClick : function () {
+                
+        }
 };
 
 //=== end of line ===========================================================================================================

@@ -16,7 +16,7 @@ var i,
 //load Scriptaculous (and Prototype)
 if (config.scriptaculous.use_provided) {
         //use the provided Scriptaculous bundled with jax (stable)
-        boot_files.push ("js/libs/prototype.js");
+        boot_files.push ("js/libs/scriptaculous/prototype.js");
         boot_files.push ("js/libs/scriptaculous/effects.js");
 } else {
         //use user-provided scriptaculous version unzipped into /js/scriptaculous/...

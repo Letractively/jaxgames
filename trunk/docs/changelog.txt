@@ -2,6 +2,8 @@
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 03.FEB.07
+    ADD: Moved prototype.js into scriptaculous folder
+    FIX: dump_src.js was html encoding only functions, and not strings
     ADD: Changed board.js to be 0-based instead of 1-based because json was incorrectly encoding the cells array without the
          first undefined element in each; therefore a board layout would not reconstruct from the json correctly.
 21.JAN.07

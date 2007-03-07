@@ -79,12 +79,8 @@ var game = {
                 );
                 
                 //blank the two dimensional array holding the location of the pieces on the board
-                this.pieces = new Array (game.board.width-1);
-                for (var x=0; x<game.board.width; x++) {
-                        this.pieces[x] = new Array (game.board.height-1);
-                        for (var y=0; y<game.board.height; y++) {this.pieces[x][y] = "";}
-                }
-                
+                this.pieces = create2DArray (game.board.width, game.board.height, "");
+                                
                 //put in the starting pieces
                 this.pieces[3][3] = "O";
                 this.pieces[4][3] = "X";

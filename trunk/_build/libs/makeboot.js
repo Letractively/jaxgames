@@ -7,7 +7,7 @@ var i,
     boot_files = []
 ;
 if (config.scriptaculous.use_provided) {
-        boot_files.push ("js/libs/prototype.js");
+        boot_files.push ("js/libs/scriptaculous/prototype.js");
         boot_files.push ("js/libs/scriptaculous/effects.js");
 } else {
         var boot_path = "js/libs/scriptaculous/scriptaculous-js-" + Scriptaculous.Version;

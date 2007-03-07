@@ -15,6 +15,6 @@ h1      {/*background-image: url("-/title.png");*/}
 
 #shared-gamearea {background-color: #008000; background-image: url("../-/felt.jpg");}
 
-.playable {background-color: red;}
+.hover {background-color: red;}
 
 /* === end of line ======================================================================================================= */

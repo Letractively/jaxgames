@@ -79,7 +79,7 @@ var dump = function(o_var, b_showtypes, n_width, n_height) {
 				var a    = o.toString ().match (/^.*function.*?\((.*?)\)/im),
 				    args = (a == null || typeof a[1] == 'undefined' || a[1] == '') ? 'none' : a[1]
 				;
-				r += '<tr><th'+th+'>'+t+'</th></tr><tr><td colspan="2"'+tdv+'><table><tr><td class="arguments key"><i>Arguments: </i></td><td'+tdv+'>'+args+'</td></tr><tr><td class="arguments key"><i>Function: </i></td><td'+tdv+'><pre>'+(!proto ? (o.toString().replace(/</g, "&lt;")) : o.toString().escapeHTML())+'</pre></td></tr></table>';
+				r += '<tr><th'+th+'>'+t+'</th></tr><tr><td colspan="2"'+tdv+'><table><tr><td class="arguments key"><i>Arguments: </i></td><td'+tdv+'>'+args+'</td></tr><tr><td class="arguments key"><i>Function: </i></td><td'+tdv+'><pre>'+fixHTML(o.toString())+'</pre></td></tr></table>';
 				j++;
 				break;
 			case 'domelement':
@@ -107,7 +107,7 @@ var dump = function(o_var, b_showtypes, n_width, n_height) {
 						r += '<tr><td'+tdk+'>'+i+(b_showtypes?' ['+t+']':'')+'</td><td'+tdv+'>'+recurse(o[i])+'</td></tr>';
 					}
 				} else {
-					r += '<tr><td'+tdk+'>'+i+(b_showtypes?' ['+t+']':'')+'</td><td'+tdv+'>'+(typeof o[i]=="string"?'"'+o[i]+'"':o[i])+'</td></tr>';
+					r += '<tr><td'+tdk+'>'+i+(b_showtypes?' ['+t+']':'')+'</td><td'+tdv+'>'+(typeof o[i]=="string"?'"'+fixHTML(o[i])+'"':o[i])+'</td></tr>';
 				}
 			}
 		}
@@ -117,6 +117,11 @@ var dump = function(o_var, b_showtypes, n_width, n_height) {
 		//=== getCssType : some types have the same css classname ===
 		function getCssType (s_type) {
 			return (/string|number|boolean|undefined|object/.test(s_type)) ? "object" : s_type;
+		}
+		
+		//=== fixHTML : encode strings to prevent html in strings from being rendered on screen ===
+		function fixHTML (s_text) {
+		        return (!proto) ? s_text.replace(/</g, "&lt;") : s_text.escapeHTML();
 		}
 		
 		//=== getType : return a detailed variable type ===

@@ -35,9 +35,9 @@ Board.prototype = {
         
         /* > intialize : constructor function
            ===============================================================================================================
-           params * s_element : html element id to inject the board into
-                    n_width   : width of the board in cells (1-based)
-                    n_height  : height of the board in cells (1-based)
+           params * s_element  : html element id to inject the board into
+                    (n_width)  : width of the board in cells (1-based). default: 8
+                    (n_height) : height of the board in cells (1-based). default: 8
            =============================================================================================================== */
         initialize : function (s_element, n_width, n_height) {
                 if (!n_width)  {n_width  = 8;}  //default: eight squares wide
@@ -55,11 +55,7 @@ Board.prototype = {
            =============================================================================================================== */
         clear : function () {
                 //create the two dimensional array to represent the html content of each cell
-                this.cells = new Array (this.width-1);
-                for (var x=0; x<this.width; x++) {
-                        this.cells[x] = new Array (this.height-1);
-                        for (var y=0; y<this.height; y++) {this.cells[x][y] = "";}
-                }
+                this.cells = create2DArray (this.width, this.height, "");
         },
         
         /* > injectHTML : inserts the initial empty html table for the board
