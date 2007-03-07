@@ -13,7 +13,7 @@ Pack.prototype = {
         
         /* > initialize : constructor function, create the pack of cards
            ===============================================================================================================
-           params * b_jokers : boolean for wether to include jokers or not
+           params * (b_jokers) : boolean for wether to include jokers or not. default: false
            =============================================================================================================== */
         initialize : function (b_jokers) {
                 if (!b_jokers) {b_jokers = false;}  //default: no jokers
@@ -90,9 +90,9 @@ Deck.prototype = {
         
         /* > initialize : constructor function, allow adding of packs to the deck upon class creation
            ===============================================================================================================
-           params * o_pack    : a pack object to take the cards from
-                    n_count   : number of packs to add to the deck
-                    b_shuffle : boolean to shuffle the deck every time a pack is added 
+           params * o_pack      : a pack object to take the cards from
+                    (n_count)   : number of packs to add to the deck. default: 1 pack
+                    (b_shuffle) : boolean to shuffle the deck every time a pack is added. default: shuffle
            =============================================================================================================== */
         initialize : function (o_pack, n_count, b_shuffle){
                 //if a pack is provided on class creation...

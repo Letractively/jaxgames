@@ -202,9 +202,8 @@ var shared = {
    OBJECT shared.chat - manage the chatbox aside the game
    ======================================================================================================================= */
 shared.chat = {
-        /* list of emotes. the file name matches the image file name (sans extension) in /games/-/emotes/
-           refer to: http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Guide:Regular_Expressions for regex rules
-        */
+        //list of emotes. the file name matches the image file name (sans extension) in /games/-/emotes/
+        //refer to: http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Guide:Regular_Expressions for regex rules
         emotes : [
                 {file: "58", symbol: ">:[", regex: /&gt;:[\[\(]/g},  // miffed   >:[ or >:(
                 {file: "60", symbol: ">:]", regex: /&gt;:[\]\)]/g},  // evilgrin >:] or >:)
@@ -446,7 +445,7 @@ Event.observe (window, 'load', function(){
         //when the user clicks the Start/Join Game button (on the user page)
         $("user-submit").onclick = shared.events.userSubmitClick;
         
-        //run the load function defined in game.js for the game to handle some on load procedures of it's own
+        //run the load function defined in game.js for the game to handle some onload procedures of its own
         game.load ();
 });
 
@@ -477,6 +476,23 @@ function enableNicknameBox (b_enabled) {
                 //disable the nickname text box
                 $("user-nickname").disabled = "disabled";
         }
+}
+
+/* =======================================================================================================================
+   > create2DArray : javascript has no built in method for creating 2D arrays
+   ======================================================================================================================= 
+   params * n_width     : 1-based width of the 2D array. e.g. 8 will create elements 0-7
+            n_height    : 1-based height of the 2D array
+            x_initvalue : an initial value to assign to each element in the array. any type supported
+   return * a_result    : the 2D array
+   ======================================================================================================================= */
+function create2DArray (n_width, n_height, x_initvalue) {
+        var arr = new Array (n_width -1);
+        for (var x=0; x<n_width; x++) {
+                arr[x] = new Array (n_height - 1);
+                for (var y=0; y<n_height; y++) {arr[x][y] = x_initvalue;}
+        }
+        return arr;
 }
 
 function bsod (message, url, line) {
