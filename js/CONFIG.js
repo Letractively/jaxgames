@@ -12,10 +12,11 @@ var config = {
         scriptaculous : {
                 //use the version of Scriptaculous provided with Jax Games:
                 //if set to false, Scriptaculous will be loaded from a unzipped Scriptaculous folder located at
-                //"/js/libs/scriptaculous/scriptaculous-js-1.x.x", where the version number is set by the 'Scriptaculous'
-                //object defined below. this lets you quickly switch between Scriptaculous versions just by setting this
-                //option to false, and changing the version number below
+                //'js/libs/scriptaculous/scriptaculous-js-?', where '?' is set by `version` below
                 use_provided : true,
+                
+                //if use_provded above is false, use this version of scriptaculous below
+                version : '1.7.0.svn',
                 
                 //an array of which Scriptaculous libraries to include, sans extension (if use_provided = false)
                 //!/includes : ["builder", "effects", "dragdrop", "controls", "slider"]  //all of Scriptaculous
@@ -26,7 +27,7 @@ var config = {
 //this is custom scriptaculous header to remove the load functions which would normally try load the external scripts.
 //the build system will instead combine the scripts together
 var Scriptaculous = {
-        Version: '1.6.5' //default is 1.6.5
+        Version: (config.scriptaculous.use_provided) ? '1.7.0' : config.scriptaculous.version
 };
 
 //=== end of line ===========================================================================================================

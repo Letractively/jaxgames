@@ -13,7 +13,7 @@ if (config.scriptaculous.use_provided) {
         var boot_path = "js/libs/scriptaculous/scriptaculous-js-" + Scriptaculous.Version;
         boot_files.push (boot_path+"/lib/prototype.js");
         for (i=0; i<config.boot_scripts.length; i++) {
-                boot_files.push (boot_path+"/src/"+scriptaculous.includes[i]+".js");
+                boot_files.push (boot_path+"/src/"+config.scriptaculous.includes[i]+".js");
         }
 }
 boot_files.push ("../js/libs/firebug/firebugx.js");

@@ -18,7 +18,28 @@
 # change directory, to the directory of this script
 # (because double clicking on this script uses home directory instead)
 cd "`dirname "$0"`"
-clear
+# pwd always gives absolute paths.
+WORKING_DIR="`pwd`"
+
+# log to file, and display on stdout at the same time
+# taken from http://www.travishartwell.net/blog/2006/08/19_2220
+# ---------------------------------------------------------------------------------------------------------------------------
+OUTPUT_LOG="$WORKING_DIR/build.log"    # absolute path must be used because on exit the current directory may be different
+OUTPUT_PIPE="$WORKING_DIR/build.pipe"
+
+if [ ! -e $OUTPUT_PIPE ]; then mkfifo $OUTPUT_PIPE; fi
+if [ -e $OUTPUT_LOG ]; then rm $OUTPUT_LOG; fi
+exec 3>&1 4>&2
+tee $OUTPUT_LOG < $OUTPUT_PIPE >&3 &
+tpid=$!
+exec > $OUTPUT_PIPE 2>&1
+
+# on any exit command, return the stdout & stderr to normal, and remove the temporary pipe file
+trap 'exec 1>&3 3>&- 2>&4 4>&-; wait $tpid; rm $OUTPUT_PIPE;' EXIT
+trap 'die "@ script terminated"' INT TERM  #clean up if the user presses ^c
+# ---------------------------------------------------------------------------------------------------------------------------
+
+clear 2>/dev/null #errors when running from TextMate
 echo "==============================================================================="
 echo "jaxgames build process                                                   v0.3.3"
 echo "==============================================================================="

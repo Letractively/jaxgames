@@ -37,6 +37,13 @@ var game = {
         board   : new Board ("game-board"),  //the game board (default size of 8x8 will be used), see board.js
         pieces  : [],                        //the layout of pieces on the board
         
+        templates : {
+                //the player's black or white piece icon on the paper at the sides
+                paper_piece : new Template (
+                        '<img src="images/#{colour}.png" width="40" height="40" alt="#{colour}" />'
+                )
+        },
+        
         /* > load : called for you on page load (see shared.js)
            =============================================================================================================== */
         load : function () {
@@ -54,12 +61,12 @@ var game = {
                 
         /* > start : begin playing
            ===============================================================================================================
-           params * b_mefirst : who begins play (yourself, or the opponent)
+           params * (b_mefirst) : who begins play (yourself, or the opponent)
            =============================================================================================================== */
         start : function (b_mefirst) {
                 //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
-                //entering their name / join key, shared.connect is called. when a connection is established between the two
-                //players, game.start is called for you
+                //entering their name / join key, `shared.connect` is called. when a connection is established between the
+                //two players, `game.start` is called for you
                 if (b_mefirst == null) {b_mefirst = shared.host;}  //default: host goes first
                 
                 //animate the title screen
@@ -71,12 +78,8 @@ var game = {
                 playerMe.piece   = (shared.host) ? "X" : "O";
                 playerThem.piece = (shared.host) ? "O" : "X";
                 //put your/their piece in the piece-count sections (the paper)
-                $("game-paper-me-piece").update ('<img src="images/'+(shared.host?"black":"white")+'.png" width="40" height'+
-                                                 '="40" alt="You are playing '+(shared.host?"black":"white")+' pieces" />'
-                );
-                $("game-paper-them-piece").update ('<img src="images/'+(shared.host?"white":"black")+'.png" width="40" height'+
-                                                   '="40" alt="You are playing '+(shared.host?"white":"black")+' pieces" />'
-                );
+                $("game-paper-me-piece").update (this.templates.paper_piece.evaluate({colour:shared.host?"black":"white"}));
+                $("game-paper-them-piece").update (this.templates.paper_piece.evaluate({colour:shared.host?"white":"black"}));
                 
                 //blank the two dimensional array holding the location of the pieces on the board
                 this.pieces = create2DArray (game.board.width, game.board.height, "");
@@ -173,7 +176,7 @@ var game = {
                     (b_reverse)  : optional, false for matching piece to space, true to match space to piece
                     (n_distance) : optional, used in recursion to track how many steps have been made, don't use yourself
            return * false        : if no bridge was found, or...
-                    o_position   : {
+                    object       : {
                                            n_x : x coordinate of the matched cell
                                            n_y : y coordinate of the matched cell
                                    }

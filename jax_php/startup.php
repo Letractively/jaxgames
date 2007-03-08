@@ -1,6 +1,6 @@
 <?php
 /* =======================================================================================================================
-   server/startup.php - Include a number of scripts of functions needed
+   startup.php - Include a number of scripts of functions needed
    =======================================================================================================================
    licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
    jax (c) copyright Kroc Camen 2005-2007

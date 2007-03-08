@@ -1,6 +1,6 @@
 <?php
 /* =======================================================================================================================
-   server/response.php - handle all request/response traffic from the clients
+   response.php - handle all request/response traffic from the clients
    =======================================================================================================================
    licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
    jax (c) copyright Kroc Camen 2005-2007

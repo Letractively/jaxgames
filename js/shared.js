@@ -28,6 +28,25 @@ var shared = {
                 host     : "../-/icons/user.png",
                 opponent : "../-/icons/user_red.png"
         },
+        templates : {
+                //template when a new game is started and you are provided with the join key
+                join_key : new Template (
+                        '<p>Copy the key code below and give it<br />to your friend so that they can join the game</p><p>'+
+                        '<input id="shared-key" type="text" readonly="readonly" value="#{conn_id}" /></p><p><br />Waiting '+
+                        'for the other player to join...</p><p><img src="../-/waiting.gif" width="16" height="16" alt="Wai'+
+                        'ting..." /></p>'
+                ),
+                //template for chat messages
+                chat_msg : new Template (
+                        '<div id="chat-#{time_id}" class="chat-#{html_class}" style="display: none;"><p><em>#{time_stamp}'+
+                        '</em> <img src="#{icon}" width="16" height="16" alt="User icon" /> <strong>#{name}</strong></p>'+
+                        '<blockquote><p>#{text}</p></blockquote></div>'
+                ),
+                //template for emoticons
+                chat_emote : new Template (
+                        '<img src="../-/emotes/#{file}.png" width="16" height="16" alt="#{symbol}" title="#{symbol}" />'
+                )
+        },
         
         //number of matches played
         played : 0,
@@ -66,15 +85,9 @@ var shared = {
                                         //if the server okay'd the new slot
                                         if (o_response.result) {
                                                 //display the code for the other player to use to join with
-                                                this.setSystemStatus (
-                                                        '<p>Copy the key code below and give it<br />to your friend so that'+
-                                                        ' they can join the game</p><p><input type="text" readonly="readonl'+
-                                                        'y" size="6" value="' + jax.conn_id + '" /></p><p><br />Waiting for'+
-                                                        ' the other player to join...</p><p><img src="../-/waiting.gif" wid'+
-                                                        'th="16" height="16" alt="Waiting..." /></p>'
-                                                );
+                                                this.setSystemStatus (this.templates.join_key.evaluate(jax));
                                                 //set the chrome title
-                                                this.setTitle (jax.conn_id + " - ");
+                                                this.setTitle (jax.conn_id+" - ");
                                         
                                         } else {
                                                 //TODO: start game or nickname failed
@@ -95,7 +108,7 @@ var shared = {
                         );
                 }
                 
-                /* PRIVATE > preStart : a hidden function available only to shared.connect
+                /* PRIVATE > preStart : a hidden function available only to `shared.connect`
                    ======================================================================================================= */
                 function preStart (o_response) {
                         //the other player has joined the game.
@@ -106,7 +119,7 @@ var shared = {
                         $("jax-game-p1icon").src = playerMe.icon;
                         $("player-status-me").style.display = "block";
                         this.setPlayerStatus ();
-
+                        
                         //display player 2's name / icon
                         $("jax-game-p2name").innerHTML = playerThem.name;
                         $("jax-game-p2icon").src = playerThem.icon;
@@ -121,7 +134,7 @@ var shared = {
         
         /* > setPlayerStatus : set a message under the player's info
            ===============================================================================================================
-           params * s_html : html to display, send nothing to hide the display
+           params * (s_html) : html to display, send nothing to hide the display
            =============================================================================================================== */
         setPlayerStatus : function (s_html) {
                 var scale = 2,                          //size to expand the player section to (in 100's %)
@@ -130,29 +143,27 @@ var shared = {
                 ;
                 if (s_html && v) {
                         //if the message is already visible, just update the text without animating
-                        e.innerHTML = s_html;
+                        e.update (s_html);
                         
                 } else if ((s_html && !v) || (!s_html && v)) {
                         //otherwise, if there's a message to show, and it's not visible, or if the message is being cleared
                         //and it is currently visible, then animate sliding open/closed
-                        new Effect.Parallel ([
-                                /*!/new Effect.Scale($("player-status-me"), (s_html?scale*100:100), {  //scale to %
-                                        scaleFrom    : (s_html?100:scale*100),                   //scale from %
-                                        scaleX       : false,                                    //do not scale width
-                                        scaleContent : false,                                    //do not scale insides
-                                        scaleMode    : {originalHeight: 21}                      //base reference for %
-                                }),*/
-                                //also move the bar at the same time (so that it effectively slides upwards)
-                                new Effect.MoveBy($("player-status-me"), (s_html?-(21*(scale)):21*(scale)), 0)
-                        ], {
+                        /*!/new Effect.Scale($("player-status-me"), (s_html?scale*100:100), {  //scale to %
+                                scaleFrom    : (s_html?100:scale*100),                   //scale from %
+                                scaleX       : false,                                    //do not scale width
+                                scaleContent : false,                                    //do not scale insides
+                                scaleMode    : {originalHeight: 21}                      //base reference for %
+                        }),*/
+                        //also move the bar at the same time (so that it effectively slides upwards)
+                        new Effect.MoveBy ($("player-status-me"), (s_html?-(21*(scale)):21*(scale)), 0, {
                                 duration    : 0.5,
                                 beforeStart : function(){
                                         //before starting the animation, change the html
-                                        if (s_html) {e.innerHTML = s_html; e.show ();}
+                                        if (s_html) {e.update (s_html).show ();}
                                 },
                                 afterFinish : function(){
                                         //after the animation hide and blank
-                                        if (!s_html) {e.hide (); e.innerHTML = "";}
+                                        if (!s_html) {e.hide ().update ();}
                                 }
                         });
                 }
@@ -160,7 +171,7 @@ var shared = {
         
         /* > setSystemStatus : the status message that covers the screen, e.g. 'loading', 'disconnected'
            ===============================================================================================================
-           params * s_html : some html to display in the system overlay, leave out to hide the system status box
+           params * (s_html) : some html to display in the system overlay, leave out to hide the system status box
            =============================================================================================================== */
         setSystemStatus : function(s_html) {
                 var e = $("system-status"),  //reference to the element containing the message
@@ -168,7 +179,7 @@ var shared = {
                 ;
                 if (s_html && v) {
                         //if the message is already visible, just update the text without animating
-                        $("system-status-text").innerHTML = s_html;
+                        $("system-status-text").update (s_html);
                         
                 } else if ((s_html && !v) || (!s_html && v)) {
                         new Effect.Opacity (e, {
@@ -178,11 +189,11 @@ var shared = {
                                 queue       : 'end',
                                 beforeStart : function(){
                                         //before starting the animation, change the html
-                                        if (s_html) {$("system-status-text").innerHTML = s_html; e.show ();}
+                                        if (s_html) {$("system-status-text").update (s_html); e.show ();}
                                 },
                                 afterFinish : function(){
                                         //hide and blank
-                                        if (!s_html) {e.hide (); $("system-status-text").innerHTML = "";}
+                                        if (!s_html) {e.hide (); $("system-status-text").update ();}
                                 }
                         });
                 }
@@ -228,18 +239,18 @@ shared.chat = {
         /* > show : make the chat section visible
            =============================================================================================================== */
         show : function(){
-                var e_shared_chat_input  = $("shared-chat-input"),   //the textarea you type your message in
-                    e_shared_chat_label  = $("shared-chat-label"),   //the "<chat here>" message
-                    e_shared_chat_emotes = $("shared-chat-emotes"),  //the emote list holder
-                    html                 = ""                        //used to put together the emote list
+                var e_chat_input  = $("shared-chat-input"),   //the textarea you type your message in
+                    e_chat_label  = $("shared-chat-label"),   //the "<chat here>" message
+                    e_chat_emotes = $("shared-chat-emotes"),  //the emote list holder
+                    html          = ""                        //used to put together the emote list
                 ;
                 
                 //make the chat section visible
                 $("shared-chat").style.display = "block";
                 //clear the chatbox textarea as Firefox will remember the field value on refresh
-                if (!e_shared_chat_input.value) {
-                        e_shared_chat_input.value = "";
-                        e_shared_chat_label.style.display = "block";
+                if (!e_chat_input.value) {
+                        e_chat_input.value = "";
+                        e_chat_label.style.display = "block";
                 }
                 
                 //create the emote list
@@ -247,16 +258,14 @@ shared.chat = {
                         //emotes can be hidden so that they do not show in the panel, but still function when typed
                         if (!o_emote.hide) {
                                 //add the emoticon image to the collection
-                                html += '<img src="../-/emotes/'+o_emote.file+'.png" width="16" height="16" '+
-                                        'alt="'+o_emote.symbol+'" title="'+o_emote.symbol+'" />'
-                                ;
+                                html += shared.templates.chat_emote.evaluate (o_emote);
                         }
                 });
                 //put the images into the panel
-                e_shared_chat_emotes.innerHTML = html;
+                e_chat_emotes.update (html);
                 
                 //add an onclick event to each of the emotes in the panel
-                $A(e_shared_chat_emotes.getElementsByTagName("img")).each (function(o_element){
+                $A(e_chat_emotes.getElementsByTagName("img")).each (function(o_element){
                         o_element.onclick = shared.events.chatEmoteClick;
                 });
                 
@@ -270,29 +279,29 @@ shared.chat = {
                 }.bind(this));
 
                 //when the user clicks on the textbox, hide the label
-                Event.observe (e_shared_chat_input, "focus", function(e_event){
-                        e_shared_chat_label.style.display = "none";
+                Event.observe (e_chat_input, "focus", function(e_event){
+                        e_chat_label.style.display = "none";
                 });
                 //when focus on the textbox is lost, put the label back if the textbox is empty
-                Event.observe (e_shared_chat_input, "blur", function(e_event){
-                        if (!e_shared_chat_input.value.replace(/^\s*|\s*$/g,"")) {
-                                e_shared_chat_label.style.display = "block";
+                Event.observe (e_chat_input, "blur", function(e_event){
+                        if (!e_chat_input.value.replace(/^\s*|\s*$/g,"")) {
+                                e_chat_label.style.display = "block";
                         }
                 });
                 //if the user clicks on the label itself, pass focus to the textbox
-                Event.observe (e_shared_chat_input, "click", function(e_event){
-                        e_shared_chat_input.focus ();
+                Event.observe (e_chat_input, "click", function(e_event){
+                        e_chat_input.focus ();
                 });
 
                 //trap keypresses to the input field
-                Event.observe (e_shared_chat_input, "keypress", function(e_event){
+                Event.observe (e_chat_input, "keypress", function(e_event){
                         //if they press Return
                         if(e_event.keyCode == 13) {
                                 //disable the chat textbox and send the message...
-                                var msg = e_shared_chat_input.value.replace (/^\s*|\s*$/g,"");
-                                e_shared_chat_input.value = "";
+                                var msg = e_chat_input.value.replace (/^\s*|\s*$/g,"");
+                                e_chat_input.value = "";
                                 if (msg.length) {
-                                        e_shared_chat_input.readOnly = true;
+                                        e_chat_input.readOnly = true;
                                         this.sendMessage (msg);
                                 }
                         }
@@ -333,31 +342,30 @@ shared.chat = {
            =============================================================================================================== */
         addMessage : function (s_name, s_icon, s_msg) {
                 //get the timestamp
-                var now       = new Date (),
-                    hours     = now.getHours (),
-                    minutes   = now.getMinutes (),
-                    timestamp = (hours > 12 ? hours - 12 : hours) + ":" + (minutes < 10 ? "0" : "") + minutes,
-                    timeid    = now.getTime ()
+                var now      = new Date (),
+                    hours    = now.getHours (),
+                    minutes  = now.getMinutes (),
+                    chat_msg = {
+                            time_stamp : (hours > 12 ? hours - 12 : hours) + ":" + (minutes < 10 ? "0" : "") + minutes,
+                            time_id    : now.getTime (),
+                            html_class : (s_name == playerMe.name ? "me" : "them"),
+                            icon       : s_icon,
+                            name       : s_name,
+                            text       : s_msg.escapeHTML ()
+                    }
                 ;
                 //insert emoticon images in the message
-                s_msg = s_msg.escapeHTML ();
                 this.emotes.each (function(o_emote, n_index){
                         //replace the emote with the image
-                        s_msg = s_msg.replace (o_emote.regex, '<img src="../-/emotes/'+o_emote.file+'.png" width="16" '+
-                                               'height="16" alt="'+o_emote.symbol+'" title="'+o_emote.symbol+'" />'
-                        );
+                        chat_msg.text = chat_msg.text.replace (o_emote.regex, shared.templates.chat_emote.evaluate(o_emote));
                 }.bind(this));
                 
                 //add the message to the chat history. 'Insertion.Bottom' is used (instead of '.innerHTML+=') so that 
                 //multiple messages coming in at the same time don't overwrite each other
                 var e = $("shared-chat-history");
-                new Insertion.Bottom (e, '<div id="chat-'+timeid+'" class="chat-'+(s_name==playerMe.name?"me":"them")+'" '+
-                                         'style="display: none;"><p><em>'+timestamp+'</em> <img src="'+s_icon+'" '+
-                                         'width="16" height="16" alt="User icon" /> <strong>'+s_name+'</strong></p>'+
-                                         '<blockquote><p>'+s_msg+'</p></blockquote></div>'
-                );
+                new Insertion.Bottom (e, shared.templates.chat_msg.evaluate(chat_msg));
                 //animate the message appearing (and scroll down to meet it)
-                new Effect.SlideDown ("chat-"+timeid, {duration: 0.3, afterUpdate: function(){
+                new Effect.SlideDown ("chat-"+chat_msg.time_id, {duration: 0.3, afterUpdate: function(){
                         //scroll to the bottom of the chat history
                         e.scrollTop = e.scrollHeight;
                 }, afterFinish: function(){
@@ -461,30 +469,19 @@ jax.listenFor ("jax_disconnect", function(o_response) {
 });
 
 function enableNicknameBox (b_enabled) {
-        var e;
-        if (b_enabled) {
-                //enable the nickname text box
-                $("user-nickname").disabled = "";
-                e = $("user-submit");
-                e.disabled = "";
-                e.value = "Start Game";
-        } else {
-                //change the submit button to say "checking...", and disable it
-                e = $("user-submit");
-                e.disabled = "disabled";
-                e.value = "checking...";
-                //disable the nickname text box
-                $("user-nickname").disabled = "disabled";
-        }
+        var e = $("user-submit");
+        e.disabled = (b_enabled ? "" : "disabled");
+        e.value    = (b_enabled ? "Start Game" : "Checking...");
+        $("user-nickname").disabled = (b_enabled ? "" : "disabled");
 }
 
 /* =======================================================================================================================
    > create2DArray : javascript has no built in method for creating 2D arrays
    ======================================================================================================================= 
-   params * n_width     : 1-based width of the 2D array. e.g. 8 will create elements 0-7
-            n_height    : 1-based height of the 2D array
-            x_initvalue : an initial value to assign to each element in the array. any type supported
-   return * a_result    : the 2D array
+   params * n_width       : 1-based width of the 2D array. e.g. 8 will create elements 0-7
+            n_height      : 1-based height of the 2D array
+            (x_initvalue) : an initial value to assign to each element in the array. any type supported (default null)
+   return * array         : the 2D array
    ======================================================================================================================= */
 function create2DArray (n_width, n_height, x_initvalue) {
         var arr = new Array (n_width -1);

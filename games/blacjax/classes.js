@@ -8,7 +8,7 @@
 /* isCombo : is the card a wild card?
    =======================================================================================================================
    params * s_card  : name of the card in question
-   return * b_combo : if the card is a wild card or not
+   return * boolean : if the card is a wild card or not
    ======================================================================================================================= */
 Pack.prototype.isCombo = function (s_card) {
         //a Joker (value 0), Ace or Eight are combo cards
@@ -18,7 +18,7 @@ Pack.prototype.isCombo = function (s_card) {
 /* isArmed : is the card an armed card? (a Two or Black Jack)
    =======================================================================================================================
    params * s_card  : name of the card in question
-   return * b_combo : if the card is an armed card or not
+   return * boolean : if the card is an armed card or not
    ======================================================================================================================= */
 Pack.prototype.isArmed = function (s_card) {
         //a Two, or a Black Jack are armed cards
@@ -33,7 +33,7 @@ Pack.prototype.isArmed = function (s_card) {
 /* initialize : constructor function for Player class
    =======================================================================================================================
    params * s_element : html id to inject the player's hand into
-          * b_host   : if this player instance is the game's host or not (i.e. the near or far hand on screen)
+          * boolean   : if this player instance is the game's host or not (i.e. the near or far hand on screen)
    ======================================================================================================================= */
 Player.prototype.initialize = function (s_element, b_host) {
         this.hand = new Hand (s_element, b_host);  //create a new hand instance for the player
@@ -66,9 +66,9 @@ Hand.prototype = {
         
         /* > takeCard : take a card from the deck and put it into the player's hand
            ===============================================================================================================
-           params * n_count      : number of cards to take from the deck
-                    f_onComplete : a function to call once the animation is complete
-           return * s_card       : returns the first card taken, regardless of n_count
+           params * (n_count)      : number of cards to take from the deck
+                    (f_onComplete) : a function to call once the animation is complete
+           return * string         : returns the first card taken, regardless of n_count
            =============================================================================================================== */
         takeCard : function (n_count, f_onComplete) {
                 if (!n_count)      {n_count      = 1;}                        //default: take 1 card
@@ -82,7 +82,7 @@ Hand.prototype = {
                         //for each card in the hand...
                         this.cards.each (function(s_card,n_index){
                                 //assign an animation to each card to shift it to the new position
-                                cardanims.push (new Effect.MoveBy (this.element+'-'+s_card, 0, cardpos[n_index+1], {mode:'absolute'}));
+                                cardanims.push (new Effect.MoveBy (this.element+'-'+s_card, 0, cardpos[n_index+1], {sync:true, mode:'absolute'}));
                         }.bind(this));
                 }
 
@@ -95,7 +95,7 @@ Hand.prototype = {
                                    (this.host?-113:113)+'px;" src="../-/cards/back.png" width="71" height="96" '+
                                    'alt="'+card+'" />'
                 );
-                cardanims.push (new Effect.MoveBy (card_id, 0, cardpos[0], {mode:'absolute', afterFinish:function(o_effect){
+                cardanims.push (new Effect.MoveBy (card_id, 0, cardpos[0], {sync:true, mode:'absolute', afterFinish:function(o_effect){
                         //flip the card over by switching to the face image (playerMe only)
                         if (this.host) {$(o_effect.element.id).src = "../-/cards/" + card + ".png";}
                 }.bind(this)}));
@@ -122,8 +122,8 @@ Hand.prototype = {
         
         /* > getCardPositions : return the positions for each card, given a number of cards to fit into the hand
            ===============================================================================================================
-           params * n_count     : how many cards (1-based) to return the positions for
-           return * a_positions : an array containing the X position of each card
+           params * (n_count) : how many cards (1-based) to return the positions for
+           return * array     : the X position of each card
            =============================================================================================================== */
         getCardPositions : function (n_count) {
                 //defaults
@@ -152,9 +152,9 @@ Hand.prototype = {
         
         /* > useCard : take a card from the hand and move it onto the run
            ===============================================================================================================
-           params * s_card       : name of the card to take from the player's hand (e.g. KC)
-                    f_onComplete : function to call once the animation is complete
-                                   param * s_card : name of chosen card
+           params * s_card         : name of the card to take from the player's hand (e.g. KC)
+                    (f_onComplete) : function to call once the animation is complete
+                                     param * s_card : name of chosen card
            =============================================================================================================== */
         useCard : function (s_card, f_onComplete) {
                 if (!f_onComplete) {f_onComplete = Prototype.emptyFunction;}  //default: no callback
@@ -195,7 +195,7 @@ Hand.prototype = {
                         this.cards.each (function(s_card,n_index){
                                 //assign an animation to each card (excluding the card that was chosen)
                                 if (n_index != card_id) {
-                                        anims.push (new Effect.MoveBy (this.element+'-'+s_card, 0, cardpos[d], {mode:'absolute'}));
+                                        anims.push (new Effect.MoveBy (this.element+'-'+s_card, 0, cardpos[d], {sync:true, mode:'absolute'}));
                                         d++;
                                 }
                         }.bind(this));
@@ -221,7 +221,7 @@ Hand.prototype = {
         
         /* > playableCards : return a list of the indexes of which cards can be played
            ===============================================================================================================
-           return * a_indexes : an array of the indexes of cards in your hand which are playable
+           return * array : the indexes of cards in your hand which are playable
            =============================================================================================================== */
         playableCards : function () {                
                 var armedrun  = game.run.armed (),
