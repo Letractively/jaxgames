@@ -34,8 +34,8 @@ Pack.prototype = {
         
         /* > value : given a card, return what value it is
            ===============================================================================================================
-           params * s_card  : card straight from the deck/pack
-           return * s_value : the value of the card (Ace is low, Joker is 0)
+           params * s_card : card straight from the deck/pack
+           return * string : the value of the card (Ace is low, Joker is 0)
            =============================================================================================================== */
         value : function (s_card) {
                 //the index of the card in the faces array, is it's value
@@ -45,17 +45,17 @@ Pack.prototype = {
         /* > suit : given a card, return what suit it is
            ===============================================================================================================
            params * s_card : card straight from the deck/pack
-           return * s_suit : the suit of the card as a single letter - S, C, D, H
+           return * string : the suit of the card as a single letter - S, C, D, H
            =============================================================================================================== */
         suit : function (s_card) {
                 //the last letter of the card name is the suit
-                return s_card.substr (-1,1);
+                return s_card.substr (-1, 1);
         },
         
         /* > colour : given a card, return what colour it is
            ===============================================================================================================
-           params * s_card   : card straight from the deck/pack
-           return * s_colour : the colour as the word "black" or "red"
+           params * s_card : card straight from the deck/pack
+           return * string : the colour as the word "black" or "red"
            =============================================================================================================== */
         colour : function (s_card) {
                 var suit = this.suit (s_card);
@@ -137,7 +137,7 @@ Deck.prototype = {
         
         /* > jax_deck.drawCard : take a card off of the deck
            ===============================================================================================================
-           return * s_card : card name
+           return * string : card name
            =============================================================================================================== */
         drawCard : function() {
                 return this.cards.pop ();

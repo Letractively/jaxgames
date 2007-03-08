@@ -1,11 +1,23 @@
 =============================================================================================================================
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+08.MAR.07
+    ADD: Upgraded to Script.aculo.us 1.7.0! (fix below has made this possible)
+    FIX: Fixed a lot of jittering in Parallel animations by adding sync:true
+    ADD: Lots of housekeeping, reduction and refactoring all over the codebase
+    ADD: Othello: added templates there too
+    NEW: `shared.templates` utilising Prototype's Template class
+    ADD: Shared: Improved the look of the join-key display
+    ADD: Blacjax: Improvements to the heads-up message (game.setStatus)
+    FIX: boot.js and _build/libs/makeboot.js not loading custom scriptaculous correctly
+07.MAR.07
+    NEW: Blacjax: Message in the middle of the screen declaring the action of the opponent's played card. e.g. "Pickup 5"
+    ADD: Logging in build script
 03.FEB.07
     ADD: Moved prototype.js into scriptaculous folder
     FIX: dump_src.js was html encoding only functions, and not strings
     ADD: Changed board.js to be 0-based instead of 1-based because json was incorrectly encoding the cells array without the
-         first undefined element in each; therefore a board layout would not reconstruct from the json correctly.
+         first undefined element in each; therefore a board layout would not reconstruct from json correctly.
 21.JAN.07
     NEW: Build system now zips the source code for easy distribution for those without SVN
     NEW: Build system stops if any of the steps errors, returning an error code equal to the step that failed
@@ -36,7 +48,7 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
          + window height/width arguments
          + uses a CSS block instead of inline CSS (removed the huge _dumpStyles function)
          + strings are braced by speech marks to make numbers stored as a string / nullstrings obvious
-         + no longer polutes the global namespace with outside functions. all functions are internal
+         + no longer pollutes the global namespace with outside functions. all functions are internal
          + functions are shown in <pre> blocks with horizontal scrollbar if needed
          + html in functions does not break. this can be massively improved
          + IE/Safari/Opera support is broken, will work on this
@@ -131,7 +143,7 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
     FIX: 'O_o' regex broken, the . was being treated as any character, and not just .
     FIX: if typing in the chatbox when starting a new game, the <chat here> appears
 16.DEC.06
-    FIX: >:) not working, being incorectly identified as :) first
+    FIX: >:) not working, being incorrectly identified as :) first
     NEW: queue cards clicks from the opponent to avoid bugs when two clicks occur at the same time
 15.DEC.06
     NEW: Created Boot.js to bootstrap all shared libraries - this can then be replaced with a compressed, merged version of
@@ -148,7 +160,7 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
     FIX: Both users clicking Play Again at the same time caused the game to fail 
     NEW: The run now compacts the cards in it to fit in more than 4 cards 
     ADD: Improved the hand card spacing so that the hand is always the same width with 7 or more cards 
-    ADD: Improved the card graphics by optimizing to 8-bit PNGs. From 247KB to 151KB 
+    ADD: Improved the card graphics by optimising to 8-bit PNGs. From 247KB to 151KB 
     NEW: Timestamps to chatlog 
 26.NOV.06
     NEW: game.setPlayerStatus slides the player panel up at the bottom to show a message instead 

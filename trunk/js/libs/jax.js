@@ -51,7 +51,7 @@ Jax.prototype = {
                                                 connid : (string) connection id assigned - this.conn_id receives this
                                         }
                     f_onJoin : function called once the opponent has joined the game
-                               return * o_response : contains data the other player has sent to you upon joining
+                               return * object : contains data the other player has sent to you upon joining
            =============================================================================================================== */
         open : function (o_data, f_onOpen, f_onJoin) {
                 //send the request to the server to open a new game

@@ -22,7 +22,7 @@ Shared:
 * P2 * 4 games created
 * P3 * Hyperlinks in chat messages clickable. Due to the length of URLs, they should be replaced with "[link]" instead
 * P4 * Start Game button should say Join Game instead when join game was chosen on the title screen
-* P5 * O, and 0 look similar in join key. create keys without 0
+* P4 * O, and 0 look similar in join key. create keys without 0
 
 Blacjax:
 -----------------------------------------------------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ Othello:
 QA, Testing and Compatibility:
 -----------------------------------------------------------------------------------------------------------------------------
 * P1 * A catch screen for if the user is using an unsupported browser
-* P2 * IE6, 7 / Firefox 1.5, 2.0 compatibility
+* P2 * IE6, 7 / Firefox 2.0 compatibility
 * P2 * Windows Installation Instructions for Developers
 
 

@@ -33,10 +33,12 @@ h1      {background-image: url("images/title.png");}
 .card-disabled  {cursor: not-allowed;}
 
 
-/*#game-status      {top: 45px; left: 0; width: 512px; height: 384px;}
+#game-status      {top: 45px; left: 0; width: 512px; height: 384px; z-index: 999;}
 #game-status .hv1 {width: 512px; height: 384px;}
-#game-status-text {font: normal 11px Arial; text-align: center; color: white;
-                   background-image: url("../-/mask.png");}*/
+#game-status-bar  {padding: 0; font: normal 11px Arial; text-align: center; color: white;
+                   background-image: url("../-/mask.png"); overflow: hidden;
+                   border: solid 2px #49d; border-left: 0; border-right: 0;}
+#game-status-text p {padding: 10px 0 10px 0;}
 
 /*#temp {position: absolute; top: 189px; left: 84px; width: 344px; height: 96px; background-image: url("../-/mask.png");}
 #temp {position: absolute; top: 302px; left: 8px; width: 497px; height: 96px; background-image: url("../-/mask.png");}*/

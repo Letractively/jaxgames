@@ -41,6 +41,9 @@ h1 span {visibility: hidden;}
 #system-status .hv1       {height: 450px; width: 640px;}
 #system-status-text       {font: normal 11px Arial; text-align: center; color: white;}
 
+#shared-key {width: 250px; padding: 6px; font: normal 36px Courier, "Courier New", monospace; color: #49d; text-align: center;
+             border: solid 2px #49d; -moz-border-radius: 12px; background-color: transparent;}
+
 /* === chat ============================================================================================================== */
 #shared-chatcol           {float: left; width: 127px; height: 384px; border-left: solid 1px #010801; background-color: #dada96;}
 #shared-chat              {display: none; font-size: 11px; color: #6E654D;}

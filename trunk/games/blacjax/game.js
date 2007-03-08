@@ -35,7 +35,7 @@ var playerMe   = new Player ("game-nearhand", true),  //the player on this compu
 ;
 
 /* =======================================================================================================================
-   OBJECT game : this game, extends the object in gloabl.js which provides shared functions between all the games
+   OBJECT game : this game's core routines
    ======================================================================================================================= */
 var game = {
         name    : "Blacjax",
@@ -44,12 +44,12 @@ var game = {
         pack    : new Pack (true),  //the pack of cards that decks are made from (include Jokers)
         deck    : new Deck (),      //create a deck of cards
         
-        /* > load : called for you on page load (see element)
+        /* > load : called for you on page load (see shared.js)
            =============================================================================================================== */
         load : function () {
                 //write out all the cards to the page to load the images ready for when they need to appear. this reduces
                 //flicker as the card images are cached and do not have to load on each new appearance
-                game.pack.cache ();
+                this.pack.cache ();
         },
         
         /* OBJECT > queue : when you receive ajax calls for cards the opponent clicked on, queue them for processing
@@ -61,30 +61,47 @@ var game = {
                    ======================================================================================================= */
                 doNext : function () {
                         //if there's 1 or more cards queued, process the first one
-                        if (this.cards.length) {this.opponentCardClick (this.cards.first());}
+                        if (this.cards.length) {
+                                this.opponentCardClick (this.cards.first());
+                        }
                 },
                 
                 /* > opponentCardClick : move the card onto the run
+                   =======================================================================================================
+                   params * s_card : name of the card to remove from the opponents hand and place on the run
                    ======================================================================================================= */
                 opponentCardClick : function (s_card) {
                         //pluck the card from their hand, and move it onto the run
                         playerThem.hand.useCard (s_card, function(s_card){
                                 //decide course of action:
-                                //if the card played was a Two or Black Jack, the opponent will have to attack or defend
+                                //if the card played was a Two or Black Jack...
                                 if (game.pack.isArmed(s_card)) {
+                                        var penalty = (game.pack.value(s_card) == 2 ? 2 : 5);
                                         //add the penalty to the total. a Two is pickup 2, and a Black Jack is pickup 5
-                                        game.run.updatePenalty (game.run.penalty + (game.pack.value(s_card) == 2 ? 2 : 5));
+                                        game.run.updatePenalty (game.run.penalty+penalty);
+                                        //display the heads-up
+                                        game.headsup.show ("Pickup "+game.run.penalty+"!", 1);
+                                        //preempt the next move
                                         game.preempt (true);
-
+                                        
                                 } else if (game.pack.isCombo (s_card)) {
-                                        //no action, the other player gets to choose another card
+                                        //the player put down an Ace, Eight or Joker
+                                        //display the heads up
+                                        switch (game.pack.value (s_card)) {
+                                                case 0: game.headsup.show ("Any Card&hellip;", 1);    break;
+                                                case 1: game.headsup.show ("Another Go&hellip;", 1);  break;
+                                                case 8: game.headsup.show ("Change Suit&hellip;", 1); break;
+                                        }
+                                        //Take no action, the player gets to choose another card (if they have any playable)
                                         game.preempt (false);
-
+                                        
                                 } else {
                                         //if the player put down a Red Jack...
                                         if (game.run.penalty && game.pack.value(s_card) == 11 &&
-                                            game.pack.colour(s_card) == "red")
-                                        {
+                                            game.pack.colour(s_card) == "red"
+                                        ) {
+                                                //display the heads up!
+                                                game.headsup.show ("Penalty Cancelled!", 1);
                                                 //...cancel the penalty
                                                 game.run.updatePenalty (0);
                                         }
@@ -97,20 +114,20 @@ var game = {
                         });
                 }
         }, //end game.queue <
-                
+        
         /* > start : begin playing
            ===============================================================================================================
-           params * b_mefirst : who begins play (yourself, or the opponent)
-                    n_cards   : number of cards to draw for each player (default 7)
+           params * (b_mefirst) : who begins play (yourself, or the opponent)
+                    (n_cards)   : number of cards to draw for each player (default 7)
            =============================================================================================================== */
         start : function (b_mefirst, n_cards) {
                 //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
-                //entering their name / join key, shared.connect is called. when a connection is established between the two
-                //players, game.start is called for you
-                if (b_mefirst == null) {b_mefirst = shared.host;}  //default: host goes first
-                if (!n_cards)          {n_cards   = 7;}            //default: 7 cards each
+                //entering their name / join key, `shared.connect` is called. when a connection is established between the
+                //two players, `game.start` is called for you
+                if (typeof b_mefirst == "undefined") {b_mefirst = shared.host;}  //default: host goes first
+                if (!n_cards)                        {n_cards   = 7;}            //default: 7 cards each
                 
-                shared.setTitle (playerMe.name + " v. " + playerThem.name + " - ");
+                shared.setTitle (playerMe.name+" v. "+playerThem.name+" - ");
                 shared.setPlayerStatus ();
                 
                 //clear any cards on the table
@@ -118,7 +135,7 @@ var game = {
                 
                 //if you're going first..
                 if (b_mefirst) {
-                        //prepare a new deck. the person who is going first shuffles a deck of cards and sends the order to
+                        //prepare a new deck. the person who is going first, shuffles a deck of cards and sends the order to
                         //the other player so that both players are playing off of the same order of cards
                         this.deck.cards.clear ();
                         //note: if you want to setup a fake deck of cards for forcing order of play, do it here
@@ -128,7 +145,7 @@ var game = {
                                 1,          //add one pack to the deck
                                 true        //shuffle the deck each time a pack is added
                         );
-                        //send the deck to use to the other player...
+                        //send the deck to the other player...
                         jax.sendToQueue ("game_start", {deck: game.deck.cards, cards: n_cards}, startComplete);
                 } else {
                         //wait to receive the deck to play with...
@@ -154,7 +171,7 @@ var game = {
                         //the host takes their cards first, then the opponents. the opponent does the opposite
                         (b_mefirst?playerThem:playerMe).hand.takeCard (cards, function(){
                                 (b_mefirst?playerMe:playerThem).hand.takeCard (cards, function(){
-                                        //preempt to avoid drawing 7 unplayable cards. the host will check their own cards
+                                        //preempt to avoid drawing all unplayable cards. the host will check their own cards
                                         //and draw if none are playable, and the opponent will check the host's card to see
                                         //if they would have to draw, and thus switch turns
                                         game.preempt (b_mefirst);
@@ -181,8 +198,8 @@ var game = {
                         if (!enabled) {
                                 //if the card is disabled, fade it out a little and drop it down
                                 new Effect.Parallel ([
-                                        new Effect.Opacity (e, {from:1.0, to:0.9}),
-                                        new Effect.MoveBy  (e, 15, 0)
+                                        new Effect.Opacity (e, {sync:true, from:1.0, to:0.9}),
+                                        new Effect.MoveBy  (e, 15, 0, {sync:true})
                                 ], {duration: 0.5});
                                 //use a no-sign(/) cursor (IE6, Firefox 1.5)
                                 e.addClassName ("card-disabled");
@@ -262,6 +279,7 @@ var game = {
                 } else if (!cards.length) {  //------------------------------------------------------------------------------
                         //the player has no playable cards to use, preempt them taking the penalty / picking up a card, to
                         //save having to wait for a message to confirm the obvious from the opponent
+                        if (!b_self && !armedrun) {game.headsup.show ("No playable cards", 1);}
                         player.hand.takeCard (count, function(){ game.run.fileCards (function(){
                                 if (armedrun) {
                                         if (b_self) {
@@ -284,7 +302,7 @@ var game = {
                                 //change your display to say it's their turn
                                 shared.setPlayerStatus ("<p>Other Player's Turn, Please Wait&hellip;</p>");
                                 //set the chrome title
-                                shared.setTitle ("Their turn - " + playerMe.name + " v. " + playerThem.name + " - ");
+                                shared.setTitle ("Their turn - "+playerMe.name+" v. "+playerThem.name+" - ");
                                 
                                 //in the case that the opponent put down an Eight, Ace or Joker, you'll arrive here. they
                                 //will have placed another card, which will have been added to the queue. now that the
@@ -306,7 +324,7 @@ var game = {
                              '<a href="javascript:game.resign();">Resign</a></p>',
                     anims  = [],
                     winner = b_winner ? playerMe : playerThem,
-                    loser  = b_winner ? playerThem : playerMe
+                    loser  = !winner
                 ;
                 //drop out each card in the opponent's hand
                 if (loser.hand.cards.length) {
@@ -325,7 +343,7 @@ var game = {
                 
                 //increase the number of games played
                 shared.played ++;
-                shared.setTitle ((b_winner?"YOU WIN":"YOU LOSE") + playerMe.name + " v. " + playerThem.name + " - ");
+                shared.setTitle ((b_winner?"YOU WIN":"YOU LOSE")+playerMe.name+" v. "+playerThem.name+" - ");
                 shared.setPlayerStatus ("<p>"+(b_winner?"YOU WIN":"YOU LOSE")+"<br />"+html);
                 //update the player info display
                 winner.wins ++;
@@ -336,7 +354,7 @@ var game = {
                 /*jax.listenFor("jax_disconnect", function(o_response) {
                         //if the opponent resigned
                         if (o_response.data.reason = "resign") {
-                                game.setStatus();
+                                game.headsup.show();
                                 shared.setSystemStatus(playerThem.name + " resigned");
                                 var anims = [];
                                 
@@ -375,37 +393,87 @@ var game = {
                 jax.disconnect ({reason: "unload"});
                 shared.setPlayerStatus ();
                 shared.setSystemStatus ();
-        }
+        },
         
-        /* > setStatus : the box in the game for status, like 'other player's turn, please wait'
-           ===============================================================================================================
-           params * s_html : some html to display in the status box
+        /* OBJECT > headsup : the heads-up status display in the centre of the game
            =============================================================================================================== */
-        /*setStatus : function (s_html) {
-                var e = $("game-status");
-                if(!s_html) {
-                        //if the status message is already visible, fade it out
-                        if (e.visible ()) {
-                                 new Effect.Opacity (e, {duration:0.3, from:1, to:0, queue:'end', afterFinish:function(){
-                                         //hide and blank
-                                         e.hide ();
-                                         $("game-status-text").innerHTML = "";    
-                                 }});
-                        }
-                } else {
+        headsup : {
+                //current visibility status of the heads-up. used to queue animation
+                visible : false,
+                
+                /* > show : make the heads-up visible and display a message
+                   =======================================================================================================
+                   params * (s_html)    : message to display. if omitted the heads-up will hide
+                            (n_timeout) : number of seconds to wait before auto hiding. omit for never
+                   ======================================================================================================= */
+                show : function (s_html, n_timeout) {
+                        //if no text is provided, hide the heads-up display
+                        if(!s_html) {this.hide ();}
+                        
+                        var e1 = $("game-status"),      //the outside wrapper (that vertically centres the heads-up bar)
+                            e2 = $("game-status-text")  //the heads-up bar itself
+                        ;
+                        //update the message
+                        e2.update ("<p>"+s_html+"</p>");
+                        
                         //if the status message is hidden, fade it in
-                        if (!e.visible ()) {
-                                new Effect.Opacity (e, {duration:0.3, from:0, to:1, queue:'end', beforeStart:function(){
-                                        //before starting the animation, change the html
-                                        $("game-status-text").innerHTML = s_html;
-                                        e.show ();
-                                }});
-                        } else {
-                                $("game-status-text").innerHTML = s_html;
-                                e.show ();
+                        if (!this.visible) {
+                                //hide the message, and the wrapper; the animation will unhide automatically. these two lines
+                                //prevent additional flicker in this instance
+                                e2.hide ();
+                                e1.show ();
+                                //animate the heads-up displaying
+                                new Effect.Parallel ([
+                                        new Effect.BlindDown (e2, {sync:true, scaleFromCenter:true}),
+                                        new Effect.Opacity (e1, {sync:true, from:0.0, to:1.0})
+                                ], {
+                                        duration    : 0.3,
+                                        transition  : Effect.Transitions.linear,
+                                        queue       : {position:'end', scope:'headsup', limit:2},
+                                        afterFinish : function(){
+                                                this.visible = true;
+                                        }.bind(this)
+                                });
                         }
-                } 
-        }*/
+                        //cancel any existing timeout
+                        var queue = Effect.Queues.get ('headsup');
+                        queue.each (function(o_item){
+                                if (o_item.options.fps == 1) {o_item.cancel ();}
+                        });
+                        //auto-hide?
+                        if (n_timeout) {
+                                //wait for the specified timeout and hide, mark this wait with a low fps so that it can be
+                                //identified later on (see above)
+                                new Effect.Event ({duration:n_timeout, fps:1, afterFinish:function(){
+                                        this.hide ();
+                                }.bind(this), queue:{position: 'end', scope: 'headsup', limit:2}});
+                        }
+                }, 
+                
+                /* > hide : hide the heads-up message
+                   ======================================================================================================= */
+                hide : function () {
+                        if (this.visible) {
+                                this.visible = false;
+                                var e1 = $("game-status"),
+                                    e2 = $("game-status-text")
+                                ;
+                                new Effect.Parallel ([
+                                        new Effect.BlindUp (e2, {sync:true, scaleFromCenter:true}),
+                                        new Effect.Opacity (e1, {sync:true, from:1.0, to:0.0})
+                                ], {
+                                        duration    : 0.3,
+                                        transition  : Effect.Transitions.linear,
+                                        queue       : {position:'end', scope:'headsup', limit:2},
+                                        afterFinish : function(){
+                                                //hide and blank
+                                                e1.hide ();
+                                                e2.update ("<p></p>");
+                                        }.bind(this)
+                                });
+                        }
+                }
+        } //end game.headsup <
 };
 
 /* =======================================================================================================================
@@ -431,18 +499,14 @@ game.events = {
                         case 11:
                                 //a Black Jack is pickup 5, a Red Jack is cancel pickup
                                 msg = (game.pack.colour (card) == "black")
-                                    ? "Pickup 5" : (game.run.armed () ? "Cancel Pickup" : "")
+                                    ? "Pickup 5" : (game.run.armed () ? "Cancel Penalty" : "")
                                 ;
                                 break;
                 }
                 //if any of the above matched
                 if (msg) {
                         //put the text in the label
-                        $("game-label").innerHTML = msg;
-                        //move the label over the card in question
-                        Element.setStyle ("game-label", {left: Element.getStyle(this,'left')});
-                        //and make it visible
-                        $("game-label").show ();
+                        $("game-label").update (msg).setStyle ({left: Element.getStyle(this,'left')}). show ();
                 }
         },
         
@@ -466,7 +530,8 @@ game.events = {
                     playable_cards = playerMe.hand.playableCards ()
                 ;
                 
-                //alert the other player to the card you chose
+                //alert the other player to the card you chose. this is the most important, and most confusing aspect of this
+                //game. see the function underneath the game object for where the other player picks up this signal
                 jax.sendToQueue ("game_card_chosen", {card: cardname});
                 
                 //first, move all the cards in the hand back to normal places
@@ -480,8 +545,8 @@ game.events = {
                         if (playable_cards.indexOf (n_index) < 0) {
                                 //make opaque and move back to normal position
                                 new Effect.Parallel ([
-                                        new Effect.Opacity (e, {from:0.9, to:1.0}),
-                                        new Effect.MoveBy  (e, -15, 0)
+                                        new Effect.Opacity (e, {sync:true, from:0.9, to:1.0}),
+                                        new Effect.MoveBy  (e, -15, 0, {sync:true})
                                 ]);
                                 e.removeClassName ("card-disabled");
                         } else {
@@ -503,16 +568,16 @@ game.events = {
                                         game.run.penalty + (game.pack.value (s_card) == 2 ? 2 : 5)
                                 );
                                 game.preempt (false);
-
+                                
                         } else if (game.pack.isCombo (s_card)) {
                                 //let the player choose another card
                                 game.preempt (true);
-
+                                
                         } else {
                                 //was this a Red Jack cancelling the penalty?
                                 if (game.run.penalty && game.pack.value (s_card) == 11 &&
-                                    game.pack.colour (s_card) == "red")
-                                {
+                                    game.pack.colour (s_card) == "red"
+                                ) {
                                         //cancel the penalty
                                         game.run.updatePenalty (0);
                                 }
@@ -547,8 +612,8 @@ game.run = {
         penalty : 0,   //current card penalty in play
         
         //the spacing in pixels between each card on the run, given the number of cards present. these numbers allow for the
-        //cards on the run to get compact together to always stay within the run's area. this could be calculated as needed
-        //in .getCardPositions, but I couldn't get the math right
+        //cards on the run to compact together to always stay within the run's area. this could be calculated as needed
+        //in `.getCardPositions`, but I couldn't get the math right
         spacing : [
                 0, 5, 5, 5, 5,  //0, no spacing. 1-4 cards, normal spacing between cards
                 -2.8,    /* 5  cards */  -16.3,  /* 6  cards */  -25.5,  /* 7  cards */  -32,    /* 8 cards */
@@ -588,22 +653,25 @@ game.run = {
         },
         
         /* > updatePenalty : change the penalty value (and automatically display / hide it accordingly)
+           ===============================================================================================================
+           params * (n_value) : new penalty value to use
            =============================================================================================================== */
         updatePenalty : function (n_value) {
+                var e = $("game-penalty");
+                
                 //if setting to directly to 0 (i.e. cancelling a penalty with a Red Jack) then animate it dropping
                 if (!n_value && this.penalty) {
-                        new Effect.DropOut ("game-penalty", {afterFinish:function(){
-                                $("game-penalty").innerHTML = "";
+                        new Effect.DropOut (e, {afterFinish:function(){
+                                e.update ();
                         }});
                         
                 } else {
                         //update the penalty
                         if (!n_value) {
                                 //if 0, hide the penalty, don't need to display "0"
-                                $("game-penalty").hide ();
+                                e.hide ();
                         } else {
-                                $("game-penalty").innerHTML = n_value;
-                                $("game-penalty").show ();
+                                e.update (n_value).show ();
                         }
                 }
                 this.penalty = n_value;
@@ -617,8 +685,8 @@ game.run = {
 
         /* > getCardPositions : return the positions for each card, given a number of cards to fit into the run
            ===============================================================================================================
-           params * n_count     : how many cards (1-based) to return the positions for
-           return * a_positions : an array containing the x position of each card
+           params * (n_count) : how many cards (1-based) to return the positions for
+           return * array     : the x position of each card
            =============================================================================================================== */
         getCardPositions : function (n_count) {
                 //defaults
@@ -638,11 +706,11 @@ game.run = {
         
         /* > fileCards : file the cards from the run onto the discard, and set the new face card
            ===============================================================================================================
-           params * f_onComplete : function to call once the animation is complete
+           params * (f_onComplete) : function to call once the animation is complete
            =============================================================================================================== */
         fileCards : function (f_onComplete) {
                 if (!f_onComplete) {f_onComplete = Prototype.emptyFunction;}  //defualt: no callback
-
+                
                 //are there any cards in the run anywho?
                 if (!game.run.cards.length) {
                         //no, just callback
@@ -652,7 +720,7 @@ game.run = {
                         var cardanims = [];
                         game.run.cards.each (function(s_card,n_index){
                                 var move_to = 436 - parseInt($("game-run-"+s_card).getStyle("left"));
-                                cardanims.push (new Effect.MoveBy("game-run-"+s_card, 0, move_to));
+                                cardanims.push (new Effect.MoveBy("game-run-"+s_card, 0, move_to, {sync:true}));
                         });
                         new Effect.Parallel (cardanims, {duration:0.5, queue:'end', afterFinish:function(){
                                 //put the old face card on the discard pile

@@ -9,9 +9,9 @@
    
    where "var board = new Board ('element');":
    <table> = #element-table    (class: '.board')
-   <col>   = #element-col-x    (where x is column number - 1, 2, 3 etc)
-   <tr>    = #element-row-y    (where y is the row number 1 to number of rows)
-   <td>    = #element-cell-Xy  (where X is the column letter - A, B, C... and y is the row number. e.g. #element-cell-C6)
+   <col>   = #element-col-X    (where X is column number - 1, 2, 3 etc)
+   <tr>    = #element-row-Y    (where Y is the row number 1 to number of rows)
+   <td>    = #element-cell-XxY (where X is the column number and Y is the row number. e.g. #element-cell-3x6)
 */
 var Board = Class.create ();
 Board.prototype = {
@@ -90,17 +90,17 @@ Board.prototype = {
                 }
                 //finish the table
                 html += "\t\t\t</tbody></table>";
-                //put the table to screen. the Prototype .update function is used instead of .innerHTML so that it will work
-                //in IE (which has no .innerHTML for some elements) also as a bonus for l33t programmers, any <script> blocks
-                //in any cells will be executed (but not included)
+                //put the table to screen. the Prototype `.update` function is used instead of `.innerHTML` so that it will
+                //work in IE (which has no `.innerHTML` for some elements) also as a bonus for l33t programmers, any <script>
+                //blocks in any cells will be executed (but not included)
                 $(this.element).update (html);
         },
         
         /* > getCellId : return the html element id for a cell, given the x/y
            ===============================================================================================================
-           params * n_x  : x cell reference
-                    n_y  : y cell reference
-           return * s_id : html element id of the cell requested 
+           params * n_x    : x cell reference
+                    n_y    : y cell reference
+           return * string : html element id of the cell requested 
            =============================================================================================================== */
         getCellId : function (n_x, n_y) {
                 return this.element + '-cell-' + n_x + "x" + n_y;
@@ -108,11 +108,11 @@ Board.prototype = {
         
         /* > getCoordsFromId : return x/y position given a html id for a cell
            ===============================================================================================================
-           params * s_id       : html element id of the cell in question
-           return * o_position : {
-                                         x : column of cell
-                                         y : row of cell
-                                 }
+           params * s_id   : html element id of the cell in question
+           return * object : {
+                                     x : column of cell
+                                     y : row of cell
+                             }
            =============================================================================================================== */
         getCoordsFromId : function (s_id) {
                 var id  = s_id.split ("-").last (),          //get the cell reference from the cell id
@@ -133,7 +133,7 @@ Board.prototype = {
                         //get the html element for this cell (x, y)
                         var e = $(this.getCellId(x,y));
                         //if the html in the cell is not the same as in memory, update it
-                        if (e.innerHTML != this.cells[x][y]) {e.innerHTML = this.cells[x][y];}
+                        if (e.innerHTML != this.cells[x][y]) {e.update (this.cells[x][y]);}
                 } }
         }
 };
