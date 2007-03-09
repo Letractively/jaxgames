@@ -16,7 +16,7 @@ if (config.scriptaculous.use_provided) {
                 boot_files.push (boot_path+"/src/"+config.scriptaculous.includes[i]+".js");
         }
 }
-boot_files.push ("../js/libs/firebug/firebugx.js");
+boot_files.push ("js/libs/firebug/firebugx.js");
 for (i=0; i<config.boot_scripts.length; i++) {
         boot_files.push (config.boot_scripts[i]);
 }

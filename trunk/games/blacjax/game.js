@@ -80,20 +80,24 @@ var game = {
                                         //add the penalty to the total. a Two is pickup 2, and a Black Jack is pickup 5
                                         game.run.updatePenalty (game.run.penalty+penalty);
                                         //display the heads-up
-                                        game.headsup.show ("Pickup "+game.run.penalty+"!", 1);
-                                        //preempt the next move
-                                        game.preempt (true);
+                                        shared.headsup.show ("Pickup "+game.run.penalty+"!", 1, function(){
+                                                //preempt the next move
+                                                game.preempt (true);
+                                        });
                                         
                                 } else if (game.pack.isCombo (s_card)) {
                                         //the player put down an Ace, Eight or Joker
                                         //display the heads up
+                                        var msg;
                                         switch (game.pack.value (s_card)) {
-                                                case 0: game.headsup.show ("Any Card&hellip;", 1);    break;
-                                                case 1: game.headsup.show ("Another Go&hellip;", 1);  break;
-                                                case 8: game.headsup.show ("Change Suit&hellip;", 1); break;
+                                                case 0: msg = "Any Card&hellip;";    break;
+                                                case 1: msg = "Another Go&hellip;";  break;
+                                                case 8: msg = "Change Suit&hellip;"; break;
                                         }
-                                        //Take no action, the player gets to choose another card (if they have any playable)
-                                        game.preempt (false);
+                                        shared.headsup.show (msg, 1, function(){
+                                                //take no action, the player gets to choose another card (if they have any)
+                                                game.preempt (false);
+                                        });
                                         
                                 } else {
                                         //if the player put down a Red Jack...
@@ -101,7 +105,7 @@ var game = {
                                             game.pack.colour(s_card) == "red"
                                         ) {
                                                 //display the heads up!
-                                                game.headsup.show ("Penalty Cancelled!", 1);
+                                                shared.headsup.show ("Penalty Cancelled!", 1);
                                                 //...cancel the penalty
                                                 game.run.updatePenalty (0);
                                         }
@@ -279,20 +283,32 @@ var game = {
                 } else if (!cards.length) {  //------------------------------------------------------------------------------
                         //the player has no playable cards to use, preempt them taking the penalty / picking up a card, to
                         //save having to wait for a message to confirm the obvious from the opponent
-                        if (!b_self && !armedrun) {game.headsup.show ("No playable cards", 1);}
-                        player.hand.takeCard (count, function(){ game.run.fileCards (function(){
-                                if (armedrun) {
-                                        if (b_self) {
-                                                if (!playerThem.hand.cards.length) {game.end (false); return false;}
+                        
+                        //a private function so that the same code can be run now, or after the heads-up timeout
+                        var _drawCard = function () {
+                                player.hand.takeCard (count, function(){ game.run.fileCards (function(){
+                                        if (armedrun) {
+                                                if (b_self) {
+                                                        if (!playerThem.hand.cards.length) {game.end (false); return false;}
+                                                }
+                                                //if you took the penalty, it's your go (preempt for the rare occurance of
+                                                //picking up cards, yet not having any playable ones afterwards)
+                                                game.preempt (b_self);
+                                        } else {
+                                                //when someone takes a card, check if the other player can play too
+                                                game.preempt (!b_self);
                                         }
-                                        //if you took the penalty, it's your go (preempt for the rare occurance of picking
-                                        //up cards, yet not having any playable ones afterwards)
-                                        game.preempt (b_self);
-                                } else {
-                                        //when someone takes a card, check if the other player can play too
-                                        game.preempt (!b_self);
-                                }
-                        }); });
+                                }); });
+                        }; //end _drawCard <
+                        
+                        if (!b_self && !armedrun) {
+                                //display a heads-up message when the opponent has no playable cards, and the run is not
+                                //armed (they are not drawing a penalty, but a single card instead)
+                                shared.headsup.show ("No playable cards", 1, _drawCard);
+                        } else {
+                                //otherwise just take a card
+                                _drawCard ();
+                        }
                         
                 } else {  //-------------------------------------------------------------------------------------------------
                         //there is a playable card; if this is you - it's your go, if not it's their go...
@@ -324,7 +340,7 @@ var game = {
                              '<a href="javascript:game.resign();">Resign</a></p>',
                     anims  = [],
                     winner = b_winner ? playerMe : playerThem,
-                    loser  = !winner
+                    loser  = b_winner ? playerThem : playerMe
                 ;
                 //drop out each card in the opponent's hand
                 if (loser.hand.cards.length) {
@@ -354,7 +370,7 @@ var game = {
                 /*jax.listenFor("jax_disconnect", function(o_response) {
                         //if the opponent resigned
                         if (o_response.data.reason = "resign") {
-                                game.headsup.show();
+                                shared.headsup.show();
                                 shared.setSystemStatus(playerThem.name + " resigned");
                                 var anims = [];
                                 
@@ -393,87 +409,7 @@ var game = {
                 jax.disconnect ({reason: "unload"});
                 shared.setPlayerStatus ();
                 shared.setSystemStatus ();
-        },
-        
-        /* OBJECT > headsup : the heads-up status display in the centre of the game
-           =============================================================================================================== */
-        headsup : {
-                //current visibility status of the heads-up. used to queue animation
-                visible : false,
-                
-                /* > show : make the heads-up visible and display a message
-                   =======================================================================================================
-                   params * (s_html)    : message to display. if omitted the heads-up will hide
-                            (n_timeout) : number of seconds to wait before auto hiding. omit for never
-                   ======================================================================================================= */
-                show : function (s_html, n_timeout) {
-                        //if no text is provided, hide the heads-up display
-                        if(!s_html) {this.hide ();}
-                        
-                        var e1 = $("game-status"),      //the outside wrapper (that vertically centres the heads-up bar)
-                            e2 = $("game-status-text")  //the heads-up bar itself
-                        ;
-                        //update the message
-                        e2.update ("<p>"+s_html+"</p>");
-                        
-                        //if the status message is hidden, fade it in
-                        if (!this.visible) {
-                                //hide the message, and the wrapper; the animation will unhide automatically. these two lines
-                                //prevent additional flicker in this instance
-                                e2.hide ();
-                                e1.show ();
-                                //animate the heads-up displaying
-                                new Effect.Parallel ([
-                                        new Effect.BlindDown (e2, {sync:true, scaleFromCenter:true}),
-                                        new Effect.Opacity (e1, {sync:true, from:0.0, to:1.0})
-                                ], {
-                                        duration    : 0.3,
-                                        transition  : Effect.Transitions.linear,
-                                        queue       : {position:'end', scope:'headsup', limit:2},
-                                        afterFinish : function(){
-                                                this.visible = true;
-                                        }.bind(this)
-                                });
-                        }
-                        //cancel any existing timeout
-                        var queue = Effect.Queues.get ('headsup');
-                        queue.each (function(o_item){
-                                if (o_item.options.fps == 1) {o_item.cancel ();}
-                        });
-                        //auto-hide?
-                        if (n_timeout) {
-                                //wait for the specified timeout and hide, mark this wait with a low fps so that it can be
-                                //identified later on (see above)
-                                new Effect.Event ({duration:n_timeout, fps:1, afterFinish:function(){
-                                        this.hide ();
-                                }.bind(this), queue:{position: 'end', scope: 'headsup', limit:2}});
-                        }
-                }, 
-                
-                /* > hide : hide the heads-up message
-                   ======================================================================================================= */
-                hide : function () {
-                        if (this.visible) {
-                                this.visible = false;
-                                var e1 = $("game-status"),
-                                    e2 = $("game-status-text")
-                                ;
-                                new Effect.Parallel ([
-                                        new Effect.BlindUp (e2, {sync:true, scaleFromCenter:true}),
-                                        new Effect.Opacity (e1, {sync:true, from:1.0, to:0.0})
-                                ], {
-                                        duration    : 0.3,
-                                        transition  : Effect.Transitions.linear,
-                                        queue       : {position:'end', scope:'headsup', limit:2},
-                                        afterFinish : function(){
-                                                //hide and blank
-                                                e1.hide ();
-                                                e2.update ("<p></p>");
-                                        }.bind(this)
-                                });
-                        }
-                }
-        } //end game.headsup <
+        }
 };
 
 /* =======================================================================================================================

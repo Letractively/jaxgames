@@ -28,6 +28,8 @@ var shared = {
                 host     : "../-/icons/user.png",
                 opponent : "../-/icons/user_red.png"
         },
+        
+        //reusable templates for pieces of html used in shared
         templates : {
                 //template when a new game is started and you are provided with the join key
                 join_key : new Template (
@@ -168,6 +170,109 @@ var shared = {
                         });
                 }
         },
+        
+        /* OBJECT > headsup : the heads-up status display in the centre of the game
+           =============================================================================================================== */
+        headsup : {
+                //current visibility status of the heads-up. used to queue animation
+                visible : false,
+                
+                /* > show : make the heads-up visible and display a message
+                   =======================================================================================================
+                   params * (s_html)    : message to display. if omitted the heads-up will hide
+                            (n_timeout) : number of seconds to wait before auto hiding. omit for never
+                            (f_timeout) : function to run once the timeout occurs
+                   ======================================================================================================= */
+                show : function (s_html, n_timeout, f_timeout) {
+                        /* warning: your timeout function may be cancelled!
+                           ------------------------------------------------
+                           to avoid the heads-up message from opening and closing rapidly from multiple calls, previous
+                           timeouts will be cancelled in lieu of this function being called again.
+                           
+                           example:
+                             shared.headsup.show ("my timeout will never be run", 5, function(){alert("test");});
+                             shared.headsup.show ("because this text will override it", 1)
+                           
+                           To avoid this, either use a function by-reference for side-by-side calls to `.show`, or use the
+                           timeout function of one call to start the next, for example:
+                           
+                             shared.headsup.show ("this will show first", 5, function(){
+                                     shared.headsup.show ("and then this afterwards", 1);     
+                             });
+                        */
+                        if (!f_timeout) {f_timeout = Prototype.emptyFunction;}  //default: no callback
+                        
+                        //if no text is provided, hide the heads-up display
+                        if(!s_html) {this.hide ();}
+                        
+                        var e1 = $("shared-headsup"),      //the outside wrapper (that vertically centres the heads-up bar)
+                            e2 = $("shared-headsup-text")  //the heads-up bar itself
+                        ;
+                        //update the message
+                        e2.update ("<p>"+s_html+"</p>");
+                        
+                        //if the status message is hidden, fade it in
+                        if (!this.visible) {
+                                //hide the message, and the wrapper; the animation will unhide automatically. these two lines
+                                //prevent additional flicker in this instance
+                                e2.hide ();
+                                e1.show ();
+                                //animate the heads-up displaying
+                                new Effect.Parallel ([
+                                        new Effect.BlindDown (e2, {sync:true, scaleFromCenter:true}),
+                                        new Effect.Opacity (e1, {sync:true, from:0.0, to:1.0})
+                                ], {
+                                        duration    : 0.3,
+                                        transition  : Effect.Transitions.linear,
+                                        queue       : {position:'end', scope:'headsup', limit:2},
+                                        afterFinish : function(){
+                                                this.visible = true;
+                                        }.bind(this)
+                                });
+                        }
+                        //cancel any existing timeout
+                        var queue = Effect.Queues.get ('headsup');
+                        queue.each (function(o_item){
+                                if (o_item.options.fps == 1) {o_item.cancel ();}
+                        });
+                        //auto-hide?
+                        if (n_timeout) {
+                                //wait for the specified timeout and hide, mark this wait with a low fps so that it can be
+                                //identified later on (see above)
+                                new Effect.Event ({duration:n_timeout, fps:1, afterFinish:function(){
+                                        this.hide (f_timeout);
+                                }.bind(this), queue:{position: 'end', scope: 'headsup', limit:2}});
+                        }
+                }, 
+                
+                /* > hide : hide the heads-up message
+                   =======================================================================================================
+                   params * (f_callback) : optional function to call after hide is complete, used by `.show` above
+                   ======================================================================================================= */
+                hide : function (f_callback) {
+                        if (this.visible) {
+                                this.visible = false;
+                                var e1 = $("shared-headsup"),
+                                    e2 = $("shared-headsup-text")
+                                ;
+                                new Effect.Parallel ([
+                                        new Effect.BlindUp (e2, {sync:true, scaleFromCenter:true}),
+                                        new Effect.Opacity (e1, {sync:true, from:1.0, to:0.0})
+                                ], {
+                                        duration    : 0.3,
+                                        transition  : Effect.Transitions.linear,
+                                        queue       : {position:'end', scope:'headsup', limit:2},
+                                        afterFinish : function(){
+                                                //hide and blank
+                                                e1.hide ();
+                                                e2.update ("<p></p>");
+                                                //if a callback was provided, call it now
+                                                if (f_callback) {f_callback ();}
+                                        }.bind(this)
+                                });
+                        }
+                }
+        }, //end shared.headsup <
         
         /* > setSystemStatus : the status message that covers the screen, e.g. 'loading', 'disconnected'
            ===============================================================================================================
