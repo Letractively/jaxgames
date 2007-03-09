@@ -56,9 +56,6 @@
 			        &nbsp;
 			</div>
 		</div>
-		<div id="game-status" class="hv" style="display: none;"><div class="hv1"><div class="hv2">
-			<div id="game-status-bar" class="hvt"><div id="game-status-text"></div></div>
-		</div></div></div>
 	</div>
 	<?php include ("../-/inc/footer.html")?>
 </div></body>
