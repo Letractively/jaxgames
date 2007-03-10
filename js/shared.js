@@ -171,7 +171,8 @@ var shared = {
                 }
         },
         
-        /* OBJECT > headsup : the heads-up status display in the centre of the game
+        /* ===============================================================================================================
+           OBJECT headsup : the heads-up status display in the centre of the game
            =============================================================================================================== */
         headsup : {
                 //current visibility status of the heads-up. used to queue animation
@@ -380,7 +381,7 @@ shared.chat = {
                         //display the chat message received...
                         this.addMessage (playerThem.name, playerThem.icon, o_response.data.msg);
                 }.bind(this));
-
+                
                 //when the user clicks on the textbox, hide the label
                 Event.observe (e_chat_input, "focus", function(e_event){
                         e_chat_label.style.display = "none";
@@ -395,7 +396,7 @@ shared.chat = {
                 Event.observe (e_chat_input, "click", function(e_event){
                         e_chat_input.focus ();
                 });
-
+                
                 //trap keypresses to the input field
                 Event.observe (e_chat_input, "keypress", function(e_event){
                         //if they press Return
@@ -410,17 +411,17 @@ shared.chat = {
                         }
                 }.bind(this));
         },
-
+        
         /* > hide : make the chat section invisible
            =============================================================================================================== */
         hide : function () {
                 //hide the container
                 $("shared-chat").style.display = "none";
-
+                
                 //stop listening for keypresses
                 Event.stopObserving ("shared-chat-input", "keypress");
         },
-
+        
         /* > sendMessage : send a chat message to the server for the other player
            ================================================================================================================
            params * s_msg : text to send to the other player's chatbox
@@ -428,7 +429,7 @@ shared.chat = {
         sendMessage : function (s_msg) {
                 //echo locally
                 this.addMessage (playerMe.name, playerMe.icon, s_msg);
-
+                
                 //send the message to the server
                 jax.sendToQueue ("game_chat_message", {msg:s_msg}, function(o_response){
                         var e = $("shared-chat-input");
@@ -436,7 +437,7 @@ shared.chat = {
                         e.focus ();
                 });
         },
-
+        
         /* > addMessage : display a chat message on screen
            ===============================================================================================================
            params * s_name : name of person to display
@@ -534,8 +535,7 @@ shared.events = {
         }
 };
 
-/* =======================================================================================================================
-   > when the page finishes loading all code...
+/* > when the page finishes loading all code...
    ======================================================================================================================= */
 Event.observe (window, 'load', function(){
         //put the version info in the log
@@ -561,8 +561,7 @@ Event.observe (window, 'load', function(){
         game.load ();
 });
 
-/* =======================================================================================================================
-   jax_disconnect < listen out for the disconnect message when the other player leaves the game
+/* jax_disconnect < listen out for the disconnect message when the other player leaves the game
    ======================================================================================================================= */
 jax.listenFor ("jax_disconnect", function(o_response) {
         //if the player closed the window...
@@ -580,8 +579,7 @@ function enableNicknameBox (b_enabled) {
         $("user-nickname").disabled = (b_enabled ? "" : "disabled");
 }
 
-/* =======================================================================================================================
-   > create2DArray : javascript has no built in method for creating 2D arrays
+/* > create2DArray : javascript has no built in method for creating 2D arrays
    ======================================================================================================================= 
    params * n_width       : 1-based width of the 2D array. e.g. 8 will create elements 0-7
             n_height      : 1-based height of the 2D array
@@ -597,12 +595,19 @@ function create2DArray (n_width, n_height, x_initvalue) {
         return arr;
 }
 
+/* > bsod : the fatal error screen, no one hears your screams
+   ======================================================================================================================= 
+   params * n_width       : 1-based width of the 2D array. e.g. 8 will create elements 0-7
+            n_height      : 1-based height of the 2D array
+            (x_initvalue) : an initial value to assign to each element in the array. any type supported (default null)
+   return * array         : the 2D array
+   ======================================================================================================================= */
 function bsod (message, url, line) {
-        document.getElementById ("jax-bsod").style.display = "block";
-        console.warning (line + ": " + message);
+        document.getElementById ("bsod").style.display = "block";
+        console.critical (line + ": " + message);
         return true;
 }
-//!/window.onerror = bsod;
+window.onerror = bsod;
 
 //=== end of line ===========================================================================================================
 //licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/

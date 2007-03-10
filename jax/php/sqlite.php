@@ -9,7 +9,7 @@ require_once "libs/SQLiteDB.php";
 
 $path = realpath($config['db_path'])."/";
 $filename = $path.$config['db_name'];
-if (!is_writable($filename)) die("result=&error=".urlencode("No write permissions for DB. Please chmod 777 the ".$config['db_path']." directory and contents"));
+if (!is_writable($path)) die("result=&error=".urlencode("No write permissions for DB. Please chmod 777 the ".$config['db_path']." directory and contents"));
 
 //open the mini database
 $database = new SQLiteDB($filename);
