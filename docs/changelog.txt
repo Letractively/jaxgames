@@ -2,6 +2,11 @@
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 10.MAR.07
+    ADD: Othello: Less `updateBoard` calls
+    NEW: Othello: 'flip' animation for pieces. (will need some improvement, but it works for now)
+    ADD: Changed Effect.Opacity to Effect.Appear/Fade,toggle where appropriate
+    ADD: Othello title logo (It's not very good) and basic menus for now
+    FIX: build_mac.command now keeps file modification times, making syncing with an FTP copy easier
     FIX: bug from below causing the release version to present the db-not-writeable error incorrectly
     ADD: Renamed 'jax_php' to 'jax'. Moved the PHP files into 'jax/php'. This will provide room for others to contribute
          API-compatible alternative server-side scripts for Jax, such as Ruby or ASP.

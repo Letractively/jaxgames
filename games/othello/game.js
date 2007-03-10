@@ -124,7 +124,7 @@ var game = {
                         
                         //update the html for the cell (in memory)
                         this.board.cells[x][y] = (this.pieces[x][y] == "") ? "" : '<img width="40" height="40" src="images/'+
-                                                 (this.pieces[x][y]=="X"?'black.png" alt="Black':'white.png" alt="White')+'" />'
+                                                 (this.pieces[x][y]=="X"?'black.png" alt="black':'white.png" alt="white')+'" />'
                         ;
                 } }
                 //reflect any changes on the cells
@@ -246,16 +246,60 @@ var game = {
                 //change the cell first
                 var whodunit = (b_self) ? playerMe : playerThem;
                 this.pieces[n_x][n_y] = whodunit.piece;
+                var anims = [];
                 
                 //search all directions for bridges built, and change the pieces between into your own
                 for (var dir=0; dir<8; dir++) {
                         //flip each piece in each direction that yields a valid move
                         this.findBridge (b_self, n_x, n_y, dir, function(n_dir,n_x,n_y,n_dist){
                                 this.pieces[n_x][n_y] = whodunit.piece;
-                                this.updateBoard ();
+                                //?/this.updateBoard ();
+                                anims.push (this.board.getCellId(n_x,n_y));
                         }.bind(this), true);
                 }
-                this.preempt (!b_self);
+                this.flipPiece (this.board.getCellId(n_x,n_y), whodunit.piece);
+                anims.each (function(s_item){
+                        this.flipPiece (s_item, whodunit.piece);
+                }.bind(this));
+                new Effect.Event ({queue:{position:'end', scope:'flipPiece'}, afterFinish:function(){
+                        this.preempt (!b_self);
+                }.bind(this)});
+        },
+        
+        flipPiece : function (s_htmlid, s_piece, f_callback) {
+                if (!f_callback) {f_callback = Prototype.emptyFunction;}
+                
+                var e = $(s_htmlid);
+                if (e.innerHTML == "") {
+                        var piece = (s_piece == "X" ? "black" : "white");
+                        e.update ('<image src="images/'+piece+'.png" width="40" height="40" alt="'+piece+'" />');
+                        var e2 = e.down ();
+                        new Effect.Puff (e2, {transition:Effect.Transitions.reverse, duration:0.4, afterFinish:function(){
+                                e2.show ();
+                                f_callback ();
+                        }, queue:{position:'end',scope:'flipPiece'}});
+                } else {
+                        var e1      = e.down (),
+                            flip_to = (e1.alt == "white") ? "black" : "white"
+                        ;
+                        new Insertion.After (e1, '<image src="images/'+flip_to+'.png" width="40" height="40" alt="'+flip_to+'" />');
+                        var e2 = e1.next ();
+                        new Effect.Parallel ([
+                                new Effect.Puff (e1, {sync:true, beforeStart:function(o_effect){
+                                        o_effect.render ();
+                                }}),
+                                new Effect.Puff (e2, {sync:true, transition: Effect.Transitions.reverse, afterFinish:function(){
+                                        e2.show ();
+                                        e1.remove ();
+                                }})
+                        ], {
+                                duration    : 0.4,
+                                queue       : {position:'end',scope:'flipPiece'},
+                                afterFinish : function(){
+                                        f_callback ();
+                                }
+                        });
+                }
         },
         
         /* > preempt : switch players, but preempt the rare occassion of not being able to take a turn
@@ -385,7 +429,20 @@ game.events = {
         playableCellClick : function () {
                 //the update board function will remove the mouse events on all the cells, preventing you from clicking
                 //another playable cell again, or the same one twice in a row
-                game.updateBoard ();
+                //?/game.updateBoard ();
+                for (var y=0; y<game.board.height; y++) { for (var x=0; x<game.board.width; x++) {
+                        //get the html element for this cell
+                        var e = $(game.board.getCellId(x,y));
+                        if (game.pieces[x][y] == "" && e.innerHTML != "") {
+                                e.update ();
+                                //remove mouse events from any cells
+                                e.onclick     = Prototype.emptyFunction;
+                                e.onmouseover = Prototype.emptyFunction;
+                                e.onmouseout  = Prototype.emptyFunction;
+                        }
+                        //remove the hover effect from any cells
+                        e.removeClassName ("hover");
+                } }
                 //get the x/y location of the cell clicked
                 var position = game.board.getCoordsFromId (this.id);
                 //alert the opponent to the chosen square

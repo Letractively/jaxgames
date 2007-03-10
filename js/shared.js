@@ -55,9 +55,10 @@ var shared = {
         
         /* > showPage : display a particular page in a game (like the titlescreen, join page etc)
            ===============================================================================================================
-           params * s_page : page name to show (as from game.pages array)
+           params * s_page : page name to show (as from `shared.pages` array)
            =============================================================================================================== */
         showPage : function (s_page) {
+                //loop over each page and hide/show as appropriate
                 this.pages.each (function(s_item){
                         $("page-" + s_item).style.display = (s_item == s_page ? "block" : "none");
                 });
@@ -68,6 +69,8 @@ var shared = {
            params * b_host : if you are the host (start game) or opponent (join game)
            =============================================================================================================== */
         connect : function (b_host) {
+                if (typeof b_host == "undefined") {b_host = shared.host;}  //default: as specified in `shared.host`
+                
                 //display the game board
                 this.showPage ("game");
                 
@@ -215,14 +218,12 @@ var shared = {
                                 //hide the message, and the wrapper; the animation will unhide automatically. these two lines
                                 //prevent additional flicker in this instance
                                 e2.hide ();
-                                e1.show ();
                                 //animate the heads-up displaying
                                 new Effect.Parallel ([
                                         new Effect.BlindDown (e2, {sync:true, scaleFromCenter:true}),
-                                        new Effect.Opacity (e1, {sync:true, from:0.0, to:1.0})
+                                        new Effect.Appear (e1, {sync:true})
                                 ], {
                                         duration    : 0.3,
-                                        transition  : Effect.Transitions.linear,
                                         queue       : {position:'end', scope:'headsup', limit:2},
                                         afterFinish : function(){
                                                 this.visible = true;
@@ -256,7 +257,7 @@ var shared = {
                                 ;
                                 new Effect.Parallel ([
                                         new Effect.BlindUp (e2, {sync:true, scaleFromCenter:true}),
-                                        new Effect.Opacity (e1, {sync:true, from:1.0, to:0.0})
+                                        new Effect.Fade (e1, {sync:true})
                                 ], {
                                         duration    : 0.3,
                                         transition  : Effect.Transitions.linear,
@@ -286,10 +287,8 @@ var shared = {
                         $("system-status-text").update (s_html);
                         
                 } else if ((s_html && !v) || (!s_html && v)) {
-                        new Effect.Opacity (e, {
+                        new Effect.toggle (e, 'appear', {
                                 duration    : 0.3,
-                                from        : (s_html?0:1),
-                                to          : (s_html?1:0),
                                 queue       : 'end',
                                 beforeStart : function(){
                                         //before starting the animation, change the html
@@ -543,7 +542,7 @@ Event.observe (window, 'load', function(){
                       "jax: "+jax.version+" - Script.aculo.us: "+Scriptaculous.Version+" - Prototype: "+Prototype.Version+"\n"
         );
         //change the chrome title (game.name is automatically appended)
-        //?/shared.setTitle ("Welcome to ");
+        shared.setTitle ("Welcome to ");
         //hide the loading page and display the game's title screen
         shared.setSystemStatus ();
         
@@ -567,7 +566,7 @@ jax.listenFor ("jax_disconnect", function(o_response) {
         //if the player closed the window...
         if (o_response.data.reason == "unload") {
                 shared.headsup.hide ();
-                shared.setTitle (playerThem.name + " left the game - ");
+                shared.setTitle (playerThem.name+" left the game - ");
                 shared.setSystemStatus (playerThem.name+' left the game.<br /><a href="javascript:location.reload ();">Play Again</a>');
         }
 });
@@ -597,16 +596,17 @@ function create2DArray (n_width, n_height, x_initvalue) {
 
 /* > bsod : the fatal error screen, no one hears your screams
    ======================================================================================================================= 
-   params * n_width       : 1-based width of the 2D array. e.g. 8 will create elements 0-7
-            n_height      : 1-based height of the 2D array
-            (x_initvalue) : an initial value to assign to each element in the array. any type supported (default null)
-   return * array         : the 2D array
+   params (s_message) : error message to display on the bsod and console
+          (s_url)     : url of file that caused the error (provided by native JS error throwing)
+          (n_line)    : line number of the error (provided by native JS error throwing)
    ======================================================================================================================= */
-function bsod (message, url, line) {
+function bsod (s_message, s_url, n_line) {
+        document.getElementById ("bsod-msg").innerHTML = s_message ? s_message : "Check the Javascript Console for details";
         document.getElementById ("bsod").style.display = "block";
-        console.critical (line + ": " + message);
+        console.error ((n_line?n_line+":":"")+s_message);
         return true;
 }
+//try catch errors and throw them to the screen (url and line number are provided)
 window.onerror = bsod;
 
 //=== end of line ===========================================================================================================
