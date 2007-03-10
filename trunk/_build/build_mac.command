@@ -1,7 +1,7 @@
 #!/bin/bash
 #============================================================================================================================
 # Jax Games Build Script - 'compiles' the game into a release folder with compressed scripts
-# licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+# licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
 # jax, jax games (c) copyright Kroc Camen 2005-2007
 #============================================================================================================================
 # HOW TO RUN THIS FILE: (TextMate users can press Cmd+R to run this file!)
@@ -25,7 +25,7 @@ WORKING_DIR="`pwd`"
 # taken from http://www.travishartwell.net/blog/2006/08/19_2220
 # ---------------------------------------------------------------------------------------------------------------------------
 OUTPUT_LOG="$WORKING_DIR/build.log"    # absolute path must be used because on exit the current directory may be different
-OUTPUT_PIPE="$WORKING_DIR/build.pipe"
+OUTPUT_PIPE="$WORKING_DIR/build.pipe"  # temporary file for logging
 
 if [ ! -e $OUTPUT_PIPE ]; then mkfifo $OUTPUT_PIPE; fi
 if [ -e $OUTPUT_LOG ]; then rm $OUTPUT_LOG; fi
@@ -68,7 +68,7 @@ echo "--------------------------------------------------------------------------
 echo "  removing old release..."
 # rm: remove files
 # -rf = recurse sub folders, and do not prompt to delete
-rm -rf ./release/jaxgames
+rm -rf ./release/jaxgames 2>/dev/null
 mkdir -p ./release/jaxgames
 echo "  copying new source..."
 # copy the current source, to release directory using rsync
@@ -92,7 +92,7 @@ echo "--------------------------------------------------------------------------
 # -x \*.sqlite = exclude the sqlite database
 echo "* create zip file of source"
 echo "-------------------------------------------------------------------------------"
-rm ./release/JaxGamesSource.zip
+rm ./release/JaxGamesSource.zip 2>/dev/null
 zip -r -X -9 ./release/JaxGamesSource.zip ./release/jaxgames -x \*.db -x \*.sqlite
 if [ $? -gt 0 ]; then echo "! creation of source zip file failed"; exit 3; fi
 echo "-------------------------------------------------------------------------------"
@@ -157,7 +157,7 @@ echo "--------------------------------------------------------------------------
 # -x \*.sqlite = exclude the sqlite database
 echo "* create zip file of release"
 echo "-------------------------------------------------------------------------------"
-rm ./release/JaxGames.zip
+rm ./release/JaxGames.zip 2>/dev/null  #ignore error from this
 zip -r -X -9 ./release/JaxGames.zip ./release/jaxgames -x \*.db -x \*.sqlite
 if [ $? -gt 0 ]; then echo "! creating zip of release failed"; exit 8; fi
 echo "-------------------------------------------------------------------------------"

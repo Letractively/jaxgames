@@ -2,7 +2,7 @@
 /* =======================================================================================================================
    startup.php - Include a number of scripts of functions needed
    =======================================================================================================================
-   licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+   licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    jax (c) copyright Kroc Camen 2005-2007
 */
 require_once "config.php";

@@ -23,10 +23,6 @@ rules of play:
      > a Red Jack can be used to cancel out the penalty against you
      > if you cannot put down a 2, Black Jack, or Red Jack then you must take the number of penalty cards from the deck
      > after a penalty is taken, the player may then place cards
-
-TODO:
- + allow chaining of pairs
- + tactical draws
 -------------------------------------------------------------------------------------------------------------------------- */
 
 //create the players (see classes.js)
@@ -80,7 +76,7 @@ var game = {
                                         //add the penalty to the total. a Two is pickup 2, and a Black Jack is pickup 5
                                         game.run.updatePenalty (game.run.penalty+penalty);
                                         //display the heads-up
-                                        shared.headsup.show ("Pickup "+game.run.penalty+"!", 1, function(){
+                                        shared.headsup.show ("Pickup "+game.run.penalty+"!", 0.5, function(){
                                                 //preempt the next move
                                                 game.preempt (true);
                                         });
@@ -94,7 +90,7 @@ var game = {
                                                 case 1: msg = "Another Go&hellip;";  break;
                                                 case 8: msg = "Change Suit&hellip;"; break;
                                         }
-                                        shared.headsup.show (msg, 1, function(){
+                                        shared.headsup.show (msg, 0.5, function(){
                                                 //take no action, the player gets to choose another card (if they have any)
                                                 game.preempt (false);
                                         });
@@ -105,7 +101,7 @@ var game = {
                                             game.pack.colour(s_card) == "red"
                                         ) {
                                                 //display the heads up!
-                                                shared.headsup.show ("Penalty Cancelled!", 1);
+                                                shared.headsup.show ("Penalty Cancelled!", 0.5);
                                                 //...cancel the penalty
                                                 game.run.updatePenalty (0);
                                         }
@@ -133,6 +129,7 @@ var game = {
                 
                 shared.setTitle (playerMe.name+" v. "+playerThem.name+" - ");
                 shared.setPlayerStatus ();
+                shared.headsup.hide ();
                 
                 //clear any cards on the table
                 [this.run, playerMe.hand, playerThem.hand].invoke ("clear");
@@ -209,6 +206,7 @@ var game = {
                                 e.addClassName ("card-disabled");
                                 
                         } else {
+                                e.addClassName ("card-playable");
                                 e.onmouseover = game.events.cardMouseOver;  //for enabled cards, set the interactivity
                                 e.onmouseout  = game.events.cardMouseOut;   //on mouse out, go back down to normal
                                 e.onclick     = game.events.cardClick;      //when you click the card you want to play
@@ -304,7 +302,7 @@ var game = {
                         if (!b_self && !armedrun) {
                                 //display a heads-up message when the opponent has no playable cards, and the run is not
                                 //armed (they are not drawing a penalty, but a single card instead)
-                                shared.headsup.show ("No playable cards", 1, _drawCard);
+                                shared.headsup.show ("No playable cards", 0.5, _drawCard);
                         } else {
                                 //otherwise just take a card
                                 _drawCard ();
@@ -335,12 +333,15 @@ var game = {
            params * b_winner : if you are the winner or not
            =============================================================================================================== */
         end : function (b_winner) {
-                //!/TODO: this
                 var html   = '<a href="javascript:game.playAgain('+b_winner+');">Play Again?</a> ' +
-                             '<a href="javascript:game.resign();">Resign</a></p>',
-                    anims  = [],
+                             '<a href="javascript:game.resign();">Resign</a>',
                     winner = b_winner ? playerMe : playerThem,
-                    loser  = b_winner ? playerThem : playerMe
+                    loser  = b_winner ? playerThem : playerMe,
+                    onDrop = function () {
+                            //add a point for each card left in the opponent's hand
+                            winner.points ++;
+                            $("player-status-"+(b_winner?"me":"them")+"-points").innerHTML = winner.points;
+                    } 
                 ;
                 //drop out each card in the opponent's hand
                 if (loser.hand.cards.length) {
@@ -348,11 +349,7 @@ var game = {
                                 //animate the card dropping
                                 new Effect.DropOut (loser.hand.element+'-'+s_card, {
                                         delay       : (n_index/6),  //stagger the dropping
-                                        afterFinish : function(){
-                                                //add a point for each card left in the opponent's hand
-                                                winner.points ++;
-                                                $("player-status-"+(b_winner?"me":"them")+"-points").innerHTML = winner.points;
-                                        }
+                                        afterFinish : onDrop
                                 });
                         });
                 }
@@ -360,30 +357,11 @@ var game = {
                 //increase the number of games played
                 shared.played ++;
                 shared.setTitle ((b_winner?"YOU WIN":"YOU LOSE")+playerMe.name+" v. "+playerThem.name+" - ");
-                shared.setPlayerStatus ("<p>"+(b_winner?"YOU WIN":"YOU LOSE")+"<br />"+html);
+                shared.headsup.show ((b_winner?"YOU WIN":"YOU LOSE")+"<br />"+html);
                 //update the player info display
                 winner.wins ++;
                 $("player-status-me-wins").innerHTML   = playerMe.wins;
                 $("player-status-them-wins").innerHTML = playerThem.wins;
-                
-                //listen out for the resign signal from the other person
-                /*jax.listenFor("jax_disconnect", function(o_response) {
-                        //if the opponent resigned
-                        if (o_response.data.reason = "resign") {
-                                shared.headsup.show();
-                                shared.setSystemStatus(playerThem.name + " resigned");
-                                var anims = [];
-                                
-                                var whodo = (playerMe.hand.cards.length) ? playerMe.hand : playerThem.hand;
-                                if (whodo.cards.length) {
-                                        whodo.cards.each(function(s_name,n_index){
-                                                var elid = whdo.element + '-' + (n_index+1);
-                                                anims.push(new Effect.DropOut(elid, {delay: (n_index/8)}));
-                                        });
-                                        new Effect.Parallel(anims, {queue: 'end'});
-                                }
-                        }
-                });*/
                 
                 //listen out for the 'play again' signal from the other person
                 jax.listenFor ("game_again", function(o_response){
@@ -408,7 +386,8 @@ var game = {
         resign : function () {
                 jax.disconnect ({reason: "unload"});
                 shared.setPlayerStatus ();
-                shared.setSystemStatus ();
+                shared.headsup.hide ();
+                shared.setSystemStatus ('You have resigned.<br /><a href="javascript:location.reload ();">Play Again</a>');
         }
 };
 
@@ -489,6 +468,7 @@ game.events = {
                                 //enabled cards, remove the interactivity
                                 e.onmouseover = Prototype.emptyFunction;
                                 e.onmouseout  = Prototype.emptyFunction;
+                                e.removeClassName ("card-playable");
                                 e.removeClassName ("card-hover");
                         }
                 });
@@ -680,5 +660,5 @@ game.run = {
 };
 
 //=== end of line ===========================================================================================================
-//licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+//licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
 //jax, jax games (c) copyright Kroc Camen 2005-2007

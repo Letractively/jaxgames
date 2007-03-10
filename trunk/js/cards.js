@@ -145,5 +145,5 @@ Deck.prototype = {
 };
 
 //=== end of line ===========================================================================================================
-//licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+//licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
 //jax, jax games (c) copyright Kroc Camen 2005-2007

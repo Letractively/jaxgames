@@ -67,12 +67,14 @@ var game = {
                 //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
                 //entering their name / join key, `shared.connect` is called. when a connection is established between the
                 //two players, `game.start` is called for you
-                if (b_mefirst == null) {b_mefirst = shared.host;}  //default: host goes first
+                if (typeof b_mefirst == "undefined") {b_mefirst = shared.host;}  //default: host goes first
                 
                 //animate the title screen
                 this.events.clouds.stop ();
                 
                 shared.setTitle (playerMe.name+" v. "+playerThem.name+" - ");
+                shared.setPlayerStatus ();
+                shared.headsup.hide ();
                 
                 //set which piece each player is using. the host always plays black, and goes first
                 playerMe.piece   = (shared.host) ? "X" : "O";
@@ -182,19 +184,19 @@ var game = {
                                    }
            =============================================================================================================== */
         findBridge : function (b_self, n_x, n_y, n_dir, f_piece, b_reverse, n_distance) {
-                //this function will traverse the board in a given direction, checking for:
-                // 1) b_reverse = false, this function will continue to check cells in the specified direction until
-                //    an empty cell is found. in othello, you must place a piece so that it comes between any number of
-                //    opponent pieces and one of your own. this function will return an object with the x and y coordinates
-                //    of the playable cell found, otherwise false
-                // 2) b_reverse = true, used to backtrack from an empty cell, over opponent pieces, to one of your pieces.
-                //    this is used when you click on a playable cell, to then flip the opponent pieces along the way
-                
-                //if a callback function is provided as f_piece, it will be called on each opponent piece encountered along
-                //the way - *only if the specified direction turns out to be playable*. therefore you do not need to check
-                //beforehand if the direction is playable, before using this function with the callback. examples of use in
-                //this game are: flipping the pieces over and highlighting the cells on mouseover
-                
+                /* this function will traverse the board in a given direction, checking for:
+                   1) b_reverse = false, this function will continue to check cells in the specified direction until
+                      an empty cell is found. in othello, you must place a piece so that it comes between any number of
+                      opponent pieces and one of your own. this function will return an object with the x and y coordinates
+                      of the playable cell found, otherwise false
+                   2) b_reverse = true, used to backtrack from an empty cell, over opponent pieces, to one of your pieces.
+                      this is used when you click on a playable cell, to then flip the opponent pieces along the way
+                *//*
+                   if a callback function is provided as f_piece, it will be called on each opponent piece encountered along
+                   the way - *only if the specified direction turns out to be playable*. therefore you do not need to check
+                   beforehand if the direction is playable, before using this function with the callback. examples of use in
+                   this game are: flipping the pieces over and highlighting the cells on mouseover
+                */
                 if (!n_distance) {n_distance = 0;}                        //default: start counting number of steps
                 if (!f_piece)    {f_piece    = Prototype.emptyFunction;}  //default: no callback
                 
@@ -306,6 +308,7 @@ var game = {
                         
                 } else if (!count.moves) {
                         //if there are no playable moves, skip go
+                        shared.headsup.show ("No available moves, turn skipped", 2);
                         //TODO: apparently there is a rare condition where neither player can play
                         this.preempt (!b_self);
                         
@@ -330,8 +333,10 @@ var game = {
                 ;
                 //increase the number of games played
                 shared.played ++;
-                (b_winner?playerMe:playerThem).wins ++;  //increase the tally for the winner
-                shared.setPlayerStatus ("<p>"+(b_winner?"YOU WIN":"YOU LOSE")+"<br />"+html);
+                shared.setTitle ((b_winner?"YOU WIN":"YOU LOSE")+playerMe.name+" v. "+playerThem.name+" - ");
+                shared.headsup.show ((b_winner?"YOU WIN":"YOU LOSE")+"<br />"+html);
+                //update the player info display
+                winner.wins ++;
                 $("player-status-me-wins").innerHTML   = playerMe.wins;
                 $("player-status-them-wins").innerHTML = playerThem.wins;
                 
@@ -358,38 +363,9 @@ var game = {
         resign : function () {
                 jax.disconnect ({reason: "unload"});
                 shared.setPlayerStatus ();
+                shared.headsup.hide ();
                 shared.setSystemStatus ();
         }
-        
-        /* > setStatus : the box in the game for status, like 'other player's turn, please wait'
-           ===============================================================================================================
-           params * s_html : some html to display in the status box
-           =============================================================================================================== */
-        /*setStatus : function(s_html) {
-                var e = $("game-status");
-                if(!s_html) {
-                        //if the status message is already visible, fade it out
-                        if (e.visible()) {
-                                 new Effect.Opacity(e, {duration:0.3, from:1, to:0, queue:'end', afterFinish:function(){
-                                         //hide and blank
-                                         e.hide();
-                                         $("game-status-text").innerHTML = "";    
-                                 }});
-                        }
-                } else {
-                        //if the status message is hidden, fade it in
-                        if (!e.visible()) {
-                                new Effect.Opacity(e, {duration:0.3, from:0, to:1, queue:'end', beforeStart:function(){
-                                        //before starting the animation, change the html
-                                        $("game-status-text").innerHTML = s_html;
-                                        e.show();
-                                }});
-                        } else {
-                                $("game-status-text").innerHTML = s_html;
-                                e.show();
-                        }
-                } 
-        }*/
 };
 
 /* =======================================================================================================================
@@ -497,5 +473,5 @@ game.events = {
 };
 
 //=== end of line ===========================================================================================================
-//licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+//licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
 //jax, jax games (c) copyright Kroc Camen 2005-2007

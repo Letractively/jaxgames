@@ -201,9 +201,7 @@ var shared = {
                              });
                         */
                         if (!f_timeout) {f_timeout = Prototype.emptyFunction;}  //default: no callback
-                        
-                        //if no text is provided, hide the heads-up display
-                        if(!s_html) {this.hide ();}
+                        if (!s_html)    {this.hide ();}  //if no text is provided, hide the heads-up message
                         
                         var e1 = $("shared-headsup"),      //the outside wrapper (that vertically centres the heads-up bar)
                             e2 = $("shared-headsup-text")  //the heads-up bar itself
@@ -524,7 +522,7 @@ shared.events = {
                 //enable the nickname textbox as Gecko will keep it disabled if you refesh the page
                 enableNicknameBox (true);
                 $("join-game").style.display = b_host ? "none" : "block";
-
+                
                 shared.host = b_host;
                 shared.showPage ("user");
         },
@@ -545,9 +543,10 @@ Event.observe (window, 'load', function(){
                       "jax: "+jax.version+" - Script.aculo.us: "+Scriptaculous.Version+" - Prototype: "+Prototype.Version+"\n"
         );
         //change the chrome title (game.name is automatically appended)
-        shared.setTitle ("Welcome to ");
+        //?/shared.setTitle ("Welcome to ");
         //hide the loading page and display the game's title screen
         shared.setSystemStatus ();
+        
         //Firefox remembers the values in fields, even after refreshing, clear the chat box
         $("shared-chat-input").value = "";
         
@@ -568,8 +567,9 @@ Event.observe (window, 'load', function(){
 jax.listenFor ("jax_disconnect", function(o_response) {
         //if the player closed the window...
         if (o_response.data.reason == "unload") {
+                shared.headsup.hide ();
                 shared.setTitle (playerThem.name + " left the game - ");
-                shared.setSystemStatus (playerThem.name+" left the game");
+                shared.setSystemStatus (playerThem.name+' left the game.<br /><a href="javascript:location.reload ();">Play Again</a>');
         }
 });
 
@@ -605,5 +605,5 @@ function bsod (message, url, line) {
 //!/window.onerror = bsod;
 
 //=== end of line ===========================================================================================================
-//licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+//licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
 //jax, jax games (c) copyright Kroc Camen 2005-2007
