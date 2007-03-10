@@ -7,7 +7,7 @@ You've already completed the first step, which is to download and unzip Jax Game
 Jax Games is a web application designed to be accessed through a web browser. To run Jax, you will need
 
 * Apple Mac OS X 'Tiger' or Microsoft Windows 98, Me, 2000, XP or Linux (check with your distributor for compatibility)
-* The PHP webserver software (v5)
+* The PHP webserver software (v5.2+)
 * Mozilla Firefox, or Apple Safari (as Jax Games is not compatible with Internet Explorer just yet)
 
 Note: Better support for Microsoft Windows will be coming at a later stage.
@@ -24,7 +24,7 @@ ii)  Open the .tar.gz file (may happen automatically if you're using Safari)
 iii) Move the jaxgames folder that you unzipped/checked-out (and are looking at now ) to
      'Macintosh HD > Library > WebServer > Documents'.
 
-iv)  The database folder must be write-able for Jax Games to function. Navigate into the 'jax_php' folder.
+iv)  The database folder must be write-able for Jax Games to function. Navigate into the 'jax' folder.
      Ctrl-Click on the 'db' folder and select Get Info. Expand the 'Ownership & Permissions' section, and expand the
      'Details' section within. Change The three drop down boxes for Access to all say "Read & Write", then click the
      'Apply to enclosed items' button. Enter your password as prompted. Once done, dismiss the info window

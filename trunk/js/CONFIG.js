@@ -3,10 +3,10 @@
    ======================================================================================================================= */
 var config = {
         //location of the jax server side receiver
-        jax_path      : "jax_php/response.php",
+        jax_path      : "jax/php/response.php",
         
         //array of javascript files to include (ignoring Prototype & Scriptaculous)
-        boot_scripts  : ["js/libs/json.js", "js/libs/jax.js", "js/shared.js"],
+        boot_scripts  : ["js/libs/json.js", "jax/jax.js", "js/shared.js"],
         
         //Scriptaculous settings...
         scriptaculous : {

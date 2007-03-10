@@ -41,29 +41,32 @@ trap 'die "@ script terminated"' INT TERM  #clean up if the user presses ^c
 
 clear 2>/dev/null #errors when running from TextMate
 echo "==============================================================================="
-echo "jaxgames build process                                                   v0.3.3"
+echo "jaxgames build process                                                   v0.3.4"
 echo "==============================================================================="
 
 # [1]:
 # Rhino is a java implementation of javascript. Dojo <dojotoolkit.org> uses a custom version of Rhino to compact javascript
 # files into a smaller space. this will also make them more compatible with Dean Edward's packer.
 # if custom_rhino.jar does not exist, download it... (saves us 700 kb in our SVN)
+echo "[1] checking dependencies for build..."
+echo "-------------------------------------------------------------------------------"
 if ! [[ -e ./libs/custom_rhino.jar ]]
 then
-        echo "* downloading custom_rhino.jar"
-        echo "-------------------------------------------------------------------------------"
-        # curl: download a file
-        # -o = save to disk
-        # -S = show errors on screen
-        # -# = show a progress bar instead of details
-        # -A = set the user-agent to use, in this case we want to alert Dojo that this script is doing a direct download
-        curl -o ./libs/custom_rhino.jar -S -\# -A "Mozilla/4.0 (Jax Games Build Script - http://code.google.com/p/jaxgames)" "http://svn.dojotoolkit.org/dojo/trunk/buildscripts/lib/custom_rhino.jar"
-        if [ $? -gt 0 ]; then echo "! downloading of custom_rhino.jar failed"; exit 1; fi
-        echo "-------------------------------------------------------------------------------"
+	echo "  downloading custom_rhino.jar..."
+	# curl: download a file
+	# -o = save to disk
+	# -S = show errors on screen
+	# -# = show a progress bar instead of details
+	# -A = set the user-agent to use, in this case we want to alert Dojo that this script is doing a direct download
+	curl -o ./libs/custom_rhino.jar -S -\# -A "Mozilla/4.0 (Jax Games Build Script - http://code.google.com/p/jaxgames)" "http://svn.dojotoolkit.org/dojo/trunk/buildscripts/lib/custom_rhino.jar"
+	if [ $? -gt 0 ]; then echo "! downloading of custom_rhino.jar failed"; exit 1; fi
+else
+	echo "  custom_rhino.jar is present"
 fi
+echo "-------------------------------------------------------------------------------"
 
 # [2]:
-echo "* copy source to release directory"
+echo "[2] copy source to release directory"
 echo "-------------------------------------------------------------------------------"
 echo "  removing old release..."
 # rm: remove files
@@ -78,7 +81,7 @@ echo "  copying new source..."
 rsync -r --delete-excluded --exclude-from=./libs/excludes.txt ../ ./release/jaxgames
 if [ $? -gt 0 ]; then echo "! copying of source to release directory failed"; exit 2; fi
 # make the database directory writeable, in case you want to run the release locally to test
-chmod -R 777 ./release/jaxgames/jax_php/db
+chmod -R 777 ./release/jaxgames/jax/db
 echo "-------------------------------------------------------------------------------"
 
 # [3]:
@@ -90,7 +93,7 @@ echo "--------------------------------------------------------------------------
 # -9 = maximum compression
 # -x \*.db = exclude Windows Thumbs.db files
 # -x \*.sqlite = exclude the sqlite database
-echo "* create zip file of source"
+echo "[3] create zip file of source"
 echo "-------------------------------------------------------------------------------"
 rm ./release/JaxGamesSource.zip 2>/dev/null
 zip -r -X -9 ./release/JaxGamesSource.zip ./release/jaxgames -x \*.db -x \*.sqlite
@@ -100,7 +103,7 @@ echo "--------------------------------------------------------------------------
 # [4]:
 # merge together all the scripts needed for boot.js. this means we can load one javascript file to include all of the
 # libraries for the project (prototype / scriptaculous / json / jax / firebugx)
-echo "* merge libraries for boot.js"
+echo "[4] merge libraries for boot.js"
 echo "-------------------------------------------------------------------------------"
 java -jar ./libs/custom_rhino.jar ./libs/makeboot.js
 if [ $? -gt 0 ]; then echo "! merging of libraries for boot.js failed"; exit 4; fi
@@ -108,7 +111,7 @@ echo "--------------------------------------------------------------------------
 
 # [5]:
 # run it through the dojo compressor, this will strip the comments and do other optimisations
-echo "* compact scripts"
+echo "[5] compact scripts"
 echo "-------------------------------------------------------------------------------"
 # find all javascripts (ignoring folders starting with underscore) and compact them
 for FILE in `find ./release/jaxgames -regex "\.\/[^_]*\.js"`
@@ -122,7 +125,7 @@ echo "--------------------------------------------------------------------------
 
 # [6]:
 # run the compacted scripts through Dean Edward's Packer for even more shrinkage
-echo "* compress scripts (this will take a long time)"
+echo "[6] compress scripts (this will take a long time)"
 echo "-------------------------------------------------------------------------------"
 # find all javascript files (ignoring folders starting with underscore) at least 4000 bytes in size
 # the packer will generally producer _larger_ files when feeding it very small files to begin with
@@ -135,7 +138,7 @@ echo "--------------------------------------------------------------------------
 
 # [7]:
 # the compression will have removed all comments, add new headers and licence blocks
-echo "* add headers"
+echo "[7] add headers"
 echo "-------------------------------------------------------------------------------"
 # boot.js has its own header as it contains all the third party libraries
 java -jar ./libs/custom_rhino.jar ./libs/merge.js ./headers/boot.js ./release/jaxgames/js/boot.js ./release/jaxgames/js/boot.js
@@ -155,7 +158,7 @@ echo "--------------------------------------------------------------------------
 # -9 = maximum compression
 # -x \*.db = exclude Windows Thumbs.db files
 # -x \*.sqlite = exclude the sqlite database
-echo "* create zip file of release"
+echo "[8] create zip file of release"
 echo "-------------------------------------------------------------------------------"
 rm ./release/JaxGames.zip 2>/dev/null  #ignore error from this
 zip -r -X -9 ./release/JaxGames.zip ./release/jaxgames -x \*.db -x \*.sqlite
