@@ -468,8 +468,7 @@ game.events = {
                                 //enabled cards, remove the interactivity
                                 e.onmouseover = Prototype.emptyFunction;
                                 e.onmouseout  = Prototype.emptyFunction;
-                                e.removeClassName ("card-playable");
-                                e.removeClassName ("card-hover");
+                                e.removeClassName ("card-playable").removeClassName ("card-hover");
                         }
                 });
                 //take the chosen card out of the hand, and move it onto the run
