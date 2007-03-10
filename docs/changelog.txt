@@ -1,6 +1,9 @@
 =============================================================================================================================
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+10.MAR.07
+    ADD: Renamed 'jax_php' to 'jax'. Will commit and then move the PHP files into 'jax/php'. This will provide room for
+         others to contribute API-compatible alternative server-side scripts for Jax, such as Ruby or ASP.
 09.MAR.07
     ADD: upgraded to Creative Commons 3.0 licence
     FIX: updated _build/headers/boot.js for scriptaculous 1.7.0
