@@ -84,7 +84,8 @@ h1 span {visibility: hidden;}
 #bsod        {display: none;}
 .bsod        {position:  absolute; top: 0; left: 0; width: 640px; height: 450px;
 	      text-align: center; background-color: #0000ac; -moz-opacity:  0.9;}
-.bsod p      {padding-top:  175px; font: bold 12px "Courier New", monospace; color: white;}
+.bsod p      {padding: 175px 30px 0 30px; font: bold 12px "Courier New", monospace; color: white;}
 .bsod strong {background-color: #ccc; color: #0000ac; padding: 2px 5px 2px 5px; text-transform: uppercase;}
+.bsod a      {color: #ccc; text-decoration: none;}
 
 /* === end of line ======================================================================================================= */

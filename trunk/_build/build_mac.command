@@ -76,9 +76,10 @@ mkdir -p ./release/jaxgames
 echo "  copying new source..."
 # copy the current source, to release directory using rsync
 # -r = recurse into directories
+# --times = keep modified times (makes syncing a copy with FTP easier)
 # -delete-excluded = delete any files in release folder that are no longer in the original
 # -exclude-from = list of files/folders to ignore when copying (read excludes.txt)
-rsync -r --delete-excluded --exclude-from=./libs/excludes.txt ../ ./release/jaxgames
+rsync -r --times --delete-excluded --exclude-from=./libs/excludes.txt ../ ./release/jaxgames
 if [ $? -gt 0 ]; then echo "! copying of source to release directory failed"; exit 2; fi
 # make the database directory writeable, in case you want to run the release locally to test
 chmod -R 777 ./release/jaxgames/jax/db
