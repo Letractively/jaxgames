@@ -16,6 +16,12 @@ Website:
 -----------------------------------------------------------------------------------------------------------------------------
 * P2 * Technical and Developer focused website
 
+Jax:
+-----------------------------------------------------------------------------------------------------------------------------
+* P2 * Reconfigure Jax backend to always output JSON data in all instances. (currently some data and errors are not)
+* P2 * Use application/json output type, accept out application/json type in jax.js
+* P2 * Switch to using Prototype 1.5.1's native JSON parser and remove json.js dependency
+
 Shared:
 -----------------------------------------------------------------------------------------------------------------------------
 * P1 * Entering the join key should not be case sensitive. Join key must be validated locally and on server

@@ -7,11 +7,10 @@
 */
 
 $config = array (
-        //path from here to the database folder. *always* include the trailing slash. the path can be relative, or absolute
-        //Mac and Linux users need to enable write permissions for this folder and its contents. if you're uploading to a
-        //Windows host and do not have control over write permissions, you may have been provided with a /private or /db
-        //writable folder below htdocs or wwwroot
-        'db_path' => "db/",
+        //path from here to the database folder. the path can be relative, or absolute. Mac and Linux users need to enable
+	//write permissions for this folder and its contents. if you're uploading to a Windows host and do not have control
+	//over write permissions, you may have been provided with a '/private' or '/db' writable folder below 'htdocs'
+        'db_path' => "../db/",
         //name of the SQLite database to connect to / make if not present
         'db_name' => "jax.sqlite"
 );

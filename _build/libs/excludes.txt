@@ -11,7 +11,7 @@ _*
 *.sqlite
 
 #exclude certain scripts, which will be replaced with a single compressed script
+/jax/jax.js
 /js/boot.js
 /js/shared.js
 /js/libs
-
