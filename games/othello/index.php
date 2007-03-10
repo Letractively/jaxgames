@@ -36,35 +36,32 @@
 		</div>
 		<!-- === game = the main game display =================================================================== -->
 		<div id="page-game">
-		        <div id="game-board"></div>
-		        <div id="game-paper-me" class="game-paper">
-		                <div id="game-paper-me-pieces" class="game-paper-pieces"></div>
-		                <div id="game-paper-me-piece"></div>
-		        </div>
-		        <div id="game-paper-them" class="game-paper">
-		                <div id="game-paper-them-piece"></div>
-	                        <div id="game-paper-them-pieces" class="game-paper-pieces"></div>
-		        </div>
+			<div id="game-board"></div>
+			<div id="game-paper-me" class="game-paper">
+				<div id="game-paper-me-pieces" class="game-paper-pieces"></div>
+				<div id="game-paper-me-piece"></div>
+			</div>
+			<div id="game-paper-them" class="game-paper">
+				<div id="game-paper-them-piece"></div>
+				<div id="game-paper-them-pieces" class="game-paper-pieces"></div>
+			</div>
 		</div>
 		<!-- === common game elements =========================================================================== -->
 		<div id="player-status-them" class="player-status">
-		        <div id="player-status-them-info" class="player-info">
-		                <div style="float: left;" id="player-status-them-win"><img src="../-/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /> Wins: <span id="player-status-them-wins">0</span></div>
-			        <span id="jax-game-p2name" class="player-name">Player 2</span> <img src="../-/icons/user_red.png" id="jax-game-p2icon" width="16" height="16" alt="User Icon" align="top" />
+			<div id="player-status-them-info" class="player-info">
+				<div style="float: left;" id="player-status-them-win"><img src="../-/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /> Wins: <span id="player-status-them-wins">0</span></div>
+				<span id="jax-game-p2name" class="player-name">Player 2</span> <img src="../-/icons/user_red.png" id="jax-game-p2icon" width="16" height="16" alt="User Icon" align="top" />
 			</div>
 		</div>
 		<div id="player-status-me" class="player-status">
-		        <div id="player-status-me-info" class="player-info">
-		                <div style="float: right; text-align: right;" id="player-status-me-win">Wins: <span id="player-status-me-wins">0</span> <img src="../-/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /></div>
-			        <img src="../-/icons/user.png" id="jax-game-p1icon" width="16" height="16" alt="User Icon" align="top" /> <span id="jax-game-p1name" class="player-name">Player 1</span>
+			<div id="player-status-me-info" class="player-info">
+				<div style="float: right; text-align: right;" id="player-status-me-win">Wins: <span id="player-status-me-wins">0</span> <img src="../-/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /></div>
+				<img src="../-/icons/user.png" id="jax-game-p1icon" width="16" height="16" alt="User Icon" align="top" /> <span id="jax-game-p1name" class="player-name">Player 1</span>
 			</div><div id="player-status-me-msg" class="player-msg" style="display: none;">
-			        &nbsp;
+				&nbsp;
 			</div>
 		</div>
-		<!--<div id="game-status" class="hv"><div class="hv1"><div class="hv2">
-               		<div id="game-status-text" class="hvt"></div>
-               	</div></div></div>-->
 	</div>
-        <?php include ("../-/inc/footer.html")?>
+	<?php include ("../-/inc/footer.html")?>
 </div></body>
 <!-- === end of line ============================================================================================= --></html>

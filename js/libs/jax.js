@@ -1,7 +1,7 @@
 /* =======================================================================================================================
    jax.js - (c) copyright Kroc Camen 2005-2007
    ======================================================================================================================= */
-// licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+// licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
 // REQUIRES: prototype 1.5.0, Prototype-compatible json.js
 
 /* TODO:

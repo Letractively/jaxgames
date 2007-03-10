@@ -2,11 +2,16 @@
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 09.MAR.07
+    ADD: upgraded to Creative Commons 3.0 licence
+    FIX: updated _build/headers/boot.js for scriptaculous 1.7.0
+    FIX: Blacjax: Hand cursor when mouse over a card, but not when in :hover state (occurs when flicking between two windows)
+    FIX: Blacjax, Othello: Clicking Resign at the end left the screen blank for the local player
+    ADD: Blacjax, Othello: Changed the game over message to be on the heads-up message instead of the playerStatus
     NEW: New release on Google Code
     FIX: _build/libs/makeboot.js was incorrectly including firebugx.js, preventing the compiled release working on browsers
          without Firebug installed :/
     FIX: error in `game.end`. `winner` is an object not a boolean
-        ADD: Improved the heads-up to allow a callback function
+    ADD: Improved the heads-up to allow a callback function
     ADD: The heads-up object has been moved from blacjax to shared so that all games can access it via `shared.headsup.show`
 08.MAR.07
     ADD: Upgraded to Script.aculo.us 1.7.0! (fix below has made this possible)

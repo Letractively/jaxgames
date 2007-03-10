@@ -172,12 +172,14 @@ Hand.prototype = {
                 
                 //if there's any cards in the run, slide them around to make room for one more
                 if (game.run.cards.length) {
+                        var anims = [];
                         game.run.cards.each (function(s_card,n_index){
                                 //assign an animation to each card
                                 $("game-run-"+s_card).style.zIndex = n_index + 1;
-                                var move_to = cardpos[n_index] - parseInt($("game-run-"+s_card).getStyle("left"));
-                                new Effect.MoveBy ('game-run-'+s_card, 0, move_to);
+                                var move_to = cardpos[n_index] - parseInt ($("game-run-"+s_card).getStyle("left"));
+                                anims.push (new Effect.MoveBy ("game-run-"+s_card, 0, move_to, {sync:true}));
                         }.bind(this));
+                        new Effect.Parallel (anims);
                 }
                 
                 //slide the card over onto the run
@@ -253,5 +255,5 @@ Hand.prototype = {
 };
 
 //=== end of line ===========================================================================================================
-//licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+//licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
 //jax, jax games (c) copyright Kroc Camen 2005-2007

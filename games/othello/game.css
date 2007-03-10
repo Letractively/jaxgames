@@ -1,7 +1,7 @@
 /* =======================================================================================================================
    games/othello/game.css - styles specific for this game
    =======================================================================================================================
-   licenced under the Creative Commons Attribution 2.5 License: http://creativecommons.org/licenses/by/2.5/
+   licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    jax, jax games (c) copyright Kroc Camen 2005-2007
 */
 
@@ -34,10 +34,5 @@ h1      {background-image: url("images/title.png");}
                     background-image: url("images/paperthem.png"); background-repeat: no-repeat;}
 .game-paper-pieces {font: normal 32px/52px Georgia, serif;}
 
-
-/*#game-status      {top: 45px; left: 0; width: 512px; height: 384px;}
-#game-status .hv1 {width: 512px; height: 384px;}
-#game-status-text {font: normal 11px Arial; text-align: center; color: white;
-                   background-image: url("../-/mask.png");}*/
 
 /* === end of line ======================================================================================================= */
