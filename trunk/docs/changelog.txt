@@ -2,6 +2,7 @@
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 10.MAR.07
+    FIX: bug from below causing the release version to present the db-not-writeable error incorrectly
     ADD: Renamed 'jax_php' to 'jax'. Moved the PHP files into 'jax/php'. This will provide room for others to contribute
          API-compatible alternative server-side scripts for Jax, such as Ruby or ASP.
 09.MAR.07
