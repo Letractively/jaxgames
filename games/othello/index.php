@@ -19,9 +19,11 @@
 			<div id="title-fg">
 				<div id="title-board">
 					<img id="title-logo" src="images/titlelogo.png" width="450" height="80" alt="Othello" />
-					<p><a id="title-start-game" href="#page-user"><img src="images/white.png" width="40" height="40" class="left" /><img src="images/white.png" width="40" height="40" class="right" />Start Game</a></p>
-					<p><a id="title-join-game" href="#page-user"><img src="images/white.png" width="40" height="40" class="left" /><img src="images/white.png" width="40" height="40" class="right" />Join Game</a></p>
-					<p><a id="title-rules" href="#page-rules"><img src="images/white.png" width="40" height="40" class="left" /><img src="images/white.png" width="40" height="40" class="right" />Rules</a></p>
+					<p id="title-menu">
+						<a id="title-start-game" href="#page-user">Start Game</a>
+						<a id="title-join-game" href="#page-user">Join Game</a>
+						<!-- <a id="title-rules" href="#page-rules">Rules</a> -->
+					</p>
 				</div>
 			</div>
 		</div>
