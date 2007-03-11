@@ -1,6 +1,12 @@
 =============================================================================================================================
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+11.MAR.07
+    FIX: ZIPs/RARs spun from the build script now extract without the 'release' folder in them
+    NEW: RAR support for the build script. 
+    FIX: Unicode em-dash in Licence.txt
+    FIX: In a monumental bit of stupidity I have realised that the build script's ZIPs of the source have been completely
+         useless all this time, joy.
 10.MAR.07
     FIX: Othello: `winner` undefined in `game.win`
     NEW: Othello: Menu item animation
