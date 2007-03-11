@@ -32,7 +32,7 @@ var playerMe   = new Player (),  //the player on this computer
    ======================================================================================================================= */
 var game = {
         name    : "Othello",  //a user-seen name for your game. required, as used in shared.js
-        version : "0.2.0",
+        version : "0.3.0",
         
         board   : new Board ("game-board"),  //the game board (default size of 8x8 will be used), see board.js
         pieces  : [],                        //the layout of pieces on the board
@@ -55,10 +55,79 @@ var game = {
                 //animate the title screen
                 this.events.clouds.start ();
                 
+                var menuItemHover = function () {  //private function for mouse over menu item
+                        //loop over each image in the link and show them (the black and white pieces)
+                        this.immediateDescendants ().each (function(e_item){ e_item.show (); });
+                },  menuItemOut = function () {    //private function for mouse over menu item
+                        //loop over each image in the link and hide them
+                        this.immediateDescendants ().each (function(e_item){ e_item.hide (); });
+                },  menuItemClick = function () {  //private function for menu item click
+                        //remove the focus rectangle around the link
+                        this.blur ();
+                        //remove the mouse events for everything else (so that the animation doesn't hide if you mouse out,
+                        //nor are you able to click on another menu item). loop over each hyperlink in the menu...
+                        $("title-menu").immediateDescendants ().each (function(e_item){
+                                //remove mouse events
+                                e_item.onmouseover = Prototype.emptyFunction;
+                                e_item.onmouseout  = Prototype.emptyFunction;
+                                e_item.onclick     = Prototype.emptyFunction;
+                        });
+                        
+                        //animate the white pieces either side the menu item 'flipping' over to black pieces:
+                        var anims = [];
+                        //loop over each image in the link (4)...
+                        this.immediateDescendants ().each (function(e_menu){
+                                //if this image is white, zoom out... black, zoom in
+                                var piece = e_menu.hasClassName ("white");
+                                //add the animation to an array awaiting parallel animation
+                                anims.push (new Effect.Puff (e_menu, {
+                                        sync        : true,
+                                        transition  : (piece ? Effect.Transitions.linear : Effect.Transitions.reverse),
+                                        afterFinish : function() {
+                                                if (piece) {e_menu.hide ();} else {e_menu.show ();}
+                                        }
+                                }));
+                        });
+                        //run the animation
+                        new Effect.Parallel (anims, {duration:0.4, afterFinish:function(){
+                                //which menu item was clicked?
+                                switch (this.id) {
+                                        case "title-start-game":
+                                        case "title-join-game":
+                                                //proceed to the next screen. the second argument is true for Start Game, 
+                                                //and false for Join Game.
+                                                shared.events.titleButtonClick (this, (this.id=="title-start-game"));
+                                                //reset this screen
+                                                //!/TODO: initialisation methods for pages
+                                                game.load ();
+                                                break;
+                                        case "title-rules":
+                                                //!/TODO: rules page
+                                                break;
+                                }
+                        }.bind(this)});
+                };
+                //prepare the menu items: loop over each menu link
+                $("title-menu").immediateDescendants ().each (function(e_item){
+                        //if there are no child elements in the link (no piece images)...
+                        if (!e_item.down ()) {
+                                //insert 2 white / 2 black pieces into each link
+                                new Insertion.Top (e_item, '<image src="images/black.png" width="40" height="40" class="left black" /><img src="images/white.png" width="40" height="40" class="left white" style="position: absolute; left: 136px;" /><img src="images/white.png" width="40" height="40" class="right white" style="position: absolute; left: 336px;" /><image src="images/black.png" width="40" height="40" class="right black" />');
+                        }
+                        //apply mouse events (as you've seen above)
+                        e_item.onmouseover = menuItemHover;
+                        e_item.onmouseout  = menuItemOut;
+                        e_item.onclick     = menuItemClick;
+                        //hide the white/black pieces to begin with
+                        e_item.immediateDescendants ().each (function(e_item){
+                                e_item.hide ();
+                        });
+                });
+                
                 //!/debug: leap straight into the game screen
                 /*shared.showPage ("game"); this.start (true);*/
         },
-                
+        
         /* > start : begin playing
            ===============================================================================================================
            params * (b_mefirst) : who begins play (yourself, or the opponent)
@@ -153,7 +222,7 @@ var game = {
                                                               'to place your piece here" />'
                                                 ;
                                                 //make the empty cell clickable so you can choose that square
-                                                //see game.events further down to continue following program flow
+                                                //see `game.events` further down to continue following program flow
                                                 e.onclick     = this.events.playableCellClick;
                                                 //when you hover over the cell
                                                 e.onmouseover = this.events.playableCellMouseOver;
@@ -247,6 +316,7 @@ var game = {
                 var whodunit = (b_self) ? playerMe : playerThem;
                 this.pieces[n_x][n_y] = whodunit.piece;
                 var anims = [];
+                var centre_id = this.board.getCellId (n_x,n_y);
                 
                 //search all directions for bridges built, and change the pieces between into your own
                 for (var dir=0; dir<8; dir++) {
@@ -254,13 +324,14 @@ var game = {
                         this.findBridge (b_self, n_x, n_y, dir, function(n_dir,n_x,n_y,n_dist){
                                 this.pieces[n_x][n_y] = whodunit.piece;
                                 //?/this.updateBoard ();
-                                anims.push (this.board.getCellId(n_x,n_y));
+                                if (this.board.getCellId(n_x,n_y) != centre_id) {anims.push (this.board.getCellId(n_x,n_y));}
                         }.bind(this), true);
                 }
-                this.flipPiece (this.board.getCellId(n_x,n_y), whodunit.piece);
+                //?/anims.push (centre_id);
                 anims.each (function(s_item){
                         this.flipPiece (s_item, whodunit.piece);
                 }.bind(this));
+                this.flipPiece (centre_id, whodunit.piece);
                 new Effect.Event ({queue:{position:'end', scope:'flipPiece'}, afterFinish:function(){
                         this.preempt (!b_self);
                 }.bind(this)});
@@ -272,11 +343,13 @@ var game = {
                 var e = $(s_htmlid);
                 if (e.innerHTML == "") {
                         var piece = (s_piece == "X" ? "black" : "white");
-                        e.update ('<image src="images/'+piece+'.png" width="40" height="40" alt="'+piece+'" />');
-                        var e2 = e.down ();
-                        new Effect.Puff (e2, {transition:Effect.Transitions.reverse, duration:0.4, afterFinish:function(){
-                                e2.show ();
-                                f_callback ();
+                        new Effect.Event ({afterFinish:function(){
+                                new Insertion.Top (e, '<image src="images/'+piece+'.png" width="40" height="40" alt="'+piece+'" />');
+                                var e2 = e.down ();
+                                new Effect.Puff (e2, {transition:Effect.Transitions.reverse, duration:0.4, afterFinish:function(){
+                                        e2.show ();
+                                        f_callback ();
+                                }, queue:{position:'end',scope:'flipPiece'}});
                         }, queue:{position:'end',scope:'flipPiece'}});
                 } else {
                         var e1      = e.down (),
@@ -373,7 +446,9 @@ var game = {
         end : function (b_winner) {
                 //!/TODO: this
                 var html = '<a href="javascript:game.playAgain('+b_winner+');">Play Again?</a> ' +
-                           '<a href="javascript:game.resign();">Resign</a></p>'
+                           '<a href="javascript:game.resign();">Resign</a></p>',
+                   winner = b_winner ? playerMe : playerThem,
+                   loser  = b_winner ? playerThem : playerMe
                 ;
                 //increase the number of games played
                 shared.played ++;

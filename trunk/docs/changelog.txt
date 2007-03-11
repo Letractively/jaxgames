@@ -2,6 +2,8 @@
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 10.MAR.07
+    FIX: Othello: `winner` undefined in `game.win`
+    NEW: Othello: Menu item animation
     ADD: Othello: Less `updateBoard` calls
     NEW: Othello: 'flip' animation for pieces. (will need some improvement, but it works for now)
     ADD: Changed Effect.Opacity to Effect.Appear/Fade,toggle where appropriate

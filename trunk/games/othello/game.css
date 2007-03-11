@@ -17,10 +17,10 @@ h1      {background-image: url("images/title.png");}
 #title-fg p {padding: 0;}
 #title-fg a {display: block; text-decoration: none; width: 240px; height: 40px; margin: 0 auto; line-height: 40px;}
 
-#title-fg a img       {display: none;}
+#title-fg a img       {}
 #title-fg a img.left  {float: left;}
 #title-fg a img.right {float: right;}
-#title-fg a:hover img {display: block;}
+/*#title-fg a:hover img {display: block;}*/
 
 #title-clouds  {position: absolute; top: 160px; width: 512px; height: 143px; overflow: hidden; z-index: -1;}
 #title-cloud   {position: relative; width: 1002px; height: 143px; background-image: url("images/titlecloud.png");}
