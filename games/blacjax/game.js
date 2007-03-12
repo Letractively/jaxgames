@@ -634,7 +634,7 @@ game.run = {
                         //animate all cards in the run sliding onto the discard pile
                         var cardanims = [];
                         game.run.cards.each (function(s_card,n_index){
-                                var move_to = 436 - parseInt($("game-run-"+s_card).getStyle("left"));
+                                var move_to = 436 - parseInt($("game-run-"+s_card).getStyle("left"), 10);
                                 cardanims.push (new Effect.MoveBy("game-run-"+s_card, 0, move_to, {sync:true}));
                         });
                         new Effect.Parallel (cardanims, {duration:0.5, queue:'end', afterFinish:function(){

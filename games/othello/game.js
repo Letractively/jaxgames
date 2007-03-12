@@ -313,25 +313,32 @@ var game = {
            =============================================================================================================== */
         placePiece : function (b_self, n_x, n_y) {
                 //change the cell first
-                var whodunit = (b_self) ? playerMe : playerThem;
-                this.pieces[n_x][n_y] = whodunit.piece;
-                var anims = [];
-                var centre_id = this.board.getCellId (n_x,n_y);
+                var piece     = (b_self) ? playerMe.piece : playerThem.piece,
+                    centre_id = this.board.getCellId (n_x,n_y),
+                    anims     = []
+                ;
+                //set your piece to the specified cell
+                this.pieces[n_x][n_y] = piece;
                 
                 //search all directions for bridges built, and change the pieces between into your own
                 for (var dir=0; dir<8; dir++) {
                         //flip each piece in each direction that yields a valid move
                         this.findBridge (b_self, n_x, n_y, dir, function(n_dir,n_x,n_y,n_dist){
-                                this.pieces[n_x][n_y] = whodunit.piece;
+                                //set the piece to this cell
+                                this.pieces[n_x][n_y] = piece;
+                                //queue the cell for animation
+                                anims.push (this.board.getCellId(n_x,n_y));
                                 //?/this.updateBoard ();
-                                if (this.board.getCellId(n_x,n_y) != centre_id) {anims.push (this.board.getCellId(n_x,n_y));}
                         }.bind(this), true);
                 }
-                //?/anims.push (centre_id);
+                //loop over each cell in the queue...
                 anims.each (function(s_item){
-                        this.flipPiece (s_item, whodunit.piece);
+                        //...and animate the pieces being flipped
+                        this.flipPiece (s_item, piece);
                 }.bind(this));
-                this.flipPiece (centre_id, whodunit.piece);
+                //animate in the original piece this function was called for. this 
+                this.flipPiece (centre_id, piece);
+                //
                 new Effect.Event ({queue:{position:'end', scope:'flipPiece'}, afterFinish:function(){
                         this.preempt (!b_self);
                 }.bind(this)});

@@ -3,31 +3,40 @@
    ======================================================================================================================= */
 var config = {
         //location of the jax server side receiver
-        jax_path      : "jax/php/response.php",
+        jax_path : "jax/php/response.php",
         
         //array of javascript files to include (ignoring Prototype & Scriptaculous)
-        boot_scripts  : ["js/libs/json.js", "jax/jax.js", "js/shared.js"],
+        boot_scripts : ["js/libs/json.js", "jax/jax.js", "js/shared.js"],
         
         //Scriptaculous settings...
         scriptaculous : {
-                //use the version of Scriptaculous provided with Jax Games:
-                //if set to false, Scriptaculous will be loaded from a unzipped Scriptaculous folder located at
-                //'js/libs/scriptaculous/scriptaculous-js-?', where '?' is set by `version` below
-                use_provided : true,
+                //use the version of Scriptaculous & Prototype provided with Jax Games:
+                //if set to false, the custom locations below will be used to load them. this is so you can test with
+                //unreleased/custom versions of scriptaculous & prototype with little hassle
+                use_defaults : true,
                 
-                //if use_provded above is false, use this version of scriptaculous below
-                version : '1.7.0.svn',
+                //location to your own copy of prototype to use
+                custom_prototype : "js/libs/scriptaculous/scriptaculous-js-svn/lib/prototype.js",
+                //location to your own folder containing a copy of scriptaculous to use (always include end slash)
+                custom_src : "js/libs/scriptaculous/scriptaculous-js-svn/src/",
+                //you'll have to specify the version number of your own copy
+                custom_version : "1.7.1",
                 
-                //an array of which Scriptaculous libraries to include, sans extension (if use_provided = false)
+                //an array of which Scriptaculous libraries to include, sans extension (if use_defaults = false)
                 //!/includes : ["builder", "effects", "dragdrop", "controls", "slider"]  //all of Scriptaculous
                 includes : ["effects"]  //just the effects only please
-        }
+        },
+        
+        //use the bsod for javascript errors? do not change this value - it is overided in js/boot.js so that only the 
+        //compressed, release version of jax games will show the bsod on errors. this is so that end-users can tell when an
+        //error has actually occured, instead of the game just hanging mid-play with no indication that it has failed
+        use_bsod : true
 };
 
 //this is custom scriptaculous header to remove the load functions which would normally try load the external scripts.
-//the build system will instead combine the scripts together
+//(see 'js/libs/scriptaculous/scriptaculous.js') the build system will instead combine the scripts together
 var Scriptaculous = {
-        Version: (config.scriptaculous.use_provided) ? '1.7.0' : config.scriptaculous.version
+        Version: (config.scriptaculous.use_defaults) ? '1.7.0' : config.scriptaculous.custom_version
 };
 
 //=== end of line ===========================================================================================================

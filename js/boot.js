@@ -1,7 +1,9 @@
 /* =======================================================================================================================
    js/boot.js - load the libraries needed for the games
    ======================================================================================================================= */
-/* note: in the distribution version, this page is replaced by a compressed version of the merged scripts below
+/* note: in the distribution version, this page is replaced by a compressed version of the merged scripts below.
+         this means that anything defined here, will NOT be available in the release version of jax games, therefore you can
+         include extra developer-only javascript files and redefine values from CONFIG.js for developer only use
 
    + Prototype     : extends core javascript functionality to reduce the amount of genereal code everywhere
    + Scriptaculous : provides animation and effects
@@ -10,20 +12,21 @@
    + jax.js        : establish a bridge between two computer users to send AJAX back and forth
    + shared.js     : shared code between all the games
 */
-var i,
-    boot_files = []
-;
+
+//disable the bsod for developers only. you are expected to use Firebug to trap and view errors
+config.use_bsod = false;
+
 //load Scriptaculous (and Prototype)
-if (config.scriptaculous.use_provided) {
+var i = 0, boot_files = [];
+if (config.scriptaculous.use_defaults) {
         //use the provided Scriptaculous bundled with jax (stable)
         boot_files.push ("js/libs/scriptaculous/prototype.js");
         boot_files.push ("js/libs/scriptaculous/effects.js");
 } else {
-        //use user-provided scriptaculous version unzipped into /js/scriptaculous/...
-        var boot_path = "js/libs/scriptaculous/scriptaculous-js-" + Scriptaculous.Version;
-        boot_files.push (boot_path+"/lib/prototype.js");
+        //use user-provided Prototype & Scriptaculous
+        boot_files.push (config.scriptaculous.custom_prototype);
         for (i=0; i<config.boot_scripts.length; i++) {
-                boot_files.push (boot_path+"/src/"+config.scriptaculous.includes[i]+".js");
+                boot_files.push (config.scriptaculous.custom_src+config.scriptaculous.includes[i]+".js");
         }
 }
 //load the rest of the boot scripts (see CONFIG.js)
