@@ -160,8 +160,8 @@ Hand.prototype = {
                 if (!f_onComplete) {f_onComplete = Prototype.emptyFunction;}  //default: no callback
                 
                 var card_id = this.cards.indexOf (s_card),
-                    elid    = this.element + '-' + s_card,           //the html id of the card
-                    curpos  = parseInt($(elid).getStyle ("left")),   //get the X position of the chosen card...
+                    elid    = this.element + '-' + s_card,              //the html id of the card
+                    curpos  = parseInt($(elid).getStyle ("left"), 10),  //get the X position of the chosen card...
                     cardpos = game.run.getCardPositions (game.run.cards.length+1),
                     newpos  = cardpos.last ()
                 ;
@@ -176,7 +176,7 @@ Hand.prototype = {
                         game.run.cards.each (function(s_card,n_index){
                                 //assign an animation to each card
                                 $("game-run-"+s_card).style.zIndex = n_index + 1;
-                                var move_to = cardpos[n_index] - parseInt ($("game-run-"+s_card).getStyle("left"));
+                                var move_to = cardpos[n_index] - parseInt ($("game-run-"+s_card).getStyle("left"), 10);
                                 anims.push (new Effect.MoveBy ("game-run-"+s_card, 0, move_to, {sync:true}));
                         }.bind(this));
                         new Effect.Parallel (anims);

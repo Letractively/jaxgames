@@ -6,14 +6,16 @@ load ('../js/CONFIG.js');
 var i,
     boot_files = []
 ;
-if (config.scriptaculous.use_provided) {
+//load Scriptaculous (and Prototype)
+if (config.scriptaculous.use_defaults) {
+        //use the provided Scriptaculous bundled with jax (stable)
         boot_files.push ("js/libs/scriptaculous/prototype.js");
         boot_files.push ("js/libs/scriptaculous/effects.js");
 } else {
-        var boot_path = "js/libs/scriptaculous/scriptaculous-js-" + Scriptaculous.Version;
-        boot_files.push (boot_path+"/lib/prototype.js");
+        //use user-provided Prototype & Scriptaculous
+        boot_files.push (config.scriptaculous.custom_prototype);
         for (i=0; i<config.boot_scripts.length; i++) {
-                boot_files.push (boot_path+"/src/"+config.scriptaculous.includes[i]+".js");
+                boot_files.push (config.scriptaculous.custom_src+config.scriptaculous.includes[i]+".js");
         }
 }
 boot_files.push ("js/libs/firebug/firebugx.js");

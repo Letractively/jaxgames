@@ -586,9 +586,9 @@ function enableNicknameBox (b_enabled) {
    return * array         : the 2D array
    ======================================================================================================================= */
 function create2DArray (n_width, n_height, x_initvalue) {
-        var arr = new Array (n_width -1);
+        var arr = new Array (n_width-1);
         for (var x=0; x<n_width; x++) {
-                arr[x] = new Array (n_height - 1);
+                arr[x] = new Array (n_height-1);
                 for (var y=0; y<n_height; y++) {arr[x][y] = x_initvalue;}
         }
         return arr;
@@ -596,18 +596,20 @@ function create2DArray (n_width, n_height, x_initvalue) {
 
 /* > bsod : the fatal error screen, no one hears your screams
    ======================================================================================================================= 
-   params (s_message) : error message to display on the bsod and console
-          (s_url)     : url of file that caused the error (provided by native JS error throwing)
-          (n_line)    : line number of the error (provided by native JS error throwing)
+   params * (s_message) : error message to display on the bsod and console
+            (s_url)     : url of file that caused the error (provided by native JS error throwing)
+            (n_line)    : line number of the error (provided by native JS error throwing)
+   return * true        : so that the javascript error is not ignored by the browser (when error is thrown)
    ======================================================================================================================= */
 function bsod (s_message, s_url, n_line) {
+        s_message = (s_url?(s_url.split("/").last())+" ":"") + (n_line?"["+n_line+"]: ":"") + s_message;
         document.getElementById ("bsod-msg").innerHTML = s_message ? s_message : "Check the Javascript Console for details";
         document.getElementById ("bsod").style.display = "block";
-        console.error ((n_line?n_line+":":"")+s_message);
+        console.error (s_message);
         return true;
 }
-//try catch errors and throw them to the screen (url and line number are provided)
-window.onerror = bsod;
+//try to catch thrown errors (url and line number are provided by the browser)
+if (config.use_bsod) {window.onerror = bsod;}
 
 //=== end of line ===========================================================================================================
 //licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
