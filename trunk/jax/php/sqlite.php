@@ -15,11 +15,11 @@ if (!is_writable($path)) die("result=&error=".urlencode("No write permissions fo
 $database = new SQLiteDB($filename);
 
 //$forcepurge = true;
-if ($requesttype=="purge") {
+if ($request_type=="purge") {
 	if(sqlite_table_exists("queue"))       $database->query("DROP TABLE queue;");
 	if(sqlite_table_exists("connections")) $database->query("DROP TABLE connections;");
 	
-} elseif ($requesttype=="dump") {
+} elseif ($request_type=="dump") {
 	dump_table("queue");
 	dump_table("connections");
 	exit();

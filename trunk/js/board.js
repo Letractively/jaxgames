@@ -1,7 +1,10 @@
 /* =======================================================================================================================
    js/board.js - create and manage a game board/grid
-   ======================================================================================================================= */
-/* css guide:
+   =======================================================================================================================
+   licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
+   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+*//*
+   css guide:
    ----------
    when you create an instance of the board class, you must provide an id of an html element that currently exists (ideally
    a div) that the baord table will be injected into. the board will use the following html ids for the various table
@@ -115,9 +118,9 @@ Board.prototype = {
                              }
            =============================================================================================================== */
         getCoordsFromId : function (s_id) {
-                var id  = s_id.split ("-").last (),          //get the cell reference from the cell id
-                    col = parseInt (id.split("x").first()),  //the first reference is the col
-                    row = parseInt (id.split("x").last())    //row is the second reference
+                var id  = s_id.split ("-").last (),              //get the cell reference from the cell id
+                    col = parseInt (id.split("x").first(), 10),  //the first reference is the col
+                    row = parseInt (id.split("x").last(), 10)    //row is the second reference
                 ;
                 return {x: col, y: row};
         },
@@ -139,5 +142,3 @@ Board.prototype = {
 };
    
 //=== end of line ===========================================================================================================
-//licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-//jax, jax games (c) copyright Kroc Camen 2005-2007

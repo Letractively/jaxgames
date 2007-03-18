@@ -1,6 +1,9 @@
 /* =======================================================================================================================
    js/cards.js - a set of classes for using playing cards in your game
-   ======================================================================================================================= */
+   =======================================================================================================================
+   licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
+   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+*/
 
 /* =======================================================================================================================
    CLASS Pack - a standard 54 card pack of playing cards. decks can be made of one or more of these
@@ -39,7 +42,7 @@ Pack.prototype = {
            =============================================================================================================== */
         value : function (s_card) {
                 //the index of the card in the faces array, is it's value
-                return parseInt (this.faces.indexOf(s_card.substr(0,1))) + 1;
+                return parseInt (this.faces.indexOf(s_card.substr(0,1)), 10) + 1;
         },
         
         /* > suit : given a card, return what suit it is
@@ -145,5 +148,3 @@ Deck.prototype = {
 };
 
 //=== end of line ===========================================================================================================
-//licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-//jax, jax games (c) copyright Kroc Camen 2005-2007

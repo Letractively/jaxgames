@@ -8,12 +8,14 @@ Many thanks go to these people, and their contributions:
 * The Mozilla Foundation, Mozilla Firefox <getfirefox.com>
 * Joe Hewitt <joehewitt.com> Firebug, Firebug Lite <getfirebug.com> 
 * Allan Odgaard, TextMate <macromates.com>
+* Andrew Dupont, Text Mate Javascript Tools <andrewdupont.net/2006/10/01/javascript-tools-textmate-bundle>
 * Jasc, Corel, Paint Shop Pro 7, X <paintshoppro.com>
 
 [Javascript]
 * Sam Stephenson, Prototype javascript framework <prototypejs.org> and contributors
 * Thomas Fuchs <mir.aculo.us> Scriptaculous javascript framework <script.aculo.us> and contributors
 * The blogger of unfocus.com for Prototype-compatible json.js <unfocus.com/projects/source/Javascript/json.js>
+* Douglas Crockford, JSLint <jslint.com>
 * Shuns, Dump <netgrow.com.au/files>
 
 [Content]
@@ -48,4 +50,4 @@ If you've contributed to the SVN, please add your name and URL/email below, than
 
 === end of line =============================================================================================================
 licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-jax, jax games (c) copyright Kroc Camen 2005-2007
+jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/

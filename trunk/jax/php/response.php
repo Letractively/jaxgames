@@ -4,150 +4,177 @@
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    jax (c) copyright Kroc Camen 2005-2007
+   
+   this page accepts requests from jax.js in order to setup an ajax connection between two browsers and share data.
+   see 'docs/api.txt' for a detailed break down of how to use jax and a list of input/outputs of this script
+*//*
+   TODO:_
+	+ purge the database of unused entries when it grows above specified size (64Kb?)
+	+ impose a 4kb (configurable) limit on each message
+	+ thorough error handling and validation
+	+ try to prevent request abuse / hijacking others connections / XSS etc.
 */
 //do all the common startup
 require_once "startup.php";
 
 //prepare the message to return
-$response = array();
+$output = array ();
 
-switch($requesttype) {
+switch($request_type) {
 	case "jax_open":  //=================================================================================================
 		//create an open slot for the new user. a connection id is generated, and the other person can join with this
-		$userid = register_session();
-		$connid = strtoupper(substr(base_convert(time(), 10, 35), 0, 6));
+		$user_id = register_session();
+		$conn_id = strtoupper (substr(base_convert(time(),10,35),0,6));
 		
-		$sql = "INSERT INTO connections (connid, userid1) VALUES ('$connid', '$userid');";
+		//save this to the database
+		$sql = "INSERT INTO connections (connid, userid1) VALUES ('$conn_id', '$user_id');";
 		$database->query($sql) or die("error in creating game");
 		
-		$response['connid'] = $connid;  //return the connection id, the other person needs this to join
-		$response['userid'] = $userid;  //return your userid
+		//the request also has the option of providing some json data for the other person when they connect
+		if (isset ($_REQUEST['data'])) {
+			addToQueue ($conn_id, 'AWAITING', 'init', $_REQUEST['data']);
+		}
 		
-		//place the data provided onto the queue for the other person to pickup upon joining
-		addToQueue ($connid, 'AWAITING', 'init', $_REQUEST['data']);
+		//generate a response to the caller, passing back:
+		$output['response'] = array (
+			'result'  => true,      //the connection has been opened
+			'conn_id' => $conn_id,  //the connection id you've been assigned
+			'user_id' => $user_id   //a user id that determines who is who
+		);
 		
-		$response['result'] = true;
+		//the server did not error
+		$output['result'] = true;
 		break;
 		
 	case "jax_connect":  //==============================================================================================
-		//register your user id
-		$userid = register_session();
-		$connid = $_REQUEST['connid'];
-		$response['userid'] = $userid;
+		$user_id = register_session ();   //register your user id
+		$conn_id = $_REQUEST['conn_id'];  //the connection you wish to join
 		
-		//find the connection to join
-		$sql = "SELECT connid FROM connections WHERE connid='$connid';";
-		$result = $database->query($sql);
-		if ($database->num_rows($result) == 0) {
+		//find the connection to join in the database
+		$result = $database->query ("SELECT connid FROM connections WHERE connid='$conn_id';");
+		if ($database->num_rows ($result) == 0) {
 			//the connection was not found, return false
-			$response['result'] = false;
+			$output['response'] = array (
+				'result'  => false   //there was a problem with the request
+			);
 			
 		} else {
 			//join the host's connection
-			$sql = "UPDATE connections SET userid2='$userid' WHERE connid='$connid';";
-			$database->query($sql);
+			$database->query ("UPDATE connections SET userid2='$user_id' WHERE connid='$conn_id';");
 			
 			//get the other user's id
-			$sql = "SELECT userid1 FROM connections WHERE connid='$connid';";
-			$result = $database->query($sql);
-			list($hostid) = $database->fetch_row($result);
-			$response['hostid'] = $hostid;
+			$result = $database->query ("SELECT userid1 FROM connections WHERE connid='$conn_id';");
+			list ($host_id) = $database->fetch_row ($result);
 			
-			$data = json_decode($_REQUEST['data']);
-			$data->userid = urlencode($userid);
-			$data = json_encode($data);
+			//generate a response to the caller, passing back:
+			$output['response'] = array (
+				'result'  => true,
+				'user_id' => $user_id,
+				'host_id' => $host_id
+			);
+			
+			$data = json_decode ($_REQUEST['data']);
+			$data->user_id = $user_id;
+			$data = json_encode ($data);
+			
 			//put a message on the queue for them to say you've joined
-			addToQueue ($connid, $hostid, 'jax_join', $data);
+			addToQueue ($conn_id, $host_id, 'jax_join', $data);
 			
 			//get the data the host provided when the connection was created
-			$sql = "SELECT data FROM queue WHERE connid='$connid' AND whoto='AWAITING' AND type='init';";
-			$result = $database->query($sql);
-			if ($database->num_rows($result) > 0) {
-				list($response['data']) = $database->fetch_row($result);
-				$sql = "DELETE FROM queue WHERE connid='$connid' AND whoto='AWAITING' AND type='init';";
-				$database->query($sql);
+			$sql = "SELECT data FROM queue WHERE connid='$conn_id' AND whoto='AWAITING' AND type='init';";
+			$result = $database->query ($sql);
+			if ($database->num_rows ($result) > 0) {
+				list ($output['response']['data']) = $database->fetch_row ($result);
+				$output['response']['data'] = json_decode ($output['response']['data']);
+				
+				$sql = "DELETE FROM queue WHERE connid='$conn_id' AND whoto='AWAITING' AND type='init';";
+				$database->query ($sql);
 			};
-			
-			//return true
-			$response['result'] = true;
 		};
+		//return true
+		$output['result'] = true;
 		break;
 	
 	case "jax_check_queue":  //==========================================================================================
 		//check the queue for messages addressed to you
-		$connid = $_REQUEST['connid'];  //which connection to query
-		$userid = $_REQUEST['userid'];  //your id
-		$sql = "SELECT type, data FROM queue WHERE connid='$connid' AND whoto='$userid';";
-		$result = $database->query($sql);
-		//if there is more than one message on the queue
-		if ($database->num_rows($result) > 0) {
-			$c = 0;
-			while (list($type, $data) = $database->fetch_row($result)) {
-				$c++;
-				$response['type'.$c] = $type;
-				$response['data'.$c] = $data;
+		$conn_id = $_REQUEST['conn_id'];  //which connection to query
+		$user_id = $_REQUEST['user_id'];  //your id
+		
+		//retrieve a list of messages posted to you
+		$result  = $database->query ("SELECT type, data FROM queue WHERE connid='$conn_id' AND whoto='$user_id';");
+		//if there is one or more messages on the queue...
+		if ($database->num_rows ($result) > 0) {
+			//loop over each message
+			while (list ($type, $data) = $database->fetch_row ($result)) {
+				//generate a response containing the message
+				$response = array (
+					'type' => $type,
+					'data' => json_decode ($data)
+				);
+				addResponse ($response);
+				
 				//delete the entry
-				$sql = "DELETE FROM queue WHERE connid='$connid' AND whoto='$userid' AND type='".$type."' AND data='".$data."';";
-				$database->query($sql);
+				$sql = "DELETE FROM queue WHERE connid='$conn_id' AND whoto='$user_id' AND type='".$type."'"+
+				       " AND data='".$data."';"
+				;
+				$database->query ($sql);
 			}
-			$response['count']  = $c;
-			$response['result'] = true;
+			
 		} else {
-			$response['result'] = false;
+			//there was no messages on the queue for you
+			$response = array (
+				'result' => false
+			);
 		}
+		$output['result'] = true;
 		break;
 		
 	case "jax_queue":  //================================================================================================
 		//this places a message on the queue, addressed to the other player
-		$connid = $_REQUEST['connid'];  //which connection is being used
-		$userid = $_REQUEST['sendto'];  //who the message is addressed to
-		$type   = $_REQUEST['type'];    //what type of message this is
-		$data   = $_REQUEST['data'];    //the message itself
+		$conn_id = $_REQUEST['conn_id'];  //which connection is being used
+		$user_id = $_REQUEST['sendto'];   //who the message is addressed to
+		$type    = $_REQUEST['type'];     //what type of message this is
+		$data    = $_REQUEST['data'];     //the message itself
 		
 		//insert the message into the queue
-		addToQueue ($connid, $userid, $type, $data);
+		addToQueue ($conn_id, $user_id, $type, $data);
 		
 		//return true if the message was queued successfully
-		$response['result'] = true;
+		$output['result'] = true;
 		break;
 		
 	case "jax_disconnect":  //===========================================================================================
 		//remove yourself from a game, and if both players have left, delete the game
-		$connid = $_REQUEST['connid'];
-		$userid = $_REQUEST['userid'];
-		$data   = $_REQUEST['data'];
+		$conn_id = $_REQUEST['conn_id'];
+		$user_id = $_REQUEST['user_id'];
+		$data    = $_REQUEST['data'];
 		
 		//get the current state of the game
-		$sql = "SELECT userid1, userid2 FROM connections WHERE connid='$connid';";
-		list($userid1, $userid2) = $database->fetch_row($database->query($sql));
+		$sql = "SELECT userid1, userid2 FROM connections WHERE connid='$conn_id';";
+		list ($user_id1, $user_id2) = $database->fetch_row ($database->query($sql));
 		
 		//if the other player has left already, just delete the connection
-		if ($userid1 == "DECEASED" || $userid2 == "DECEASED") {
+		if ($user_id1 == "DECEASED" || $user_id2 == "DECEASED") {
 			//delete the connection
-			$sql = "DELETE FROM connections WHERE connid='$connid';";
-			$database->query($sql);
+			$database->query ("DELETE FROM connections WHERE connid='$conn_id';");
 		} else {
 			//remove you from the connection...
-			$sql = "UPDATE connections SET ".($userid==$userid1?'userid1':'userid2')."='DECEASED' WHERE connid='$connid';";
-			$database->query($sql);
+			$sql = "UPDATE connections SET ".($user_id==$user_id1?'userid1':'userid2')."='DECEASED' WHERE "+
+			       "connid='$conn_id';"
+			;
+			$database->query ($sql);
 			
 			//and leave a message on the queue to notify the other person
-			addToQueue($connid, ($userid==$userid1?$userid2:$userid1), "jax_disconnect", $data);
+			addToQueue ($conn_id, ($user_id==$user_id1?$user_id2:$user_id1), "jax_disconnect", $data);
 		}
 		break;
 }
-$r = "requesttype=".urlencode($requesttype);
-foreach ($response as $key=>$value) {
-	$r.="&".$key."=".urlencode($value);
-}
-echo $r;
-$database->close($database);
+//close the database
+$database->close ($database);
 
-function addToQueue ($connid, $whoto, $type, $data) {
-	global $database;
-	//insert the message into the queue
-	$sql = "INSERT INTO queue (connid, whoto, type, data) VALUES ('$connid', '$whoto', '$type', '$data');";
-	$database->query($sql);
-}
+//return header type
+header ('Content-type: application/json');
+//output the encoded string
+echo json_encode ($output);
 	
 /* === end of line ==================================================================================================== */ ?>

@@ -1,7 +1,10 @@
 /* =======================================================================================================================
    games/blacjax/game.js - the logic for this game
-   ======================================================================================================================= */
-/* name   : blacjax
+   =======================================================================================================================
+   licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
+   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+*//*
+   name   : blacjax
    author : Kroc Camen | kroccamen@gmail.com | kroc.deviantart.com
    type   : card game
    desc   : an implementation of BlackJack, popular in Europe & the UK, known as 'Crazy 8's' in America
@@ -39,6 +42,15 @@ var game = {
         
         pack    : new Pack (true),  //the pack of cards that decks are made from (include Jokers)
         deck    : new Deck (),      //create a deck of cards
+        
+        /* ===============================================================================================================
+           OBJECT pages - show/hide actions for the screens in the game (title screen, game screen, rules screen etc)
+           =============================================================================================================== */
+        pages : [
+             {name : "title"},
+             {name : "user"},
+             {name : "game"}
+        ],
         
         /* > load : called for you on page load (see shared.js)
            =============================================================================================================== */
@@ -200,7 +212,7 @@ var game = {
                                 //if the card is disabled, fade it out a little and drop it down
                                 new Effect.Parallel ([
                                         new Effect.Opacity (e, {sync:true, from:1.0, to:0.9}),
-                                        new Effect.MoveBy  (e, 15, 0, {sync:true})
+                                        new Effect.Move    (e, {sync:true, x:0, y:15})
                                 ], {duration: 0.5});
                                 //use a no-sign(/) cursor (IE6, Firefox 1.5)
                                 e.addClassName ("card-disabled");
@@ -461,7 +473,7 @@ game.events = {
                                 //make opaque and move back to normal position
                                 new Effect.Parallel ([
                                         new Effect.Opacity (e, {sync:true, from:0.9, to:1.0}),
-                                        new Effect.MoveBy  (e, -15, 0, {sync:true})
+                                        new Effect.Move    (e, {sync:true, x:0, y:-15})
                                 ]);
                                 e.removeClassName ("card-disabled");
                         } else {
@@ -635,7 +647,7 @@ game.run = {
                         var cardanims = [];
                         game.run.cards.each (function(s_card,n_index){
                                 var move_to = 436 - parseInt($("game-run-"+s_card).getStyle("left"), 10);
-                                cardanims.push (new Effect.MoveBy("game-run-"+s_card, 0, move_to, {sync:true}));
+                                cardanims.push (new Effect.Move("game-run-"+s_card, {sync:true, x:move_to, y:0}));
                         });
                         new Effect.Parallel (cardanims, {duration:0.5, queue:'end', afterFinish:function(){
                                 //put the old face card on the discard pile
@@ -659,5 +671,3 @@ game.run = {
 };
 
 //=== end of line ===========================================================================================================
-//licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-//jax, jax games (c) copyright Kroc Camen 2005-2007

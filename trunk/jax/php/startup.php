@@ -29,7 +29,7 @@ function magic_quotes_strip($mixed) {
 }
 
 //get what is requested
-$requesttype = request('requesttype');
+$request_type = request('request_type');
 
 //include the database class
 require_once "sqlite.php";
@@ -39,8 +39,24 @@ function request ($var) {
 }
 
 function register_session () {
-	$userid = md5(session_id().strtoupper(substr(base_convert(time(), 10, 35), 0, 6)));
-	return $userid;
+	$user_id = md5(session_id().strtoupper(substr(base_convert(time(), 10, 35), 0, 6)));
+	return $user_id;
+}
+
+function addResponse ($a_response) {
+	global $output;
+	
+	if (!isset ($output['response'])) {
+		$output['response'] = array ();
+	}
+	array_push ($output['response'], $a_response);
+}
+
+function addToQueue ($conn_id, $whoto, $type, $data) {
+	global $database;
+	//insert the message into the queue
+	$sql = "INSERT INTO queue (connid, whoto, type, data) VALUES ('$conn_id', '$whoto', '$type', '$data');";
+	$database->query($sql);
 }
 
 /* === end of line ==================================================================================================== */ ?>
