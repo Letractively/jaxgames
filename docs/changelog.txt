@@ -1,7 +1,19 @@
 =============================================================================================================================
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+17.MAR.07
+    ADD: Rejiggered the copyright notices to add the website address
+15.MAR.07
+    ADD: jax: additional constructor parameter to specify the interval in seconds
+    ADD: Changed the jax server to respond in JSON. the 'data' attribute is decoded server side before being sent so that
+         only one `json.parse` call needs to be made locally. 
+13.MAR.07
+    FIX: Othello: Scriptaculous error after the clouds have reached the end of their animation
+    NEW: page show/hide events. `shared.showPage` now uses the `game.pages` array and calls the show/hide functions there.
+         the reason for this is so you can start/stop animation on each page as you switch between them (e.g. title screen)
+    FIX: bsod now stays above everythig else (z-index:999;)
 12.MAR.07
+    ADD: Changed Effect.MoveBy uses (depreciated) to Effect.Move
     ADD: variable in CONFIG.js to enable/disable the bsod
     FIX: bsod shows filename and line number for thrown errors
 11.MAR.07

@@ -2,7 +2,7 @@
    css/shared.css - styles shared between all the games (chatcol, etc)
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-   jax, jax games (c) copyright Kroc Camen 2005-2007
+   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 */
 
 #body   {width: 642px; max-width: 640px; height: 429px; overflow: hidden;}
@@ -12,8 +12,7 @@ h1 span {visibility: hidden;}
 #shared-gamearea {float: left; width: 512px; height: 384px; overflow: hidden;}
 
 #page-title, #page-user, #page-join, #page-game
-	{display: none; width: 100%; height: 100%; overflow: hidden !important;}
-#page-title {display: block;}
+	{width: 100%; height: 100%; overflow: hidden !important;}
 
 .hv  {position: absolute;}
 .hv1 {display: table; _position: relative; overflow: hidden;}
@@ -37,7 +36,7 @@ h1 span {visibility: hidden;}
 #player-status-me-score   {float: right; margin-right: 8px;}
 
 /* === heads-up message ================================================================================================== */
-#shared-headsup           {top: 45px; left: 0; width: 512px; height: 384px; z-index: 998;}
+#shared-headsup           {top: 45px; left: 0; width: 512px; height: 384px; z-index: 997;}
 #shared-headsup .hv1      {width: 512px; height: 384px;}
 #shared-headsup-bar       {padding: 0; font: normal 11px Arial; text-align: center; color: white;
                            background-image: url("../games/-/mask.png"); overflow: hidden;
@@ -45,7 +44,7 @@ h1 span {visibility: hidden;}
 #shared-headsup-text p    {padding: 10px 0 10px 0;}
 
 /* === screen overlay ==================================================================================================== */
-#system-status            {top: 0; left: 0; width: 640px; height: 429px; background-image: url("../games/-/mask.png"); z-index: 999;}
+#system-status            {top: 0; left: 0; width: 640px; height: 429px; background-image: url("../games/-/mask.png"); z-index: 998;}
 #system-status .hv1       {height: 450px; width: 640px;}
 #system-status-text       {font: normal 11px Arial; text-align: center; color: white;}
 
@@ -82,7 +81,7 @@ h1 span {visibility: hidden;}
 
 /* === error screen ====================================================================================================== */
 #bsod        {display: none;}
-.bsod        {position:  absolute; top: 0; left: 0; width: 640px; height: 450px;
+.bsod        {position:  absolute; top: 0; left: 0; width: 640px; height: 450px; z-index: 999;
 	      text-align: center; background-color: #0000ac; -moz-opacity:  0.9;}
 .bsod p      {padding: 175px 30px 0 30px; font: bold 12px "Courier New", monospace; color: white;}
 .bsod strong {background-color: #ccc; color: #0000ac; padding: 2px 5px 2px 5px; text-transform: uppercase;}

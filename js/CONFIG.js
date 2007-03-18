@@ -1,6 +1,9 @@
 /* =======================================================================================================================
    js/config.js - jax games configuration
-   ======================================================================================================================= */
+   =======================================================================================================================
+   licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
+   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+*/
 var config = {
         //location of the jax server side receiver
         jax_path : "jax/php/response.php",
@@ -40,5 +43,3 @@ var Scriptaculous = {
 };
 
 //=== end of line ===========================================================================================================
-//licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-//jax, jax games (c) copyright Kroc Camen 2005-2007

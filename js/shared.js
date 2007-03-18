@@ -1,6 +1,9 @@
 /* =======================================================================================================================
    js/shared.js - functions shared with all the games on the site
-   ======================================================================================================================= */
+   =======================================================================================================================
+   licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
+   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+*/
 
 //create an instance of Jax, direct it to the PHP page to receive the AJAX calls
 var jax = new Jax ("../../"+config.jax_path);
@@ -22,9 +25,10 @@ Player.prototype = {
    OBJECT shared - functions/properties shared by different games on the site
    ======================================================================================================================= */
 var shared = {
-        host  : false,                      //true = you are the host, false = you are the opponent
-        pages : ["title", "user", "game"],  //the screens in the game, override this in game.js to add more
-        icons : {
+        host   : false,  //true = you are the host, false = you are the opponent
+        played : 0,      //number of matches played
+        
+        icons  : {
                 host     : "../-/icons/user.png",
                 opponent : "../-/icons/user_red.png"
         },
@@ -50,17 +54,28 @@ var shared = {
                 )
         },
         
-        //number of matches played
-        played : 0,
-        
         /* > showPage : display a particular page in a game (like the titlescreen, join page etc)
            ===============================================================================================================
            params * s_page : page name to show (as from `shared.pages` array)
            =============================================================================================================== */
         showPage : function (s_page) {
                 //loop over each page and hide/show as appropriate
-                this.pages.each (function(s_item){
+                /*this.pages.each (function(s_item){
                         $("page-" + s_item).style.display = (s_item == s_page ? "block" : "none");
+                });*/
+                game.pages.each (function(o_item) {
+                        var e = $("page-"+o_item.name);
+                        if (o_item.name == s_page) {
+                                if (!e.visible ()) {
+                                        if (typeof o_item.show == "function") {o_item.show ();}
+                                        e.show ();
+                                }
+                        } else {
+                                if (e.visible ()) {
+                                        if (typeof o_item.hide == "function") {o_item.hide ();}
+                                        e.hide ();
+                                }
+                        }
                 });
         },
         
@@ -107,9 +122,9 @@ var shared = {
                         this.setSystemStatus ("<p>Joining Game</p><p>Please Wait&hellip;</p>");
                         
                         //connect to the other player
-                        jax.connect ($F("join-key"),         //the connection key the user pasted into the text box
-                                    {name : playerMe.name},  //your nickname to send to the other player
-                                    preStart.bind(this)      //function to call once you've joined the game (see below)
+                        jax.connect ($F("join-key"),        //the connection key the user pasted into the text box
+                                    {name: playerMe.name},  //your nickname to send to the other player
+                                    preStart.bind(this)     //function to call once you've joined the game (see below)
                         );
                 }
                 
@@ -160,7 +175,9 @@ var shared = {
                                 scaleMode    : {originalHeight: 21}                      //base reference for %
                         }),*/
                         //also move the bar at the same time (so that it effectively slides upwards)
-                        new Effect.MoveBy ($("player-status-me"), (s_html?-(21*(scale)):21*(scale)), 0, {
+                        new Effect.Move ($("player-status-me"), {
+                                x           : 0,
+                                y           : (s_html?-(21*(scale)):21*(scale)),
                                 duration    : 0.5,
                                 beforeStart : function(){
                                         //before starting the animation, change the html
@@ -558,6 +575,8 @@ Event.observe (window, 'load', function(){
         
         //run the load function defined in game.js for the game to handle some onload procedures of its own
         game.load ();
+        //if present, run the title screen's show function to prepare the title screen
+        shared.showPage ("title");
 });
 
 /* jax_disconnect < listen out for the disconnect message when the other player leaves the game
@@ -567,7 +586,9 @@ jax.listenFor ("jax_disconnect", function(o_response) {
         if (o_response.data.reason == "unload") {
                 shared.headsup.hide ();
                 shared.setTitle (playerThem.name+" left the game - ");
-                shared.setSystemStatus (playerThem.name+' left the game.<br /><a href="javascript:location.reload ();">Play Again</a>');
+                shared.setSystemStatus (
+                        playerThem.name+' left the game.<br /><a href="javascript:location.reload ();">Play Again</a>'
+                );
         }
 });
 
@@ -612,5 +633,3 @@ function bsod (s_message, s_url, n_line) {
 if (config.use_bsod) {window.onerror = bsod;}
 
 //=== end of line ===========================================================================================================
-//licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-//jax, jax games (c) copyright Kroc Camen 2005-2007

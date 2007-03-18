@@ -14,7 +14,7 @@
 	<h1><span>Othello</span></h1>
 	<div id="shared-gamearea">
 		<!-- === title = title screen, start or join a game ===================================================== -->
-		<div id="page-title">
+		<div id="page-title" style="display: none;">
 			<div id="title-clouds"><div id="title-cloud"></div></div>
 			<div id="title-fg">
 				<div id="title-board">
@@ -28,7 +28,7 @@
 			</div>
 		</div>
 		<!-- === user = let the user enter a name =============================================================== -->
-		<div id="page-user">
+		<div id="page-user" style="display: none;">
 			<p><a href="javascript:shared.showPage('title');">&laquo; Back</a></p>
 			<p><label for="user-nickname">Enter a desired nickname:</label></p>
 			<p><input type="text" name="user-nickname" id="user-nickname" maxlength="20" /></p>
@@ -39,7 +39,7 @@
 			<p><input type="button" id="user-submit" value="Start Game" /></p>
 		</div>
 		<!-- === game = the main game display =================================================================== -->
-		<div id="page-game">
+		<div id="page-game" style="display: none;">
 			<div id="game-board"></div>
 			<div id="game-paper-me" class="game-paper">
 				<div id="game-paper-me-pieces" class="game-paper-pieces"></div>

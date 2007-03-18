@@ -1,22 +1,25 @@
 /* =======================================================================================================================
    jax.js - (c) copyright Kroc Camen 2005-2007
-   ======================================================================================================================= */
-// licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-// REQUIRES: prototype 1.5.0, Prototype-compatible json.js
-
-/* TODO:
+   =======================================================================================================================
+   licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
+   jax (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+*//*
+   jax is an ajax messaging system allowing two computers to send information to each other from a browser
+   REQUIRES: prototype 1.5.0, Prototype-compatible json.js
+   
+   TODO:
    + if the server responds with a 403, 404, 500 etc, display an error message
    + if the server times out, give a warning message and try again
 */
 
 /* =======================================================================================================================
-   CLASS Jax - user to user AJAX communication (via PHP)
+   CLASS Jax - user to user ajax communication
    ======================================================================================================================= */
 var Jax = new Class.create ();
 Jax.prototype = {
         //--- public variables ----------------------------------------------------------------------------------------------
-        version : "0.4.0.0000.alpha",  //version number of jax in 'major.minor.revision.build.tag' format
-        conn_id : null,                //once you've opened/connected, this is the connection id for this instance
+        version  : "0.5.0",  //version number of jax in 'major.minor.revision' format (read only)
+        conn_id  : null,     //once you've opened/connected, this is the connection id for this instance (read only)
         
         //--- private variables ---------------------------------------------------------------------------------------------
         _ : {
@@ -24,15 +27,21 @@ Jax.prototype = {
                 local_id     : "",  //your id, needed to collect your messages from the server
                 remote_id    : "",  //id of the other person, needed to send messages to them
                 callbax      : [],  //a 'bat-belt' (array of functions) for the server queue callbacks
-                timer_handle : 0    //for remembering the timer handle to be able to stop it later on
+                timer_handle : 0,   //for remembering the timer handle to be able to stop it later on
+                interval     : 3    //number of seconds between checking the server for new messages
         },
         
-        /* initialize
+        /* initialize : called when the class is created
+           ===============================================================================================================
+           params * (s_server)   : optional, alternative location to the server side jax response page
+                    (n_interval) : optional, number of seconds between checking the server for new messages
            =============================================================================================================== */
-        initialize : function (s_server) {
-                //set the server location for AJAX calls
+        initialize : function (s_server, n_interval) {
+                //set the server location for ajax calls
                 if (!s_server) {s_server = "jax/php/response.php";}  //default: same folder (assumedly webroot)
-                this._.request_file = s_server;
+                
+                if (n_interval) {this._.interval = n_interval;}      //if interval is specified, set it
+                this._.request_file = s_server;                      //set the server url
                 
                 //when the user closes the window or navigates away from the website
                 Event.observe (window, 'beforeunload', function(){
@@ -43,36 +52,30 @@ Jax.prototype = {
         
         /* > open : open a new connection on the server
            ===============================================================================================================
-           params * o_data   : data (as object literal) to give to the other player as soon as they join
-                    f_onOpen : function called once the server accepts the game and begins waiting for the opponent 
-                               params * o_response : {
-                                                result : (bool) if the server opened the slot okay
-                                                error  : (string) error message if there was one (if result = false)
-                                                connid : (string) connection id assigned - this.conn_id receives this
-                                        }
+           params * o_data   : data (as object literal) to give to the other person as soon as they join
+                    f_onOpen : function called once the server accepts the connection and begins waiting for the other person
                     f_onJoin : function called once the opponent has joined the game
-                               return * object : contains data the other player has sent to you upon joining
            =============================================================================================================== */
         open : function (o_data, f_onOpen, f_onJoin) {
                 //send the request to the server to open a new game
                 this.sendRequest ("jax_open", {data:json.stringify(o_data)}, function(o_response){
                         //if the server created the game without error...
-                        if (o_response.result) {
+                        //?/if (o_response.result) {
                                 //set the id
-                                this.conn_id    = o_response.connid;
-                                this._.local_id = o_response.userid;
+                                this.conn_id    = o_response.conn_id;
+                                this._.local_id = o_response.user_id;
                                 //what to do when the other player joins
                                 this.listenFor ("jax_join", function(o_response){
                                         //do not respond again to a user joining
                                         this.listenFor ("jax_join");
                                         //get the other person's id, needed to send messages to them
-                                        this._.remote_id = o_response.data.userid;
+                                        this._.remote_id = o_response.data.user_id;
                                         //call the passed function from the game when the game starts
                                         f_onJoin (o_response);
                                 }.bind(this));
                                 //start the timer to check for new messages
                                 this.timerStart ();
-                        }
+                        //?/}
                         //call the passed function from the game for when the game is initialized
                         f_onOpen (o_response);
                 }.bind(this));
@@ -85,32 +88,32 @@ Jax.prototype = {
         connect : function (s_connid, o_data, f_onGameStart) {
                 //attempt to join the game with your nickname and key
                 this.sendRequest("jax_connect", {
-                        connid : s_connid,
-                        data   : json.stringify(o_data)
+                        conn_id : s_connid,
+                        data    : json.stringify (o_data)
                 }, function(o_response){
                         //did the server have any problems with your key/name?
-                        if (o_response.result) {
+                        //?/if (o_response.result) {
                                 //get yours and their id
                                 this.conn_id     = s_connid;
-                                this._.local_id  = o_response.userid;
-                                this._.remote_id = o_response.hostid;
+                                this._.local_id  = o_response.user_id;
+                                this._.remote_id = o_response.host_id;
                                 //start the automatic check for new messages
                                 this.timerStart ();
                                 //call the passed function from the game.js for when you join the game
                                 f_onGameStart (o_response);
-                        } else {
+                        /*?/} else {
                                 //!/server side register nickname / join game failed
                                 alert ("Did not join the game");
-                        }
+                        }*/
                 }.bind(this));
         },
         
         /* > timerStart : begin the recurring timer
            ===============================================================================================================
-           params * n_interval : number of milleseconds between AJAX calls
+           params * (n_interval) : number of seconds between AJAX calls
            =============================================================================================================== */
         timerStart : function (n_interval) {
-                if (!n_interval) {n_interval = 3000;}  //default: 3 seconds
+                if (!n_interval) {n_interval = this._.interval;}  //default: the default interval (in seconds)
                 
                 //if the event timer is in motion, stop it first
                 if (this._.timer_handle) {this.timerStop ();}
@@ -118,15 +121,16 @@ Jax.prototype = {
                 //set the interval
                 this._.timer_handle = setInterval(function(){
                         this.sendRequest ("jax_check_queue", {
-                                connid : this.conn_id,    //which connection applies
-                                userid : this._.local_id  //and your user id to get your messages
+                                conn_id : this.conn_id,    //which connection applies
+                                user_id : this._.local_id  //and your user id to get your messages
                         });
-                }.bind(this), n_interval);
+                }.bind(this), n_interval*1000);
         },
         
         /* > timerStop
            =============================================================================================================== */
         timerStop : function () {
+                //stop the timer using the remembered handle
                 clearInterval (this._.timer_handle);
         },
         
@@ -144,7 +148,7 @@ Jax.prototype = {
                    the other player (via the server). For example "chat_message". The server's response will be passed to
                    the function, you should use the listenFor function like this:
 
-                       jax.listenFor("game_chat_message", function(o_response) {
+                       jax.listenFor ("game_chat_message", function(o_response){
                            //code to run when you receive a "game_chat_message" from the server/other player,
                            //'o_response' is an object containing the server's response
                        });
@@ -167,7 +171,7 @@ Jax.prototype = {
         sendRequest : function (s_type, o_request, f_onResponse) {
                 if (!f_onResponse) {f_onResponse = Prototype.emptyFunction;}  //default: no callback
                 
-                o_request.requesttype = s_type;
+                o_request.request_type = s_type;
                 pars = $H(o_request).toQueryString ();
                 
                 var self = this,
@@ -177,74 +181,58 @@ Jax.prototype = {
                                 method     : 'post',
                                 parameters : pars,
                                 onComplete : function(o_ajax){  //-----------------------------------------------------------
-                                        //take the querystring returned by the server and turn into an object literal
-                                        var str      = o_ajax.responseText.replace (/\+/g, " "),
-                                            response = str.toQueryParams ()
-                                        ;
-                                        if (response.data) {response.data = json.parse (response.data);}
-                                        
-                                        //if this is something from the queue, there may be more than one message there
-                                        if (response.requesttype == "jax_check_queue") {
-                                                var count = parseInt (response.count);
-                                                for (var i=1; i<=count; i++) {
-                                                        //build a response object for this data
-                                                        var r = {
-                                                                result : response.result,
-                                                                type   : response["type"+i],
-                                                                data   : json.parse (response["data"+i])
-                                                        };
+                                        //un-json the returned data
+                                        var r = json.parse (o_ajax.responseText);
+                                        //loop over the responses (may be multiple if more than one message was on queue)
+                                        if (s_type == "jax_check_queue") {
+                                                r.response.each (function(o_response){
                                                         //call the user-added function to deal with this data
-                                                        if (typeof self._.callbax[r.type] == "function") {
-                                                                self._.callbax[r.type](r);
+                                                        if (typeof self._.callbax[o_response.type] == "function") {
+                                                                self._.callbax[o_response.type] (o_response);
                                                         }
-                                                }
+                                                });
                                         }
-                                        if (response.error) {
-                                                //fatal server error!
-                                                console.error (response.error);
-                                                alert (response.error);
-                                        } else {
-                                                f_onResponse (response);
-                                                f_onResponse = null;
-                                        }
+                                        f_onResponse (r.response);
+                                        f_onResponse = null;
                                 }
                         }
                 );
         },
         
-        /* > sendToQueue : send some data to the other person (via the server's pickup queue)
+        /* > sendToQueue : send some data to the other person (via the server's message queue)
            ==============================================================================================================
-           params * s_type   : the label to identify the data, e.g. chat_message
-                    o_data   : object literal containing key:value pairs to send to the other player
-                    f_onSent : function to call once the server accepts the data
+           params * s_type     : the label to identify the data, e.g. chat_message
+                    o_data     : object literal containing key:value pairs to send to the other player
+                    (f_onSent) : function to call once the server accepts the data
            =============================================================================================================== */
         sendToQueue : function(s_type, o_data, f_onSent) {
                 if (!f_onSent) {f_onSent = Prototype.emptyFunction;}  //default: no callback
                 
                 var self = this;
                 this.sendRequest ("jax_queue", {
-                        connid : self.conn_id,            //connection id for the you-them bridge
-                        sendto : self._.remote_id,        //the opponent's id you're sending to
-                        type   : s_type,                  //the tag name of the data being sent e.g. "chat_message"
-                        data   : json.stringify (o_data)  //the custom data being sent
+                        conn_id : self.conn_id,            //connection id for the you-them bridge
+                        sendto  : self._.remote_id,        //the opponent's id you're sending to
+                        type    : s_type,                  //the tag name of the data being sent e.g. "chat_message"
+                        data    : json.stringify (o_data)  //the custom data being sent
                 }, f_onSent);
         },
         
-        /* disconnect : tell the other person you've left, and stop the AJAX
+        /* disconnect : tell the other person you've left, and stop the ajax
            ===============================================================================================================
            params * o_data : data (as object literal) to send the other person
            =============================================================================================================== */
         disconnect : function(o_data) {
                 //ignore if the user hasn't actually connected yet (e.g. closing a window before connecting)
                 if (!this._.local_id) {return false;}
+                
                 //stop the local timer
                 this.timerStop ();
-                //send the death knell to the other player
+                //send the death knell to the other person
                 var self = this;
                 this.sendRequest ("jax_disconnect", {
-                        connid : self.conn_id,            //the connection you're on
-                        userid : self._.local_id,         //your user id
-                        data   : json.stringify (o_data)  //something to send to the other player, like reason for disconnect  
+                        conn_id : self.conn_id,            //the connection you're on
+                        user_id : self._.local_id,         //your user id
+                        data    : json.stringify (o_data)  //something to send to the other person
                 });
         }
 };

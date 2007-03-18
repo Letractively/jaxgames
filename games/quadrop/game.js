@@ -1,7 +1,10 @@
 /* =======================================================================================================================
    games/quadrop/game.js - the logic for this game
-   ======================================================================================================================= */
-/* name   : Quadrop
+   =======================================================================================================================
+   licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
+   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+*//*
+   name   : Quadrop
    author : Kroc Camen | kroccamen@gmail.com | kroc.deviantart.com
    type   : board game
    desc   : as known as 'Connect 4™'
@@ -205,5 +208,3 @@ game.events = {
 };
 
 //=== end of line ===========================================================================================================
-//licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-//jax, jax games (c) copyright Kroc Camen 2005-2007

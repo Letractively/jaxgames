@@ -1,7 +1,10 @@
 /* =======================================================================================================================
    js/boot.js - load the libraries needed for the games
-   ======================================================================================================================= */
-/* note: in the distribution version, this page is replaced by a compressed version of the merged scripts below.
+   =======================================================================================================================
+   licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
+   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+*//* 
+   note: in the distribution version, this page is replaced by a compressed version of the merged scripts below.
          this means that anything defined here, will NOT be available in the release version of jax games, therefore you can
          include extra developer-only javascript files and redefine values from CONFIG.js for developer only use
 
@@ -51,5 +54,3 @@ for (i=0; i<boot_files.length; i++) {
 }
 
 //=== end of line ===========================================================================================================
-//licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-//jax, jax games (c) copyright Kroc Camen 2005-2007

@@ -1,6 +1,9 @@
 /* =======================================================================================================================
    games/blacjax/classes.js - extra classes unique to this game
-   ======================================================================================================================= */
+   =======================================================================================================================
+   licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
+   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+*/
 
 /* =======================================================================================================================
    EXTEND CLASS Pack - add Black Jack specific functions to the standard pack class
@@ -82,10 +85,10 @@ Hand.prototype = {
                         //for each card in the hand...
                         this.cards.each (function(s_card,n_index){
                                 //assign an animation to each card to shift it to the new position
-                                cardanims.push (new Effect.MoveBy (this.element+'-'+s_card, 0, cardpos[n_index+1], {sync:true, mode:'absolute'}));
+                                cardanims.push (new Effect.Move(this.element+'-'+s_card, {sync:true, x:cardpos[n_index+1], y:0, mode:'absolute'}));
                         }.bind(this));
                 }
-
+                
                 //slide the card from the deck to the hand
                 this.cards.unshift (game.deck.cards.pop());
                 var card    = this.cards.first (),
@@ -95,7 +98,7 @@ Hand.prototype = {
                                    (this.host?-113:113)+'px;" src="../-/cards/back.png" width="71" height="96" '+
                                    'alt="'+card+'" />'
                 );
-                cardanims.push (new Effect.MoveBy (card_id, 0, cardpos[0], {sync:true, mode:'absolute', afterFinish:function(o_effect){
+                cardanims.push (new Effect.Move(card_id, {sync:true, x:cardpos[0], y:0, mode:'absolute', afterFinish:function(o_effect){
                         //flip the card over by switching to the face image (playerMe only)
                         if (this.host) {$(o_effect.element.id).src = "../-/cards/" + card + ".png";}
                 }.bind(this)}));
@@ -166,7 +169,7 @@ Hand.prototype = {
                     newpos  = cardpos.last ()
                 ;
                 //slide the card out a bit,
-                new Effect.MoveBy (elid, (this.host?-57:57), 0, {duration:0.5, beforeStart:function(){
+                new Effect.Move (elid, {x:0, y:(this.host?-57:57), duration:0.5, beforeStart:function(){
                         $(elid).style.zIndex = this.cards.length+1;
                 }.bind(this)});
                 
@@ -177,13 +180,15 @@ Hand.prototype = {
                                 //assign an animation to each card
                                 $("game-run-"+s_card).style.zIndex = n_index + 1;
                                 var move_to = cardpos[n_index] - parseInt ($("game-run-"+s_card).getStyle("left"), 10);
-                                anims.push (new Effect.MoveBy ("game-run-"+s_card, 0, move_to, {sync:true}));
+                                anims.push (new Effect.Move("game-run-"+s_card, {sync:true, x:move_to, y:0}));
                         }.bind(this));
                         new Effect.Parallel (anims);
                 }
                 
                 //slide the card over onto the run
-                new Effect.MoveBy (elid, (this.host?-113:113), newpos, {
+                new Effect.Move (elid, {
+                        x           : newpos,
+                        y           : (this.host?-113:113),
                         mode        : 'absolute',
                         duration    : (Math.abs (newpos-curpos) / 500) + 0.3,  //time taken is based on the distance
                         queue       : 'end',
@@ -197,7 +202,7 @@ Hand.prototype = {
                         this.cards.each (function(s_card,n_index){
                                 //assign an animation to each card (excluding the card that was chosen)
                                 if (n_index != card_id) {
-                                        anims.push (new Effect.MoveBy (this.element+'-'+s_card, 0, cardpos[d], {sync:true, mode:'absolute'}));
+                                        anims.push (new Effect.Move (this.element+'-'+s_card, {sync:true, x:cardpos[d], y:0, mode:'absolute'}));
                                         d++;
                                 }
                         }.bind(this));
@@ -207,14 +212,14 @@ Hand.prototype = {
                                 var chosencard = this.cards[card_id];  //pull the card actually out of the hand array
                                 this.cards[card_id] = null;            //set that slot to null
                                 this.cards = this.cards.compact ();    //and rebuild the array
-
+                                
                                 //add the card to the run, update the run
                                 game.run.cards.push (chosencard);
                                 $(this.element+"-"+chosencard).id = "game-run-"+chosencard;
-
+                                
                                 //flip the card over by switching to the face image (your cards are already face up)
                                 if (!this.host) {$("game-run-"+chosencard).src = "../-/cards/" + chosencard + ".png";}
-
+                                
                                 f_onComplete (chosencard);
                         }.bind(this)});
                         
@@ -255,5 +260,3 @@ Hand.prototype = {
 };
 
 //=== end of line ===========================================================================================================
-//licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-//jax, jax games (c) copyright Kroc Camen 2005-2007
