@@ -102,7 +102,7 @@ var game = {
         /* > playTurn : take your turn
            =============================================================================================================== */
         playTurn : function () {
-                //clear the "other player's turn" message on screen if it's there
+                //clear the “other player’s turn” message on screen if it’s there
                 shared.setPlayerStatus ();
                 
                 //check each column to see which are playable
@@ -144,7 +144,7 @@ var game = {
                 $("player-status-me-wins").innerHTML   = playerMe.wins;
                 $("player-status-them-wins").innerHTML = playerThem.wins;
                 
-                //listen out for the 'play again' signal from the other person
+                //listen out for the “play again” signal from the other person
                 jax.listenFor("game_again", function(o_response){
                         jax.listenFor ("game_again");
                         game.start (!b_winner);

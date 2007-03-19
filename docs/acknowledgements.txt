@@ -30,7 +30,7 @@ Many thanks go to these people, and their contributions:
 [Build]
 * The Mozilla Foundation, Rhino <mozilla.org/rhino/>
 * Dojo <dojotoolkit.org>, custom_rhino.jar <alex.dojotoolkit.org/shrinksafe/>
-* David McNab <david@rebirthing.co.nz>, Rhino port of Dean Edward's Packer <dean.edwards.name/packer>
+* David McNab <david@rebirthing.co.nz>, Rhino port of Dean Edward’s Packer <dean.edwards.name/packer>
 * and Sun Microsystems for Java, which Rhino runs upon <java.com>
 
 [Depreciated]

@@ -10,8 +10,8 @@
    a div) that the baord table will be injected into. the board will use the following html ids for the various table
    elements, where 'element' is the html id you created the board class with.
    
-   where "var board = new Board ('element');":
-   <table> = #element-table    (class: '.board')
+   where `var board = new Board ('element');`:
+   <table> = #element-table    (class: .board)
    <col>   = #element-col-X    (where X is column number - 1, 2, 3 etc)
    <tr>    = #element-row-Y    (where Y is the row number 1 to number of rows)
    <td>    = #element-cell-XxY (where X is the column number and Y is the row number. e.g. #element-cell-3x6)
@@ -24,7 +24,7 @@ Board.prototype = {
         cells   : [],  //an array of html content to go in each cell (as a two dimensional array, e.g. [x][y])
         
         //this is a set of vectors to move in the eight directions. you can use this in your own logic to traverse the 
-        //board for your own reasons. refer to othello for good examples. it isn't used internally at all.
+        //board for your own reasons. refer to othello for good examples. it isn’t used internally at all
         directions : [
                 {x:  0, y: -1},  //0 - up
                 {x:  1, y: -1},  //1 - right-up

@@ -2,42 +2,42 @@
 jax games
 =============================================================================================================================
 Here follows installation instructions for Jax Games.
-You've already completed the first step, which is to download and unzip Jax Games.
+You’ve already completed the first step, which is to download and unzip Jax Games.
 
 Jax Games is a web application designed to be accessed through a web browser. To run Jax, you will need
 
-* Apple Mac OS X 'Tiger' or Microsoft Windows 98, Me, 2000, XP or Linux (check with your distributor for compatibility)
+* Apple Mac OS X ‘Tiger’ or Microsoft Windows 98, Me, 2000, XP or Linux (check with your distributor for compatibility)
 * The PHP webserver software (v5.2+)
 * Mozilla Firefox, or Apple Safari (as Jax Games is not compatible with Internet Explorer just yet)
 
 Note: Better support for Microsoft Windows will be coming at a later stage.
 
 
-1. Instructions for Apple Mac OS X 'Tiger' users:
+1. Instructions for Apple Mac OS X ‘Tiger’ users:
 =============================================================================================================================
 i)   Download the Mac OS X PHP 5 bundle from <http://www.entropy.ch/software/macosx/php/#install>
-     Choose the download labelled "PHP 5.?.? for Apache 1.3" (version numbers will change over time)
+     Choose the download labelled ‘PHP 5.?.? for Apache 1.3’ (version numbers will change over time)
 
 ii)  Open the .tar.gz file (may happen automatically if you're using Safari)   
      Open the "entropy-php.mpkg" installer and follow the steps to install PHP5 using the default options
 
 iii) Move the jaxgames folder that you unzipped/checked-out (and are looking at now ) to
-     'Macintosh HD > Library > WebServer > Documents'.
+     ‘Macintosh HD > Library > WebServer > Documents’.
 
-iv)  The database folder must be write-able for Jax Games to function. Navigate into the 'jax' folder.
-     Ctrl-Click on the 'db' folder and select Get Info. Expand the 'Ownership & Permissions' section, and expand the
-     'Details' section within. Change The three drop down boxes for Access to all say "Read & Write", then click the
-     'Apply to enclosed items' button. Enter your password as prompted. Once done, dismiss the info window
+iv)  The database folder must be write-able for Jax Games to function. Navigate into the ‘jax’ folder.
+     Ctrl-Click on the ‘db’ folder and select Get Info. Expand the ‘Ownership & Permissions’ section, and expand the
+     ‘Details’ section within. Change The three drop down boxes for Access to all say “Read & Write”, then click the
+     ‘Apply to enclosed items’ button. Enter your password as prompted. Once done, dismiss the info window
 
-v)   Open System Preferences either from the dock, or 'Apple Menu > System Preferences...' and click on 'Sharing'.
-     Tick the box labelled 'Personal Web Sharing'
+v)   Open System Preferences either from the dock, or ‘Apple Menu > System Preferences...’ and click on ‘Sharing’.
+     Tick the box labelled ‘Personal Web Sharing’
      
-vi)  At the top of the Sharing preferences window is your computer's name, underneath that is your local address
-     "Other computers on your local subnet can access your computer at mymac.local" where 'mymac' is the name you've
-     given the computer. If you've not assigned a sensible name, now would be a good time. You could use tree names, pet 
+vi)  At the top of the Sharing preferences window is your computer’s name, underneath that is your local address
+     “Other computers on your local subnet can access your computer at mymac.local” where “mymac” is the name you’ve
+     given the computer. If you’ve not assigned a sensible name, now would be a good time. You could use tree names, pet 
      names or character names from Monty Python films, for example.
       
-     Open Safari or Firefox and navigate to http://mymac.local/jaxgames/ (where 'mymac' is the name you've assigned your
+     Open Safari or Firefox and navigate to http://mymac.local/jaxgames/ (where “mymac” is the name you've assigned your
      computer). If all is well, you should be presented with the games list. If not, seek help in the Jax Games forum at
      <http://groups.google.com/group/jaxgames>
      

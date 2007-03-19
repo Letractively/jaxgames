@@ -18,15 +18,15 @@
 var Jax = new Class.create ();
 Jax.prototype = {
         //--- public variables ----------------------------------------------------------------------------------------------
-        version  : "0.5.0",  //version number of jax in 'major.minor.revision' format (read only)
-        conn_id  : null,     //once you've opened/connected, this is the connection id for this instance (read only)
+        version  : "0.5.0",  //version number of jax in “major.minor.revision” format (read only)
+        conn_id  : null,     //once you’ve opened/connected, this is the connection id for this instance (read only)
         
         //--- private variables ---------------------------------------------------------------------------------------------
         _ : {
                 request_file : "",  //url of the jax server page
                 local_id     : "",  //your id, needed to collect your messages from the server
                 remote_id    : "",  //id of the other person, needed to send messages to them
-                callbax      : [],  //a 'bat-belt' (array of functions) for the server queue callbacks
+                callbax      : [],  //a ‘bat-belt’ (array of functions) for the server queue callbacks
                 timer_handle : 0,   //for remembering the timer handle to be able to stop it later on
                 interval     : 3    //number of seconds between checking the server for new messages
         },
@@ -45,7 +45,7 @@ Jax.prototype = {
                 
                 //when the user closes the window or navigates away from the website
                 Event.observe (window, 'beforeunload', function(){
-                        //'onbeforeunload' must be used because popup windows do not have an onunload event
+                        //`onbeforeunload` must be used because popup windows do not have an onunload event
                         this.disconnect ({reason: "unload"});
                 }.bind(this));
         },
@@ -68,7 +68,7 @@ Jax.prototype = {
                                 this.listenFor ("jax_join", function(o_response){
                                         //do not respond again to a user joining
                                         this.listenFor ("jax_join");
-                                        //get the other person's id, needed to send messages to them
+                                        //get the other person’s id, needed to send messages to them
                                         this._.remote_id = o_response.data.user_id;
                                         //call the passed function from the game when the game starts
                                         f_onJoin (o_response);
@@ -150,7 +150,7 @@ Jax.prototype = {
 
                        jax.listenFor ("game_chat_message", function(o_response){
                            //code to run when you receive a "game_chat_message" from the server/other player,
-                           //'o_response' is an object containing the server's response
+                           //`o_response` is an object containing the server’s response
                        });
 
                    To unregister a callback and unlisten from the queue, send null as the second parameter.
@@ -199,7 +199,7 @@ Jax.prototype = {
                 );
         },
         
-        /* > sendToQueue : send some data to the other person (via the server's message queue)
+        /* > sendToQueue : send some data to the other person (via the server’s message queue)
            ==============================================================================================================
            params * s_type     : the label to identify the data, e.g. chat_message
                     o_data     : object literal containing key:value pairs to send to the other player
@@ -211,18 +211,18 @@ Jax.prototype = {
                 var self = this;
                 this.sendRequest ("jax_queue", {
                         conn_id : self.conn_id,            //connection id for the you-them bridge
-                        sendto  : self._.remote_id,        //the opponent's id you're sending to
+                        sendto  : self._.remote_id,        //the opponent’s id you’re sending to
                         type    : s_type,                  //the tag name of the data being sent e.g. "chat_message"
                         data    : json.stringify (o_data)  //the custom data being sent
                 }, f_onSent);
         },
         
-        /* disconnect : tell the other person you've left, and stop the ajax
+        /* disconnect : tell the other person you’ve left, and stop the ajax
            ===============================================================================================================
            params * o_data : data (as object literal) to send the other person
            =============================================================================================================== */
         disconnect : function(o_data) {
-                //ignore if the user hasn't actually connected yet (e.g. closing a window before connecting)
+                //ignore if the user hasn’t actually connected yet (e.g. closing a window before connecting)
                 if (!this._.local_id) {return false;}
                 
                 //stop the local timer
@@ -230,7 +230,7 @@ Jax.prototype = {
                 //send the death knell to the other person
                 var self = this;
                 this.sendRequest ("jax_disconnect", {
-                        conn_id : self.conn_id,            //the connection you're on
+                        conn_id : self.conn_id,            //the connection you’re on
                         user_id : self._.local_id,         //your user id
                         data    : json.stringify (o_data)  //something to send to the other person
                 });

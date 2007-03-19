@@ -3,7 +3,7 @@
    response.php - handle all request/response traffic from the clients
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-   jax (c) copyright Kroc Camen 2005-2007
+   jax (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
    
    this page accepts requests from jax.js in order to setup an ajax connection between two browsers and share data.
    see 'docs/api.txt' for a detailed break down of how to use jax and a list of input/outputs of this script
@@ -23,12 +23,12 @@ $output = array ();
 switch($request_type) {
 	case "jax_open":  //=================================================================================================
 		//create an open slot for the new user. a connection id is generated, and the other person can join with this
-		$user_id = register_session();
+		$user_id = registerSession ();
 		$conn_id = strtoupper (substr(base_convert(time(),10,35),0,6));
 		
 		//save this to the database
 		$sql = "INSERT INTO connections (connid, userid1) VALUES ('$conn_id', '$user_id');";
-		$database->query($sql) or die("error in creating game");
+		$database->query ($sql) or die ("error in creating game");
 		
 		//the request also has the option of providing some json data for the other person when they connect
 		if (isset ($_REQUEST['data'])) {
@@ -38,7 +38,7 @@ switch($request_type) {
 		//generate a response to the caller, passing back:
 		$output['response'] = array (
 			'result'  => true,      //the connection has been opened
-			'conn_id' => $conn_id,  //the connection id you've been assigned
+			'conn_id' => $conn_id,  //the connection id you’ve been assigned
 			'user_id' => $user_id   //a user id that determines who is who
 		);
 		
@@ -47,7 +47,7 @@ switch($request_type) {
 		break;
 		
 	case "jax_connect":  //==============================================================================================
-		$user_id = register_session ();   //register your user id
+		$user_id = registerSession ();    //register your user id
 		$conn_id = $_REQUEST['conn_id'];  //the connection you wish to join
 		
 		//find the connection to join in the database
@@ -59,10 +59,10 @@ switch($request_type) {
 			);
 			
 		} else {
-			//join the host's connection
+			//join the host’s connection
 			$database->query ("UPDATE connections SET userid2='$user_id' WHERE connid='$conn_id';");
 			
-			//get the other user's id
+			//get the other user’s id
 			$result = $database->query ("SELECT userid1 FROM connections WHERE connid='$conn_id';");
 			list ($host_id) = $database->fetch_row ($result);
 			
@@ -77,7 +77,7 @@ switch($request_type) {
 			$data->user_id = $user_id;
 			$data = json_encode ($data);
 			
-			//put a message on the queue for them to say you've joined
+			//put a message on the queue for them to say you’ve joined
 			addToQueue ($conn_id, $host_id, 'jax_join', $data);
 			
 			//get the data the host provided when the connection was created
@@ -172,8 +172,6 @@ switch($request_type) {
 //close the database
 $database->close ($database);
 
-//return header type
-header ('Content-type: application/json');
 //output the encoded string
 echo json_encode ($output);
 	

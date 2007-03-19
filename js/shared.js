@@ -3,17 +3,23 @@
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+*//*
+   shared.js contains objects that are shared between all of the games. in particular `shared`, an object containing core
+   functions to power the games and make the shared ui function (e.g. chat box)
 */
 
-//create an instance of Jax, direct it to the PHP page to receive the AJAX calls
-var jax = new Jax ("../../"+config.jax_path);
+//create an instance of `Jax`, direct it to the php page to receive the ajax calls.
+//jax allows us to setup a ‘browser-to-browser’ connection via ajax. one player starts a new connection, and the other joins.
+//the server is polled every few seconds for new messages from each other. jax is therefore not realtime, there is absolutely
+//no gaurantee that a message will arrive at the other player at a given time. jax games are therefore turn-based
+var jax = new Jax ("../../"+config.jax_path, 3);  //set server url, and polling interval. see ‘jax/jax.js’ for details
 
 /* =======================================================================================================================
    CLASS Player - a base class, your game can extend this to add more player properties
    ======================================================================================================================= */
 var Player = Class.create ();
 Player.prototype = {
-        //override this in your game to add a constructor function to your player's classes
+        //override this in your game to add a constructor function to your player’s classes
         initialize : Prototype.emptyFunction,
         
         name : "",  //display name
@@ -54,24 +60,33 @@ var shared = {
                 )
         },
         
-        /* > showPage : display a particular page in a game (like the titlescreen, join page etc)
+        /* > showPage : display a particular page in a game (like the title screen, join page etc)
            ===============================================================================================================
-           params * s_page : page name to show (as from `shared.pages` array)
+           params * s_page : page name to show (as from `game.pages` array, see `game.js` for relevant game for details)
            =============================================================================================================== */
         showPage : function (s_page) {
+                //a ‘page’ is a screen in the game that the player sees. most games will have a title screen, the main
+                //gameplay screen, and maybe rules / about screens. each of these is an html div with the id “page-????”
+                //(where ???? is the page’s name). in addition to this, the game.js for the game has an array `game.pages`
+                //where the names of each of the pages in the game is stored, along with functions to run when the page is
+                //shown / hidden
+                
                 //loop over each page and hide/show as appropriate
-                /*this.pages.each (function(s_item){
-                        $("page-" + s_item).style.display = (s_item == s_page ? "block" : "none");
-                });*/
                 game.pages.each (function(o_item) {
+                        //reference the html element
                         var e = $("page-"+o_item.name);
+                        //if this is the page to be shown…
                         if (o_item.name == s_page) {
+                                //if it’s not visible (don’t run the show functions for pages already visible)
                                 if (!e.visible ()) {
+                                        //if there is a show function present for this page, run it
                                         if (typeof o_item.show == "function") {o_item.show ();}
                                         e.show ();
                                 }
                         } else {
+                                //if the page is visible (thus needs to be hidden)
                                 if (e.visible ()) {
+                                        //if there is a hide function present for this page, run it
                                         if (typeof o_item.hide == "function") {o_item.hide ();}
                                         e.hide ();
                                 }
@@ -89,7 +104,7 @@ var shared = {
                 //display the game board
                 this.showPage ("game");
                 
-                //disable the 'Start Game' button
+                //disable the “Start Game” button
                 enableNicknameBox (false);
                 
                 playerMe.name   = $F("user-nickname");
@@ -97,12 +112,12 @@ var shared = {
                 playerThem.icon = b_host ? this.icons.opponent : this.icons.host;
                 
                 //if you are the host, or opponent:
-                if (b_host) {    //------------------------------------------------------------------------------------------
+                if (b_host) {  //--------------------------------------------------------------------------------------------
                         //create the game on the server
                         jax.open (
                                 {name : playerMe.name},  //your chosen name
                                 function(o_response){    //when the game starts, but the other player has not yet joined
-                                        //if the server okay'd the new slot
+                                        //if the server okay’d the new slot
                                         if (o_response.result) {
                                                 //display the code for the other player to use to join with
                                                 this.setSystemStatus (this.templates.join_key.evaluate(jax));
@@ -124,7 +139,7 @@ var shared = {
                         //connect to the other player
                         jax.connect ($F("join-key"),        //the connection key the user pasted into the text box
                                     {name: playerMe.name},  //your nickname to send to the other player
-                                    preStart.bind(this)     //function to call once you've joined the game (see below)
+                                    preStart.bind(this)     //function to call once you’ve joined the game (see below)
                         );
                 }
                 
@@ -134,13 +149,13 @@ var shared = {
                         //the other player has joined the game.
                         playerThem.name = o_response.data.name;
                         
-                        //display player 1's name / icon
+                        //display player 1’s name / icon
                         $("jax-game-p1name").innerHTML = playerMe.name;
                         $("jax-game-p1icon").src = playerMe.icon;
                         $("player-status-me").style.display = "block";
                         this.setPlayerStatus ();
                         
-                        //display player 2's name / icon
+                        //display player 2’s name / icon
                         $("jax-game-p2name").innerHTML = playerThem.name;
                         $("jax-game-p2icon").src = playerThem.icon;
                         $("player-status-them").style.display = "block";
@@ -152,12 +167,12 @@ var shared = {
                 }
         },
         
-        /* > setPlayerStatus : set a message under the player's info
+        /* > setPlayerStatus : set a message under the player’s info
            ===============================================================================================================
            params * (s_html) : html to display, send nothing to hide the display
            =============================================================================================================== */
         setPlayerStatus : function (s_html) {
-                var scale = 2,                          //size to expand the player section to (in 100's %)
+                var scale = 2,                          //size to expand the player section to (in 100s %)
                     e     = $("player-status-me-msg"),  //reference to the element containing the message
                     v     = e.visible ()                //if that element is visible or not
                 ;
@@ -166,7 +181,7 @@ var shared = {
                         e.update (s_html);
                         
                 } else if ((s_html && !v) || (!s_html && v)) {
-                        //otherwise, if there's a message to show, and it's not visible, or if the message is being cleared
+                        //otherwise, if there’s a message to show, and it’s not visible, or if the message is being cleared
                         //and it is currently visible, then animate sliding open/closed
                         /*!/new Effect.Scale($("player-status-me"), (s_html?scale*100:100), {  //scale to %
                                 scaleFrom    : (s_html?100:scale*100),                   //scale from %
@@ -291,7 +306,7 @@ var shared = {
                 }
         }, //end shared.headsup <
         
-        /* > setSystemStatus : the status message that covers the screen, e.g. 'loading', 'disconnected'
+        /* > setSystemStatus : the status message that covers the screen, e.g. “loading”, “disconnected”
            ===============================================================================================================
            params * (s_html) : some html to display in the system overlay, leave out to hide the system status box
            =============================================================================================================== */
@@ -480,8 +495,8 @@ shared.chat = {
                         chat_msg.text = chat_msg.text.replace (o_emote.regex, shared.templates.chat_emote.evaluate(o_emote));
                 }.bind(this));
                 
-                //add the message to the chat history. 'Insertion.Bottom' is used (instead of '.innerHTML+=') so that 
-                //multiple messages coming in at the same time don't overwrite each other
+                //add the message to the chat history. `Insertion.Bottom` is used (instead of `.innerHTML+=`) so that 
+                //multiple messages coming in at the same time don’t overwrite each other
                 var e = $("shared-chat-history");
                 new Insertion.Bottom (e, shared.templates.chat_msg.evaluate(chat_msg));
                 //animate the message appearing (and scroll down to meet it)
@@ -560,7 +575,7 @@ Event.observe (window, 'load', function(){
         );
         //change the chrome title (game.name is automatically appended)
         shared.setTitle ("Welcome to ");
-        //hide the loading page and display the game's title screen
+        //hide the loading page and display the game’s title screen
         shared.setSystemStatus ();
         
         //Firefox remembers the values in fields, even after refreshing, clear the chat box
@@ -575,7 +590,7 @@ Event.observe (window, 'load', function(){
         
         //run the load function defined in game.js for the game to handle some onload procedures of its own
         game.load ();
-        //if present, run the title screen's show function to prepare the title screen
+        //run the title screen’s show function to prepare the title screen
         shared.showPage ("title");
 });
 
@@ -618,15 +633,20 @@ function create2DArray (n_width, n_height, x_initvalue) {
 /* > bsod : the fatal error screen, no one hears your screams
    ======================================================================================================================= 
    params * (s_message) : error message to display on the bsod and console
-            (s_url)     : url of file that caused the error (provided by native JS error throwing)
-            (n_line)    : line number of the error (provided by native JS error throwing)
+            (s_url)     : url of file that caused the error (provided by native js error throwing)
+            (n_line)    : line number of the error (provided by native js error throwing)
    return * true        : so that the javascript error is not ignored by the browser (when error is thrown)
    ======================================================================================================================= */
 function bsod (s_message, s_url, n_line) {
+        //construct the message, include line number and filename if provided
         s_message = (s_url?(s_url.split("/").last())+" ":"") + (n_line?"["+n_line+"]: ":"") + s_message;
+        //put the message on the bsod
         document.getElementById ("bsod-msg").innerHTML = s_message ? s_message : "Check the Javascript Console for details";
+        //show it (Prototype is not used here incase Prototype is the thing causing the error)
         document.getElementById ("bsod").style.display = "block";
+        //show the error on the Firebug console (if present)
         console.error (s_message);
+        //accept the error and stop the browser (when error was thrown by the browser)
         return true;
 }
 //try to catch thrown errors (url and line number are provided by the browser)

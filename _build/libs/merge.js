@@ -2,8 +2,8 @@
 ; //this semilcolon is here to allow the script to pass JSLint, which thinks the bang above is a javascript line
 
 //get the arguments from the command line. if argv is already defined, ignore this step. the reason this is done, is so that
-//another script in rhino can preload the argv array with parameters wanted, and then "load('merge.js');" to run this script
-//within Rhino, and within another currently running Rhino script. 'mergeboot.js' uses this ability to dynamically build the
+//another script in rhino can preload the argv array with parameters wanted, and then `load('merge.js');` to run this script
+//within Rhino, and within another currently running Rhino script. ‘mergeboot.js’ uses this ability to dynamically build the
 //list of parameters for this script
 if (argv == null) {
         var argv = new Array ();
