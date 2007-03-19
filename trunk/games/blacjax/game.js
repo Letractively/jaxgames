@@ -68,7 +68,7 @@ var game = {
                 /* > doNext : process the next card (on the queue) that the opponent clicked
                    ======================================================================================================= */
                 doNext : function () {
-                        //if there's 1 or more cards queued, process the first one
+                        //if there’s 1 or more cards queued, process the first one
                         if (this.cards.length) {
                                 this.opponentCardClick (this.cards.first());
                         }
@@ -146,7 +146,7 @@ var game = {
                 //clear any cards on the table
                 [this.run, playerMe.hand, playerThem.hand].invoke ("clear");
                 
-                //if you're going first..
+                //if you’re going first..
                 if (b_mefirst) {
                         //prepare a new deck. the person who is going first, shuffles a deck of cards and sends the order to
                         //the other player so that both players are playing off of the same order of cards
@@ -180,12 +180,12 @@ var game = {
                         game.run.face = game.deck.drawCard ();
                         game.run.displayFace ();
                         
-                        //set the player's hands
+                        //set the player’s hands
                         //the host takes their cards first, then the opponents. the opponent does the opposite
                         (b_mefirst?playerThem:playerMe).hand.takeCard (cards, function(){
                                 (b_mefirst?playerMe:playerThem).hand.takeCard (cards, function(){
                                         //preempt to avoid drawing all unplayable cards. the host will check their own cards
-                                        //and draw if none are playable, and the opponent will check the host's card to see
+                                        //and draw if none are playable, and the opponent will check the host’s card to see
                                         //if they would have to draw, and thus switch turns
                                         game.preempt (b_mefirst);
                                 });
@@ -198,7 +198,7 @@ var game = {
         playTurn : function () {
                 //set the chrome title
                 shared.setTitle ("Your turn! - " + playerMe.name + " v. " + playerThem.name + " - ");
-                //clear the "other player's turn" message on screen if it's there
+                //clear the “other player’s turn” message on screen if its there
                 shared.setPlayerStatus ();
                 
                 //disable cards that cannot be played
@@ -231,7 +231,7 @@ var game = {
            params * b_self : if you or them should be checked
            =============================================================================================================== */
         preempt : function (b_self) {
-                //this function is a 'switch box'. it is small and simple, but can confuse the hell out of you
+                //this function is a ‘switch box’. it is small and simple, but can confuse the hell out of you
                 
                 /* the game originally sent a signal to the other player at the end of each turn. whilst very simple to do,
                    it was very slow. the opponent would have to wait for your animation to finish before switching players.
@@ -266,7 +266,7 @@ var game = {
                 var player   = (b_self) ? playerMe : playerThem,  //the primary person being referred to
                     cards    = player.hand.playableCards (),      //which cards in the hand are playable
                     armedrun = this.run.armed (),                 //if the run is topped by a Black Jack or Two
-                    count    = (armedrun ? this.run.penalty : 1)  //if there's a penalty, take that many cards
+                    count    = (armedrun ? this.run.penalty : 1)  //if there’s a penalty, take that many cards
                 ;
                 
                 //an Eight, Ace or Joker was put down, it is a combo card, have another go:
@@ -275,7 +275,7 @@ var game = {
                         if (!cards.length) {
                                 //take a card from the deck, file the cards from the run onto the discard pile
                                 player.hand.takeCard (count, function(){ game.run.fileCards (function(){
-                                        //it'll be the other player's go - check if they have any playable cards
+                                        //it’ll be the other player’s go - check if they have any playable cards
                                         game.preempt (!b_self);
                                 }); });
                         } else {
@@ -301,7 +301,7 @@ var game = {
                                                 if (b_self) {
                                                         if (!playerThem.hand.cards.length) {game.end (false); return false;}
                                                 }
-                                                //if you took the penalty, it's your go (preempt for the rare occurance of
+                                                //if you took the penalty, it’s your go (preempt for the rare occurance of
                                                 //picking up cards, yet not having any playable ones afterwards)
                                                 game.preempt (b_self);
                                         } else {
@@ -321,16 +321,16 @@ var game = {
                         }
                         
                 } else {  //-------------------------------------------------------------------------------------------------
-                        //there is a playable card; if this is you - it's your go, if not it's their go...
+                        //there is a playable card; if this is you - it’s your go, if not it’s their go...
                         if (b_self) {
                                 game.playTurn ();
                         } else {
-                                //change your display to say it's their turn
+                                //change your display to say it’s their turn
                                 shared.setPlayerStatus ("<p>Other Player's Turn, Please Wait&hellip;</p>");
                                 //set the chrome title
                                 shared.setTitle ("Their turn - "+playerMe.name+" v. "+playerThem.name+" - ");
                                 
-                                //in the case that the opponent put down an Eight, Ace or Joker, you'll arrive here. they
+                                //in the case that the opponent put down an Eight, Ace or Joker, you’ll arrive here. they
                                 //will have placed another card, which will have been added to the queue. now that the
                                 //animation moving the previous card is over, the next card can be plucked. this is done so
                                 //that we do not try to move two cards onto the run at the same time (it breaks)
@@ -350,12 +350,12 @@ var game = {
                     winner = b_winner ? playerMe : playerThem,
                     loser  = b_winner ? playerThem : playerMe,
                     onDrop = function () {
-                            //add a point for each card left in the opponent's hand
+                            //add a point for each card left in the opponent’s hand
                             winner.points ++;
                             $("player-status-"+(b_winner?"me":"them")+"-points").innerHTML = winner.points;
                     } 
                 ;
-                //drop out each card in the opponent's hand
+                //drop out each card in the opponent’s hand
                 if (loser.hand.cards.length) {
                         loser.hand.cards.each (function(s_card,n_index){
                                 //animate the card dropping
@@ -375,7 +375,7 @@ var game = {
                 $("player-status-me-wins").innerHTML   = playerMe.wins;
                 $("player-status-them-wins").innerHTML = playerThem.wins;
                 
-                //listen out for the 'play again' signal from the other person
+                //listen out for the “play again” signal from the other person
                 jax.listenFor ("game_again", function(o_response){
                         game.start (!b_winner);
                 });
@@ -413,7 +413,7 @@ game.events = {
                 //on mouse over, nudge the card up a little by using a CSS class
                 this.addClassName ("card-hover");
                 
-                //the card's name is stored in the img tag's alt property
+                //the card’s name is stored in the img tag’s alt property
                 var card = this.alt,
                     msg  = ""
                 ;
@@ -525,7 +525,7 @@ jax.listenFor ("game_card_chosen", function(o_response){
         //queue it
         game.queue.cards.push (o_response.data.card);
         
-        //if there's only one item in the queue, run it
+        //if there’s only one item in the queue, run it
         //after each card has completed its action, the next one will be taken (see game.preempt)
         if (game.queue.cards.length == 1) {game.queue.doNext ();}
 });
@@ -539,8 +539,8 @@ game.run = {
         penalty : 0,   //current card penalty in play
         
         //the spacing in pixels between each card on the run, given the number of cards present. these numbers allow for the
-        //cards on the run to compact together to always stay within the run's area. this could be calculated as needed
-        //in `.getCardPositions`, but I couldn't get the math right
+        //cards on the run to compact together to always stay within the run’s area. this could be calculated as needed
+        //in `.getCardPositions`, but I couldn’t get the math right
         spacing : [
                 0, 5, 5, 5, 5,  //0, no spacing. 1-4 cards, normal spacing between cards
                 -2.8,    /* 5  cards */  -16.3,  /* 6  cards */  -25.5,  /* 7  cards */  -32,    /* 8 cards */
@@ -595,7 +595,7 @@ game.run = {
                 } else {
                         //update the penalty
                         if (!n_value) {
-                                //if 0, hide the penalty, don't need to display "0"
+                                //if 0, hide the penalty, don’t need to display “0”
                                 e.hide ();
                         } else {
                                 e.update (n_value).show ();

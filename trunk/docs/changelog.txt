@@ -1,11 +1,16 @@
 =============================================================================================================================
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+19.MAR.07
+    ADD: Cleanup in jax’s PHP files
+    ADD: Moved js/json.js to jax/libs/ as it’s directly related to jax, not jaxgames. This file will be obsoleted by
+         Prototype 1.5.1 once it’s out and stable
+    ADD: I  Unicode. See diff for details
 17.MAR.07
     ADD: Rejiggered the copyright notices to add the website address
 15.MAR.07
     ADD: jax: additional constructor parameter to specify the interval in seconds
-    ADD: Changed the jax server to respond in JSON. the 'data' attribute is decoded server side before being sent so that
+    ADD: Changed the jax server to respond in JSON. the `data` attribute is decoded server side before being sent so that
          only one `json.parse` call needs to be made locally. 
 13.MAR.07
     FIX: Othello: Scriptaculous error after the clouds have reached the end of their animation
@@ -17,21 +22,21 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
     ADD: variable in CONFIG.js to enable/disable the bsod
     FIX: bsod shows filename and line number for thrown errors
 11.MAR.07
-    FIX: ZIPs/RARs spun from the build script now extract without the 'release' folder in them
+    FIX: ZIPs/RARs spun from the build script now extract without the ‘release’ folder in them
     NEW: RAR support for the build script. 
     FIX: Unicode em-dash in Licence.txt
-    FIX: In a monumental bit of stupidity I have realised that the build script's ZIPs of the source have been completely
+    FIX: In a monumental bit of stupidity I have realised that the build script’s ZIPs of the source have been completely
          useless all this time, joy.
 10.MAR.07
     FIX: Othello: `winner` undefined in `game.win`
     NEW: Othello: Menu item animation
     ADD: Othello: Less `updateBoard` calls
-    NEW: Othello: 'flip' animation for pieces. (will need some improvement, but it works for now)
+    NEW: Othello: ‘flip’ animation for pieces. (will need some improvement, but it works for now)
     ADD: Changed Effect.Opacity to Effect.Appear/Fade,toggle where appropriate
-    ADD: Othello title logo (It's not very good) and basic menus for now
+    ADD: Othello title logo (It’s not very good) and basic menus for now
     FIX: build_mac.command now keeps file modification times, making syncing with an FTP copy easier
     FIX: bug from below causing the release version to present the db-not-writeable error incorrectly
-    ADD: Renamed 'jax_php' to 'jax'. Moved the PHP files into 'jax/php'. This will provide room for others to contribute
+    ADD: Renamed ‘jax_php’ to ‘jax’. Moved the PHP files into ‘jax/php’. This will provide room for others to contribute
          API-compatible alternative server-side scripts for Jax, such as Ruby or ASP.
 09.MAR.07
     ADD: upgraded to Creative Commons 3.0 licence
@@ -50,12 +55,12 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
     FIX: Fixed a lot of jittering in Parallel animations by adding sync:true
     ADD: Lots of housekeeping, reduction and refactoring all over the codebase
     ADD: Othello: added templates there too
-    NEW: `shared.templates` utilising Prototype's Template class
+    NEW: `shared.templates` utilising Prototype’s Template class
     ADD: Shared: Improved the look of the join-key display
     ADD: Blacjax: Improvements to the heads-up message (game.setStatus)
     FIX: boot.js and _build/libs/makeboot.js not loading custom scriptaculous correctly
 07.MAR.07
-    NEW: Blacjax: Message in the middle of the screen declaring the action of the opponent's played card. e.g. "Pickup 5"
+    NEW: Blacjax: Message in the middle of the screen declaring the action of the opponent’s played card. e.g. “Pickup 5”
     ADD: Logging in build script
 03.FEB.07
     ADD: Moved prototype.js into scriptaculous folder
@@ -66,7 +71,7 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
     NEW: Build system now zips the source code for easy distribution for those without SVN
     NEW: Build system stops if any of the steps errors, returning an error code equal to the step that failed
 20.JAN.07
-    NEW: I'm really struggling with the direction of this project now, some real help would be appreciated
+    NEW: I’m really struggling with the direction of this project now, some real help would be appreciated
     NEW: boot.js uses config to dynamically build the list of files to include. the build system now uses makeboot.js to load
          config.js and dynamically build the same list, but merge the scripts together into the compressed boot.js. This 
          system needs a proper write up and improving, but for now provides the power to share config settings between the
@@ -81,9 +86,9 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
 09.JAN.07
     ADD: board.js now includes <cols> so you can use CSS/JS to style a vertical column (useful for Quadrop)
 08.JAN.07
-    ADD: Build script now downloads custom_rhino.jar if not present so that it doesn't have to be included in our SVN
+    ADD: Build script now downloads custom_rhino.jar if not present so that it doesn’t have to be included in our SVN
     NEW: Some initial title screen graphics for Othello, more to come
-    ADD: Four-in-a-Row is now 'Quadrop'
+    ADD: Four-in-a-Row is now “Quadrop”
 07.JAN.07
     NEW: /docs/acknowledgements.txt
     FIX: Improvements to Dump
@@ -97,21 +102,21 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
          + html in functions does not break. this can be massively improved
          + IE/Safari/Opera support is broken, will work on this
 06.JAN.07
-    NEW: Shuns Dump script www.netgrow.com.au/files added. see /js/libs/dump_src.js. I'm working on greatly improving this
+    NEW: Shuns Dump script www.netgrow.com.au/files added. see /js/libs/dump_src.js. I’m working on greatly improving this
          script. use dump(any var); in the console/firebug to use
     FIX: Blacjax: Play Again links staying on screen when starting new game
     FIX: Card images not displaying in blacjax
     FIX: Points not adding when winning in blacjax
 05.JAN.07
     ADD: removed the onclick events from the HTML, and moved to shared.js
-    ADD: moved /games/othello/game.js:game._.directions to Board class (board.js) so that multiple games don't need to
+    ADD: moved /games/othello/game.js:game._.directions to Board class (board.js) so that multiple games don’t need to
          repeat these vectors
     NEW: Othello uses Black & White piece user icons
     ADD: Renamed /games/images/ to /games/- and moved games/inc to /games/-/inc. with this name, the images folder stands
          out from the folders containing games, there are no longer two folders not related to games there, and "-" will
          always stay at the top of the list when alphabetically sorted. Also, less letters in the CSS/HTML saving a few bytes
-         for what it's worth
-    ADD: removed the ability for users to choose icons. user's icons will be according to what game they are playing to
+         for what it’s worth
+    ADD: removed the ability for users to choose icons. user’s icons will be according to what game they are playing to
          better remind them of which piece they are, and to simplify the code / speed up starting games. this is blue vs.
          red for the moment until icons have been made for each of the current games
     ADD: Some CSS cleaning and reorganisation
@@ -148,7 +153,7 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
          load all the piece graphics every update. The class now only updates the html in a cell if it has changed
     NEW: Othello: Piece counts on the sides
     ADD: Othello: Switched to Black goes first (instead of white), as per official rules.
-    FIX: Properly fixed Othello's preempt routine. It was not working as previously advertised. The preempt also now checks
+    FIX: Properly fixed Othello’s preempt routine. It was not working as previously advertised. The preempt also now checks
          for a winner, and if a player is totally wiped off the board
 28.DEC.06
     NEW: Graphics for Othello: board and pieces
@@ -165,7 +170,7 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
     NEW: install.txt. Need Windows & Linux instructions
     ADD: improved build system to use Find command so that new JS files in the source can be handled automatically
 24.DEC.06
-    NEW: Build system in _build. Uses Dojo's compressor, and Dean Edward's Packer to compress the scripts
+    NEW: Build system in _build. Uses Dojo’s compressor, and Dean Edward’s Packer to compress the scripts
 22.DEC.06
     FIX: when there was five or more cards on the run they slid the wrong way to make room for the new card
     FIX: "preempt failed" bug. When you took a penalty, but still had no playable cards
@@ -176,7 +181,7 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
 21.DEC.06
     NEW: removed debug object (a wrapper for Firebug), and added Firebug Lite (see boot.js)
     NEW: window title is now changed to reflect game status (game.setTitle)
-    NEW: Added .name and .version constants to game.js. The version info is debug.info'd on page load
+    NEW: Added .name and .version constants to game.js. The version info is `debug.info`’d on page load
 20.DEC.06
     NEW: This new changelog in the SVN
     NEW: Created Google Code project and uploaded code to SVN
@@ -184,7 +189,7 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
     NEW: use Insertion methods instead of .innerHTML to put cards into the hand/run to reduce flicker. the .display methods
          have been removed from player*.hand and game.run! cards are now persistent up until being put on the discard
 17.DEC.06
-    FIX: 'O_o' regex broken, the . was being treated as any character, and not just .
+    FIX: “O_o” regex broken, the . was being treated as any character, and not just .
     FIX: if typing in the chatbox when starting a new game, the <chat here> appears
 16.DEC.06
     FIX: >:) not working, being incorrectly identified as :) first
@@ -209,7 +214,7 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
 26.NOV.06
     NEW: game.setPlayerStatus slides the player panel up at the bottom to show a message instead 
     NEW: tooltips to action cards 
-    ADD: 8's now do not work as a global wildcard, improving the gameplay a little 
+    ADD: 8s now do not work as a global wildcard, improving the gameplay a little 
     ADD: switched to using CSS classes for card hover effects 
     NEW: Play Again after game over 
 23.NOV.06
@@ -218,7 +223,7 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
     FIX: when a penalty is taken, it should be your go, and not theirs 
 20.NOV.06
     ADD: changed SetGameStatus to SetStatus and SetSystemStatus for messages for all games, and messages for the particular
-         game you're playing 
+         game you’re playing 
 17.NOV.06
     NEW: disconnect function to jax, and disconnect signal when a user closes the window 
 15.NOV.06
@@ -230,9 +235,9 @@ jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing 
 13.NOV.06
     ADD: moved jax into a class to get rid of jax.ajax.init 
     ADD: switched to using JSON instead of PHP_Serializer 
-    FIX: '<chat here>' not disappearing when losing focus 
+    FIX: “<chat here>” not disappearing when losing focus 
 12.NOV.06
-    NEW: created 'game' object in global.js, and moved the chatbox into there. 
+    NEW: created `game` object in global.js, and moved the chatbox into there. 
     ADD: modified jax.js to not include jaxgames specific code, still more to do 
 11.NOV.06
     NEW: Started this log. Very late in the game, as jax has already been in development for many months

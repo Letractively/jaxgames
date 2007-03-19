@@ -50,7 +50,7 @@ Player.prototype.points = 0;     //number of points earnt
    ======================================================================================================================= */
 function Hand (s_element, b_host) {
         //this array cannot be defined as a prototype otherwise the pointer will be shared by all instances of the class,
-        //and thus both player's hands will point to the same array
+        //and thus both player’s hands will point to the same array
         this.cards = [];
         
         this.element = s_element;  //the id of an html element the cards will be injected into
@@ -67,7 +67,7 @@ Hand.prototype = {
                 51.65,  /* 23 cards */  52.5,  /* 24 cards */  53.25,  /* 25 cards */  53.96   /* 26 cards */
         ],
         
-        /* > takeCard : take a card from the deck and put it into the player's hand
+        /* > takeCard : take a card from the deck and put it into the player’s hand
            ===============================================================================================================
            params * (n_count)      : number of cards to take from the deck
                     (f_onComplete) : a function to call once the animation is complete
@@ -107,7 +107,7 @@ Hand.prototype = {
                         duration    : 0.3,
                         afterFinish : function(){
                                 $("game-deck").innerHTML = "";
-                                //if there's a penalty, take one from the penalty total
+                                //if there’s a penalty, take one from the penalty total
                                 if (game.run.penalty) {game.run.updatePenalty (game.run.penalty-1);}
                                 //more cards to draw?
                                 if (n_count > 1) {
@@ -173,7 +173,7 @@ Hand.prototype = {
                         $(elid).style.zIndex = this.cards.length+1;
                 }.bind(this)});
                 
-                //if there's any cards in the run, slide them around to make room for one more
+                //if there’s any cards in the run, slide them around to make room for one more
                 if (game.run.cards.length) {
                         var anims = [];
                         game.run.cards.each (function(s_card,n_index){
@@ -246,9 +246,9 @@ Hand.prototype = {
                              !armedrun && (!face_value || !card_value ||  //Jokers
                                             face_value == card_value  ||  //value matches
                                             face_suit  == card_suit   ||  //suit matches
-                                            card_value == 8)              //8's match anything underneath
+                                            card_value == 8)              //8s match anything underneath
                         ) || (
-                             //if run is armed, only Jacks or Two's allowed
+                             //if run is armed, only Jacks or Twos allowed
                              armedrun && (card_value == 11 || card_value == 2)
                         )) {
                                 //add the index of this card in your hand to the results (of playable cards)

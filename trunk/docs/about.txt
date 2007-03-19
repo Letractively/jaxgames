@@ -4,11 +4,11 @@ jax games
 Think MSN one on one IM games; but without MSN, without registration, without Flash or Java plugins, without ads, without
 annoyances. Just one-on-one with your friends in various games, on any operating system, any common webbrowser, any time.
 
-Jax Games uses 'jax', a script to allow player-to-player communication via AJAX and PHP. The upshot of this, is that just
+Jax Games uses ‘jax’, a script to allow player-to-player communication via AJAX and PHP. The upshot of this, is that just
 about any turn-based game you would like can be implemented using the simple API to connect the two players together and then
 send messages from computer to computer.
 
-Jax does this by giving the player a 'join key' when they start a game, which they can then IM/e-mail/FedEx to their friend,
+Jax does this by giving the player a ‘join key’ when they start a game, which they can then IM/e-mail/FedEx to their friend,
 who uses the key to join the game. Whilst you could have a lobby system and play against strangers; I don't want to play with
 asshats - the rest of the Internet will happily cater for them. Jax Games aims to recreate the fun friend vs. friend games
 played over MSN Messenger using open source javascript. Few, if any gaming websites cater for this.
@@ -36,7 +36,7 @@ Dependencies:
 Compatibility:
 --------------
 * No debugging has been done for IE/Opera yet, that will come when Jax Games is in Beta, or if anybody feels compelled to
-  stress themselves out with IE's inadequacies. I don't have Visual Studio to do proper IE debugging. Please use Firefox /
+  stress themselves out with IE’s inadequacies. I don't have Visual Studio to do proper IE debugging. Please use Firefox /
   Safari to run the project correctly, and any other browser if you wish to fix for it.
 * Once in Beta I would ideally like to target the following:
   - IE 6 and above

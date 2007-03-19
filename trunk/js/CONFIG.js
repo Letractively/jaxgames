@@ -9,7 +9,7 @@ var config = {
         jax_path : "jax/php/response.php",
         
         //array of javascript files to include (ignoring Prototype & Scriptaculous)
-        boot_scripts : ["js/libs/json.js", "jax/jax.js", "js/shared.js"],
+        boot_scripts : ["jax/libs/json.js", "jax/jax.js", "js/shared.js"],
         
         //Scriptaculous settings...
         scriptaculous : {
@@ -22,7 +22,7 @@ var config = {
                 custom_prototype : "js/libs/scriptaculous/scriptaculous-js-svn/lib/prototype.js",
                 //location to your own folder containing a copy of scriptaculous to use (always include end slash)
                 custom_src : "js/libs/scriptaculous/scriptaculous-js-svn/src/",
-                //you'll have to specify the version number of your own copy
+                //you’ll have to specify the version number of your own copy
                 custom_version : "1.7.1",
                 
                 //an array of which Scriptaculous libraries to include, sans extension (if use_defaults = false)
@@ -37,7 +37,7 @@ var config = {
 };
 
 //this is custom scriptaculous header to remove the load functions which would normally try load the external scripts.
-//(see 'js/libs/scriptaculous/scriptaculous.js') the build system will instead combine the scripts together
+//(see ‘js/libs/scriptaculous/scriptaculous.js’) the build system will instead combine the scripts together
 var Scriptaculous = {
         Version: (config.scriptaculous.use_defaults) ? '1.7.0' : config.scriptaculous.custom_version
 };

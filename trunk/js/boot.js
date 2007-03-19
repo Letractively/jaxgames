@@ -40,7 +40,7 @@ for (i=0; i<config.boot_scripts.length; i++) {boot_files.push (config.boot_scrip
    ======================================================================================================================= */
 //if Firebug is not installed in Firefox, use Firebug Lite
 //in the compressed release, firebugx.js would be included instead to ignore the console.* calls therefore you can liberally
-//use Firebug features in the code (except 'debugger;') without breaking the release version
+//use Firebug features in the code (except `debugger;`) without breaking the release version
 if (!("console" in window) || !("firebug" in console)) {
         boot_files.push ("js/libs/firebug/firebug.js");
 }

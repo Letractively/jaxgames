@@ -1,13 +1,13 @@
 #excludes.txt - files/folders to exclude when copying to release folder (using rsync)
 
-#ignore hidden files starting with a '.', e.g. SVN, .DS_STORE etc. also ignore Windows Thumbs.db files
+#ignore hidden files starting with a ‘.’, e.g. SVN, .DS_STORE etc. also ignore Windows Thumbs.db files
 .*
 *.db
 
 #ignore anything starting with an underscore. e.g. _build etc.
 _*
 
-#don't include the sqlite database
+#don’t include the sqlite database
 *.sqlite
 
 #exclude certain scripts, which will be replaced with a single compressed script

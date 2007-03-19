@@ -3,7 +3,7 @@
    sqlite.php
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-   jax (c) copyright Kroc Camen 2005-2007
+   jax (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 */	
 require_once "libs/SQLiteDB.php";
 
@@ -62,14 +62,14 @@ function dump_table($table) {
 	$sql = "SELECT * FROM $table;";
 	$result = $database->query($sql);
 	if ($database->num_rows($result) > 0) {
-	    echo "<table cellpadding=10 border=1>";
-	    while($row = $database->fetch_row($result)) {
+		echo "<table cellpadding=10 border=1>";
+		while($row = $database->fetch_row($result)) {
 			echo "<tr>";
 			foreach ($row as $field) {
-	        	echo "<td>".$field."</td>";
-	        }
-	        echo "</tr>";
-	    }
+				echo "<td>".$field."</td>";
+			}
+			echo "</tr>";
+		}
 		echo "</table>";
 	}
 }
