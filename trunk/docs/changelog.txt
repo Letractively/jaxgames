@@ -2,8 +2,11 @@
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 19.MAR.07
+    ADD: changed file names created by build script
+    NEW: build script now creates a jax distribution (just ‘jax/’)
+    NEW: Added prototype.js to ‘jax/libs/’ so that jax can be distributed separately with the appropriate 3rd party libs
     ADD: Cleanup in jax’s PHP files
-    ADD: Moved js/json.js to jax/libs/ as it’s directly related to jax, not jaxgames. This file will be obsoleted by
+    ADD: Moved ‘js/json.js’ to ‘jax/libs/’ as it’s directly related to jax, not jaxgames. This file will be obsoleted by
          Prototype 1.5.1 once it’s out and stable
     ADD: I  Unicode. See diff for details
 17.MAR.07

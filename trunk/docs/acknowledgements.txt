@@ -32,6 +32,7 @@ Many thanks go to these people, and their contributions:
 * Dojo <dojotoolkit.org>, custom_rhino.jar <alex.dojotoolkit.org/shrinksafe/>
 * David McNab <david@rebirthing.co.nz>, Rhino port of Dean Edward’s Packer <dean.edwards.name/packer>
 * and Sun Microsystems for Java, which Rhino runs upon <java.com>
+* Travis Hartwell <www.travishartwell.net/blog>, logging in the build script <www.travishartwell.net/blog/2006/08/19_2220>
 
 [Depreciated]
 * DarkCryst, SACK <twilightuniverse.com/resources/code/sack/> no longer used, but was integral to getting this far

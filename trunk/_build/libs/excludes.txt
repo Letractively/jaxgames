@@ -12,6 +12,7 @@ _*
 
 #exclude certain scripts, which will be replaced with a single compressed script
 /jax/jax.js
+/jax/libs/
 /js/boot.js
 /js/shared.js
 /js/libs

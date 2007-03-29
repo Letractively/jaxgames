@@ -5,8 +5,13 @@
    jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 */
 var config = {
-        //location of the jax server side receiver
-        jax_path : "jax/php/response.php",
+        //configurations we’ll apply to jax (see ‘jax/jax.js’)
+        jax : {
+                //location of the jax server side receiver
+                path : "jax/php/response.php",
+                //number of seconds inbetween checking server for updates. default is 3. you can set this to 1 for a LAN game
+                interval : 3
+        },
         
         //array of javascript files to include (ignoring Prototype & Scriptaculous)
         boot_scripts : ["jax/libs/json.js", "jax/jax.js", "js/shared.js"],
@@ -30,16 +35,17 @@ var config = {
                 includes : ["effects"]  //just the effects only please
         },
         
-        //use the bsod for javascript errors? do not change this value - it is overided in js/boot.js so that only the 
+        //use the bsod for javascript errors? do not change this value - it is overided in ‘js/boot.js’ so that only the 
         //compressed, release version of jax games will show the bsod on errors. this is so that end-users can tell when an
         //error has actually occured, instead of the game just hanging mid-play with no indication that it has failed
         use_bsod : true
 };
 
-//this is custom scriptaculous header to remove the load functions which would normally try load the external scripts.
+//this is a custom scriptaculous header to remove the load functions which would normally try load the external scripts.
 //(see ‘js/libs/scriptaculous/scriptaculous.js’) the build system will instead combine the scripts together
 var Scriptaculous = {
         Version: (config.scriptaculous.use_defaults) ? '1.7.0' : config.scriptaculous.custom_version
 };
 
 //=== end of line ===========================================================================================================
+//                                                                                                        next » ‘js/boot.js’
