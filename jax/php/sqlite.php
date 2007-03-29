@@ -4,66 +4,70 @@
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    jax (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
-*/	
+*/
 require_once "libs/SQLiteDB.php";
 
-$path = realpath($config['db_path'])."/";
-$filename = $path.$config['db_name'];
-if (!is_writable($path)) die("result=&error=".urlencode("No write permissions for DB. Please chmod 777 the ".$config['db_path']." directory and contents"));
+//check for the prescence of the database and writeability
+$db_path = realpath ($config['db_path'])."/";  //convert the database folder to an absolute path on the server
+$db_file = $db_path.$config['db_name'];        //add the filename on the end
+if (!is_writable ($db_path)) die (             //is the db folder writeable?
+	//no: return a json of the error
+	json_encode (array (
+		'result' => 'false',
+		'error'  => "No write permissions for DB. Please chmod 777 the ".$config['db_path']." directory and contents"
+	))
+);
 
 //open the mini database
-$database = new SQLiteDB($filename);
+$database = new SQLiteDB ($db_file);
 
-//$forcepurge = true;
-if ($request_type=="purge") {
-	if(sqlite_table_exists("queue"))       $database->query("DROP TABLE queue;");
-	if(sqlite_table_exists("connections")) $database->query("DROP TABLE connections;");
+if ($request_type == "purge") {
+	if (sqlite_table_exists ("queue"))       $database->query ("DROP TABLE queue;");
+	if (sqlite_table_exists ("connections")) $database->query ("DROP TABLE connections;");
 	
-} elseif ($request_type=="dump") {
-	dump_table("queue");
-	dump_table("connections");
-	exit();
+} elseif ($request_type == "dump") {
+	dump_table ("queue");
+	dump_table ("connections");
+	exit ();
 }
 
 //check if the `queue` table exists
-if (sqlite_table_exists("queue")==false) {
+if (sqlite_table_exists ("queue") == false) {
 	//create the queue table (where messages are queued for collection by the other person)
-	$database->query("CREATE TABLE queue (".
+	$database->query ("CREATE TABLE queue (".
 		"connid  CHAR(6),".   //connection id
 		"whoto   CHAR(32),".  //the user id of the recipient
 		"type    CHAR(20),".  //the requesttype that was sent
 		"data    TEXT".       //a JSON string to be picked up
 	");");
 }
-if (sqlite_table_exists("connections")==false) {
+if (sqlite_table_exists ("connections") == false) {
 	//create the connections table
-	$database->query("CREATE TABLE connections (".
+	$database->query ("CREATE TABLE connections (".
 		"connid   CHAR(6),".   //connection id for the player-to-payer connection
 		"userid1  CHAR(32),".  //user id of host
 		"userid2  CHAR(32)".   //user id of client
 	");");
 }
 
-function sqlite_table_exists($mytable) {
+function sqlite_table_exists ($s_table) {
 	global $database;
 	
-	$query = $database->query("SELECT name FROM sqlite_master WHERE type='table'");
-	while ($row = $database->fetch_row($query)) {
-		//print_r ($tables);
-	    if ($row[0] == $mytable) return(true);
+	$query = $database->query ("SELECT name FROM sqlite_master WHERE type='table'");
+	while ($row = $database->fetch_row ($query)) {
+	    if ($row[0] == $s_table) {return true;}
 	};
-	return (false);
+	return false;
 }
 
-function dump_table($table) {
+function dump_table ($s_table) {
 	global $database;
 	
-	echo "<h2>$table:</h2>";
-	$sql = "SELECT * FROM $table;";
-	$result = $database->query($sql);
-	if ($database->num_rows($result) > 0) {
+	echo "<h2>$s_table:</h2>";
+	$result = $database->query ("SELECT * FROM $s_table;");
+	if ($database->num_rows ($result) > 0) {
 		echo "<table cellpadding=10 border=1>";
-		while($row = $database->fetch_row($result)) {
+		while($row = $database->fetch_row ($result)) {
 			echo "<tr>";
 			foreach ($row as $field) {
 				echo "<td>".$field."</td>";

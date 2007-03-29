@@ -10,9 +10,43 @@
 
 //create an instance of `Jax`, direct it to the php page to receive the ajax calls.
 //jax allows us to setup a ‘browser-to-browser’ connection via ajax. one player starts a new connection, and the other joins.
-//the server is polled every few seconds for new messages from each other. jax is therefore not realtime, there is absolutely
+//the server is polled every few seconds for new messages from each other. jax is therefore not realtime; there is absolutely
 //no gaurantee that a message will arrive at the other player at a given time. jax games are therefore turn-based
-var jax = new Jax ("../../"+config.jax_path, 3);  //set server url, and polling interval. see ‘jax/jax.js’ for details
+var jax = new Jax ("../../"+config.jax.path, config.jax.interval);
+
+
+/* > EVENT onload - when everything is loaded and we are ready to go…
+   ======================================================================================================================= */
+Event.observe (window, 'load', function(){
+        //this is essentially the starting point for jax games. after all the scripts have been loaded, this function will
+        //put everything into motion. read further down this page for the definition of the `shared` object and functions
+        
+        //put the version info in the log
+        console.info ("Welcome to Jax Games | "+game.name+": "+game.version+" ["+Date()+"]\n"+
+                      "jax: "+jax.version+" - Script.aculo.us: "+Scriptaculous.Version+" - Prototype: "+Prototype.Version+"\n"
+        );
+        
+        //Firefox remembers the values in fields, even after refreshing, clear the chat box
+        $("shared-chat-input").value = "";
+        
+        //the buttons on the title screen
+        $("title-start-game").onclick = shared.events.titleButtonClick.bindAsEventListener (this, true);
+        $("title-join-game").onclick  = shared.events.titleButtonClick.bindAsEventListener (this, false);
+        
+        //when the user clicks the Start/Join Game button (on the user page)
+        $("user-submit").onclick = shared.events.userSubmitClick;
+        
+        //change the window title (`game.name` is automatically appended by this function)
+        shared.setTitle ("Welcome to ");
+        //hide the loading message covering the screen
+        shared.setSystemStatus ();
+        
+        //run the `load` function defined in game.js for the game to handle some onload procedures of its own
+        game.load ();
+        //show the title screen (see `game.pages`, if there’s a `show` function for the title screen, it will be executed)
+        shared.showPage ("title");
+});
+
 
 /* =======================================================================================================================
    CLASS Player - a base class, your game can extend this to add more player properties
@@ -30,6 +64,7 @@ Player.prototype = {
 /* =======================================================================================================================
    OBJECT shared - functions/properties shared by different games on the site
    ======================================================================================================================= */
+//`shared` relies on a game being loaded and the presence of an object `game`. see ‘games/???/game.js’ for specs
 var shared = {
         host   : false,  //true = you are the host, false = you are the opponent
         played : 0,      //number of matches played
@@ -45,7 +80,7 @@ var shared = {
                 join_key : new Template (
                         '<p>Copy the key code below and give it<br />to your friend so that they can join the game</p><p>'+
                         '<input id="shared-key" type="text" readonly="readonly" value="#{conn_id}" /></p><p><br />Waiting '+
-                        'for the other player to join...</p><p><img src="../-/waiting.gif" width="16" height="16" alt="Wai'+
+                        'for the other player to join&hellip;</p><p><img src="../-/waiting.gif" width="16" height="16" alt="Wai'+
                         'ting..." /></p>'
                 ),
                 //template for chat messages
@@ -67,9 +102,8 @@ var shared = {
         showPage : function (s_page) {
                 //a ‘page’ is a screen in the game that the player sees. most games will have a title screen, the main
                 //gameplay screen, and maybe rules / about screens. each of these is an html div with the id “page-????”
-                //(where ???? is the page’s name). in addition to this, the game.js for the game has an array `game.pages`
-                //where the names of each of the pages in the game is stored, along with functions to run when the page is
-                //shown / hidden
+                //(where ???? is the page’s name). in addition to this, the game.js for the game, has an array `game.pages`
+                //with the names of each page, along with functions to run when the page is shown / hidden
                 
                 //loop over each page and hide/show as appropriate
                 game.pages.each (function(o_item) {
@@ -96,12 +130,12 @@ var shared = {
         
         /* > connect : start/join a game
            ===============================================================================================================
-           params * b_host : if you are the host (start game) or opponent (join game)
+           params * (b_host) : if you are the host (start game) or opponent (join game)
            =============================================================================================================== */
         connect : function (b_host) {
                 if (typeof b_host == "undefined") {b_host = shared.host;}  //default: as specified in `shared.host`
                 
-                //display the game board
+                //display the game screen
                 this.showPage ("game");
                 
                 //disable the “Start Game” button
@@ -348,9 +382,11 @@ var shared = {
    OBJECT shared.chat - manage the chatbox aside the game
    ======================================================================================================================= */
 shared.chat = {
-        //list of emotes. the file name matches the image file name (sans extension) in /games/-/emotes/
+        //list of emotes. the file name matches the image file name (sans extension) in ‘games/-/emotes/’
         //refer to: http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Guide:Regular_Expressions for regex rules
         emotes : [
+                //note: add a “hide: true” pair to an emote object to hide the emote from the pull up list
+                //TODO: can't work out the regex to distinguish “:)” from “>:)”
                 {file: "58", symbol: ">:[", regex: /&gt;:[\[\(]/g},  // miffed   >:[ or >:(
                 {file: "60", symbol: ">:]", regex: /&gt;:[\]\)]/g},  // evilgrin >:] or >:)
                 {file: "01", symbol: ":)",  regex: /:\)/g},          // happy    :)
@@ -370,10 +406,10 @@ shared.chat = {
                 {file: "62", symbol: ":o",  regex: /:o/gi},          // shocked  :O
                 {file: "63", symbol: ";P",  regex: /;p/gi}           // sarcasm  ;P
         ],
-
+        
         /* > show : make the chat section visible
            =============================================================================================================== */
-        show : function(){
+        show : function () {
                 var e_chat_input  = $("shared-chat-input"),   //the textarea you type your message in
                     e_chat_label  = $("shared-chat-label"),   //the "<chat here>" message
                     e_chat_emotes = $("shared-chat-emotes"),  //the emote list holder
@@ -409,7 +445,7 @@ shared.chat = {
                 
                 //respond to chat messages
                 jax.listenFor ("game_chat_message", function(o_response){
-                        //display the chat message received...
+                        //display the chat message received
                         this.addMessage (playerThem.name, playerThem.icon, o_response.data.msg);
                 }.bind(this));
                 
@@ -432,7 +468,7 @@ shared.chat = {
                 Event.observe (e_chat_input, "keypress", function(e_event){
                         //if they press Return
                         if(e_event.keyCode == 13) {
-                                //disable the chat textbox and send the message...
+                                //disable the chat textbox and send the message…
                                 var msg = e_chat_input.value.replace (/^\s*|\s*$/g,"");
                                 e_chat_input.value = "";
                                 if (msg.length) {
@@ -566,38 +602,10 @@ shared.events = {
         }
 };
 
-/* > when the page finishes loading all code...
-   ======================================================================================================================= */
-Event.observe (window, 'load', function(){
-        //put the version info in the log
-        console.info ("Welcome to Jax Games | "+game.name+": "+game.version+" ["+Date()+"]\n"+
-                      "jax: "+jax.version+" - Script.aculo.us: "+Scriptaculous.Version+" - Prototype: "+Prototype.Version+"\n"
-        );
-        //change the chrome title (game.name is automatically appended)
-        shared.setTitle ("Welcome to ");
-        //hide the loading page and display the game’s title screen
-        shared.setSystemStatus ();
-        
-        //Firefox remembers the values in fields, even after refreshing, clear the chat box
-        $("shared-chat-input").value = "";
-        
-        //the buttons on the title screen
-        $("title-start-game").onclick = shared.events.titleButtonClick.bindAsEventListener (this, true);
-        $("title-join-game").onclick  = shared.events.titleButtonClick.bindAsEventListener (this, false);
-        
-        //when the user clicks the Start/Join Game button (on the user page)
-        $("user-submit").onclick = shared.events.userSubmitClick;
-        
-        //run the load function defined in game.js for the game to handle some onload procedures of its own
-        game.load ();
-        //run the title screen’s show function to prepare the title screen
-        shared.showPage ("title");
-});
-
 /* jax_disconnect < listen out for the disconnect message when the other player leaves the game
    ======================================================================================================================= */
 jax.listenFor ("jax_disconnect", function(o_response) {
-        //if the player closed the window...
+        //if the player closed the window…
         if (o_response.data.reason == "unload") {
                 shared.headsup.hide ();
                 shared.setTitle (playerThem.name+" left the game - ");
@@ -632,20 +640,26 @@ function create2DArray (n_width, n_height, x_initvalue) {
 
 /* > bsod : the fatal error screen, no one hears your screams
    ======================================================================================================================= 
-   params * (s_message) : error message to display on the bsod and console
+   params * (s_message) : error message to display on the bsod and console. use null to clear the bsod
             (s_url)     : url of file that caused the error (provided by native js error throwing)
             (n_line)    : line number of the error (provided by native js error throwing)
    return * true        : so that the javascript error is not ignored by the browser (when error is thrown)
    ======================================================================================================================= */
 function bsod (s_message, s_url, n_line) {
-        //construct the message, include line number and filename if provided
-        s_message = (s_url?(s_url.split("/").last())+" ":"") + (n_line?"["+n_line+"]: ":"") + s_message;
-        //put the message on the bsod
-        document.getElementById ("bsod-msg").innerHTML = s_message ? s_message : "Check the Javascript Console for details";
-        //show it (Prototype is not used here incase Prototype is the thing causing the error)
-        document.getElementById ("bsod").style.display = "block";
-        //show the error on the Firebug console (if present)
-        console.error (s_message);
+        //if an error message is provided, show the bsod:
+        if (s_message) {
+                //construct the message, include line number and filename if provided
+                s_message = (s_url?(s_url.split("/").last())+" ":"") + (n_line?"["+n_line+"]: ":"") + s_message;
+                //put the message on the bsod
+                document.getElementById ("bsod-msg").innerHTML = s_message ? s_message : "Check the Javascript Console for details";
+                //show it (Prototype is not used here incase Prototype is the thing causing the error)
+                document.getElementById ("bsod").style.display = "block";
+                //show the error on the Firebug console (if present)
+                console.error (s_message);
+        } else {
+                //otherwise hide it
+                document.getElementById ("bsod").style.display = "none";
+        }
         //accept the error and stop the browser (when error was thrown by the browser)
         return true;
 }
@@ -653,3 +667,4 @@ function bsod (s_message, s_url, n_line) {
 if (config.use_bsod) {window.onerror = bsod;}
 
 //=== end of line ===========================================================================================================
+//‘js/boot.js’ « previous                                                                          next » ‘games/*/index.php’
