@@ -125,7 +125,7 @@ switch ($request_type) {
 				addResponse ($response);
 				
 				//delete the entry
-				$sql = "DELETE FROM queue WHERE connid='$conn_id' AND whoto='$user_id' AND type='".$type."'"+
+				$sql = "DELETE FROM queue WHERE connid='$conn_id' AND whoto='$user_id' AND type='".$type."'".
 				       " AND data='".$data."';"
 				;
 				$database->query ($sql);
@@ -168,7 +168,7 @@ switch ($request_type) {
 			$database->query ("DELETE FROM connections WHERE connid='$conn_id';");
 		} else {
 			//remove you from the connection...
-			$sql = "UPDATE connections SET ".($user_id==$user_id1?'userid1':'userid2')."='DECEASED' WHERE "+
+			$sql = "UPDATE connections SET ".($user_id==$user_id1?'userid1':'userid2')."='DECEASED' WHERE ".
 			       "connid='$conn_id';"
 			;
 			$database->query ($sql);

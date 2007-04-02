@@ -1,6 +1,9 @@
 =============================================================================================================================
 jaxgames changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+02.APR.07
+    FIX: syntax typos in the php files broke the backend
+    FIX: Unicode ellipsis not displaying in build script
 19.MAR.07
     ADD: changed file names created by build script
     NEW: build script now creates a jax distribution (just ‘jax/’)
