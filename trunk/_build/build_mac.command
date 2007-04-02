@@ -45,14 +45,14 @@ echo "jaxgames build process                                                   v
 echo "==============================================================================="
 
 # [1]:
-echo "[1] checking dependencies for build…"
+echo "[1] checking dependencies for build..."
 echo "-------------------------------------------------------------------------------"
 # Rhino is a java implementation of javascript. Dojo <dojotoolkit.org> uses a custom version of Rhino to compact javascript
 # files into a smaller space. this will also make them more compatible with Dean Edward’s packer.
-# if custom_rhino.jar does not exist, download it… (saves us 700 kb in our SVN)
+# if custom_rhino.jar does not exist, download it... (saves us 700 kb in our SVN)
 if ! [[ -e ./libs/custom_rhino.jar ]]
 then
-	echo "* downloading custom_rhino.jar…"
+	echo "* downloading custom_rhino.jar..."
 	# curl: download a file
 	# -o = save to disk
 	# -S = show errors on screen
@@ -68,7 +68,7 @@ fi
 # Go to Folder’ in finder to get there)
 if [ -e /usr/local/bin/rar/rar ]
 then
-	echo "@ RAR is present, a RARchive will also be made…"
+	echo "@ RAR is present, a RARchive will also be made..."
 	USE_RAR=true
 else
 	echo "! RAR is not present, a RARchive will not be made"
@@ -102,7 +102,7 @@ mkdir ./source
 #                                        scriptaculous and prototype there that do not need to be included)
 rsync -r --times --delete-excluded --exclude '.*' --exclude '*.db' --exclude '_*' --exclude '*.sqlite' --exclude 'js/libs/scriptaculous/*/' ../../ ./source
 
-echo "* creating ZIP archive…"
+echo "* creating ZIP archive..."
 rm ./jax-games-src.zip 2>/dev/null
 # ZIP
 # -r = recurse subdirectories
@@ -123,7 +123,7 @@ if [ "$USE_RAR" = "true" ]
 then
 	rm ./jax-games-src.rar 2>/dev/null
 	echo "-------------------------------------------------------------------------------"
-	echo "@ creating RAR archive…"
+	echo "@ creating RAR archive..."
 	/usr/local/bin/rar/rar a -idcp -k -m5 -r -s ./jax-games-src.rar ./source
 	if [ $? -gt 0 ]; then echo "! creation of source rar file failed"; exit 2; fi
 fi
@@ -134,7 +134,7 @@ echo "[3] create Jax distribution"
 echo "-------------------------------------------------------------------------------"
 cd source
 # ZIP
-echo "* creating ZIP archive…"
+echo "* creating ZIP archive..."
 rm ../jax-dist.zip 2>/dev/null
 zip -r -X -9 ../jax-dist.zip ./jax -x \*.db
 if [ $? -gt 0 ]; then echo "! creation of jax distribution zip file failed"; exit 3; fi
@@ -143,7 +143,7 @@ if [ "$USE_RAR" = "true" ]
 then
 	rm ../jax-dist.rar 2>/dev/null
 	echo "-------------------------------------------------------------------------------"
-	echo "@ creating RAR archive…"
+	echo "@ creating RAR archive..."
 	/usr/local/bin/rar/rar a -idcp -k -m5 -r -s ../jax-dist.rar ./jax
 	if [ $? -gt 0 ]; then echo "! creation of jax distribution rar file failed"; exit 3; fi
 fi
@@ -154,10 +154,10 @@ rm -rf ./source 2>/dev/null
 # [4]:
 echo "[4] copy source to release directory"
 echo "-------------------------------------------------------------------------------"
-echo "* removing old release…"
+echo "* removing old release..."
 rm -rf ./jaxgames 2>/dev/null
 
-echo "* copying new source…"
+echo "* copying new source..."
 mkdir ./jaxgames
 # copy the current source, to release directory using rsync
 # -r = recurse into directories
@@ -187,7 +187,7 @@ echo "--------------------------------------------------------------------------
 # find all javascripts (ignoring folders starting with underscore) and compact them
 for FILE in `find ./release/jaxgames -regex "\.\/[^_]*\.js"`
 do
-	echo "  compacting $FILE…"
+	echo "  compacting $FILE..."
 	java -jar ./libs/custom_rhino.jar -opt -1 -c "$FILE" > "$FILE.temp"
 	if [ $? -gt 0 ]; then echo "! compacting of $FILE failed"; exit 6; fi
 	mv -f "$FILE.temp" "$FILE"
@@ -233,7 +233,7 @@ rm ./release/jax-games-dist.zip 2>/dev/null  #ignore error from this
 # -9 = maximum compression
 # -x \*.db = exclude Windows Thumbs.db files
 # -x \*.sqlite = exclude the sqlite database
-echo "@ creating ZIP archive…"
+echo "@ creating ZIP archive..."
 zip -r -X -9 ./release/jax-games-dist.zip ./release/jaxgames -x \*.db -x \*.sqlite
 if [ $? -gt 0 ]; then echo "! creating zip of release failed"; exit 9; fi
 # RAR
@@ -241,7 +241,7 @@ if [ "$USE_RAR" = "true" ]
 then
 	rm ./release/jax-games-dist.rar 2>/dev/null
 	echo "-------------------------------------------------------------------------------"
-	echo "@ creating RAR archive…"
+	echo "@ creating RAR archive..."
 	/usr/local/bin/rar/rar a -idcp -k -m5 -r -s ./release/jax-games-dist.rar ./release/jaxgames
 	if [ $? -gt 0 ]; then echo "! creating rar of release failed"; exit 9; fi
 fi
