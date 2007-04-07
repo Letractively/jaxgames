@@ -5,43 +5,42 @@
    jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 */
 
-h1      {background-image: url("images/title.png");}
+h1            {background-image: url("images/title.png");}
 
-#page-user, #page-join
-	{padding: 15px; width: 482px; height: 354px;}
-	
-#page-title {background-image: url("images/titlebg.png");}
-#title-fg   {width: 512px; height: 384px; background-image: url("images/titlefg.png"); background-repeat: no-repeat; background-position: bottom left;}
+#page-join    {width: 482px; height: 354px; padding: 15px; }
 
-#title-logo {margin-top: 49px; margin-bottom: 10px;}
-#title-fg p {padding: 0;}
-#title-fg a {display: block; text-decoration: none; width: 240px; height: 40px; margin: 0 auto; line-height: 40px;}
+#page-title   {background-image: url("images/titlebg.png");}
+#title-clouds {position: absolute; top: 115px; width: 512px; height: 143px; overflow: hidden;}
+#title-cloud  {position: relative; width: 1002px; height: 143px; background-image: url("images/titlecloud.png");}
+
+#title-logo   {margin-top: 49px; margin-bottom: 10px;}
+#title-fg     {position: absolute; width: 512px; height: 384px; background-image: url("images/titlefg.png");
+               background-repeat: no-repeat; background-position: bottom left;}
+#title-fg p   {padding: 0;}
+#title-fg a   {display: block; width: 240px; height: 40px; margin: 0 auto; line-height: 40px; text-decoration: none;}
 
 #title-fg a img       {}
 #title-fg a img.left  {float: left;}
 #title-fg a img.right {float: right;}
 /*#title-fg a:hover img {display: block;}*/
 
-#title-clouds  {position: absolute; top: 160px; width: 512px; height: 143px; overflow: hidden; z-index: -1;}
-#title-cloud   {position: relative; width: 1002px; height: 143px; background-image: url("images/titlecloud.png");}
-
 #shared-gamearea {background-color: #008000; background-image: url("../-/felt.jpg");}
 
 /* === board ============================================================================================================= */
 #game-board, #title-board
-                   {text-align: center; margin-top: 13px; width: 512px; height: 384px;
+                   {position: absolute; top: 13px; width: 512px; height: 371px; text-align: center; 
                     background-image: url("images/board.png"); background-repeat: no-repeat; background-position: top center;}
-#game-board-table  {margin-left: 95px; margin-top: 18px; width: 321px; border-collapse: collapse; border: 0;}
-#game-board td     {width: 40px; height: 40px; padding: 0; margin: 0; border: 0; overflow: hidden !important;}
+#game-board-table  {width: 321px; margin: 18px 0 0 95px; border-collapse: collapse; border: 0;}
+#game-board td     {width: 40px; height: 40px; margin: 0; padding: 0; border: 0; text-align: center; overflow: hidden;}
 #game-board .hover {background-image: url("images/hover.png"); background-repeat: no-repeat; cursor: pointer;}
 
 /* === piece counts ====================================================================================================== */
 .game-paper        {text-align: center;}
-#game-paper-me     {position: absolute; top: 266px; left: 0; width: 86px; height: 163px; padding: 30px 6px 0 0;
+#game-paper-me     {position: absolute; top: 221px; left: 0; width: 86px; height: 163px; padding: 30px 6px 0 0;
                     background-image: url("images/paperme.png"); background-repeat: no-repeat;}
-#game-paper-them   {position: absolute; top: 45px; left: 420px; width: 86px; height: 163px; padding: 40px 0 0 6px;
+#game-paper-them   {position: absolute; top: 0; left: 420px; width: 86px; height: 163px; padding: 40px 0 0 6px;
                     background-image: url("images/paperthem.png"); background-repeat: no-repeat;}
-.game-paper-pieces {font: normal 32px/52px Georgia, serif;}
+.game-paper-pieces {font: normal 32px/52px georgia, serif;}
 
 
 /* === end of line ======================================================================================================= */

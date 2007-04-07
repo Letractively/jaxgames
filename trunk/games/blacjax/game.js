@@ -48,7 +48,6 @@ var game = {
            =============================================================================================================== */
         pages : [
              {name : "title"},
-             {name : "user"},
              {name : "game"}
         ],
         
@@ -134,8 +133,8 @@ var game = {
            =============================================================================================================== */
         start : function (b_mefirst, n_cards) {
                 //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
-                //entering their name / join key, `shared.connect` is called. when a connection is established between the
-                //two players, `game.start` is called for you
+                //entering their name / join key, `shared.(start/join)Connection` is called. when a connection is established
+                //between the two players, `game.start` is called for you
                 if (typeof b_mefirst == "undefined") {b_mefirst = shared.host;}  //default: host goes first
                 if (!n_cards)                        {n_cards   = 7;}            //default: 7 cards each
                 
@@ -433,7 +432,7 @@ game.events = {
                 //if any of the above matched
                 if (msg) {
                         //put the text in the label
-                        $("game-label").update (msg).setStyle ({left: Element.getStyle(this,'left')}). show ();
+                        $("game-label").update (msg).setStyle ({left: Element.getStyle(this,'left')}).show ();
                 }
         },
         
@@ -607,7 +606,7 @@ game.run = {
         /* > displayFace : update just the face card
            =============================================================================================================== */
         displayFace : function () {
-                $("game-face").innerHTML = (this.face) ? '<img src="../-/cards/'+this.face+'.png" width="71" height="96" alt="Face" />' : "";
+                $("game-face").update ((this.face)?'<img src="../-/cards/'+this.face+'.png" width="71" height="96" alt="Face" />':"");
         },
 
         /* > getCardPositions : return the positions for each card, given a number of cards to fit into the run

@@ -94,7 +94,7 @@ Hand.prototype = {
                 var card    = this.cards.first (),
                     card_id = this.element + '-' + card
                 ;
-                new Insertion.Top (this.element, '<img id="'+card_id+'" style="position: absolute; left: 5px; top: ' +
+                new Insertion.Top (this.element, '<img id="'+card_id+'" style="position:absolute;left:5px;top:' +
                                    (this.host?-113:113)+'px;" src="../-/cards/back.png" width="71" height="96" '+
                                    'alt="'+card+'" />'
                 );

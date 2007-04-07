@@ -4,18 +4,18 @@
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 *//*
-   shared.js contains objects that are shared between all of the games. in particular `shared`, an object containing core
+   shared.js contains objects that are shared between all of the games. in particular `shared`: an object containing core
    functions to power the games and make the shared ui function (e.g. chat box)
 */
 
-//create an instance of `Jax`, direct it to the php page to receive the ajax calls.
+//create an instance of `Jax`, direct it to the php page to receive the ajax calls
 //jax allows us to setup a ‘browser-to-browser’ connection via ajax. one player starts a new connection, and the other joins.
 //the server is polled every few seconds for new messages from each other. jax is therefore not realtime; there is absolutely
 //no gaurantee that a message will arrive at the other player at a given time. jax games are therefore turn-based
 var jax = new Jax ("../../"+config.jax.path, config.jax.interval);
 
 
-/* > EVENT onload - when everything is loaded and we are ready to go…
+/* EVENT > onload - when everything is loaded and we are ready to go…
    ======================================================================================================================= */
 Event.observe (window, 'load', function(){
         //this is essentially the starting point for jax games. after all the scripts have been loaded, this function will
@@ -23,18 +23,15 @@ Event.observe (window, 'load', function(){
         
         //put the version info in the log
         console.info ("Welcome to Jax Games | "+game.name+": "+game.version+" ["+Date()+"]\n"+
-                      "jax: "+jax.version+" - Script.aculo.us: "+Scriptaculous.Version+" - Prototype: "+Prototype.Version+"\n"
+                      "jax: "+jax.version+" - Scriptaculous: "+Scriptaculous.Version+" - Prototype: "+Prototype.Version+"\n"
         );
         
         //Firefox remembers the values in fields, even after refreshing, clear the chat box
         $("shared-chat-input").value = "";
         
-        //the buttons on the title screen
-        $("title-start-game").onclick = shared.events.titleButtonClick.bindAsEventListener (this, true);
-        $("title-join-game").onclick  = shared.events.titleButtonClick.bindAsEventListener (this, false);
-        
-        //when the user clicks the Start/Join Game button (on the user page)
-        $("user-submit").onclick = shared.events.userSubmitClick;
+        //hook up the buttons on the title screen
+        $("title-start-game").onclick = shared.events.titleStartGameClick;
+        $("title-join-game").onclick  = shared.events.titleJoinGameClick;
         
         //change the window title (`game.name` is automatically appended by this function)
         shared.setTitle ("Welcome to ");
@@ -43,7 +40,7 @@ Event.observe (window, 'load', function(){
         
         //run the `load` function defined in game.js for the game to handle some onload procedures of its own
         game.load ();
-        //show the title screen (see `game.pages`, if there’s a `show` function for the title screen, it will be executed)
+        //show the title screen (see `game.pages`. if there’s a `show` function for the title screen, it will be executed)
         shared.showPage ("title");
 });
 
@@ -64,30 +61,50 @@ Player.prototype = {
 /* =======================================================================================================================
    OBJECT shared - functions/properties shared by different games on the site
    ======================================================================================================================= */
-//`shared` relies on a game being loaded and the presence of an object `game`. see ‘games/???/game.js’ for specs
 var shared = {
+        //`shared` relies on a game being loaded and the presence of an object `game`. see ‘games/???/game.js’ for specs
         host   : false,  //true = you are the host, false = you are the opponent
         played : 0,      //number of matches played
         
+        /* ===============================================================================================================
+           OBJECT icons - the 16x16 icons to use next to each player’s name
+           =============================================================================================================== */
         icons  : {
-                host     : "../-/icons/user.png",
-                opponent : "../-/icons/user_red.png"
+                //override these values in your `game.load` function if you want something custom
+                host     : "../-/icons/user.png",     //default: player 1 is blue
+                opponent : "../-/icons/user_red.png"  //default: player 2 is red
         },
         
-        //reusable templates for pieces of html used in shared
+        /* ===============================================================================================================
+           OBJECT templates - reusable templates for pieces of html used in shared
+           =============================================================================================================== */
         templates : {
+                //template when the player clicks “Start Game” on title screen and must enter their name
+                start_game : '<p><label for="user-name">Name: </label>'+
+                             '<input type="text" name="user-name" id="user-name" maxlength="20" /></p>'+
+                             '<p><a href="#" onclick="javascript:shared.events.titleCancelClick();">Cancel</a> '+
+                             '<a href="#" onclick="javascript:shared.events.startGame();">Start Game</a></p><br />'
+                ,
+                //template when the player clicks “Join Game” on title screen and must enter their name and join key
+                join_game : '<p><label for="user-name">Name: </label>'+
+                            '<input type="text" name="user-name" id="user-name" maxlength="20" />'+
+                            '<label for="join-key">Join Key: </label>'+
+                            '<input type="text" name="join-key" id="join-key" size="6" maxlength="6" /></p>'+
+                            '<p><a href="#" onclick="javascript:shared.events.titleCancelClick();">Cancel</a> '+
+                            '<a href="#" onclick="javascript:shared.events.joinGame();">Join Game</a></p>'
+                ,
                 //template when a new game is started and you are provided with the join key
                 join_key : new Template (
                         '<p>Copy the key code below and give it<br />to your friend so that they can join the game</p><p>'+
                         '<input id="shared-key" type="text" readonly="readonly" value="#{conn_id}" /></p><p><br />Waiting '+
-                        'for the other player to join&hellip;</p><p><img src="../-/waiting.gif" width="16" height="16" alt="Wai'+
-                        'ting..." /></p>'
+                        'for the other player to join&hellip;</p><p><img src="../-/waiting.gif" width="16" height="16" alt'+
+                        '="Waiting..." /></p>'
                 ),
                 //template for chat messages
                 chat_msg : new Template (
-                        '<div id="chat-#{time_id}" class="chat-#{html_class}" style="display: none;"><p><em>#{time_stamp}'+
-                        '</em> <img src="#{icon}" width="16" height="16" alt="User icon" /> <strong>#{name}</strong></p>'+
-                        '<blockquote><p>#{text}</p></blockquote></div>'
+                        '<div id="chat-#{time_id}" class="chat-#{html_class}" style="display:none;"><p><span class="timesta'+
+                        'mp">#{time_stamp}</span> <img src="#{icon}" width="16" height="16" alt="User icon" /> '+
+                        '<strong>#{name}</strong></p><blockquote><p>#{text}</p></blockquote></div>'
                 ),
                 //template for emoticons
                 chat_emote : new Template (
@@ -103,7 +120,7 @@ var shared = {
                 //a ‘page’ is a screen in the game that the player sees. most games will have a title screen, the main
                 //gameplay screen, and maybe rules / about screens. each of these is an html div with the id “page-????”
                 //(where ???? is the page’s name). in addition to this, the game.js for the game, has an array `game.pages`
-                //with the names of each page, along with functions to run when the page is shown / hidden
+                //with the names of each page, along with functions to run when the page is shown / hidden (optional)
                 
                 //loop over each page and hide/show as appropriate
                 game.pages.each (function(o_item) {
@@ -111,12 +128,9 @@ var shared = {
                         var e = $("page-"+o_item.name);
                         //if this is the page to be shown…
                         if (o_item.name == s_page) {
-                                //if it’s not visible (don’t run the show functions for pages already visible)
-                                if (!e.visible ()) {
-                                        //if there is a show function present for this page, run it
-                                        if (typeof o_item.show == "function") {o_item.show ();}
-                                        e.show ();
-                                }
+                                //if there is a show function present for this page, run it
+                                if (typeof o_item.show == "function") {o_item.show ();}
+                                e.show ();
                         } else {
                                 //if the page is visible (thus needs to be hidden)
                                 if (e.visible ()) {
@@ -128,77 +142,51 @@ var shared = {
                 });
         },
         
-        /* > connect : start/join a game
+        /* > startConnection : connect to the server and start a game, wait for the opponent to join
            ===============================================================================================================
-           params * (b_host) : if you are the host (start game) or opponent (join game)
+           params * s_playername : the name you’ve chosen (will be sent to the opponent, so that they know it)
            =============================================================================================================== */
-        connect : function (b_host) {
-                if (typeof b_host == "undefined") {b_host = shared.host;}  //default: as specified in `shared.host`
+        startConnection : function (s_playername) {
+                playerMe.name = s_playername;
                 
-                //display the game screen
-                this.showPage ("game");
-                
-                //disable the “Start Game” button
-                enableNicknameBox (false);
-                
-                playerMe.name   = $F("user-nickname");
-                playerMe.icon   = b_host ? this.icons.host : this.icons.opponent;
-                playerThem.icon = b_host ? this.icons.opponent : this.icons.host;
-                
-                //if you are the host, or opponent:
-                if (b_host) {  //--------------------------------------------------------------------------------------------
-                        //create the game on the server
-                        jax.open (
-                                {name : playerMe.name},  //your chosen name
-                                function(o_response){    //when the game starts, but the other player has not yet joined
-                                        //if the server okay’d the new slot
-                                        if (o_response.result) {
+                //create the game on the server
+                jax.open (
+                        {name:playerMe.name},  //your chosen name
+                        function(o_response){  //when the game starts, but the other player has not yet joined
+                                //if the server okay’d the new slot
+                                if (o_response.result) {
+                                        //set the chrome title
+                                        this.setTitle (jax.conn_id+" - ");
+                                        this.headsup.hide (function(){
                                                 //display the code for the other player to use to join with
-                                                this.setSystemStatus (this.templates.join_key.evaluate(jax));
-                                                //set the chrome title
-                                                this.setTitle (jax.conn_id+" - ");
-                                        
-                                        } else {
-                                                //TODO: start game or nickname failed
-                                                enableNicknameBox (true);
-                                        }
-                                }.bind(this),
-                                preStart.bind(this)  //second function: when the other player joins the game
-                        );
-                        
-                } else {  //-------------------------------------------------------------------------------------------------
-                        this.setTitle ("Joining Game... - ");
-                        this.setSystemStatus ("<p>Joining Game</p><p>Please Wait&hellip;</p>");
-                        
-                        //connect to the other player
-                        jax.connect ($F("join-key"),        //the connection key the user pasted into the text box
-                                    {name: playerMe.name},  //your nickname to send to the other player
-                                    preStart.bind(this)     //function to call once you’ve joined the game (see below)
-                        );
-                }
+                                                this.headsup.show (this.templates.join_key.evaluate(jax));
+                                        }.bind(this));
+                                
+                                } else {
+                                        //TODO: start game or nickname failed
+                                        //?/enableNicknameBox (true);
+                                }
+                        }.bind(this),
+                        this.events.gameBegins  //second function: when the other player joins the game
+                );
+        },
+        
+        /* > joinConnection : connect to the server and join a game
+           ===============================================================================================================
+           params * s_playername : the name you’ve chosen (will be sent to the opponent, so that they know it)
+                    s_joinkey    : the unique key of the game to join
+           =============================================================================================================== */
+        joinConnection : function (s_playername, s_joinkey) {
+                playerMe.name = s_playername;
                 
-                /* PRIVATE > preStart : a hidden function available only to `shared.connect`
-                   ======================================================================================================= */
-                function preStart (o_response) {
-                        //the other player has joined the game.
-                        playerThem.name = o_response.data.name;
-                        
-                        //display player 1’s name / icon
-                        $("jax-game-p1name").innerHTML = playerMe.name;
-                        $("jax-game-p1icon").src = playerMe.icon;
-                        $("player-status-me").style.display = "block";
-                        this.setPlayerStatus ();
-                        
-                        //display player 2’s name / icon
-                        $("jax-game-p2name").innerHTML = playerThem.name;
-                        $("jax-game-p2icon").src = playerThem.icon;
-                        $("player-status-them").style.display = "block";
-                        
-                        //set the chrome title
-                        this.setTitle (playerMe.name+" v. "+playerThem.name+" - ");
-                        //start the game
-                        game.start ();
-                }
+                this.setTitle ("Joining Game... - ");
+                this.headsup.show ("<p>Joining Game</p><p>Please Wait&hellip;</p>");
+                
+                //connect to the other player
+                jax.connect (s_joinkey,             //the connection key the user pasted into the text box
+                            {name: playerMe.name},  //your nickname to send to the other player
+                            this.events.gameBegins  //function to call once you’ve joined the game (see below)
+                );
         },
         
         /* > setPlayerStatus : set a message under the player’s info
@@ -206,8 +194,7 @@ var shared = {
            params * (s_html) : html to display, send nothing to hide the display
            =============================================================================================================== */
         setPlayerStatus : function (s_html) {
-                var scale = 2,                          //size to expand the player section to (in 100s %)
-                    e     = $("player-status-me-msg"),  //reference to the element containing the message
+                var e     = $("player-status-me-msg"),  //reference to the element containing the message
                     v     = e.visible ()                //if that element is visible or not
                 ;
                 if (s_html && v) {
@@ -217,16 +204,22 @@ var shared = {
                 } else if ((s_html && !v) || (!s_html && v)) {
                         //otherwise, if there’s a message to show, and it’s not visible, or if the message is being cleared
                         //and it is currently visible, then animate sliding open/closed
-                        /*!/new Effect.Scale($("player-status-me"), (s_html?scale*100:100), {  //scale to %
-                                scaleFrom    : (s_html?100:scale*100),                   //scale from %
-                                scaleX       : false,                                    //do not scale width
-                                scaleContent : false,                                    //do not scale insides
-                                scaleMode    : {originalHeight: 21}                      //base reference for %
-                        }),*/
-                        //also move the bar at the same time (so that it effectively slides upwards)
-                        new Effect.Move ($("player-status-me"), {
-                                x           : 0,
-                                y           : (s_html?-(21*(scale)):21*(scale)),
+                        new Effect.Parallel ([
+                                //make the player information bar taller,
+                                new Effect.Scale($("player-status-me"), (s_html?300:100), {  //scale to %
+                                        sync         : true,                                 //sync with move animation
+                                        scaleFrom    : (s_html?100:300),                     //scale from %
+                                        scaleX       : false,                                //do not scale width
+                                        scaleContent : false,                                //do not scale insides
+                                        scaleMode    : {originalHeight: 21}                  //base reference for %
+                                }),
+                                //also move the bar at the same time (so that it effectively slides upwards)
+                                new Effect.Move ($("player-status-me"), {
+                                        sync        : true,
+                                        x           : 0,
+                                        y           : (s_html?-(21*2):21*2)
+                                })
+                        ], {
                                 duration    : 0.5,
                                 beforeStart : function(){
                                         //before starting the animation, change the html
@@ -260,15 +253,15 @@ var shared = {
                            timeouts will be cancelled in lieu of this function being called again.
                            
                            example:
-                             shared.headsup.show ("my timeout will never be run", 5, function(){alert("test");});
-                             shared.headsup.show ("because this text will override it", 1)
+                              shared.headsup.show ("my timeout will never be run", 5, function(){alert("test");});
+                              shared.headsup.show ("because this text will override it", 1)
                            
                            To avoid this, either use a function by-reference for side-by-side calls to `.show`, or use the
                            timeout function of one call to start the next, for example:
                            
-                             shared.headsup.show ("this will show first", 5, function(){
-                                     shared.headsup.show ("and then this afterwards", 1);     
-                             });
+                              shared.headsup.show ("this will show first", 5, function(){
+                                      shared.headsup.show ("and then this afterwards", 1);
+                              });
                         */
                         if (!f_timeout) {f_timeout = Prototype.emptyFunction;}  //default: no callback
                         if (!s_html)    {this.hide ();}  //if no text is provided, hide the heads-up message
@@ -323,7 +316,7 @@ var shared = {
                                 ;
                                 new Effect.Parallel ([
                                         new Effect.BlindUp (e2, {sync:true, scaleFromCenter:true}),
-                                        new Effect.Fade (e1, {sync:true})
+                                        new Effect.Fade    (e1, {sync:true})
                                 ], {
                                         duration    : 0.3,
                                         transition  : Effect.Transitions.linear,
@@ -512,8 +505,8 @@ shared.chat = {
                     s_msg  : text to display, will be parsed for emotes automatically
            =============================================================================================================== */
         addMessage : function (s_name, s_icon, s_msg) {
-                //get the timestamp
-                var now      = new Date (),
+                var e        = $("shared-chat-history"),
+                    now      = new Date (),
                     hours    = now.getHours (),
                     minutes  = now.getMinutes (),
                     chat_msg = {
@@ -525,15 +518,11 @@ shared.chat = {
                             text       : s_msg.escapeHTML ()
                     }
                 ;
-                //insert emoticon images in the message
-                this.emotes.each (function(o_emote, n_index){
-                        //replace the emote with the image
-                        chat_msg.text = chat_msg.text.replace (o_emote.regex, shared.templates.chat_emote.evaluate(o_emote));
-                }.bind(this));
+                //parse the message for markup, emoticons and urls
+                chat_msg.text = this.applyMarkup( this.applyEmoticons( this.linkURLs(chat_msg.text) ) );
                 
                 //add the message to the chat history. `Insertion.Bottom` is used (instead of `.innerHTML+=`) so that 
                 //multiple messages coming in at the same time don’t overwrite each other
-                var e = $("shared-chat-history");
                 new Insertion.Bottom (e, shared.templates.chat_msg.evaluate(chat_msg));
                 //animate the message appearing (and scroll down to meet it)
                 new Effect.SlideDown ("chat-"+chat_msg.time_id, {duration: 0.3, afterUpdate: function(){
@@ -543,6 +532,71 @@ shared.chat = {
                         //and again on the last frame
                         e.scrollTop = e.scrollHeight;
                 }});
+        },
+        
+        /* > linkURLs : change raw urls in a message into html hyperlinks
+           ================================================================================================================
+           params * s_msg  : text to parse for urls
+           return * string : same text, but with urls replaced with html hyperlinks
+           =============================================================================================================== */
+        linkURLs : function (s_msg) {
+                /* replace urls in the text with hyperlinks. find anything shaped like a url in the text:
+                   refer to http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:RegExp
+                   
+                   “(?:http(s)?:\/\/)?” ................................... = optional http/https (remember “s” in $1)
+                   “(” .................................................... = remember the main url in $2 (“www.test.com”)
+                             “(?:[0-9A-Z_!~\*'\(\)-]+\.)?” ................ = subdomain. e.g. “www.”
+                             “(” .......................................... = remember the short url in $3 (“test.com”)
+                                      “[0-9A-Z-]{2,63}” ................... = domain name (“test”)
+                                      “\.[A-Z\.]+” ........................ = tld. i.e. “.com”, “.co.uk” etc.
+                             “)”
+                             “(?::[0-9]{1,4})?” ........................... = optional port. e.g. “test.com:80”
+                             “(?:\/[\/0-9a-z_!~\*'\(\)\.;\?:@&=\+\$,%-]*)?” = folders/files, e.g. “test.com/stuff/index.html”
+                             “(?:#[0-9a-z-_]+)?” .......................... = optional bookmark i.e. “index.html#section-two”
+                   “)”
+                */
+                return s_msg.replace (
+                        /(?:http(s)?:\/\/)?((?:[0-9A-Z_!~\*'\(\)-]+\.)?([0-9A-Z-]{2,63}\.[A-Z\.]+)(?::[0-9]{1,4})?(?:\/[\/0-9a-z_!~\*'\(\)\.;\?:@&=\+\$,%-]*)?(?:#[0-9a-z-_]+)?)/gi,
+                        '<a href="http$1://$2" target="_blank">&lt;$3&hellip;&gt;</a>'
+                );
+        },
+        
+        /* > applyMarkup : replace simple text markup with relevant html tags
+           ================================================================================================================
+           params * s_msg  : text to parse for markup
+           return * string : same text, but with markup replaced with relevant html tags
+           =============================================================================================================== */
+        applyMarkup : function (s_msg) {
+                return s_msg.replace (/\*(.*)\*(?!.*>)/, '<strong>$1</strong>')        //“*bold*”
+                            .replace (/\/(.*)\/(?!.*>)/, '<em>$1</em>')                //“/italic/”
+                            .replace (/_(.*)_(?!.*>)/,   '<span class="u">$1</span>')  //“_underline_”
+                ;
+        },
+        
+        /* > insertEmoticons : replace ascii emoticons with images
+           ================================================================================================================
+           params * s_msg  : text to parse for emoticons
+           return * string : same text, but with ascii emoticons replaced with html images
+           =============================================================================================================== */
+        applyEmoticons : function (s_msg) {
+                var regex = /<[^<>]+>/gi,        //regex to find only html tags
+                    tags  = s_msg.match (regex)  //find all html tags and remember them for later
+                ;
+                if (tags) {
+                        //temporarily replace all html tags with “<!>” so that the emoticon replace will not accidently
+                        //break the “:/” in “http://” etc. just don’t create an “<!>” emoticon!
+                        s_msg = s_msg.replace (regex, "<^>");
+                }
+                //loop over each emote and replace any instances of it
+                this.emotes.each (function(o_emote){
+                        //replace the emote with the image
+                        s_msg = s_msg.replace (o_emote.regex, shared.templates.chat_emote.evaluate(o_emote));
+                });
+                if (tags) {
+                        //put the html tags back
+                        tags.each (function(s_html){ s_msg = s_msg.replace ("<^>", s_html); });
+                }
+                return s_msg;
         }
 };
 
@@ -550,19 +604,66 @@ shared.chat = {
    OBJECT shared.events - storage for element events (so that one function pointer can be used for multiple element events)
    ======================================================================================================================= */
 shared.events = {
+        /* > gameBegins : the moment when actual gameplay begins (this is an ajax event)
+           =============================================================================================================== */
+        gameBegins : function (o_response) {
+                //this function is called from `shared.startConnection` or `shared.joinConnection`. here the server has
+                //either started or joined the game, both player’s details are known, a connection is fully established.
+                //display the game screen, put the player’s names to screen
+                
+                //the other player has joined the game
+                playerThem.name = o_response.data.name;
+                //set the chrome title
+                shared.setTitle (playerMe.name+" v. "+playerThem.name+" - ");
+                
+                //set the icons to use
+                playerMe.icon   = shared.host ? shared.icons.host : shared.icons.opponent;
+                playerThem.icon = shared.host ? shared.icons.opponent : shared.icons.host;
+                
+                //display player 1’s name / icon
+                $("player-me-name").innerHTML = playerMe.name;
+                $("player-me-icon").src = playerMe.icon;
+                shared.setPlayerStatus ();
+                
+                //display player 2’s name / icon
+                $("player-them-name").innerHTML = playerThem.name;
+                $("player-them-icon").src = playerThem.icon;
+                
+                //display the game screen
+                shared.showPage ("game");
+                
+                //hide the headsup display, wait until it has finished animating before...
+                shared.headsup.hide (function(){
+                        //slide in the player information bars at the top and bottom
+                        new Effect.Parallel ([
+                                new Effect.SlideDown ("player-status-them", {sync: true}),
+                                new Effect.Move ("player-status-me", {x: 0, y: -21, mode: 'relative', sync: true, beforeStart: function(o_effect){
+                                        o_effect.element.style.top = "384px";
+                                        o_effect.element.show ();
+                                }})
+                        ], {
+                                duration: 0.5,
+                                afterFinish : function () {
+                                        //start the game
+                                        game.start ();
+                                }
+                        });
+                });
+        },
+        
         /* > chatEmotesShow : slide open/closed the emoticon panel
            =============================================================================================================== */
         chatEmotesShow : function () {
                 //slide up the panel (by shrinking the chatlog)
                 var height = $("shared-chat-emotes").getDimensions ().height,
-                    perc   = ((320 - height) / 320) * 100
+                    perc   = ((321 - height) / 321) * 100
                 ;
                 new Effect.Scale ($("shared-chat-history"), (this.alt=="open"?perc:100), {
                         scaleFrom    : (this.alt == "open" ? 100 : perc),
                         duration     : 0.3,
                         scaleX       : false,                  //do not scale width
                         scaleContent : false,                  //do not scale insides
-                        scaleMode    : {originalHeight: 320},  //base reference for %
+                        scaleMode    : {originalHeight: 321},  //base reference for %
                         afterFinish  : function(){
                                 var e = $("shared-chat-emote");
                                 e.title = (e.alt == "open") ? "Click to hide emotes" : "Click to show emotes";
@@ -584,21 +685,38 @@ shared.events = {
                 }); 
         },
         
-        /* > titleButtonClick : to deal with the Start or Join Game button on the title screen
+        /* > titleStartGameClick : when you click on “Start Game” on the title screen
            =============================================================================================================== */
-        titleButtonClick : function (e_event, b_host) {
-                //enable the nickname textbox as Gecko will keep it disabled if you refesh the page
-                enableNicknameBox (true);
-                $("join-game").style.display = b_host ? "none" : "block";
-                
-                shared.host = b_host;
-                shared.showPage ("user");
+        titleStartGameClick : function () {
+                shared.host = true;
+                shared.headsup.show (shared.templates.start_game);
         },
         
-        /* > userSubmitClick : when you click the Start/Join Game button
+        /* > titleJoinGameClick : when you click on “Join Game” on the title screen
            =============================================================================================================== */
-        userSubmitClick : function () {
-                shared.connect (shared.host);
+        titleJoinGameClick : function () {
+                shared.host = false;
+                shared.headsup.show (shared.templates.join_game);
+        },
+        
+        /* > titleCancelClick : when you click the “Cancel” button after clicking “Start Game” or “Join Game”
+           =============================================================================================================== */
+        titleCancelClick : function () {
+                shared.headsup.hide ();
+        },
+        
+        /* > startGame : after you’ve entered your name and clicked to start the game
+           =============================================================================================================== */
+        startGame : function () {
+                //TODO: validate name
+                shared.startConnection ($F("user-name"));
+        },
+        
+        /* > joinGame : after you’ve entered your name and join key, and clicked to start the game
+           =============================================================================================================== */
+        joinGame : function () {
+                //TODO: validate name / join key
+                shared.joinConnection ($F("user-name"), $F("join-key"));
         }
 };
 
@@ -619,7 +737,7 @@ function enableNicknameBox (b_enabled) {
         var e = $("user-submit");
         e.disabled = (b_enabled ? "" : "disabled");
         e.value    = (b_enabled ? "Start Game" : "Checking...");
-        $("user-nickname").disabled = (b_enabled ? "" : "disabled");
+        $("user-name").disabled = (b_enabled ? "" : "disabled");
 }
 
 /* > create2DArray : javascript has no built in method for creating 2D arrays

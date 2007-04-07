@@ -13,7 +13,7 @@ Jax Games is a web application designed to be accessed through a web browser. To
 Note: Better support for Microsoft Windows will be coming at a later stage.
 
 
-1. Instructions for Apple Mac OS X ‘Tiger’ users:
+[1] Instructions for Apple Mac OS X ‘Tiger’ users:
 =============================================================================================================================
 i)   Download the Mac OS X PHP 5 bundle from <http://www.entropy.ch/software/macosx/php/#install>
      Choose the download labelled ‘PHP 5.?.? for Apache 1.3’ (version numbers will change over time)
@@ -46,7 +46,7 @@ vii) Other people on your LAN can use the same address to load Jax Games and pla
      favourite Forum
      
 
-2. Instructions for Microsoft Windows users:
+[2] Instructions for Microsoft Windows users:
 =============================================================================================================================
 Microsoft Windows users have two options for installing Jax Games, either using a regular PHP installation, or a portable
 XAMPP installation which will allow easy removal, or the running from a USB pen. (insta-LAN-parties!)
@@ -63,7 +63,7 @@ B. Installing locally with PHP (good for developers, and experienced users)
 Coming soon, or sooner if someone contributes instructions.
 
 
-3. Instructions for Linux users:
+[3] Instructions for Linux users:
 =============================================================================================================================
 I have no idea. PHP inclusion/support will vary by distribution. Can someone contribute some instructions please?
 

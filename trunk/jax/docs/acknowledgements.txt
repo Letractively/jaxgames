@@ -1,6 +1,8 @@
 =============================================================================================================================
-jax games - acknowledgements
+jax - acknowledgements
 =============================================================================================================================
+Jax is a component of Jax Games, see acknowledgements there for more details. http://code.google.com/p/jaxgames/
+
 Without standing on the shoulders of these giants, this project would not have been possible.
 Many thanks go to these people, and their contributions:
 
@@ -9,34 +11,21 @@ Many thanks go to these people, and their contributions:
 * Joe Hewitt <joehewitt.com> Firebug, Firebug Lite <getfirebug.com> 
 * Allan Odgaard, TextMate <macromates.com>
 * Andrew Dupont, Text Mate Javascript Tools <andrewdupont.net/2006/10/01/javascript-tools-textmate-bundle>
-* Jasc, Corel, Paint Shop Pro 7, X <paintshoppro.com>
 
 [Javascript]
 * Sam Stephenson, Prototype javascript framework <prototypejs.org> and contributors
 * Thomas Fuchs <mir.aculo.us> Scriptaculous javascript framework <script.aculo.us> and contributors
+* The blogger of unfocus.com for Prototype-compatible json.js <unfocus.com/projects/source/Javascript/json.js>
 * Douglas Crockford, JSLint <jslint.com>
-* Shuns, Dump <netgrow.com.au/files>
 
-[Content]
-* Mark James, famfamfam silk icon set <famfamfam.com/lab/icons/silk/>
-* Matthew Gillow, Moderne Gold Emoticon Pack <deviantart.com/deviation/459382/>
-
-[Build]
-* The Mozilla Foundation, Rhino <mozilla.org/rhino/>
-* Dojo <dojotoolkit.org>, custom_rhino.jar <alex.dojotoolkit.org/shrinksafe/>
-* David McNab <david@rebirthing.co.nz>, Rhino port of Dean Edward’s Packer <dean.edwards.name/packer>
-* and Sun Microsystems for Java, which Rhino runs upon <java.com>
-* Travis Hartwell <www.travishartwell.net/blog>, logging in the build script <www.travishartwell.net/blog/2006/08/19_2220>
+[Server]
+* Jon Jensen, SQLiteDB: a PHP class for SQLite <code.jenseng.com/db/>
+* The PHP crew, Hypertext Preprocessor <php.net>
+* SQLite, <sqlite.org>
 
 [Depreciated]
-* Thomas Peri, htmlEncode.js <tumuski.com> used for html escapement before switching to Prototype
-
-[People]
-* William Hollister, the original concept
-* Clint Franklin <theraje.com> testing, art, support
-* electricnet <electricnet.deviantart.com> testing, art, support
-* Stacey W <staceyw.deviantart.com> testing, support
-* Elliott Sprehn <zeros-elipticus.deviantart.com> support
+* DarkCryst, SACK <twilightuniverse.com/resources/code/sack/> no longer used, but was integral to getting this far
+* Andrea Giammarchi, PHPSerializer <devpro.it/javascript_id_102.html> no longer used, but was integral early on
 
 
 If you've contributed to the SVN, please add your name and URL/email below, thanks!

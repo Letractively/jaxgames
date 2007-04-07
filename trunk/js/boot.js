@@ -24,6 +24,7 @@ config.use_bsod = false;
 
 //load Scriptaculous (and Prototype)
 var i = 0, boot_files = [];
+boot_files.push ("js/libs/scriptaculous/scriptaculous.js");
 if (config.scriptaculous.use_defaults) {
         //use the provided Scriptaculous bundled with jax (stable)
         boot_files.push ("js/libs/scriptaculous/prototype.js");
