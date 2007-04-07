@@ -6,10 +6,6 @@
 *//*
    jax is an ajax messaging system allowing two computers to send information to each other from a browser
    REQUIRES: prototype 1.5.0, Prototype-compatible json.js
-   
-   TODO:
-   + if the server responds with a 403, 404, 500 etc, display an error message
-   + if the server times out, give a warning message and try again
 */
 
 /* =======================================================================================================================
@@ -18,8 +14,8 @@
 var Jax = new Class.create ();
 Jax.prototype = {
         //--- public variables ----------------------------------------------------------------------------------------------
-        version  : "0.5.0",  //version number of jax in “major.minor.revision” format (read only)
-        conn_id  : null,     //once you’ve opened/connected, this is the connection id for this instance (read only)
+        version : "0.5.0",  //version number of jax in “major.minor.revision” format (read only)
+        conn_id : null,     //once you’ve opened/connected, this is the connection id for this instance (read only)
         
         //--- private variables ---------------------------------------------------------------------------------------------
         _ : {

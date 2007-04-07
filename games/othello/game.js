@@ -50,83 +50,85 @@ var game = {
         /* ===============================================================================================================
            OBJECT pages - show/hide actions for the screens in the game (title screen, game screen, rules screen etc)
            =============================================================================================================== */
-        pages : [
-             {
-                     name : "title",
-                     show : function () {
-                             var menuItemHover = function () {  //private function for mouse over menu item
-                                     //loop over each image in the link and show them (the black and white pieces)
-                                     this.immediateDescendants ().each (function(e_item){ e_item.show (); });
-                             },  menuItemOut = function () {    //private function for mouse over menu item
-                                     //loop over each image in the link and hide them
-                                     this.immediateDescendants ().each (function(e_item){ e_item.hide (); });
-                             },  menuItemClick = function () {  //private function for menu item click
-                                     //remove the focus rectangle around the link
-                                     this.blur ();
-                                     //remove the mouse events for everything else (so that the animation doesn’t hide if you
-                                     //mouse out, nor are you able to click on another menu item). loop over each hyperlink
-                                     //in the menu...
-                                     $("title-menu").immediateDescendants ().each (function(e_item){
-                                             //remove mouse events
-                                             e_item.onmouseover = Prototype.emptyFunction;
-                                             e_item.onmouseout  = Prototype.emptyFunction;
-                                             e_item.onclick     = Prototype.emptyFunction;
-                                     });
-                                     
-                                     //animate the white pieces either side the menu item ‘flipping’ over to black pieces:
-                                     var anims = [];
-                                     //loop over each image in the link (4)...
-                                     this.immediateDescendants ().each (function(e_menu){
-                                             //if this image is white, zoom out... black, zoom in
-                                             var piece = e_menu.hasClassName ("white");
-                                             //add the animation to an array awaiting parallel animation
-                                             anims.push (new Effect.Puff (e_menu, {
-                                                     sync        : true,
-                                                     transition  : (piece ? Effect.Transitions.linear : Effect.Transitions.reverse),
-                                                     afterFinish : function() {
-                                                             if (piece) {e_menu.hide ();} else {e_menu.show ();}
-                                                     }
-                                             }));
-                                     });
-                                     //run the animation
-                                     new Effect.Parallel (anims, {duration:0.4, afterFinish:function(){
-                                             //which menu item was clicked?
-                                             switch (this.id) {
-                                                     case "title-start-game":
-                                                     case "title-join-game":
-                                                             //proceed to the next screen. the second argument is true for Start Game, 
-                                                             //and false for Join Game.
-                                                             shared.events.titleButtonClick (this, (this.id=="title-start-game"));
-                                                             break;
-                                                     case "title-rules":
-                                                             //!/TODO: rules page
-                                                             break;
-                                             }
-                                     }.bind(this)});
-                             };
-                             //prepare the menu items: loop over each menu link
-                             $("title-menu").immediateDescendants ().each (function(e_item){
-                                     //apply mouse events (as you’ve seen above)
-                                     e_item.onmouseover = menuItemHover;
-                                     e_item.onmouseout  = menuItemOut;
-                                     e_item.onclick     = menuItemClick;
-                                     //hide the white/black pieces to begin with
-                                     e_item.immediateDescendants ().each (function(e_item){
-                                             e_item.hide ();
-                                     });
-                             });
-                             
-                             //animate the title screen
-                             game.events.clouds.start ();
-                     },
-                     hide : function () {
-                             //stop title screen animation
-                             game.events.clouds.stop ();
-                     }
-             },
-             {name : "user"},
-             {name : "game"}
-        ],
+        pages : [{
+                name : "title",
+                show : function () {
+                        var menuItemHover = function () {  //private function for mouse over menu item
+                                //loop over each image in the link and show them (the black and white pieces)
+                                this.immediateDescendants ().each (function(e_item){ e_item.show (); });
+                        },  menuItemOut = function () {    //private function for mouse over menu item
+                                //loop over each image in the link and hide them
+                                this.immediateDescendants ().each (function(e_item){ e_item.hide (); });
+                        },  menuItemClick = function () {  //private function for menu item click
+                                //remove the focus rectangle around the link
+                                this.blur ();
+                                //remove the mouse events for everything else (so that the animation doesn’t hide if you
+                                //mouse out, nor are you able to click on another menu item). loop over each hyperlink
+                                //in the menu...
+                                $("title-menu").immediateDescendants ().each (function(e_item){
+                                        //remove mouse events
+                                        e_item.onmouseover = Prototype.emptyFunction;
+                                        e_item.onmouseout  = Prototype.emptyFunction;
+                                        e_item.onclick     = Prototype.emptyFunction;
+                                });
+                                
+                                //animate the white pieces either side the menu item ‘flipping’ over to black pieces:
+                                var anims = [];
+                                //loop over each image in the link (4)...
+                                this.immediateDescendants ().each (function(e_menu){
+                                        //if this image is white, zoom out... black, zoom in
+                                        var piece = e_menu.hasClassName ("white");
+                                        //add the animation to an array awaiting parallel animation
+                                        anims.push (new Effect.Puff (e_menu, {
+                                                sync        : true,
+                                                transition  : (piece ? Effect.Transitions.linear : Effect.Transitions.reverse),
+                                                afterFinish : function() {
+                                                        if (piece) {e_menu.hide ();} else {e_menu.show ();}
+                                                }
+                                        }));
+                                });
+                                //run the animation
+                                new Effect.Parallel (anims, {duration:0.4, afterFinish:function(){
+                                        //which menu item was clicked?
+                                        switch (this.id) {
+                                                case "title-start-game":
+                                                        shared.events.titleStartGameClick ();
+                                                        shared.showPage ("title");
+                                                        break;
+                                                        
+                                                case "title-join-game":
+                                                        shared.events.titleJoinGameClick ();
+                                                        shared.showPage ("title");
+                                                        break;
+                                                        
+                                                case "title-rules":
+                                                        //!/TODO: rules page
+                                                        break;
+                                        }
+                                }.bind(this)});
+                        };
+                        //prepare the menu items: loop over each menu link
+                        $("title-menu").immediateDescendants ().each (function(e_item){
+                                //apply mouse events (as you’ve seen above)
+                                e_item.onmouseover = menuItemHover;
+                                e_item.onmouseout  = menuItemOut;
+                                e_item.onclick     = menuItemClick;
+                                //hide the white/black pieces to begin with
+                                e_item.immediateDescendants ().each (function(e_item){
+                                        e_item.hide ();
+                                });
+                        });
+                        
+                        //animate the title screen
+                        game.events.clouds.start ();
+                },
+                hide : function () {
+                        //stop title screen animation
+                        game.events.clouds.stop ();
+                }
+        }, {
+                name : "game"
+        }],
         
         /* > load : called for you on page load (see shared.js)
            =============================================================================================================== */
@@ -140,7 +142,13 @@ var game = {
                 //prepare the menu items: loop over each menu link
                 $("title-menu").immediateDescendants ().each (function(e_item){
                         //insert 2 white / 2 black pieces into each link
-                        new Insertion.Top (e_item, '<image src="images/black.png" width="40" height="40" class="left black" /><img src="images/white.png" width="40" height="40" class="left white" style="position: absolute; left: 136px;" /><img src="images/white.png" width="40" height="40" class="right white" style="position: absolute; left: 336px;" /><image src="images/black.png" width="40" height="40" class="right black" />');
+                        new Insertion.Top (e_item,
+                                '<image src="images/black.png" width="40" height="40" class="left black" /><img src="images'+
+                                '/white.png" width="40" height="40" class="left white" style="position:absolute;left:136px;'+
+                                '" /><img src="images/white.png" width="40" height="40" class="right white" style="position'+
+                                ':absolute;left:336px;" /><image src="images/black.png" width="40" height="40" class="right'+
+                                ' black" />'
+                        );
                 });
                 
                 //!/debug: leap straight into the game screen
@@ -153,8 +161,8 @@ var game = {
            =============================================================================================================== */
         start : function (b_mefirst) {
                 //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
-                //entering their name / join key, `shared.connect` is called. when a connection is established between the
-                //two players, `game.start` is called for you
+                //entering their name / join key, `shared.(start/join)Connection` is called. when a connection is established
+                //between the two players, `game.start` is called for you
                 if (typeof b_mefirst == "undefined") {b_mefirst = shared.host;}  //default: host goes first
                 
                 shared.setTitle (playerMe.name+" v. "+playerThem.name+" - ");
@@ -532,9 +540,6 @@ game.events = {
         /* > playableCellClick : when you click on a cell to make a move 
            =============================================================================================================== */
         playableCellClick : function () {
-                //the update board function will remove the mouse events on all the cells, preventing you from clicking
-                //another playable cell again, or the same one twice in a row
-                //?/game.updateBoard ();
                 for (var y=0; y<game.board.height; y++) { for (var x=0; x<game.board.width; x++) {
                         //get the html element for this cell
                         var e = $(game.board.getCellId(x,y));

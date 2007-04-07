@@ -6,7 +6,9 @@ load ('../js/CONFIG.js');
 var i,
     boot_files = []
 ;
+
 //load Scriptaculous (and Prototype)
+boot_files.push ("js/libs/scriptaculous/scriptaculous.js");
 if (config.scriptaculous.use_defaults) {
         //use the provided Scriptaculous bundled with jax (stable)
         boot_files.push ("js/libs/scriptaculous/prototype.js");

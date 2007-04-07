@@ -71,7 +71,7 @@ Pack.prototype = {
         /* > cache : inject all card images into the page, hidden off screen
            =============================================================================================================== */
         cache : function () {
-                var html = '\t<div style="position: absolute; top: -4999px;">\n'
+                var html = '\t<div style="position:absolute;top:-4999px;">\n'
                          + '\t\t<img src="../-/cards/back.png" width="71" height="96" alt="back" />\n'    //back of card
                          + '\t\t<img src="../-/cards/place.png" width="71" height="96" alt="place" />\n'  //place holder
                 ;

@@ -2,6 +2,7 @@
 =============================================================================================================================
 licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
 jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+This is a compressed version, visit the website for full source code
 
 Prototype JavaScript framework, version 1.5.0 (c) 2005-2007 Sam Stephenson
 http://prototypejs.org/

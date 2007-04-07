@@ -7,7 +7,7 @@
 
 h1      {/*background-image: url("-/title.png");*/}
 
-#page-title, #page-user, #page-join
+#page-title, #page-join
 	{padding: 15px; width: 482px; height: 354px;}
 
 #game-grid-table {margin-top: 28px; border-collapse: collapse; border: 0;}

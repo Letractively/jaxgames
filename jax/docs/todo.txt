@@ -1,0 +1,28 @@
+=============================================================================================================================
+jax to do list
+=============================================================================================================================
+Note: This document is not final and will be continually expanded to suit progression
+
+P1 - Priority 1, a requirement that must be met. cannot continue without
+P2 - A requirement that should be met, but may change or be re-factored
+P3 - A likely feature given timeframe and workload, could continue without
+P4 - An improvement
+P5 - A niggle
+
+
+[1] Todo List:
+=============================================================================================================================
+* P1 * Switch to using Prototype 1.5.1s native JSON parser and remove json.js dependency
+* P2 * Reconfigure Jax backend to always output JSON data in all instances. (currently some data and errors are not)
+* P2 * Use application/json output type, accept out application/json type in jax.js
+* P2 * The database should auto-prune old data when it grows too large
+* P2 * If the server times out, give a warning message and try again
+* P3 * PHP4 Compatibility. Ideally detect version, and use a PHP4 json class as appropriate (or output the string directly)
+* P3 * If the server responds with a 403, 404, 500 etc, throw an error message
+
+
+[2] Feature Suggestions:
+=============================================================================================================================
+* Extra server backends, Ruby, ASP etc. (Somebody else to implement)
+
+=== end of line =============================================================================================================
