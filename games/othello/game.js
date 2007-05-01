@@ -41,7 +41,7 @@ var game = {
         pieces  : [],                        //the layout of pieces on the board
         
         templates : {
-                //the player’s black or white piece icon on the paper at the sides
+                //the player's black or white piece icon on the paper at the sides
                 paper_piece : new Template (
                         '<img src="images/#{colour}.png" width="40" height="40" alt="#{colour}" />'
                 )
@@ -62,7 +62,7 @@ var game = {
                         },  menuItemClick = function () {  //private function for menu item click
                                 //remove the focus rectangle around the link
                                 this.blur ();
-                                //remove the mouse events for everything else (so that the animation doesn’t hide if you
+                                //remove the mouse events for everything else (so that the animation doesn't hide if you
                                 //mouse out, nor are you able to click on another menu item). loop over each hyperlink
                                 //in the menu...
                                 $("title-menu").immediateDescendants ().each (function(e_item){
@@ -72,7 +72,7 @@ var game = {
                                         e_item.onclick     = Prototype.emptyFunction;
                                 });
                                 
-                                //animate the white pieces either side the menu item ‘flipping’ over to black pieces:
+                                //animate the white pieces either side the menu item 'flipping' over to black pieces:
                                 var anims = [];
                                 //loop over each image in the link (4)...
                                 this.immediateDescendants ().each (function(e_menu){
@@ -109,7 +109,7 @@ var game = {
                         };
                         //prepare the menu items: loop over each menu link
                         $("title-menu").immediateDescendants ().each (function(e_item){
-                                //apply mouse events (as you’ve seen above)
+                                //apply mouse events (as you've seen above)
                                 e_item.onmouseover = menuItemHover;
                                 e_item.onmouseout  = menuItemOut;
                                 e_item.onclick     = menuItemClick;
@@ -227,7 +227,7 @@ var game = {
         /* > playTurn : take your turn
            =============================================================================================================== */
         playTurn : function () {
-                //clear the “other player’s turn” message on screen if it’s there
+                //clear the "other player's turn" message on screen if it's there
                 shared.setPlayerStatus ();
                 
                 //find playable moves (loop all cells in the table...)
@@ -324,7 +324,7 @@ var game = {
                                         return (b_reverse) ? false : (n_distance ? {x: new_x, y: new_y} : false);
                         }
                 } else {
-                        //hit the edge of the board, and didn’t find another of your pieces - return false
+                        //hit the edge of the board, and didn't find another of your pieces - return false
                         return false;
                 }
         },
@@ -418,7 +418,7 @@ var game = {
            params * b_self : if you or them should be checked (true = you)
            =============================================================================================================== */
         preempt : function (b_self) {
-                //the player’s piece (X or O)
+                //the player's piece (X or O)
                 var piece          = (b_self ? playerMe : playerThem).piece,
                     count          = {
                             moves  : 0,  //number of playable moves on the board (for the player specified)
@@ -435,7 +435,7 @@ var game = {
                                 case playerThem.piece : count.them   ++; break;  //occupied by them
                                 default               : count.spaces ++; break;  //an empty square
                         }
-                        //is this the player’s piece?
+                        //is this the player's piece?
                         if (this.pieces[x][y] == piece) {
                                 //check all 8 directions...
                                 for (var dir=0; dir<8; dir++) {
@@ -457,7 +457,7 @@ var game = {
                         this.end ((count.me>count.them));
                         
                 } else if (!count.me || !count.them) {
-                        //if either player has no pieces left, they’ve been wiped out
+                        //if either player has no pieces left, they've been wiped out
                         //(count.me>0) will return true if you have any pieces left, false if not
                         this.end ((count.me>0));
                         
@@ -472,7 +472,7 @@ var game = {
                         this.playTurn ();
                         
                 } else {
-                        //other player’s go
+                        //other player's go
                         shared.setPlayerStatus ("<p>Other Player's Turn, Please Wait&hellip;</p>");
                 }
         },
@@ -497,7 +497,7 @@ var game = {
                 $("player-status-me-wins").innerHTML   = playerMe.wins;
                 $("player-status-them-wins").innerHTML = playerThem.wins;
                 
-                //listen out for the “play again” signal from the other person
+                //listen out for the "play again" signal from the other person
                 jax.listenFor("game_again", function(o_response){
                         jax.listenFor ("game_again");
                         game.start (!b_winner);
@@ -590,7 +590,7 @@ game.events = {
                for (var dir=0; dir<8; dir++) {
                        //run a function for each cell traversed in the process (if the direction is a valid move)
                        var result = game.findBridge (true, position.x, position.y, dir, function(n_dir,n_x,n_y,n_dist){
-                               //add this cell’s location to the array of cells to highlight. this callback function is
+                               //add this cell's location to the array of cells to highlight. this callback function is
                                //only called on cells from a direction yielding a valid move
                                cells.push ({x: n_x, y: n_y});
                        }, true);
@@ -613,7 +613,7 @@ game.events = {
                /* start : start the animation, and keep it going
                   ======================================================================================================== */
                start : function () {
-                       //move the cloud back (there’s two side by side)
+                       //move the cloud back (there's two side by side)
                        new Effect.Move ("title-cloud", {
                                x           : -501,
                                y           : 0,

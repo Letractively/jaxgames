@@ -5,7 +5,7 @@
    jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 */
 var config = {
-        //configurations we’ll apply to jax (see ‘jax/jax.js’)
+        //configurations we'll apply to jax (see 'jax/jax.js')
         jax : {
                 //location of the jax server side receiver
                 path : "jax/php/response.php",
@@ -24,10 +24,10 @@ var config = {
                 use_defaults : true,
                 
                 //location to your own copy of prototype to use
-                custom_prototype : "js/libs/scriptaculous/scriptaculous-js-svn/lib/prototype.js",
+                custom_prototype : "js/libs/scriptaculous/prototype-svn/dist/prototype.js",
                 //location to your own folder containing a copy of scriptaculous to use (always include end slash)
                 custom_src : "js/libs/scriptaculous/scriptaculous-js-svn/src/",
-                //you’ll have to specify the version number of your own copy
+                //you'll have to specify the version number of your own copy
                 custom_version : "1.7.1",
                 
                 //an array of which Scriptaculous libraries to include, sans extension (if use_defaults = false)
@@ -35,11 +35,11 @@ var config = {
                 includes : ["effects"]  //just the effects only please
         },
         
-        //use the bsod for javascript errors? do not change this value - it is overided in ‘js/boot.js’ so that only the 
+        //use the bsod for javascript errors? do not change this value - it is overided in 'js/boot.js' so that only the 
         //compressed, release version of jax games will show the bsod on errors. this is so that end-users can tell when an
         //error has actually occured, instead of the game just hanging mid-play with no indication that it has failed
         use_bsod : true
 };
 
 //=== end of line ===========================================================================================================
-//                                                                                                        next » ‘js/boot.js’
+//                                                                                                        next » 'js/boot.js'

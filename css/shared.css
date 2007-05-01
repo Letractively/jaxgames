@@ -64,7 +64,7 @@ h1 span {visibility: hidden;}
 /* === chat ============================================================================================================== */
 #shared-chatcol           {position: absolute; top: 45px; left: 512px; width: 127px; height: 384px;
                            border-left: solid 1px #010801; background-color: #dada96;}
-#shared-chat              {display: none; font-size: 11px; color: #6E654D;}
+#shared-chat              {font-size: 11px; color: #6E654D;}
 #shared-chat-history      {height: 321px; overflow: auto;}
 
 /* --- the individual messages --- */

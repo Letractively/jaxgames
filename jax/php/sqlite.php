@@ -10,13 +10,16 @@ require_once "libs/SQLiteDB.php";
 //check for the prescence of the database and writeability
 $db_path = realpath ($config['db_path'])."/";  //convert the database folder to an absolute path on the server
 $db_file = $db_path.$config['db_name'];        //add the filename on the end
-if (!is_writable ($db_path)) die (             //is the db folder writeable?
-	//no: return a json of the error
-	json_encode (array (
-		'result' => 'false',
-		'error'  => "No write permissions for DB. Please chmod 777 the ".$config['db_path']." directory and contents"
-	))
-);
+//is the db folder writeable?
+if (!is_writable ($db_path) || (file_exists ($db_file) && !is_writeable ($db_file))) {
+	die (
+		//no: return a json of the error
+		json_encode (array (
+			'result' => false,
+			'error'  => "No write permissions for DB. Please chmod 777 the ".$config['db_path']." directory and contents"
+		))
+	);
+}
 
 //open the mini database
 $database = new SQLiteDB ($db_file);

@@ -22,7 +22,7 @@
 		<!-- === game = the main game display =================================================================== -->
 		<div id="page-game" style="display:none;">
 		        <div id="game-label" style="display:none;"></div>
-			<div id="game-face"></div>
+			<div id="game-discard"></div>
 			<div id="game-deck"></div>
 			<div id="game-penalty"></div>
 			<div id="game-farhand"></div>

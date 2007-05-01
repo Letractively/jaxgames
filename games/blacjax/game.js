@@ -22,10 +22,10 @@ rules of play:
    - you can put down a Joker without having to match the face up card, and then you can put anything on top of it
    - a 2 sets up a penalty of 2 cards. a Black Jack is a penalty of 5 cards
      > your opponent can respond by placing down another 2/Black Jack, which adds to the penalty and turns it against you
-       (players can continue to reply with 2's and Black Jacks as long as they have them in their hands)
+       (players can continue to reply with 2s and Black Jacks as long as they have them in their hands)
      > a Red Jack can be used to cancel out the penalty against you
      > if you cannot put down a 2, Black Jack, or Red Jack then you must take the number of penalty cards from the deck
-     > after a penalty is taken, the player may then place cards
+     > after a penalty is taken, that player may then place cards
 -------------------------------------------------------------------------------------------------------------------------- */
 
 //create the players (see classes.js)
@@ -59,7 +59,8 @@ var game = {
                 this.pack.cache ();
         },
         
-        /* OBJECT > queue : when you receive ajax calls for cards the opponent clicked on, queue them for processing
+        /* ===============================================================================================================
+           OBJECT queue - when you receive ajax calls for cards the opponent clicked on, queue them for processing
            =============================================================================================================== */
         queue  : {
                 cards : [],  //cards yet to be processed
@@ -67,7 +68,7 @@ var game = {
                 /* > doNext : process the next card (on the queue) that the opponent clicked
                    ======================================================================================================= */
                 doNext : function () {
-                        //if there’s 1 or more cards queued, process the first one
+                        //if there's 1 or more cards queued, process the first one
                         if (this.cards.length) {
                                 this.opponentCardClick (this.cards.first());
                         }
@@ -78,49 +79,59 @@ var game = {
                    params * s_card : name of the card to remove from the opponents hand and place on the run
                    ======================================================================================================= */
                 opponentCardClick : function (s_card) {
+                        //get the card currently on the run that you're about to place a card over. this is needed to
+                        //compare the suit of the new card with the previous, in the case that an Eight is placed on a card
+                        //that is already the same suit, and thus no heads-up message needs to be displayed
+                        var face      = game.run.getFaceCard(),
+                            _continue = function () {
+                                    //preempt the next move
+                                    game.preempt (true);
+                            }
+                        ;
+                        
                         //pluck the card from their hand, and move it onto the run
                         playerThem.hand.useCard (s_card, function(s_card){
                                 //decide course of action:
                                 //if the card played was a Two or Black Jack...
                                 if (game.pack.isArmed(s_card)) {
+                                        //Two is pickup two, Black Jack is pickup five
                                         var penalty = (game.pack.value(s_card) == 2 ? 2 : 5);
-                                        //add the penalty to the total. a Two is pickup 2, and a Black Jack is pickup 5
+                                        //add the penalty to the penalty total
                                         game.run.updatePenalty (game.run.penalty+penalty);
                                         //display the heads-up
-                                        shared.headsup.show ("Pickup "+game.run.penalty+"!", 0.5, function(){
-                                                //preempt the next move
-                                                game.preempt (true);
-                                        });
+                                        shared.headsup.show ("Pickup "+game.run.penalty+"!", 0.5, _continue);
                                         
                                 } else if (game.pack.isCombo (s_card)) {
-                                        //the player put down an Ace, Eight or Joker
-                                        //display the heads up
-                                        var msg;
+                                        //the player put down an Ace (another go), Eight (change suit) or Joker (any card)
+                                        var msg = "";
                                         switch (game.pack.value (s_card)) {
-                                                case 0: msg = "Any Card&hellip;";    break;
-                                                case 1: msg = "Another Go&hellip;";  break;
-                                                case 8: msg = "Change Suit&hellip;"; break;
+                                                case 0: msg = "Any Card&hellip;";    break;  //Joker (any card)
+                                                case 1: msg = "Another Go&hellip;";  break;  //Ace (another go)
+                                                case 8:
+                                                        //Eight. don't announce "change suit" if suit didn't change
+                                                        msg = (game.pack.suit (face) != game.pack.suit (s_card))
+                                                            ? "Change Suit&hellip;" : ""
+                                                        ; 
+                                                        break;
                                         }
+                                        //display the message
                                         shared.headsup.show (msg, 0.5, function(){
                                                 //take no action, the player gets to choose another card (if they have any)
                                                 game.preempt (false);
                                         });
                                         
                                 } else {
-                                        //if the player put down a Red Jack...
+                                        //if the player put down a Red Jack, check if it is cancelling a penalty...
                                         if (game.run.penalty && game.pack.value(s_card) == 11 &&
                                             game.pack.colour(s_card) == "red"
                                         ) {
-                                                //display the heads up!
-                                                shared.headsup.show ("Penalty Cancelled!", 0.5);
                                                 //...cancel the penalty
                                                 game.run.updatePenalty (0);
+                                                //display the heads up!
+                                                shared.headsup.show ("Penalty Cancelled!", 0.5, _continue);
                                         }
                                         //file the cards onto the discard pile
-                                        game.run.fileCards (function(){
-                                                //play your turn
-                                                game.preempt (true);
-                                        });
+                                        game.run.fileCards (_continue);
                                 }
                         });
                 }
@@ -145,13 +156,15 @@ var game = {
                 //clear any cards on the table
                 [this.run, playerMe.hand, playerThem.hand].invoke ("clear");
                 
-                //if you’re going first..
+                //if you're going first..
                 if (b_mefirst) {
                         //prepare a new deck. the person who is going first, shuffles a deck of cards and sends the order to
                         //the other player so that both players are playing off of the same order of cards
                         this.deck.cards.clear ();
                         //note: if you want to setup a fake deck of cards for forcing order of play, do it here
-                        //?/this.deck.cards = ["AS", "4H", "5H", "2S", "3S", "6H", "7H", "3D", "4D", "5D"].reverse ();
+                        //      the order is: face, them:1-7, you: 1-7, rest of deck - reversed
+                        //n_cards = 1;
+                        //this.deck.cards = ["AC", "JH", "JC", "3S", "4S", "3D", "4D", "8H", "5H", "6H", "5S", "6S", "5D", "6D", "8C"].reverse ();
                         this.deck.addPack (
                                 this.pack,  //which pack to use in the deck
                                 1,          //add one pack to the deck
@@ -176,15 +189,15 @@ var game = {
                         shared.chat.show ();        //show the chat box
                         
                         //draw the face card to start with
-                        game.run.face = game.deck.drawCard ();
-                        game.run.displayFace ();
+                        game.run.discard = game.deck.drawCard ();
+                        game.run.displayDiscard ();
                         
-                        //set the player’s hands
+                        //set the player's hands
                         //the host takes their cards first, then the opponents. the opponent does the opposite
                         (b_mefirst?playerThem:playerMe).hand.takeCard (cards, function(){
                                 (b_mefirst?playerMe:playerThem).hand.takeCard (cards, function(){
                                         //preempt to avoid drawing all unplayable cards. the host will check their own cards
-                                        //and draw if none are playable, and the opponent will check the host’s card to see
+                                        //and draw if none are playable, and the opponent will check the host's card to see
                                         //if they would have to draw, and thus switch turns
                                         game.preempt (b_mefirst);
                                 });
@@ -197,7 +210,7 @@ var game = {
         playTurn : function () {
                 //set the chrome title
                 shared.setTitle ("Your turn! - " + playerMe.name + " v. " + playerThem.name + " - ");
-                //clear the “other player’s turn” message on screen if its there
+                //clear the "other player's turn" message on screen if its there
                 shared.setPlayerStatus ();
                 
                 //disable cards that cannot be played
@@ -213,7 +226,7 @@ var game = {
                                         new Effect.Opacity (e, {sync:true, from:1.0, to:0.9}),
                                         new Effect.Move    (e, {sync:true, x:0, y:15})
                                 ], {duration: 0.5});
-                                //use a no-sign(/) cursor (IE6, Firefox 1.5)
+                                //use a no-sign(/) cursor (IE6, Firefox 1.5+)
                                 e.addClassName ("card-disabled");
                                 
                         } else {
@@ -230,7 +243,7 @@ var game = {
            params * b_self : if you or them should be checked
            =============================================================================================================== */
         preempt : function (b_self) {
-                //this function is a ‘switch box’. it is small and simple, but can confuse the hell out of you
+                //this function is a 'switch box'. it is small and simple, but can confuse the hell out of you
                 
                 /* the game originally sent a signal to the other player at the end of each turn. whilst very simple to do,
                    it was very slow. the opponent would have to wait for your animation to finish before switching players.
@@ -251,7 +264,7 @@ var game = {
                    without having to wait for the opposite player's computer to tell you so
                 *//*
                    there are some complex rules about the last card put down (to win the game)
-                     
+                   
                    + if you put down a Black Jack or a Two as your last card, play switches to the opponent,
                      > if they put down a Red Jack, the penalty is cancelled
                        + if that was their last card, they win, otherwise you win
@@ -262,10 +275,10 @@ var game = {
                      cards must always be followed up by placing another card, or taking when no cards are playable)
                 *///---------------------------------------------------------------------------------------------------------
                 
-                var player   = (b_self) ? playerMe : playerThem,  //the primary person being referred to
-                    cards    = player.hand.playableCards (),      //which cards in the hand are playable
-                    armedrun = this.run.armed (),                 //if the run is topped by a Black Jack or Two
-                    count    = (armedrun ? this.run.penalty : 1)  //if there’s a penalty, take that many cards
+                var player    = (b_self) ? playerMe : playerThem,   //the primary person being referred to
+                    cards     = player.hand.playableCards (),       //which cards in the hand are playable
+                    armed_run = this.run.armed (),                  //if the run is topped by a Black Jack or Two
+                    count     = (armed_run ? this.run.penalty : 1)  //if there's a penalty, take that many cards
                 ;
                 
                 //an Eight, Ace or Joker was put down, it is a combo card, have another go:
@@ -274,7 +287,7 @@ var game = {
                         if (!cards.length) {
                                 //take a card from the deck, file the cards from the run onto the discard pile
                                 player.hand.takeCard (count, function(){ game.run.fileCards (function(){
-                                        //it’ll be the other player’s go - check if they have any playable cards
+                                        //it'll be the other player's go - check if they have any playable cards
                                         game.preempt (!b_self);
                                 }); });
                         } else {
@@ -282,7 +295,7 @@ var game = {
                                 game.playTurn ();
                         }
                                 
-                } else if (!this.run.combo () && !armedrun &&
+                } else if (!this.run.combo () && !armed_run &&
                            (!playerMe.hand.cards.length || !playerThem.hand.cards.length)
                 ) {  //------------------------------------------------------------------------------------------------------
                         //either person has no cards left, and there is no continuation (armed / combo cards),
@@ -296,11 +309,11 @@ var game = {
                         //a private function so that the same code can be run now, or after the heads-up timeout
                         var _drawCard = function () {
                                 player.hand.takeCard (count, function(){ game.run.fileCards (function(){
-                                        if (armedrun) {
+                                        if (armed_run) {
                                                 if (b_self) {
                                                         if (!playerThem.hand.cards.length) {game.end (false); return false;}
                                                 }
-                                                //if you took the penalty, it’s your go (preempt for the rare occurance of
+                                                //if you took the penalty, it's your go (preempt for the rare occurance of
                                                 //picking up cards, yet not having any playable ones afterwards)
                                                 game.preempt (b_self);
                                         } else {
@@ -310,7 +323,7 @@ var game = {
                                 }); });
                         }; //end _drawCard <
                         
-                        if (!b_self && !armedrun) {
+                        if (!b_self && !armed_run) {
                                 //display a heads-up message when the opponent has no playable cards, and the run is not
                                 //armed (they are not drawing a penalty, but a single card instead)
                                 shared.headsup.show ("No playable cards", 0.5, _drawCard);
@@ -320,16 +333,16 @@ var game = {
                         }
                         
                 } else {  //-------------------------------------------------------------------------------------------------
-                        //there is a playable card; if this is you - it’s your go, if not it’s their go...
+                        //there is a playable card; if this is you - it's your go, if not it's their go...
                         if (b_self) {
                                 game.playTurn ();
                         } else {
-                                //change your display to say it’s their turn
+                                //change your display to say it's their turn
                                 shared.setPlayerStatus ("<p>Other Player's Turn, Please Wait&hellip;</p>");
                                 //set the chrome title
                                 shared.setTitle ("Their turn - "+playerMe.name+" v. "+playerThem.name+" - ");
                                 
-                                //in the case that the opponent put down an Eight, Ace or Joker, you’ll arrive here. they
+                                //in the case that the opponent put down an Eight, Ace or Joker, you'll arrive here. they
                                 //will have placed another card, which will have been added to the queue. now that the
                                 //animation moving the previous card is over, the next card can be plucked. this is done so
                                 //that we do not try to move two cards onto the run at the same time (it breaks)
@@ -349,12 +362,12 @@ var game = {
                     winner = b_winner ? playerMe : playerThem,
                     loser  = b_winner ? playerThem : playerMe,
                     onDrop = function () {
-                            //add a point for each card left in the opponent’s hand
+                            //add a point for each card left in the opponent's hand
                             winner.points ++;
-                            $("player-status-"+(b_winner?"me":"them")+"-points").innerHTML = winner.points;
+                            $("player-status-"+(b_winner?"me":"them")+"-points").update (winner.points);
                     } 
                 ;
-                //drop out each card in the opponent’s hand
+                //drop out each card in the opponent's hand
                 if (loser.hand.cards.length) {
                         loser.hand.cards.each (function(s_card,n_index){
                                 //animate the card dropping
@@ -367,14 +380,14 @@ var game = {
                 
                 //increase the number of games played
                 shared.played ++;
-                shared.setTitle ((b_winner?"YOU WIN":"YOU LOSE")+playerMe.name+" v. "+playerThem.name+" - ");
+                shared.setTitle ((b_winner?"YOU WIN":"YOU LOSE ")+playerMe.name+" v. "+playerThem.name+" - ");
                 shared.headsup.show ((b_winner?"YOU WIN":"YOU LOSE")+"<br />"+html);
                 //update the player info display
                 winner.wins ++;
                 $("player-status-me-wins").innerHTML   = playerMe.wins;
                 $("player-status-them-wins").innerHTML = playerThem.wins;
                 
-                //listen out for the “play again” signal from the other person
+                //listen out for the "play again" signal from the other person
                 jax.listenFor ("game_again", function(o_response){
                         game.start (!b_winner);
                 });
@@ -412,7 +425,7 @@ game.events = {
                 //on mouse over, nudge the card up a little by using a CSS class
                 this.addClassName ("card-hover");
                 
-                //the card’s name is stored in the img tag’s alt property
+                //the card's name is stored in the img tag's alt property
                 var card = this.alt,
                     msg  = ""
                 ;
@@ -421,7 +434,10 @@ game.events = {
                         case 0:  msg = "Any Card";    break;  //a Joker goes on any card, followed by any card
                         case 1:  msg = "Another Go";  break;  //an Ace allows another card matched by suit/rank
                         case 2:  msg = "Pickup 2";    break;  //Two is pickup two
-                        case 8:  msg = "Change Suit"; break;  //Eight goes on any card, followed by suit/rank match
+                        case 8:
+                                //Eight goes on any card, followed by suit/rank match
+                                msg = (game.pack.suit (game.run.getFaceCard()) != game.pack.suit (card)) ? "Change Suit" : "";
+                                break;
                         case 11:
                                 //a Black Jack is pickup 5, a Red Jack is cancel pickup
                                 msg = (game.pack.colour (card) == "black")
@@ -430,7 +446,7 @@ game.events = {
                                 break;
                 }
                 //if any of the above matched
-                if (msg) {
+                if (msg != "") {
                         //put the text in the label
                         $("game-label").update (msg).setStyle ({left: Element.getStyle(this,'left')}).show ();
                 }
@@ -452,13 +468,13 @@ game.events = {
                 $("game-label").hide ();
                 
                 //which card was clicked?
-                var cardname       = this.alt;
+                var card_name      = this.alt;
                     playable_cards = playerMe.hand.playableCards ()
                 ;
                 
                 //alert the other player to the card you chose. this is the most important, and most confusing aspect of this
                 //game. see the function underneath the game object for where the other player picks up this signal
-                jax.sendToQueue ("game_card_chosen", {card: cardname});
+                jax.sendToQueue ("game_card_chosen", {card: card_name});
                 
                 //first, move all the cards in the hand back to normal places
                 playerMe.hand.cards.each (function(s_card,n_index){
@@ -471,8 +487,8 @@ game.events = {
                         if (playable_cards.indexOf (n_index) < 0) {
                                 //make opaque and move back to normal position
                                 new Effect.Parallel ([
-                                        new Effect.Opacity (e, {sync:true, from:0.9, to:1.0}),
-                                        new Effect.Move    (e, {sync:true, x:0, y:-15})
+                                        new Effect.Opacity (playerMe.hand.element+'-'+s_card, {sync:true, from:0.9, to:1.0}),
+                                        new Effect.Move    (playerMe.hand.element+'-'+s_card, {sync:true, x:0, y:-15})
                                 ]);
                                 e.removeClassName ("card-disabled");
                         } else {
@@ -483,7 +499,7 @@ game.events = {
                         }
                 });
                 //take the chosen card out of the hand, and move it onto the run
-                playerMe.hand.useCard (cardname, function(s_card){
+                playerMe.hand.useCard (card_name, function(s_card){
                         //decide course of action:
                         //a: if armed, switch players
                         //b: if a combo, let the player continue
@@ -524,7 +540,7 @@ jax.listenFor ("game_card_chosen", function(o_response){
         //queue it
         game.queue.cards.push (o_response.data.card);
         
-        //if there’s only one item in the queue, run it
+        //if there's only one item in the queue, run it
         //after each card has completed its action, the next one will be taken (see game.preempt)
         if (game.queue.cards.length == 1) {game.queue.doNext ();}
 });
@@ -534,12 +550,12 @@ jax.listenFor ("game_card_chosen", function(o_response){
    ======================================================================================================================= */
 game.run = {
         cards   : [],  //the cards currently in the run
-        face    : "",  //the top card on the discard pile (the face) to match against
+        discard : "",  //the top card on the discard pile
         penalty : 0,   //current card penalty in play
         
         //the spacing in pixels between each card on the run, given the number of cards present. these numbers allow for the
-        //cards on the run to compact together to always stay within the run’s area. this could be calculated as needed
-        //in `.getCardPositions`, but I couldn’t get the math right
+        //cards on the run to compact together to always stay within the run's area. this could be calculated as needed
+        //in `.getCardPositions`, but I couldn't get the math right
         spacing : [
                 0, 5, 5, 5, 5,  //0, no spacing. 1-4 cards, normal spacing between cards
                 -2.8,    /* 5  cards */  -16.3,  /* 6  cards */  -25.5,  /* 7  cards */  -32,    /* 8 cards */
@@ -547,7 +563,17 @@ game.run = {
                 -48.25,  /* 13 cards */  -50,    /* 14 cards */  -51.5   /* 15 cards */
         ],
         
+        /* > getFaceCard : the card to match against; either the the last card on the run, if any, otherwise the discard card
+           ===============================================================================================================
+           return * string : card name of the face card
+           =============================================================================================================== */
+        getFaceCard : function () {
+                return this.cards.length ? this.cards.last () : this.discard;
+        },
+        
         /* > armed : if the card on top of the run is a Two or a Black Jack
+           ===============================================================================================================
+           return * boolean : true if the top card is a Two or Black Jack, false otherwise
            =============================================================================================================== */
         armed : function () {
                 return (this.cards.length) && (
@@ -557,6 +583,8 @@ game.run = {
         },
         
         /* > combo : if the card on top of the run is a combo card (Ace, Eight or Joker)
+           ===============================================================================================================
+           return * boolean : true if the top card is an Ace, Eight or Joker, false otherwise
            =============================================================================================================== */
         combo : function () {
                 return (this.cards.length) && game.pack.isCombo (this.cards.last());
@@ -571,9 +599,9 @@ game.run = {
                 });
                 //clear the cards in memory
                 this.cards.clear ();
-                //clear the face
-                this.face = "";
-                this.displayFace ();
+                //clear the discard
+                this.discard = "";
+                this.displayDiscard ();
                 //clear the penalty
                 this.updatePenalty (0);
         },
@@ -585,16 +613,15 @@ game.run = {
         updatePenalty : function (n_value) {
                 var e = $("game-penalty");
                 
-                //if setting to directly to 0 (i.e. cancelling a penalty with a Red Jack) then animate it dropping
+                //if setting to directly to 0 (i.e. cancelling a penalty with a Red Jack) then...
                 if (!n_value && this.penalty) {
-                        new Effect.DropOut (e, {afterFinish:function(){
-                                e.update ();
-                        }});
+                        //animate it dropping
+                        new Effect.DropOut (e, {afterFinish:function(){ e.update (); }});
                         
                 } else {
                         //update the penalty
                         if (!n_value) {
-                                //if 0, hide the penalty, don’t need to display “0”
+                                //if 0, hide the penalty, don't need to display "0"
                                 e.hide ();
                         } else {
                                 e.update (n_value).show ();
@@ -603,10 +630,12 @@ game.run = {
                 this.penalty = n_value;
         },
         
-        /* > displayFace : update just the face card
+        /* > displayDiscard : update just the discard card
            =============================================================================================================== */
-        displayFace : function () {
-                $("game-face").update ((this.face)?'<img src="../-/cards/'+this.face+'.png" width="71" height="96" alt="Face" />':"");
+        displayDiscard : function () {
+                $("game-discard").update (
+                        (this.discard)?'<img src="../-/cards/'+this.discard+'.png" width="71" height="96" alt="Face" />':""
+                );
         },
 
         /* > getCardPositions : return the positions for each card, given a number of cards to fit into the run
@@ -630,7 +659,7 @@ game.run = {
                 return result;
         },
         
-        /* > fileCards : file the cards from the run onto the discard, and set the new face card
+        /* > fileCards : file the cards from the run onto the discard, and set the new discard card
            ===============================================================================================================
            params * (f_onComplete) : function to call once the animation is complete
            =============================================================================================================== */
@@ -643,18 +672,18 @@ game.run = {
                         f_onComplete ();
                 } else {
                         //animate all cards in the run sliding onto the discard pile
-                        var cardanims = [];
+                        var anims = [];
                         game.run.cards.each (function(s_card,n_index){
                                 var move_to = 436 - parseInt($("game-run-"+s_card).getStyle("left"), 10);
-                                cardanims.push (new Effect.Move("game-run-"+s_card, {sync:true, x:move_to, y:0}));
+                                anims.push (new Effect.Move("game-run-"+s_card, {sync:true, x:move_to, y:0}));
                         });
-                        new Effect.Parallel (cardanims, {duration:0.5, queue:'end', afterFinish:function(){
-                                //put the old face card on the discard pile
-                                if (game.run.face) {game.deck.cards.unshift (game.run.face);}
-                                //take the card on top of the run and set as the new face card
-                                game.run.face = game.run.cards.last ();
-                                //update the face card on screen
-                                game.run.displayFace ();
+                        new Effect.Parallel (anims, {duration:0.5, queue:'end', afterFinish:function(){
+                                //put the old discard card back on the bottom of the deck (so that the deck rotates)
+                                if (game.run.discard) {game.deck.cards.unshift (game.run.discard);}
+                                //take the card on top of the run and set as the new discard card
+                                game.run.discard = game.run.cards.last ();
+                                //update the discard card on screen
+                                game.run.displayDiscard ();
                                 //remove the cards from the run
                                 game.run.cards.each (function(s_card,n_index){
                                         $("game-run-"+s_card).remove ();
