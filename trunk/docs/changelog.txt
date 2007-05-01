@@ -1,6 +1,15 @@
 =============================================================================================================================
 Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+11.APR.07
+    FIX: [Shared] All text in the chat box being recognised as URLs
+10.APR.07
+    ADD: [Shared] Reduced the number of `.style.display="none|block"` in favour of `.hide|show ();`
+    FIX: [Blacjax] Empty message on headsup when 8 is put down on same suit
+08.APR.07
+    FIX: [Project] Had to revert the unicode because of poor support in browsers and on Windows :(
+    ADD: [Blacjax] Renamed 'face' to 'discard'
+    FIX: [Blacjax] An 8 is not labelled "change suit" if the face card's suit is not actually different
 07.APR.07
     FIX: [Shared] Finally got rid of that strange mystery padding above the first chat message
     FIX: [Othello] Clouds not showing in Safari
@@ -8,27 +17,27 @@ Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing
     ADD: [Shared] Changed the game area & chatcol DIVs to absolute positioning, dropping the 45px value that had to be added
          to every `top` value in the code. Now the game area starts at effective `top: 0` making things much simpler
     FIX: [Shared] Niggle. The player info bar now lines up with the top of the textarea in the chatbox on the right
-    FIX: [Shared] Fixed window-overflow problem caused by PlayerMe’s information bar at the bottom of the screen
+    FIX: [Shared] Fixed window-overflow problem caused by PlayerMe's information bar at the bottom of the screen
     NEW: [Shared] Chatbox now supports *bold*, /italic/, _underline_ markup
 06.APR.07
     ADD: [Shared] Emoticon replacement is now a separate function, and ignores html tags
     NEW: [Shared] URLs in the chatbox are turned into hyperlinks
-    ADD: [Project] Added tags to the changelog “[Project],[Shared],[Build],[Othello]” etc. and cleaned up everything
-    ADD: [Shared] Removed ‘barbg.png’ by extending ‘barme.png’ to account for slide up height too
+    ADD: [Project] Added tags to the changelog "[Project],[Shared],[Build],[Othello]" etc. and cleaned up everything
+    ADD: [Shared] Removed 'barbg.png' by extending 'barme.png' to account for slide up height too
     ADD: [Shared] Split `shared.connect` into `shared.startConnection` and `shared.joinConnection`
-    ADD: [Shared] Moved the UI to enter name/join key for title screen “Start/Join Game” buttons to templates in `shared`.
-         The games now no longer need a “#page-user” and their own UI to enter name/join-key
+    ADD: [Shared] Moved the UI to enter name/join key for title screen "Start/Join Game" buttons to templates in `shared`.
+         The games now no longer need a "#page-user" and their own UI to enter name/join-key
 05.APR.07
-    ADD: [Shared] Moved the custom Scriptaculous header out of ‘js/CONFIG.js’ into ‘js/libs/scriptaculous/scriptaculous.js’
+    ADD: [Shared] Moved the custom Scriptaculous header out of 'js/CONFIG.js' into 'js/libs/scriptaculous/scriptaculous.js'
          so that the default version number of Scriptaculous is out of the user configuration (which should be near enough
          independent)
 02.APR.07
     FIX: [Build] Unicode ellipsis not displaying in build script
 19.MAR.07
     ADD: [Build] Changed file names created by build script
-    NEW: [Build] Build script now creates a Jax distribution (just ‘jax/’)
-    ADD: [Shared] Moved ‘js/json.js’ to ‘jax/libs/’ as it’s directly related to Jax, not Jax Games. This file will be
-         obsoleted by Prototype 1.5.1 once it’s out and stable
+    NEW: [Build] Build script now creates a Jax distribution (just 'jax/')
+    ADD: [Shared] Moved 'js/json.js' to 'jax/libs/' as it's directly related to Jax, not Jax Games. This file will be
+         obsoleted by Prototype 1.5.1 once it's out and stable
     ADD: [Project] I  Unicode. See diff for details
 17.MAR.07
     ADD: [Project] Rejiggered the copyright notices to add the website address
@@ -42,27 +51,27 @@ Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing
     ADD: [Shared] Variable in CONFIG.js to enable/disable the BSOD
     FIX: [Shared] BSOD shows filename and line number for thrown errors
 11.MAR.07
-    FIX: [Build] ZIPs/RARs spun from the build script now extract without the ‘release’ folder in them
+    FIX: [Build] ZIPs/RARs spun from the build script now extract without the 'release' folder in them
     NEW: [Build] RAR support for the build script. 
     FIX: [Project] Unicode em-dash in Licence.txt
-    FIX: [Build] In a monumental bit of stupidity I have realised that the build script’s ZIPs of the source have been
+    FIX: [Build] In a monumental bit of stupidity I have realised that the build script's ZIPs of the source have been
          completely useless all this time, joy.
 10.MAR.07
     FIX: [Othello] `winner` undefined in `game.win`
     NEW: [Othello] Menu item animation
     ADD: [Othello] Less `updateBoard` calls
-    NEW: [Othello] ‘flip’ animation for pieces. (will need some improvement, but it works for now)
+    NEW: [Othello] 'flip' animation for pieces. (will need some improvement, but it works for now)
     ADD: Changed Effect.Opacity to Effect.Appear/Fade,toggle where appropriate
-    ADD: [Othello] Title logo (It’s not very good) and basic menus for now
+    ADD: [Othello] Title logo (It's not very good) and basic menus for now
     FIX: [Build] Build system now keeps file modification times, making syncing with an FTP copy easier
 09.MAR.07
     ADD: [Project] Upgraded to Creative Commons 3.0 licence
-    FIX: [Build] Updated ‘_build/headers/boot.js’ for Scriptaculous 1.7.0
+    FIX: [Build] Updated '_build/headers/boot.js' for Scriptaculous 1.7.0
     FIX: [Blacjax] Hand cursor when mouse over card, but not when in `:hover` state (occurs when flicking between two windows)
     FIX: [Blacjax, Othello] Clicking Resign at the end left the screen blank for the local player
     ADD: [Blacjax, Othello] Changed the game over message to be on the heads-up message instead of the playerStatus
     NEW: [Project] New release on Google Code
-    FIX: [Build] ‘_build/libs/makeboot.js’ was incorrectly including ‘firebugx.js’, preventing the compiled release working
+    FIX: [Build] '_build/libs/makeboot.js' was incorrectly including 'firebugx.js', preventing the compiled release working
          on browsers without Firebug installed :/
     FIX: [Othello] Error in `game.end`. `winner` is an object not a boolean
     ADD: [Shared] Improved the heads-up to allow a callback function
@@ -73,42 +82,42 @@ Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing
     FIX: [Project] Fixed a lot of jittering in Parallel animations by adding `sync:true`
     ADD: [Project] Lots of housekeeping, reduction and re-factoring all over the codebase
     ADD: [Othello] Added templates there too
-    NEW: [Shared] `shared.templates` utilising Prototype’s Template class
+    NEW: [Shared] `shared.templates` utilising Prototype's Template class
     ADD: [Shared] Improved the look of the join-key display
     ADD: [Blacjax] Improvements to the heads-up message (`game.setStatus`)
-    FIX: [Build] ‘boot.js’ and ‘_build/libs/makeboot.js’ not loading custom Scriptaculous correctly
+    FIX: [Build] 'boot.js' and '_build/libs/makeboot.js' not loading custom Scriptaculous correctly
 07.MAR.07
-    NEW: [Blacjax] Message in the middle of the screen declaring the action of the opponent’s played card. e.g. “Pickup 5”
+    NEW: [Blacjax] Message in the middle of the screen declaring the action of the opponent's played card. e.g. "Pickup 5"
     ADD: [Build] Logging in build script
 03.FEB.07
-    ADD: [Shared] Moved ‘Prototype’.js into ‘js/libs/scriptaculous’ folder
-    FIX: [Shared] ‘dump_src.js’ was HTML-encoding only functions, and not strings
-    ADD: [Shared] Changed ‘board.js’ to be 0-based instead of 1-based because `json` was incorrectly encoding the cells array
+    ADD: [Shared] Moved 'Prototype'.js into 'js/libs/scriptaculous' folder
+    FIX: [Shared] 'dump_src.js' was HTML-encoding only functions, and not strings
+    ADD: [Shared] Changed 'board.js' to be 0-based instead of 1-based because `json` was incorrectly encoding the cells array
          without the first undefined element in each; therefore a board layout would not reconstruct from JSON correctly
 21.JAN.07
     NEW: [Build] Build system now zips the source code for easy distribution for those without SVN
     NEW: [Build] Build system stops if any of the steps errors, returning an error code equal to the step that failed
 20.JAN.07
-    NEW: [Project] I’m really struggling with the direction of this project now, some real help would be appreciated
-    NEW: [Build] ‘boot.js’ uses `config` to dynamically build the list of files to include. the build system now uses
-         ‘makeboot.js’ to load ‘config.js’ and dynamically build the same list, but merge the scripts together into the
-         compressed ‘boot.js’. This system needs a proper write up and improving, but for now provides the power to share
+    NEW: [Project] I'm really struggling with the direction of this project now, some real help would be appreciated
+    NEW: [Build] 'boot.js' uses `config` to dynamically build the list of files to include. the build system now uses
+         'makeboot.js' to load 'config.js' and dynamically build the same list, but merge the scripts together into the
+         compressed 'boot.js'. This system needs a proper write up and improving, but for now provides the power to share
          config settings between the running browser, and the build system
 19.JAN.07
-    NEW: [Shared] ‘CONFIG.js’, configuration script, lets you specify what version of Scriptaculous to use
+    NEW: [Shared] 'CONFIG.js', configuration script, lets you specify what version of Scriptaculous to use
     FIX: [Shared] `dump()` now ignores the new size function from Prototype. Also no longer uses a parameter for Prototype
          functions in the output. Prototype is detected, and automatically ignored in the output as needed
 18.JAN.07
     ADD: [Shared] Updated to Prototype.js v1.5.0 release! http://prototypejs.org
-    NEW: [Shared] ‘docs/standards.html’: some preliminary documentation on coding style used throughout
+    NEW: [Shared] 'docs/standards.html': some preliminary documentation on coding style used throughout
 09.JAN.07
-    ADD: [Shared] ‘board.js’ now includes `<cols>` so you can use CSS/JS to style a vertical column (useful for Quadrop)
+    ADD: [Shared] 'board.js' now includes `<cols>` so you can use CSS/JS to style a vertical column (useful for Quadrop)
 08.JAN.07
-    ADD: [Build] Build script now downloads ‘custom_rhino.jar’ if not present so that it doesn’t have to be included in SVN
+    ADD: [Build] Build script now downloads 'custom_rhino.jar' if not present so that it doesn't have to be included in SVN
     NEW: [Othello] Some initial title screen graphics, more to come
-    ADD: [Quadrop] Four-in-a-Row is now “Quadrop”
+    ADD: [Quadrop] Four-in-a-Row is now "Quadrop"
 07.JAN.07
-    NEW: [Shared] ‘docs/acknowledgements.txt’
+    NEW: [Shared] 'docs/acknowledgements.txt'
     FIX: [Shared] Improvements to Dump
          + _lots_ of code cleaning
          + Ignore Prototype functions
@@ -120,31 +129,31 @@ Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing
          + HTML in functions does not break. this can be massively improved
          + IE/Safari/Opera support is broken, will work on this
 06.JAN.07
-    NEW: [Shared] Shuns Dump script www.netgrow.com.au/files added. see ‘js/libs/dump_src.js’. I’m working on greatly
+    NEW: [Shared] Shuns Dump script www.netgrow.com.au/files added. see 'js/libs/dump_src.js'. I'm working on greatly
          improving this script. use `dump(any var);` in the console/Firebug to use
     FIX: [Blacjax] Play Again links staying on screen when starting new game
     FIX: [Blacjax] Card images not displaying
     FIX: [Blacjax] Points not adding when winning
 05.JAN.07
-    ADD: [Shared] Removed the `onclick` events from the HTML, and moved to ‘shared.js’
-    ADD: [Shared] Moved `games/othello/game.js:game._.directions` to Board class (‘board.js’) so that multiple games don’t
+    ADD: [Shared] Removed the `onclick` events from the HTML, and moved to 'shared.js'
+    ADD: [Shared] Moved `games/othello/game.js:game._.directions` to Board class ('board.js') so that multiple games don't
          need to repeat these vectors
     NEW: [Othello] Black & White piece user icons
-    ADD: [Shared] Renamed ‘games/images/’ to ‘games/-’ and moved ‘games/inc’ to ‘games/-/inc’. with this name, the images
+    ADD: [Shared] Renamed 'games/images/' to 'games/-' and moved 'games/inc' to 'games/-/inc'. with this name, the images
          folder stands out from the folders containing games, there are no longer two folders not related to games there,
-         and “-” will always stay at the top of the list when alphabetically sorted. Also, less letters in the CSS/HTML
-         saving a few bytes for what it’s worth
-    ADD: [Shared] Removed the ability for users to choose icons. User’s icons will be according to what game they are playing
+         and "-" will always stay at the top of the list when alphabetically sorted. Also, less letters in the CSS/HTML
+         saving a few bytes for what it's worth
+    ADD: [Shared] Removed the ability for users to choose icons. User's icons will be according to what game they are playing
          to better remind them of which piece they are, and to simplify the code / speed up starting games. this is blue vs.
          red for the moment until icons have been made for each of the current games
-    NEW: [FourInARow] ‘games/fourinarow’, completely non functional at the moment
-    NEW: [Shared] ‘docs/todo.txt’ to detail main tasks
+    NEW: [FourInARow] 'games/fourinarow', completely non functional at the moment
+    NEW: [Shared] 'docs/todo.txt' to detail main tasks
     FIX: [Shared] Player.wins default was "" not 0
     FIX: [Othello] Play Again not working, `this.start` was in the wrong scope (see `game.end`)
 04.JAN.07
-    ADD: [Shared] ‘shared.js’ now uses an object called `shared`, instead of `game`. the `game` object is now game specific,
-         in ‘game.js’. This is done so there is less confusion over references to `this.xxxx` where `xxxx` is in ‘shared.js’
-         and not ‘game.js’, and to allow shadow functions in ‘shared.js’ to then elevate to ‘game.js’. For example,
+    ADD: [Shared] 'shared.js' now uses an object called `shared`, instead of `game`. the `game` object is now game specific,
+         in 'game.js'. This is done so there is less confusion over references to `this.xxxx` where `xxxx` is in 'shared.js'
+         and not 'game.js', and to allow shadow functions in 'shared.js' to then elevate to 'game.js'. For example,
          disconnect messages can be handled at the shared level, before being passed on to the game, something not (easily)
          possible before
     ADD: [Othello] `game.findBridge` will now only call the callback function on directions that yield a valid move. The
@@ -154,13 +163,13 @@ Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing
          bar one function name. Uses Prototype `.invoke` to dynamically call the relevant function
 02.JAN.07
     ADD: [Shared] `game.connect` now sets the name/icon in the player info bars so that duplicate code is not needed in
-         ‘games/*/game.js’
+         'games/*/game.js'
 01.JAN.07
     FIX: [Othello] As the HTML table is not being recreated every time, the mouse events were not being removed after a click
     NEW: [Othello] Now highlights which cells will be captured when hovering over a playable cell
     NEW: [Project] New year
 30.DEC.06
-    ADD: [Shared] ‘board.js’ `Board` class no longer recreates the HTML table every update. This will avoid flicker caused by
+    ADD: [Shared] 'board.js' `Board` class no longer recreates the HTML table every update. This will avoid flicker caused by
          having to load all the piece graphics every update. The class now only updates the html in a cell if it has changed
     NEW: Othello: Piece counts on the sides
     ADD: [Othello] Switched to Black goes first (instead of white), as per official rules
@@ -171,14 +180,14 @@ Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing
     NEW: [Othello] Pre-empts if a player cannot take a go (not tested fully though, and some kind of message will need to be
          displayed on screen to alert the player)
 27.DEC.06
-    ADD: [Project] Slow week. Added section to ‘install.txt’ for changing the ‘db’ folder permissions (Mac OS)
+    ADD: [Project] Slow week. Added section to 'install.txt' for changing the 'db' folder permissions (Mac OS)
 26.DEC.06
-    NEW: [Project] ‘licence.txt’
+    NEW: [Project] 'licence.txt'
 25.DEC.06
-    NEW: [Project] ‘install.txt’. Need Windows & Linux instructions
+    NEW: [Project] 'install.txt'. Need Windows & Linux instructions
     ADD: [Build] Improved build system to use Find command so that new JS files in the source can be handled automatically
 24.DEC.06
-    NEW: [Build] Build system in _build. Uses Dojo’s compressor, and Dean Edward’s Packer to compress the scripts
+    NEW: [Build] Build system in _build. Uses Dojo's compressor, and Dean Edward's Packer to compress the scripts
 22.DEC.06
     FIX: [blacjax] When there was five or more cards on the run they slid the wrong way to make room for the new card
     FIX: [Blacjax] "preempt failed" bug. When you took a penalty, but still had no playable cards
@@ -187,9 +196,9 @@ Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing
          another 2/BJ, then the penalty must be taken. Also if you put down a 2/BJ as last card, and the opponent places a
          Red Jack, the penalty is cancelled; then the winner is decided (can be opponent, if red jack was their last card)
 21.DEC.06
-    NEW: [Shared] Removed debug object (a wrapper for Firebug), and added Firebug Lite (see ‘boot.js’)
+    NEW: [Shared] Removed debug object (a wrapper for Firebug), and added Firebug Lite (see 'boot.js')
     NEW: [Shared] Window title is now changed to reflect game status (`game.setTitle`)
-    NEW: [Shared] Added `.name` and `.version` constants to ‘game.js’. The version info is `debug.info`’d on page load
+    NEW: [Shared] Added `.name` and `.version` constants to 'game.js'. The version info is `debug.info`'d on page load
 20.DEC.06
     NEW: [Shared] This new changelog in the SVN
     NEW: Created Google Code project and uploaded code to SVN
@@ -199,13 +208,13 @@ Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing
          The `.display` methods have been removed from `player*.hand` and `game.run!` cards are now persistent up until being
          put on the discard pile
 17.DEC.06
-    FIX: [Shared] “O_o” regex broken, the “.” was being treated as any character, and not just “.”
+    FIX: [Shared] "O_o" regex broken, the "." was being treated as any character, and not just "."
     FIX: [Shared] If typing in the chatbox when starting a new game, the <chat here> appears
 16.DEC.06
-    FIX: [Shared] “>:)” not working, being incorrectly identified as “:)” first (partial fix)
+    FIX: [Shared] ">:)" not working, being incorrectly identified as ":)" first (partial fix)
     NEW: [Blacjax] Queue cards clicks from the opponent to avoid bugs when two clicks occur at the same time
 15.DEC.06
-    NEW: [Shared] Created ‘boot.js’ to bootstrap all shared libraries - this can then be replaced with a compressed, merged
+    NEW: [Shared] Created 'boot.js' to bootstrap all shared libraries - this can then be replaced with a compressed, merged
          version of said libraries in the distribution version
     NEW: [Shared] Points tracking between games
     NEW: [Othello] Started Othello
@@ -232,11 +241,11 @@ Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing
     FIX: [Blacjax] When a penalty is taken, it should be your go, and not theirs 
 20.NOV.06
     ADD: [Shared] Changed `SetGameStatus` to `SetStatus` and `SetSystemStatus` for messages for all games, and messages for
-         the particular game you’re playing 
+         the particular game you're playing 
 13.NOV.06
-    FIX: [Shared] “<chat here>” not disappearing when losing focus 
+    FIX: [Shared] "<chat here>" not disappearing when losing focus 
 12.NOV.06
-    NEW: [Shared] Created `game` object in ‘global.js’, and moved the chatbox into there.
+    NEW: [Shared] Created `game` object in 'global.js', and moved the chatbox into there.
 11.NOV.06
     NEW: [Project] Started this log. Very late in the game, as Jax has already been in development for many months
 

@@ -41,7 +41,7 @@ Pack.prototype = {
            return * string : the value of the card (Ace is low, Joker is 0)
            =============================================================================================================== */
         value : function (s_card) {
-                //the index of the card in the faces array, is it’s value
+                //the index of the card in the faces array, is it's value
                 return parseInt (this.faces.indexOf(s_card.substr(0,1)), 10) + 1;
         },
         

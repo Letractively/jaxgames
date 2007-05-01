@@ -2,14 +2,14 @@
 Jax Changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 06.APR.07
-    NEW: ‘jax/docs/changelog.txt’
+    NEW: 'jax/docs/changelog.txt'
 05.APR.07
-    NEW: ‘jax/docs/todo.txt’ and ‘acknowledgements.js’
+    NEW: 'jax/docs/todo.txt' and 'acknowledgements.js'
 02.APR.07
     FIX: Syntax typos in the PHP files broke the backend
 19.MAR.07
-    NEW: Added prototype.js to ‘jax/libs/’ so that Jax can be distributed separately with the appropriate 3rd-party libs
-    ADD: Cleanup in Jax’s PHP files
+    NEW: Added prototype.js to 'jax/libs/' so that Jax can be distributed separately with the appropriate 3rd-party libs
+    ADD: Cleanup in Jax's PHP files
     ADD: I  Unicode. See diff for details
 17.MAR.07
     ADD: Rejiggered the copyright notices to add the website address
@@ -18,25 +18,25 @@ Jax Changelog | NEW : New feature/code | ADD : Addition/change to existing code 
     ADD: Changed the Jax server to respond in JSON. the `data` attribute is decoded server side before being sent so that
          only one `json.parse` call needs to be made locally
 10.MAR.07
-    ADD: Renamed ‘jax_php’ to ‘jax’. Moved the PHP files into ‘jax/php’. This will provide room for others to contribute
+    ADD: Renamed 'jax_php' to 'jax'. Moved the PHP files into 'jax/php'. This will provide room for others to contribute
          API-compatible alternative server-side scripts for Jax, such as Ruby or ASP
 09.MAR.07
     ADD: Upgraded to Creative Commons 3.0 licence
 02.JAN.07
-    NEW: ‘docs’ folder in ‘jax_php’ + ‘licence.txt’ added so that Jax could be distributed separately
-    ADD: Changed the default location of ‘response.php’ in ‘jax.js’ from ‘response.php’ to ‘jax_php/response.php’ to reflect
+    NEW: 'docs' folder in 'jax_php' + 'licence.txt' added so that Jax could be distributed separately
+    ADD: Changed the default location of 'response.php' in 'jax.js' from 'response.php' to 'jax_php/response.php' to reflect
          the new folder layout
-    ADD: moved ‘inc’ folder in ‘jax_php’ to ‘games/inc’ as it contained some PHP includes that are specific to Jax Games. the
-         ‘jax_php’ folder is meant to be solely for Jax as this will form the basis of a re-distributable package for Jax.
-    ADD: changed ‘server’ folder to ‘jax_php’. ‘jax.js’ (and the PHP backend) will eventually become a separate, reusable
+    ADD: moved 'inc' folder in 'jax_php' to 'games/inc' as it contained some PHP includes that are specific to Jax Games. the
+         'jax_php' folder is meant to be solely for Jax as this will form the basis of a re-distributable package for Jax.
+    ADD: changed 'server' folder to 'jax_php'. 'jax.js' (and the PHP backend) will eventually become a separate, reusable
          script and distributed on the site by itself as well as with Jax Games
-    NEW: added ‘CONFIG.php’ so that users can change the database path without having to edit JaxPHP directly
+    NEW: added 'CONFIG.php' so that users can change the database path without having to edit JaxPHP directly
 27.DEC.06
-    ADD: Changed the default location of ‘response.php’ in Jax from ‘server/response.php’ to just ‘response.php’ to be more
-         generic and not force people to use a ‘server’ folder. It is more likely that ‘response.php’ may just be put in
+    ADD: Changed the default location of 'response.php' in Jax from 'server/response.php' to just 'response.php' to be more
+         generic and not force people to use a 'server' folder. It is more likely that 'response.php' may just be put in
          webroot or the same folder as the calling javascript
 26.DEC.06
-    NEW: ‘licence.txt’
+    NEW: 'licence.txt'
 17.NOV.06
     NEW: Disconnect function to Jax, and disconnect signal when a user closes the window 
 15.NOV.06
@@ -49,6 +49,6 @@ Jax Changelog | NEW : New feature/code | ADD : Addition/change to existing code 
     ADD: Moved Jax into a class to get rid of `jax.ajax.init`
     ADD: Switched to using JSON instead of PHP_Serializer
 12.NOV.06
-    ADD: Modified ‘jax.js’ to not include Jax Games specific code, still more to do
+    ADD: Modified 'jax.js' to not include Jax Games specific code, still more to do
 
 === end of line =============================================================================================================

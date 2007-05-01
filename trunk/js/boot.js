@@ -4,8 +4,8 @@
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 *//*
-   the code in this page only exists in the source code for jax games. the build system will create a ‘release’ version of
-   jax games where most of the scripts will be merged and compressed into a single file, replacing boot.js (see ‘_build/’).
+   the code in this page only exists in the source code for jax games. the build system will create a 'release' version of
+   jax games where most of the scripts will be merged and compressed into a single file, replacing boot.js (see '_build/').
    this means that users will have to download a lot less scripts, speeding up load times. also, this means that additional
    developer only code and scripts can be loaded here, and will not appear in the release version.
 *//*
@@ -30,13 +30,13 @@ if (config.scriptaculous.use_defaults) {
         boot_files.push ("js/libs/scriptaculous/prototype.js");
         boot_files.push ("js/libs/scriptaculous/effects.js");
 } else {
-        //use user-provided Prototype & Scriptaculous (see ‘js/CONFIG.js’ for details on this)
+        //use user-provided Prototype & Scriptaculous (see 'js/CONFIG.js' for details on this)
         boot_files.push (config.scriptaculous.custom_prototype);
         for (i=0; i<config.boot_scripts.length; i++) {
                 boot_files.push (config.scriptaculous.custom_src+config.scriptaculous.includes[i]+".js");
         }
 }
-//load the rest of the boot scripts (see ‘js/CONFIG.js’)
+//load the rest of the boot scripts (see 'js/CONFIG.js')
 for (i=0; i<config.boot_scripts.length; i++) {boot_files.push (config.boot_scripts[i]);}
 
 
@@ -59,4 +59,4 @@ for (i=0; i<boot_files.length; i++) {
 }
 
 //=== end of line ===========================================================================================================
-//‘js/CONFIG.js’ « previous                                                                             next » ‘js/shared.js’
+//'js/CONFIG.js' « previous                                                                             next » 'js/shared.js'

@@ -42,7 +42,7 @@
 			<pre>i<ins> </ins><span class="o">++</span>;<br />a<ins> </ins><span class="o">=</span><ins> </ins>b<ins> </ins><span class="o">+</span><ins> </ins>(c<ins> </ins><span class="o">-</span><ins> </ins>d);</pre>
 			
 			<em>Except</em> for operators used in a parameter, or the operators in a <tt>for</tt> statement<br />
-			<pre>f (a, b<ins class="o">+</ins>c, d);<br /><span class="k">for</span> (<span class="k">var</span> i<ins class="o">=</ins>0; i<ins class="o">&lt;</ins>10; i<ins class="o">++</ins>) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements…</span><br />}</pre>
+			<pre>f (a, b<ins class="o">+</ins>c, d);<br /><span class="k">for</span> (<span class="k">var</span> i<ins class="o">=</ins>0; i<ins class="o">&lt;</ins>10; i<ins class="o">++</ins>) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements...</span><br />}</pre>
 		</li><li>
 			<tt>if</tt> and <tt>switch</tt> are not considered functions and therefore spaces <em>must</em> be
 			included between operators<br />(excluding operators used in the parameters of a function, used in an
@@ -57,16 +57,16 @@
 			<em>Do</em> place a space between functions and their parameters &amp; the parameters and the opening
 			brace.<br />Note also that the opening brace <em>should</em> be on the same line as the function
 			statement<br />
-			<pre><span class="k">function</span> f<ins> </ins>(a, b, c)<ins> </ins>{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements…</span><br />}</pre>
+			<pre><span class="k">function</span> f<ins> </ins>(a, b, c)<ins> </ins>{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements...</span><br />}</pre>
 			
 			<em>Except</em> for functions that are parameters to another function (e.g. Prototype&rsquo;s <tt>each</tt> function)<br />
-			<pre>f (a, b, <ins><span class="k">function</span>(</ins>x<ins>){</ins><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements…</span><br />});</pre>
+			<pre>f (a, b, <ins><span class="k">function</span>(</ins>x<ins>){</ins><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements...</span><br />});</pre>
 			
 			Also, <em>except</em> for Prototype utility functions:<br />
 			<pre><ins>$(</ins>"element");<br /><ins>$F(</ins>"form-element");<br /><ins>$H(</ins>['a', 'b', 'c']);</pre>
 		</li><li>
 			All function names <em>must</em> be camel case with the first letter lower<br />
-			<pre><span class="k">function</span> <ins>myFunctionWithAName</ins> () {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements…</span><br />}</pre>
+			<pre><span class="k">function</span> <ins>myFunctionWithAName</ins> () {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements...</span><br />}</pre>
 		</li>
 	</ul>
 	<!-- ============================================================================================================ -->
@@ -74,18 +74,18 @@
 	<ul>
 		<li>
 			<em>Do</em> place a space after the comma for each parameter<br />
-			<pre><span class="k">function</span> f (a<ins>, </ins>b<ins>, </ins>c) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements…</span><br />}</pre>
+			<pre><span class="k">function</span> f (a<ins>, </ins>b<ins>, </ins>c) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements...</span><br />}</pre>
 			
 			<em>Except</em> for parameters to a function, that is itself a parameter (e.g. Prototype&rsquo;s <tt>each</tt> function)<br />
-			<pre>f (a, b, <span class="k">function</span>(x<ins>,</ins>y<ins>,</ins>z){<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements…</span><br />});</pre>
+			<pre>f (a, b, <span class="k">function</span>(x<ins>,</ins>y<ins>,</ins>z){<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements...</span><br />});</pre>
 		</li><li>
 			Parameter names <em>must</em> state their intended type using a prefix as listed below.<br />
-			<pre><span class="k">function</span> f (<ins>s_</ins>variable,&nbsp;&nbsp;<span class="c">//string</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<ins>n_</ins>variable,&nbsp;&nbsp;<span class="c">//number</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<ins>a_</ins>variable,&nbsp;&nbsp;<span class="c">//array, e.g. ['a', 'b', 'c']</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<ins>o_</ins>variable,&nbsp;&nbsp;<span class="c">//object literal, e.g. {suit: 'Spades', value: 8}</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<ins>f_</ins>function&nbsp;&nbsp;&nbsp;<span class="c">//function (when you pass a function as a parameter, e.g. Prototype&rsquo;s &lsquo;each&rsquo; function)</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<ins>x_</ins>variable,&nbsp;&nbsp;<span class="c">//for parameters that can be of any type</span><br />) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements…</span><br />}</pre>
+			<pre><span class="k">function</span> f (<ins>s_</ins>variable,&nbsp;&nbsp;<span class="c">//string</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<ins>n_</ins>variable,&nbsp;&nbsp;<span class="c">//number</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<ins>a_</ins>variable,&nbsp;&nbsp;<span class="c">//array, e.g. ['a', 'b', 'c']</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<ins>o_</ins>variable,&nbsp;&nbsp;<span class="c">//object literal, e.g. {suit: 'Spades', value: 8}</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<ins>f_</ins>function&nbsp;&nbsp;&nbsp;<span class="c">//function (when you pass a function as a parameter, e.g. Prototype&rsquo;s &lsquo;each&rsquo; function)</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<ins>x_</ins>variable,&nbsp;&nbsp;<span class="c">//for parameters that can be of any type</span><br />) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements...</span><br />}</pre>
 		</li><li>
 			Parameter names <em>must</em> be all lower case, without any underscores, (excluding the one
 			underscore used to define the type), <em>except</em> for parameters that are functions, which
 			use camelCase<br />
-			<pre><span class="k">function</span> f (s_<ins>mystring</ins>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//correct</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_<del>my_string</del>,&nbsp;&nbsp;<span class="c">//no underscores in variable name (excluding the prefix)</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_<del>myString</del>,&nbsp;&nbsp;&nbsp;<span class="c">//no camelcase,</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f_<ins>myFunction</ins>&nbsp;&nbsp;<span class="c">//except for functions as parameters</span><br />) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements…</span><br />}</pre>
+			<pre><span class="k">function</span> f (s_<ins>mystring</ins>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//correct</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_<del>my_string</del>,&nbsp;&nbsp;<span class="c">//no underscores in variable name (excluding the prefix)</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_<del>myString</del>,&nbsp;&nbsp;&nbsp;<span class="c">//no camelcase,</span><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f_<ins>myFunction</ins>&nbsp;&nbsp;<span class="c">//except for functions as parameters</span><br />) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements...</span><br />}</pre>
 		</li>
 	</ul>
 	<!-- ============================================================================================================ -->
@@ -96,7 +96,7 @@
 			Internet Explorer will generate errors in certain cases of variables not being implicitly defined
 			<br />
 			
-			<pre><span class="k"><ins>var</ins></span> r <span class="o">=</span> f (a, b, c);<br /><span class="k">for</span> (<span class="k"><ins>var</ins></span> i<span class="o">=</span>0; i<span class="o">&lt;</span>10; i<span class="o">++</span>) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements…</span><br />}</pre>
+			<pre><span class="k"><ins>var</ins></span> r <span class="o">=</span> f (a, b, c);<br /><span class="k">for</span> (<span class="k"><ins>var</ins></span> i<span class="o">=</span>0; i<span class="o">&lt;</span>10; i<span class="o">++</span>) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c">//statements...</span><br />}</pre>
 		</li><li>
 			All variables <em>must</em> be lower case with underscores for word boundaries<br />
 			<pre><span class="k">var</span> <ins>the_meaning_of_life</ins> <span class="o">=</span> 42;</pre>
@@ -126,7 +126,7 @@
 			<pre>i<span class="o">++</span>;<ins>  </ins><span class="c">//add one to i</span></pre>
 		</li><li>
 			References to actual code / objects / function names in comments <em>must</em> always be encapsulated in back-ticks<br />
-			<pre><span class="c">//<ins>`</ins>Insertion.Bottom<ins>`</ins> is used (instead of <ins>`</ins>.innerHTML+=<ins>`</ins>) so that<br />//multiple messages coming in at the same time don’t overwrite each other</span><br /><span class="k">new</span> Insertion.Bottom (e, html);</pre>
+			<pre><span class="c">//<ins>`</ins>Insertion.Bottom<ins>`</ins> is used (instead of <ins>`</ins>.innerHTML+=<ins>`</ins>) so that<br />//multiple messages coming in at the same time don't overwrite each other</span><br /><span class="k">new</span> Insertion.Bottom (e, html);</pre>
 		</li>
 	</ul>
 <div></body><!-- === end of line ================================================================================= --></html>

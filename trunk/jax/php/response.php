@@ -6,7 +6,7 @@
    jax (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
    
    this page accepts requests from jax.js in order to setup an ajax connection between two browsers and share data.
-   see ‘docs/api.txt’ for a detailed break down of how to use jax and a list of input/outputs of this script
+   see 'docs/api.txt' for a detailed break down of how to use jax and a list of input/outputs of this script
 *//*
    TODO:_
 	+ purge the database of unused entries when it grows above specified size (64Kb?)
@@ -41,7 +41,7 @@ switch ($request_type) {
 		//generate a response to the caller, passing back:
 		$output['response'] = array (
 			'result'  => true,      //the connection has been opened
-			'conn_id' => $conn_id,  //the connection id you’ve been assigned
+			'conn_id' => $conn_id,  //the connection id you've been assigned
 			'user_id' => $user_id   //a user id that determines who is who
 		);
 		
@@ -68,10 +68,10 @@ switch ($request_type) {
 				);
 
 			} else {
-				//join the host’s connection
+				//join the host's connection
 				$database->query ("UPDATE connections SET userid2='$user_id' WHERE connid='$conn_id';");
 
-				//get the other user’s id
+				//get the other user's id
 				$result = $database->query ("SELECT userid1 FROM connections WHERE connid='$conn_id';");
 				list ($host_id) = $database->fetch_row ($result);
 
@@ -86,7 +86,7 @@ switch ($request_type) {
 				$data->user_id = $user_id;
 				$data = json_encode ($data);
 
-				//put a message on the queue for them to say you’ve joined
+				//put a message on the queue for them to say you've joined
 				addToQueue ($conn_id, $host_id, 'jax_join', $data);
 
 				//get the data the host provided when the connection was created
@@ -176,7 +176,12 @@ switch ($request_type) {
 			//and leave a message on the queue to notify the other person
 			addToQueue ($conn_id, ($user_id==$user_id1?$user_id2:$user_id1), "jax_disconnect", $data);
 		}
+		$output['result'] = true;
 		break;
+	
+	default:
+		$output['result'] = false;
+		$output['error']  = "Unknown command";
 }
 //close the database
 $database->close ($database);

@@ -9,13 +9,13 @@
 */
 
 //create an instance of `Jax`, direct it to the php page to receive the ajax calls
-//jax allows us to setup a ‘browser-to-browser’ connection via ajax. one player starts a new connection, and the other joins.
+//jax allows us to setup a 'browser-to-browser' connection via ajax. one player starts a new connection, and the other joins.
 //the server is polled every few seconds for new messages from each other. jax is therefore not realtime; there is absolutely
 //no gaurantee that a message will arrive at the other player at a given time. jax games are therefore turn-based
 var jax = new Jax ("../../"+config.jax.path, config.jax.interval);
 
 
-/* EVENT > onload - when everything is loaded and we are ready to go…
+/* EVENT > onload - when everything is loaded and we are ready to go...
    ======================================================================================================================= */
 Event.observe (window, 'load', function(){
         //this is essentially the starting point for jax games. after all the scripts have been loaded, this function will
@@ -40,7 +40,7 @@ Event.observe (window, 'load', function(){
         
         //run the `load` function defined in game.js for the game to handle some onload procedures of its own
         game.load ();
-        //show the title screen (see `game.pages`. if there’s a `show` function for the title screen, it will be executed)
+        //show the title screen (see `game.pages`. if there's a `show` function for the title screen, it will be executed)
         shared.showPage ("title");
 });
 
@@ -50,7 +50,7 @@ Event.observe (window, 'load', function(){
    ======================================================================================================================= */
 var Player = Class.create ();
 Player.prototype = {
-        //override this in your game to add a constructor function to your player’s classes
+        //override this in your game to add a constructor function to your player's classes
         initialize : Prototype.emptyFunction,
         
         name : "",  //display name
@@ -62,12 +62,12 @@ Player.prototype = {
    OBJECT shared - functions/properties shared by different games on the site
    ======================================================================================================================= */
 var shared = {
-        //`shared` relies on a game being loaded and the presence of an object `game`. see ‘games/???/game.js’ for specs
+        //`shared` relies on a game being loaded and the presence of an object `game`. see 'games/???/game.js' for specs
         host   : false,  //true = you are the host, false = you are the opponent
         played : 0,      //number of matches played
         
         /* ===============================================================================================================
-           OBJECT icons - the 16x16 icons to use next to each player’s name
+           OBJECT icons - the 16x16 icons to use next to each player's name
            =============================================================================================================== */
         icons  : {
                 //override these values in your `game.load` function if you want something custom
@@ -79,13 +79,13 @@ var shared = {
            OBJECT templates - reusable templates for pieces of html used in shared
            =============================================================================================================== */
         templates : {
-                //template when the player clicks “Start Game” on title screen and must enter their name
+                //template when the player clicks "Start Game" on title screen and must enter their name
                 start_game : '<p><label for="user-name">Name: </label>'+
                              '<input type="text" name="user-name" id="user-name" maxlength="20" /></p>'+
                              '<p><a href="#" onclick="javascript:shared.events.titleCancelClick();">Cancel</a> '+
                              '<a href="#" onclick="javascript:shared.events.startGame();">Start Game</a></p><br />'
                 ,
-                //template when the player clicks “Join Game” on title screen and must enter their name and join key
+                //template when the player clicks "Join Game" on title screen and must enter their name and join key
                 join_game : '<p><label for="user-name">Name: </label>'+
                             '<input type="text" name="user-name" id="user-name" maxlength="20" />'+
                             '<label for="join-key">Join Key: </label>'+
@@ -117,16 +117,16 @@ var shared = {
            params * s_page : page name to show (as from `game.pages` array, see `game.js` for relevant game for details)
            =============================================================================================================== */
         showPage : function (s_page) {
-                //a ‘page’ is a screen in the game that the player sees. most games will have a title screen, the main
-                //gameplay screen, and maybe rules / about screens. each of these is an html div with the id “page-????”
-                //(where ???? is the page’s name). in addition to this, the game.js for the game, has an array `game.pages`
+                //a 'page' is a screen in the game that the player sees. most games will have a title screen, the main
+                //gameplay screen, and maybe rules / about screens. each of these is an html div with the id "page-????"
+                //(where ???? is the page's name). in addition to this, the game.js for the game, has an array `game.pages`
                 //with the names of each page, along with functions to run when the page is shown / hidden (optional)
                 
                 //loop over each page and hide/show as appropriate
                 game.pages.each (function(o_item) {
                         //reference the html element
                         var e = $("page-"+o_item.name);
-                        //if this is the page to be shown…
+                        //if this is the page to be shown...
                         if (o_item.name == s_page) {
                                 //if there is a show function present for this page, run it
                                 if (typeof o_item.show == "function") {o_item.show ();}
@@ -144,7 +144,7 @@ var shared = {
         
         /* > startConnection : connect to the server and start a game, wait for the opponent to join
            ===============================================================================================================
-           params * s_playername : the name you’ve chosen (will be sent to the opponent, so that they know it)
+           params * s_playername : the name you've chosen (will be sent to the opponent, so that they know it)
            =============================================================================================================== */
         startConnection : function (s_playername) {
                 playerMe.name = s_playername;
@@ -152,13 +152,14 @@ var shared = {
                 //create the game on the server
                 jax.open (
                         {name:playerMe.name},  //your chosen name
-                        function(o_response){  //when the game starts, but the other player has not yet joined
-                                //if the server okay’d the new slot
+                        function(o_response){  //:when the game starts, but the other player has not yet joined
+                                //if the server okay'd the new slot
                                 if (o_response.result) {
-                                        //set the chrome title
+                                        //set the window title
                                         this.setTitle (jax.conn_id+" - ");
+                                        //close the heads-up display and wait for it to close before continuing...
                                         this.headsup.hide (function(){
-                                                //display the code for the other player to use to join with
+                                                //display the join key for the other player to use to join the game
                                                 this.headsup.show (this.templates.join_key.evaluate(jax));
                                         }.bind(this));
                                 
@@ -167,13 +168,13 @@ var shared = {
                                         //?/enableNicknameBox (true);
                                 }
                         }.bind(this),
-                        this.events.gameBegins  //second function: when the other player joins the game
+                        this.events.gameBegins  //:function to call when the other player joins the game
                 );
         },
         
         /* > joinConnection : connect to the server and join a game
            ===============================================================================================================
-           params * s_playername : the name you’ve chosen (will be sent to the opponent, so that they know it)
+           params * s_playername : the name you've chosen (will be sent to the opponent, so that they know it)
                     s_joinkey    : the unique key of the game to join
            =============================================================================================================== */
         joinConnection : function (s_playername, s_joinkey) {
@@ -185,41 +186,27 @@ var shared = {
                 //connect to the other player
                 jax.connect (s_joinkey,             //the connection key the user pasted into the text box
                             {name: playerMe.name},  //your nickname to send to the other player
-                            this.events.gameBegins  //function to call once you’ve joined the game (see below)
+                            this.events.gameBegins  //function to call once you've joined the game (see below)
                 );
         },
         
-        /* > setPlayerStatus : set a message under the player’s info
+        /* > setPlayerStatus : set a message under the player's info
            ===============================================================================================================
            params * (s_html) : html to display, send nothing to hide the display
            =============================================================================================================== */
         setPlayerStatus : function (s_html) {
-                var e     = $("player-status-me-msg"),  //reference to the element containing the message
-                    v     = e.visible ()                //if that element is visible or not
+                var e = $("player-status-me-msg"),  //reference to the element containing the message
+                    v = e.visible ()                //if that element is visible or not
                 ;
                 if (s_html && v) {
                         //if the message is already visible, just update the text without animating
                         e.update (s_html);
                         
                 } else if ((s_html && !v) || (!s_html && v)) {
-                        //otherwise, if there’s a message to show, and it’s not visible, or if the message is being cleared
-                        //and it is currently visible, then animate sliding open/closed
-                        new Effect.Parallel ([
-                                //make the player information bar taller,
-                                new Effect.Scale($("player-status-me"), (s_html?300:100), {  //scale to %
-                                        sync         : true,                                 //sync with move animation
-                                        scaleFrom    : (s_html?100:300),                     //scale from %
-                                        scaleX       : false,                                //do not scale width
-                                        scaleContent : false,                                //do not scale insides
-                                        scaleMode    : {originalHeight: 21}                  //base reference for %
-                                }),
-                                //also move the bar at the same time (so that it effectively slides upwards)
-                                new Effect.Move ($("player-status-me"), {
-                                        sync        : true,
-                                        x           : 0,
-                                        y           : (s_html?-(21*2):21*2)
-                                })
-                        ], {
+                        //otherwise, if there's a message to show, and it's not visible, or if the message is being cleared
+                        //and it is currently visible, then animate sliding open/closed. "morph" from current position to
+                        //a different top/height according to if a message is being shown or hidden 
+                        $("player-status-me").morph ("top: "+(s_html?321:363)+"px; height: "+(s_html?63:21)+"px;", {
                                 duration    : 0.5,
                                 beforeStart : function(){
                                         //before starting the animation, change the html
@@ -272,6 +259,11 @@ var shared = {
                         //update the message
                         e2.update ("<p>"+s_html+"</p>");
                         
+                        //cancel any existing timeout
+                        /*var queue = Effect.Queues.get ('headsup');
+                        queue.each (function(o_item){
+                                o_item.cancel ();
+                        });*/
                         //if the status message is hidden, fade it in
                         if (!this.visible) {
                                 //hide the message, and the wrapper; the animation will unhide automatically. these two lines
@@ -280,27 +272,22 @@ var shared = {
                                 //animate the heads-up displaying
                                 new Effect.Parallel ([
                                         new Effect.BlindDown (e2, {sync:true, scaleFromCenter:true}),
-                                        new Effect.Appear (e1, {sync:true})
+                                        new Effect.Appear    (e1, {sync:true})
                                 ], {
                                         duration    : 0.3,
-                                        queue       : {position:'end', scope:'headsup', limit:2},
+                                        queue       : {position:'end', scope:'headsup', limit:3},
                                         afterFinish : function(){
                                                 this.visible = true;
                                         }.bind(this)
                                 });
                         }
-                        //cancel any existing timeout
-                        var queue = Effect.Queues.get ('headsup');
-                        queue.each (function(o_item){
-                                if (o_item.options.fps == 1) {o_item.cancel ();}
-                        });
                         //auto-hide?
                         if (n_timeout) {
                                 //wait for the specified timeout and hide, mark this wait with a low fps so that it can be
                                 //identified later on (see above)
                                 new Effect.Event ({duration:n_timeout, fps:1, afterFinish:function(){
                                         this.hide (f_timeout);
-                                }.bind(this), queue:{position: 'end', scope: 'headsup', limit:2}});
+                                }.bind(this), queue:{position: 'end', scope: 'headsup', limit:3}});
                         }
                 }, 
                 
@@ -320,7 +307,7 @@ var shared = {
                                 ], {
                                         duration    : 0.3,
                                         transition  : Effect.Transitions.linear,
-                                        queue       : {position:'end', scope:'headsup', limit:2},
+                                        queue       : {position:'end', scope:'headsup', limit:3},
                                         afterFinish : function(){
                                                 //hide and blank
                                                 e1.hide ();
@@ -333,7 +320,7 @@ var shared = {
                 }
         }, //end shared.headsup <
         
-        /* > setSystemStatus : the status message that covers the screen, e.g. “loading”, “disconnected”
+        /* > setSystemStatus : the status message that covers the screen, e.g. "loading", "disconnected"
            ===============================================================================================================
            params * (s_html) : some html to display in the system overlay, leave out to hide the system status box
            =============================================================================================================== */
@@ -375,11 +362,11 @@ var shared = {
    OBJECT shared.chat - manage the chatbox aside the game
    ======================================================================================================================= */
 shared.chat = {
-        //list of emotes. the file name matches the image file name (sans extension) in ‘games/-/emotes/’
+        //list of emotes. the file name matches the image file name (sans extension) in 'games/-/emotes/'
         //refer to: http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Guide:Regular_Expressions for regex rules
         emotes : [
-                //note: add a “hide: true” pair to an emote object to hide the emote from the pull up list
-                //TODO: can't work out the regex to distinguish “:)” from “>:)”
+                //note: add a "hide: true" pair to an emote object to hide the emote from the pull up list
+                //TODO: can't work out the regex to distinguish ":)" from ">:)"
                 {file: "58", symbol: ">:[", regex: /&gt;:[\[\(]/g},  // miffed   >:[ or >:(
                 {file: "60", symbol: ">:]", regex: /&gt;:[\]\)]/g},  // evilgrin >:] or >:)
                 {file: "01", symbol: ":)",  regex: /:\)/g},          // happy    :)
@@ -410,11 +397,12 @@ shared.chat = {
                 ;
                 
                 //make the chat section visible
-                $("shared-chat").style.display = "block";
+                $("shared-chat").show ();
                 //clear the chatbox textarea as Firefox will remember the field value on refresh
+                //TODO: change this to `.blank ();` with Prototype 1.5.1
                 if (!e_chat_input.value) {
-                        e_chat_input.value = "";
-                        e_chat_label.style.display = "block";
+                        e_chat_input.clear ();
+                        e_chat_label.show ();
                 }
                 
                 //create the emote list
@@ -444,12 +432,15 @@ shared.chat = {
                 
                 //when the user clicks on the textbox, hide the label
                 Event.observe (e_chat_input, "focus", function(e_event){
-                        e_chat_label.style.display = "none";
+                        e_chat_label.hide ();
                 });
                 //when focus on the textbox is lost, put the label back if the textbox is empty
                 Event.observe (e_chat_input, "blur", function(e_event){
+                        //if there's only whitespace, consider it blank
+                        //TODO: switch to using `.blank ();` with Prototype 1.5.1
                         if (!e_chat_input.value.replace(/^\s*|\s*$/g,"")) {
-                                e_chat_label.style.display = "block";
+                                e_chat_input.clear ();
+                                e_chat_label.show ();
                         }
                 });
                 //if the user clicks on the label itself, pass focus to the textbox
@@ -461,7 +452,7 @@ shared.chat = {
                 Event.observe (e_chat_input, "keypress", function(e_event){
                         //if they press Return
                         if(e_event.keyCode == 13) {
-                                //disable the chat textbox and send the message…
+                                //disable the chat textbox and send the message...
                                 var msg = e_chat_input.value.replace (/^\s*|\s*$/g,"");
                                 e_chat_input.value = "";
                                 if (msg.length) {
@@ -476,7 +467,7 @@ shared.chat = {
            =============================================================================================================== */
         hide : function () {
                 //hide the container
-                $("shared-chat").style.display = "none";
+                $("shared-chat").hide ();
                 
                 //stop listening for keypresses
                 Event.stopObserving ("shared-chat-input", "keypress");
@@ -522,7 +513,7 @@ shared.chat = {
                 chat_msg.text = this.applyMarkup( this.applyEmoticons( this.linkURLs(chat_msg.text) ) );
                 
                 //add the message to the chat history. `Insertion.Bottom` is used (instead of `.innerHTML+=`) so that 
-                //multiple messages coming in at the same time don’t overwrite each other
+                //multiple messages coming in at the same time don't overwrite each other
                 new Insertion.Bottom (e, shared.templates.chat_msg.evaluate(chat_msg));
                 //animate the message appearing (and scroll down to meet it)
                 new Effect.SlideDown ("chat-"+chat_msg.time_id, {duration: 0.3, afterUpdate: function(){
@@ -540,25 +531,24 @@ shared.chat = {
            return * string : same text, but with urls replaced with html hyperlinks
            =============================================================================================================== */
         linkURLs : function (s_msg) {
-                /* replace urls in the text with hyperlinks. find anything shaped like a url in the text:
-                   refer to http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:RegExp
-                   
-                   “(?:http(s)?:\/\/)?” ................................... = optional http/https (remember “s” in $1)
-                   “(” .................................................... = remember the main url in $2 (“www.test.com”)
-                             “(?:[0-9A-Z_!~\*'\(\)-]+\.)?” ................ = subdomain. e.g. “www.”
-                             “(” .......................................... = remember the short url in $3 (“test.com”)
-                                      “[0-9A-Z-]{2,63}” ................... = domain name (“test”)
-                                      “\.[A-Z\.]+” ........................ = tld. i.e. “.com”, “.co.uk” etc.
-                             “)”
-                             “(?::[0-9]{1,4})?” ........................... = optional port. e.g. “test.com:80”
-                             “(?:\/[\/0-9a-z_!~\*'\(\)\.;\?:@&=\+\$,%-]*)?” = folders/files, e.g. “test.com/stuff/index.html”
-                             “(?:#[0-9a-z-_]+)?” .......................... = optional bookmark i.e. “index.html#section-two”
-                   “)”
-                */
-                return s_msg.replace (
-                        /(?:http(s)?:\/\/)?((?:[0-9A-Z_!~\*'\(\)-]+\.)?([0-9A-Z-]{2,63}\.[A-Z\.]+)(?::[0-9]{1,4})?(?:\/[\/0-9a-z_!~\*'\(\)\.;\?:@&=\+\$,%-]*)?(?:#[0-9a-z-_]+)?)/gi,
-                        '<a href="http$1://$2" target="_blank">&lt;$3&hellip;&gt;</a>'
+                //regex to find anything shaped like a url in the text:
+                //refer to http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:RegExp
+                var regex = new RegExp (
+                        "(?:http(s)?:\\/\\/)?"+  //.................................  = http/https (remember "s" in $1)
+                        "("+  //....................................................  = remember url in $2 ("www.test.com")
+                           "(?:[0-9A-Z_!~\\*'\\(\\)-]+\\.)?"+  //...................  = subdomain. e.g. "www."
+                           "("+  //.................................................  = remember short url in $3 ("test.com")
+                              "[0-9A-Z-]{2,63}"+  //................................  = domain name ("test")
+                              "\\.[A-Z\\.]+"+  //...................................  = tld. i.e. ".com", ".co.uk" etc.
+                           ")"+
+                           "(?::[0-9]{1,4})?"+  //..................................  = optional port. e.g. "test.com:80"
+                           "(?:\\/[\\/0-9a-z_!~\\*'\\(\\)\\.;\\?:@&=\\+\\$,%-]*)?"+ //= folder/files "test.com/e/index.html"
+                           "(?:#[0-9a-z-_]+)?"+  //.................................  = bookmark i.e. "index.html#stuff"
+                        ")",
+                        "gi"  //'global+ignore', replace all instances, ignore case sensitivity
                 );
+                //replace urls in the text with hyperlinks
+                return s_msg.replace (regex, '<a href="http$1://$2" target="_blank">&lt;$3&hellip;&gt;</a>');
         },
         
         /* > applyMarkup : replace simple text markup with relevant html tags
@@ -567,9 +557,9 @@ shared.chat = {
            return * string : same text, but with markup replaced with relevant html tags
            =============================================================================================================== */
         applyMarkup : function (s_msg) {
-                return s_msg.replace (/\*(.*)\*(?!.*>)/, '<strong>$1</strong>')        //“*bold*”
-                            .replace (/\/(.*)\/(?!.*>)/, '<em>$1</em>')                //“/italic/”
-                            .replace (/_(.*)_(?!.*>)/,   '<span class="u">$1</span>')  //“_underline_”
+                return s_msg.replace (/\*(.*)\*(?!.*>)/, '<strong>$1</strong>')        //"*bold*"
+                            .replace (/\/(.*)\/(?!.*>)/, '<em>$1</em>')                //"/italic/"
+                            .replace (/_(.*)_(?!.*>)/,   '<span class="u">$1</span>')  //"_underline_"
                 ;
         },
         
@@ -583,8 +573,8 @@ shared.chat = {
                     tags  = s_msg.match (regex)  //find all html tags and remember them for later
                 ;
                 if (tags) {
-                        //temporarily replace all html tags with “<!>” so that the emoticon replace will not accidently
-                        //break the “:/” in “http://” etc. just don’t create an “<!>” emoticon!
+                        //temporarily replace all html tags with "<^>" so that the emoticon replace will not accidently
+                        //break the ":/" in "http://" etc. just don't create an "<^>" emoticon!
                         s_msg = s_msg.replace (regex, "<^>");
                 }
                 //loop over each emote and replace any instances of it
@@ -608,8 +598,8 @@ shared.events = {
            =============================================================================================================== */
         gameBegins : function (o_response) {
                 //this function is called from `shared.startConnection` or `shared.joinConnection`. here the server has
-                //either started or joined the game, both player’s details are known, a connection is fully established.
-                //display the game screen, put the player’s names to screen
+                //either started or joined the game, both player's details are known, a connection is fully established.
+                //display the game screen, put the player's names to screen
                 
                 //the other player has joined the game
                 playerThem.name = o_response.data.name;
@@ -620,12 +610,12 @@ shared.events = {
                 playerMe.icon   = shared.host ? shared.icons.host : shared.icons.opponent;
                 playerThem.icon = shared.host ? shared.icons.opponent : shared.icons.host;
                 
-                //display player 1’s name / icon
+                //display player 1's name / icon
                 $("player-me-name").innerHTML = playerMe.name;
                 $("player-me-icon").src = playerMe.icon;
                 shared.setPlayerStatus ();
                 
-                //display player 2’s name / icon
+                //display player 2's name / icon
                 $("player-them-name").innerHTML = playerThem.name;
                 $("player-them-icon").src = playerThem.icon;
                 
@@ -642,7 +632,7 @@ shared.events = {
                                         o_effect.element.show ();
                                 }})
                         ], {
-                                duration: 0.5,
+                                duration    : 0.5,
                                 afterFinish : function () {
                                         //start the game
                                         game.start ();
@@ -685,34 +675,34 @@ shared.events = {
                 }); 
         },
         
-        /* > titleStartGameClick : when you click on “Start Game” on the title screen
+        /* > titleStartGameClick : when you click on "Start Game" on the title screen
            =============================================================================================================== */
         titleStartGameClick : function () {
                 shared.host = true;
                 shared.headsup.show (shared.templates.start_game);
         },
         
-        /* > titleJoinGameClick : when you click on “Join Game” on the title screen
+        /* > titleJoinGameClick : when you click on "Join Game" on the title screen
            =============================================================================================================== */
         titleJoinGameClick : function () {
                 shared.host = false;
                 shared.headsup.show (shared.templates.join_game);
         },
         
-        /* > titleCancelClick : when you click the “Cancel” button after clicking “Start Game” or “Join Game”
+        /* > titleCancelClick : when you click the "Cancel" button after clicking "Start Game" or "Join Game"
            =============================================================================================================== */
         titleCancelClick : function () {
                 shared.headsup.hide ();
         },
         
-        /* > startGame : after you’ve entered your name and clicked to start the game
+        /* > startGame : after you've entered your name and clicked to start the game
            =============================================================================================================== */
         startGame : function () {
                 //TODO: validate name
                 shared.startConnection ($F("user-name"));
         },
         
-        /* > joinGame : after you’ve entered your name and join key, and clicked to start the game
+        /* > joinGame : after you've entered your name and join key, and clicked to start the game
            =============================================================================================================== */
         joinGame : function () {
                 //TODO: validate name / join key
@@ -723,7 +713,7 @@ shared.events = {
 /* jax_disconnect < listen out for the disconnect message when the other player leaves the game
    ======================================================================================================================= */
 jax.listenFor ("jax_disconnect", function(o_response) {
-        //if the player closed the window…
+        //if the player closed the window...
         if (o_response.data.reason == "unload") {
                 shared.headsup.hide ();
                 shared.setTitle (playerThem.name+" left the game - ");
@@ -785,4 +775,4 @@ function bsod (s_message, s_url, n_line) {
 if (config.use_bsod) {window.onerror = bsod;}
 
 //=== end of line ===========================================================================================================
-//‘js/boot.js’ « previous                                                                          next » ‘games/*/index.php’
+//'js/boot.js' « previous                                                                          next » 'games/*/index.php'

@@ -14,15 +14,15 @@
 var Jax = new Class.create ();
 Jax.prototype = {
         //--- public variables ----------------------------------------------------------------------------------------------
-        version : "0.5.0",  //version number of jax in “major.minor.revision” format (read only)
-        conn_id : null,     //once you’ve opened/connected, this is the connection id for this instance (read only)
+        version : "0.5.0",  //version number of jax in "major.minor.revision" format (read only)
+        conn_id : null,     //once you've opened/connected, this is the connection id for this instance (read only)
         
         //--- private variables ---------------------------------------------------------------------------------------------
         _ : {
                 request_file : "",  //url of the jax server page
                 local_id     : "",  //your id, needed to collect your messages from the server
                 remote_id    : "",  //id of the other person, needed to send messages to them
-                callbax      : [],  //a ‘bat-belt’ (array of functions) for the server queue callbacks
+                callbax      : [],  //a 'bat-belt' (array of functions) for the server queue callbacks
                 timer_handle : 0,   //for remembering the timer handle to be able to stop it later on
                 interval     : 3    //number of seconds between checking the server for new messages
         },
@@ -64,7 +64,7 @@ Jax.prototype = {
                                 this.listenFor ("jax_join", function(o_response){
                                         //do not respond again to a user joining
                                         this.listenFor ("jax_join");
-                                        //get the other person’s id, needed to send messages to them
+                                        //get the other person's id, needed to send messages to them
                                         this._.remote_id = o_response.data.user_id;
                                         //call the passed function from the game when the game starts
                                         f_onJoin (o_response);
@@ -88,7 +88,7 @@ Jax.prototype = {
                         data    : json.stringify (o_data)
                 }, function(o_response){
                         //did the server have any problems with your key/name?
-                        //?/if (o_response.result) {
+                        if (o_response.result) {
                                 //get yours and their id
                                 this.conn_id     = s_connid;
                                 this._.local_id  = o_response.user_id;
@@ -97,10 +97,10 @@ Jax.prototype = {
                                 this.timerStart ();
                                 //call the passed function from the game.js for when you join the game
                                 f_onGameStart (o_response);
-                        /*?/} else {
+                        } else {
                                 //!/server side register nickname / join game failed
                                 alert ("Did not join the game");
-                        }*/
+                        }
                 }.bind(this));
         },
         
@@ -146,7 +146,7 @@ Jax.prototype = {
 
                        jax.listenFor ("game_chat_message", function(o_response){
                            //code to run when you receive a "game_chat_message" from the server/other player,
-                           //`o_response` is an object containing the server’s response
+                           //`o_response` is an object containing the server's response
                        });
 
                    To unregister a callback and unlisten from the queue, send null as the second parameter.
@@ -174,28 +174,36 @@ Jax.prototype = {
                     ajax = new Ajax.Request (
                         this._.request_file,
                         {
-                                method     : 'post',
-                                parameters : pars,
-                                onComplete : function(o_ajax){  //-----------------------------------------------------------
+                                method         : 'post',
+                                parameters     : pars,
+                                requestHeaders : {Accept: 'application/json'},
+                                onComplete     : function(o_ajax){  //-------------------------------------------------------
+                                        //I have no idea why, but when you refresh the window this comes back empty
+                                        if (!o_ajax.responseText) {return false;}
                                         //un-json the returned data
                                         var r = json.parse (o_ajax.responseText);
-                                        //loop over the responses (may be multiple if more than one message was on queue)
-                                        if (s_type == "jax_check_queue") {
-                                                r.response.each (function(o_response){
-                                                        //call the user-added function to deal with this data
-                                                        if (typeof self._.callbax[o_response.type] == "function") {
-                                                                self._.callbax[o_response.type] (o_response);
-                                                        }
-                                                });
+                                        if (r.result) {
+                                                //loop over the responses (may be multiple if more than one message was on queue)
+                                                if (s_type == "jax_check_queue") {
+                                                        r.response.each (function(o_response){
+                                                                //call the user-added function to deal with this data
+                                                                if (typeof self._.callbax[o_response.type] == "function") {
+                                                                        self._.callbax[o_response.type] (o_response);
+                                                                }
+                                                        });
+                                                }
+                                                f_onResponse (r.response);
+                                                f_onResponse = null;
+                                        } else {
+                                                //fatal server error
+                                                alert (r.error);
                                         }
-                                        f_onResponse (r.response);
-                                        f_onResponse = null;
                                 }
                         }
                 );
         },
         
-        /* > sendToQueue : send some data to the other person (via the server’s message queue)
+        /* > sendToQueue : send some data to the other person (via the server's message queue)
            ==============================================================================================================
            params * s_type     : the label to identify the data, e.g. chat_message
                     o_data     : object literal containing key:value pairs to send to the other player
@@ -207,18 +215,18 @@ Jax.prototype = {
                 var self = this;
                 this.sendRequest ("jax_queue", {
                         conn_id : self.conn_id,            //connection id for the you-them bridge
-                        sendto  : self._.remote_id,        //the opponent’s id you’re sending to
+                        sendto  : self._.remote_id,        //the opponent's id you're sending to
                         type    : s_type,                  //the tag name of the data being sent e.g. "chat_message"
                         data    : json.stringify (o_data)  //the custom data being sent
                 }, f_onSent);
         },
         
-        /* disconnect : tell the other person you’ve left, and stop the ajax
+        /* disconnect : tell the other person you've left, and stop the ajax
            ===============================================================================================================
            params * o_data : data (as object literal) to send the other person
            =============================================================================================================== */
-        disconnect : function(o_data) {
-                //ignore if the user hasn’t actually connected yet (e.g. closing a window before connecting)
+        disconnect : function (o_data) {
+                //ignore if the user hasn't actually connected yet (e.g. closing a window before connecting)
                 if (!this._.local_id) {return false;}
                 
                 //stop the local timer
@@ -226,7 +234,7 @@ Jax.prototype = {
                 //send the death knell to the other person
                 var self = this;
                 this.sendRequest ("jax_disconnect", {
-                        conn_id : self.conn_id,            //the connection you’re on
+                        conn_id : self.conn_id,            //the connection you're on
                         user_id : self._.local_id,         //your user id
                         data    : json.stringify (o_data)  //something to send to the other person
                 });

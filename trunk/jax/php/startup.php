@@ -8,7 +8,7 @@
 //all output will be in json (http://json.org)
 header ('Content-type: application/json');
 
-/* note: there seems to be a difference between XAMPP and a real PHP install regarding ‘magic quotes’. if magic quotes is on,
+/* note: there seems to be a difference between XAMPP and a real PHP install regarding 'magic quotes'. if magic quotes is on,
          the super globals are manually stripped. this is done just to make it easier for people to run jax on a local
          computer without having to configure anything (jax is designed to be copy-paste-run) */
 function fixMagicQuotes () {
@@ -48,14 +48,14 @@ require_once 'sqlite.php';  //include the database class
    return * string : the return value, or empty string if the item is not present
    ======================================================================================================================= */
 function request ($s_var) {
-	//php produces a warning if you try access an array item that doesn’t exist. this also applies to the superglobals
+	//php produces a warning if you try access an array item that doesn't exist. this also applies to the superglobals
 	//$_GET, $_POST and the combined form $_REQUEST
 	return (isset ($_REQUEST[$s_var])) ? $_REQUEST[$s_var] : "";
 }
 
 /* > registerSession : return a user id from their unique session id assigned to them by the webserver
    =======================================================================================================================
-   return * string : the ‘user id’, an encryption of the requestor’s session id
+   return * string : the 'user id', an encryption of the requestor's session id
    ======================================================================================================================= */
 function registerSession () {
 	$user_id = md5 (session_id().strtoupper(substr(base_convert(time(),10,35),0,6)));
