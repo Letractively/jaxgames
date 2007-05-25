@@ -12,9 +12,7 @@ P5 - A niggle
 
 [1] Todo List:
 =============================================================================================================================
-* P1 * Switch to using Prototype 1.5.1s native JSON parser and remove json.js dependency
 * P2 * Reconfigure Jax backend to always output JSON data in all instances. (currently some data and errors are not)
-* P2 * Use application/json output type, accept out application/json type in jax.js
 * P2 * The database should auto-prune old data when it grows too large
 * P2 * If the server times out, give a warning message and try again
 * P3 * PHP4 Compatibility. Ideally detect version, and use a PHP4 json class as appropriate (or output the string directly)

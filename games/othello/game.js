@@ -151,7 +151,7 @@ var game = {
                         );
                 });
                 
-                //!/debug: leap straight into the game screen
+                //?/debug: leap straight into the game screen
                 /*shared.showPage ("game"); this.start (true);*/
         },
         
@@ -184,7 +184,7 @@ var game = {
                 this.pieces[4][3] = "X";
                 this.pieces[3][4] = "X";
                 this.pieces[4][4] = "O";
-                //!/this.pieces = [["O","X","","X","X","X","X","X"],["O","X","X","","O","O","X","X"],["X","O","X","O","X","X","X","X"],["X","X","O","X","O","X","X","X"],["X","X","X","X","O","X","X","X"],["X","X","X","O","X","O","X","X"],["X","X","O","X","X","X","X","X"],["X","X","X","X","X","X","O","O"]];
+                //?/this.pieces = [["O","X","","X","X","X","X","X"],["O","X","X","","O","O","X","X"],["X","O","X","O","X","X","X","X"],["X","X","O","X","O","X","X","X"],["X","X","X","X","O","X","X","X"],["X","X","X","O","X","O","X","X"],["X","X","O","X","X","X","X","X"],["X","X","X","X","X","X","O","O"]];
                 this.updateBoard ();
                 
                 //reset the piece counters to 2 a piece

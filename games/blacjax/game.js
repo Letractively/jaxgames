@@ -81,7 +81,7 @@ var game = {
                 opponentCardClick : function (s_card) {
                         //get the card currently on the run that you're about to place a card over. this is needed to
                         //compare the suit of the new card with the previous, in the case that an Eight is placed on a card
-                        //that is already the same suit, and thus no heads-up message needs to be displayed
+                        //that is already the same suit, and thus, no heads-up message needs to be displayed
                         var face      = game.run.getFaceCard(),
                             _continue = function () {
                                     //preempt the next move
@@ -105,12 +105,12 @@ var game = {
                                         //the player put down an Ace (another go), Eight (change suit) or Joker (any card)
                                         var msg = "";
                                         switch (game.pack.value (s_card)) {
-                                                case 0: msg = "Any Card&hellip;";    break;  //Joker (any card)
-                                                case 1: msg = "Another Go&hellip;";  break;  //Ace (another go)
+                                                case 0: msg = "Any Card&hellip;";   break;  //Joker (any card)
+                                                case 1: msg = "Another Go&hellip;"; break;  //Ace (another go)
                                                 case 8:
                                                         //Eight. don't announce "change suit" if suit didn't change
                                                         msg = (game.pack.suit (face) != game.pack.suit (s_card))
-                                                            ? "Change Suit&hellip;" : ""
+                                                            ? "Change Suit&hellip;" : "Another Go"
                                                         ; 
                                                         break;
                                         }
@@ -128,6 +128,9 @@ var game = {
                                                 //...cancel the penalty
                                                 game.run.updatePenalty (0);
                                                 //display the heads up!
+                                                //FIXME: there is a bug that starts here; if you finish a game by cancelling
+                                                //       a penalty, then this heads up will conflict with the "WIN/LOSE"
+                                                //       message. fix seems to lie with accurately managing headsup
                                                 shared.headsup.show ("Penalty Cancelled!", 0.5, _continue);
                                         }
                                         //file the cards onto the discard pile
@@ -163,8 +166,8 @@ var game = {
                         this.deck.cards.clear ();
                         //note: if you want to setup a fake deck of cards for forcing order of play, do it here
                         //      the order is: face, them:1-7, you: 1-7, rest of deck - reversed
-                        //n_cards = 1;
-                        //this.deck.cards = ["AC", "JH", "JC", "3S", "4S", "3D", "4D", "8H", "5H", "6H", "5S", "6S", "5D", "6D", "8C"].reverse ();
+                        //?/n_cards = 1;
+                        //?/this.deck.cards = ["AC", "JH", "JC", "3S", "4S", "3D", "4D", "8H", "5H", "6H", "5S", "6S", "5D", "6D", "8C"].reverse ();
                         this.deck.addPack (
                                 this.pack,  //which pack to use in the deck
                                 1,          //add one pack to the deck
@@ -426,7 +429,7 @@ game.events = {
                 this.addClassName ("card-hover");
                 
                 //the card's name is stored in the img tag's alt property
-                var card = this.alt,
+                var card = this.id.split ("-").last (),
                     msg  = ""
                 ;
                 //find action cards (Joker, Ace, Two, Eight, Black/Red Jack) and label them on mouseover
@@ -436,7 +439,7 @@ game.events = {
                         case 2:  msg = "Pickup 2";    break;  //Two is pickup two
                         case 8:
                                 //Eight goes on any card, followed by suit/rank match
-                                msg = (game.pack.suit (game.run.getFaceCard()) != game.pack.suit (card)) ? "Change Suit" : "";
+                                msg = (game.pack.suit (game.run.getFaceCard()) != game.pack.suit (card)) ? "Change Suit" : "Another Go";
                                 break;
                         case 11:
                                 //a Black Jack is pickup 5, a Red Jack is cancel pickup
@@ -468,7 +471,7 @@ game.events = {
                 $("game-label").hide ();
                 
                 //which card was clicked?
-                var card_name      = this.alt;
+                var card_name      = this.id.split ("-").last ();
                     playable_cards = playerMe.hand.playableCards ()
                 ;
                 
@@ -487,9 +490,11 @@ game.events = {
                         if (playable_cards.indexOf (n_index) < 0) {
                                 //make opaque and move back to normal position
                                 new Effect.Parallel ([
-                                        new Effect.Opacity (playerMe.hand.element+'-'+s_card, {sync:true, from:0.9, to:1.0}),
-                                        new Effect.Move    (playerMe.hand.element+'-'+s_card, {sync:true, x:0, y:-15})
-                                ]);
+                                        new Effect.Opacity (e, {sync:true, from:0.9, to:1.0}),
+                                        new Effect.Move    (e, {sync:true, x:0, y:-15})
+                                ], {
+                                        transition:Effect.Transitions.linear}
+                                );
                                 e.removeClassName ("card-disabled");
                         } else {
                                 //enabled cards, remove the interactivity
@@ -634,7 +639,7 @@ game.run = {
            =============================================================================================================== */
         displayDiscard : function () {
                 $("game-discard").update (
-                        (this.discard)?'<img src="../-/cards/'+this.discard+'.png" width="71" height="96" alt="Face" />':""
+                        (this.discard)?'<div class="card card-'+this.discard+'"></div>':""
                 );
         },
 

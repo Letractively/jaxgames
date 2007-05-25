@@ -14,7 +14,7 @@ var config = {
         },
         
         //array of javascript files to include (ignoring Prototype & Scriptaculous)
-        boot_scripts : ["jax/libs/json.js", "jax/jax.js", "js/shared.js"],
+        boot_scripts : ["jax/jax.js", "js/shared.js"],
         
         //Scriptaculous settings...
         scriptaculous : {
@@ -24,6 +24,7 @@ var config = {
                 use_defaults : true,
                 
                 //location to your own copy of prototype to use
+                //?/custom_prototype : "js/libs/scriptaculous/scriptaculous-js-svn/lib/prototype.js",
                 custom_prototype : "js/libs/scriptaculous/prototype-svn/dist/prototype.js",
                 //location to your own folder containing a copy of scriptaculous to use (always include end slash)
                 custom_src : "js/libs/scriptaculous/scriptaculous-js-svn/src/",
@@ -31,7 +32,7 @@ var config = {
                 custom_version : "1.7.1",
                 
                 //an array of which Scriptaculous libraries to include, sans extension (if use_defaults = false)
-                //!/includes : ["builder", "effects", "dragdrop", "controls", "slider"]  //all of Scriptaculous
+                //?/includes : ["builder", "effects", "dragdrop", "controls", "slider"]  //all of Scriptaculous
                 includes : ["effects"]  //just the effects only please
         },
         

@@ -15,9 +15,10 @@ h1 {background-image: url("images/title.png");}
 /* === game area ========================================================================================================= */
 #game-deck, #game-discard, #game-run, #game-penalty
                 {position: absolute; top: 144px;}
-#game-deck      {left: 5px; width: 71px; height: 96px; background-image: url("../-/cards/back.png");}
+#game-deck      {left: 5px; width: 71px; height: 96px;
+	         background-image: url("../-/cards/cards.png"); background-position: -923px -96px;}
 .game-deck-card {position: absolute;}
-#game-discard      {left: 436px; width: 71px; height: 96px; background-image: url("../-/cards/place.png");}
+#game-discard   {left: 436px; width: 71px; height: 96px; background-image: url("../-/cards/place.png");}
 #game-penalty   {left: 5px; width: 71px; height: 96px; padding-top: 30px;
                  font: bold 30px Arial, Helvetica, sans-serif; text-align: center;}
 #game-run       {left: 0; height: 96px; width: 430px;}
@@ -30,7 +31,7 @@ h1 {background-image: url("images/title.png");}
 #game-farhand   {top: 31px;}
 #game-nearhand  {top: 257px;}
 .card-playable  {cursor: pointer;}
-.card-hover     {top: -5px !important; padding-bottom: 20px;}
+.card-hover     {top: -5px !important;}
 .card-disabled  {cursor: not-allowed !important;}
 
 /* === end of line ======================================================================================================= */

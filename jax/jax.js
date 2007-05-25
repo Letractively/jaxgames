@@ -5,7 +5,7 @@
    jax (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 *//*
    jax is an ajax messaging system allowing two computers to send information to each other from a browser
-   REQUIRES: prototype 1.5.0, Prototype-compatible json.js
+   REQUIRES: prototype 1.5.1
 */
 
 /* =======================================================================================================================
@@ -14,7 +14,7 @@
 var Jax = new Class.create ();
 Jax.prototype = {
         //--- public variables ----------------------------------------------------------------------------------------------
-        version : "0.5.0",  //version number of jax in "major.minor.revision" format (read only)
+        version : "0.5.1",  //version number of jax in "major.minor.revision" format (read only)
         conn_id : null,     //once you've opened/connected, this is the connection id for this instance (read only)
         
         //--- private variables ---------------------------------------------------------------------------------------------
@@ -41,7 +41,7 @@ Jax.prototype = {
                 
                 //when the user closes the window or navigates away from the website
                 Event.observe (window, 'beforeunload', function(){
-                        //`onbeforeunload` must be used because popup windows do not have an onunload event
+                        //`onbeforeunload` must be used because popup windows do not have an `onunload` event
                         this.disconnect ({reason: "unload"});
                 }.bind(this));
         },
@@ -54,7 +54,7 @@ Jax.prototype = {
            =============================================================================================================== */
         open : function (o_data, f_onOpen, f_onJoin) {
                 //send the request to the server to open a new game
-                this.sendRequest ("jax_open", {data:json.stringify(o_data)}, function(o_response){
+                this.sendRequest ("jax_open", {data:Object.toJSON (o_data)}, function(o_response){
                         //if the server created the game without error...
                         //?/if (o_response.result) {
                                 //set the id
@@ -85,7 +85,7 @@ Jax.prototype = {
                 //attempt to join the game with your nickname and key
                 this.sendRequest("jax_connect", {
                         conn_id : s_connid,
-                        data    : json.stringify (o_data)
+                        data    : Object.toJSON (o_data)
                 }, function(o_response){
                         //did the server have any problems with your key/name?
                         if (o_response.result) {
@@ -181,7 +181,7 @@ Jax.prototype = {
                                         //I have no idea why, but when you refresh the window this comes back empty
                                         if (!o_ajax.responseText) {return false;}
                                         //un-json the returned data
-                                        var r = json.parse (o_ajax.responseText);
+                                        var r = o_ajax.responseText.evalJSON (true);
                                         if (r.result) {
                                                 //loop over the responses (may be multiple if more than one message was on queue)
                                                 if (s_type == "jax_check_queue") {
@@ -196,7 +196,7 @@ Jax.prototype = {
                                                 f_onResponse = null;
                                         } else {
                                                 //fatal server error
-                                                alert (r.error);
+                                                alert ("Server Error: "+r.error);
                                         }
                                 }
                         }
@@ -214,10 +214,10 @@ Jax.prototype = {
                 
                 var self = this;
                 this.sendRequest ("jax_queue", {
-                        conn_id : self.conn_id,            //connection id for the you-them bridge
-                        sendto  : self._.remote_id,        //the opponent's id you're sending to
-                        type    : s_type,                  //the tag name of the data being sent e.g. "chat_message"
-                        data    : json.stringify (o_data)  //the custom data being sent
+                        conn_id : self.conn_id,          //connection id for the you-them bridge
+                        sendto  : self._.remote_id,      //the opponent's id you're sending to
+                        type    : s_type,                //the tag name of the data being sent e.g. "chat_message"
+                        data    : Object.toJSON(o_data)  //the custom data being sent
                 }, f_onSent);
         },
         
@@ -234,9 +234,9 @@ Jax.prototype = {
                 //send the death knell to the other person
                 var self = this;
                 this.sendRequest ("jax_disconnect", {
-                        conn_id : self.conn_id,            //the connection you're on
-                        user_id : self._.local_id,         //your user id
-                        data    : json.stringify (o_data)  //something to send to the other person
+                        conn_id : self.conn_id,           //the connection you're on
+                        user_id : self._.local_id,        //your user id
+                        data    : Object.toJSON (o_data)  //something to send to the other person
                 });
         }
 };
