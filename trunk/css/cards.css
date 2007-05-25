@@ -1,0 +1,64 @@
+.card    {position:absolute; width: 71px; height: 96px;
+	  background-image: url("../games/-/cards/cards.png");
+	  background-repeat: no-repeat;}
+
+.card-bk {background-position: -923px  -96px;}
+
+.card-AS {background-position:    0      0;}
+.card-2S {background-position:  -71px    0;}
+.card-3S {background-position: -142px    0;}
+.card-4S {background-position: -213px    0;}
+.card-5S {background-position: -284px    0;}
+.card-6S {background-position: -355px    0;}
+.card-7S {background-position: -426px    0;}
+.card-8S {background-position: -497px    0;}
+.card-9S {background-position: -568px    0;}
+.card-XS {background-position: -639px    0;}
+.card-JS {background-position: -710px    0;}
+.card-QS {background-position: -781px    0;}
+.card-KS {background-position: -852px    0;}
+
+.card-AC {background-position:    0    -96px;}
+.card-2C {background-position:  -71px  -96px;}
+.card-3C {background-position: -142px  -96px;}
+.card-4C {background-position: -213px  -96px;}
+.card-5C {background-position: -284px  -96px;}
+.card-6C {background-position: -355px  -96px;}
+.card-7C {background-position: -426px  -96px;}
+.card-8C {background-position: -497px  -96px;}
+.card-9C {background-position: -568px  -96px;}
+.card-XC {background-position: -639px  -96px;}
+.card-JC {background-position: -710px  -96px;}
+.card-QC {background-position: -781px  -96px;}
+.card-KC {background-position: -852px  -96px;}
+
+.card-AD {background-position:    0   -192px;}
+.card-2D {background-position:  -71px -192px;}
+.card-3D {background-position: -142px -192px;}
+.card-4D {background-position: -213px -192px;}
+.card-5D {background-position: -284px -192px;}
+.card-6D {background-position: -355px -192px;}
+.card-7D {background-position: -426px -192px;}
+.card-8D {background-position: -497px -192px;}
+.card-9D {background-position: -568px -192px;}
+.card-XD {background-position: -639px -192px;}
+.card-JD {background-position: -710px -192px;}
+.card-QD {background-position: -781px -192px;}
+.card-KD {background-position: -852px -192px;}
+
+.card-AH {background-position:    0   -288px;}
+.card-2H {background-position:  -71px -288px;}
+.card-3H {background-position: -142px -288px;}
+.card-4H {background-position: -213px -288px;}
+.card-5H {background-position: -284px -288px;}
+.card-6H {background-position: -355px -288px;}
+.card-7H {background-position: -426px -288px;}
+.card-8H {background-position: -497px -288px;}
+.card-9H {background-position: -568px -288px;}
+.card-XH {background-position: -639px -288px;}
+.card-JH {background-position: -710px -288px;}
+.card-QH {background-position: -781px -288px;}
+.card-KH {background-position: -852px -288px;}
+
+.card-BJ {background-position: -923px    0;}
+.card-RJ {background-position: -923px -192px;}

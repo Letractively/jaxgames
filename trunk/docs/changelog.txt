@@ -1,6 +1,11 @@
 =============================================================================================================================
 Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+25.MAY.07
+    ADD: [Blacjax] Switched to using a sprite sheet for the cards for quicker load times
+    FIX: [Blacjax] Empty message on headsup when 8 is put down on same suit, now says "Another Go"
+    ADD: [Project] Upgraded to Scriptaculous 1.7.1_beta3 / Prototype 1.5.1
+    FIX: [Project] "options has no properties" workaround caused by Effect.Parallel having no options
 11.APR.07
     FIX: [Shared] All text in the chat box being recognised as URLs
 10.APR.07

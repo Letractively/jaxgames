@@ -94,19 +94,19 @@ Hand.prototype = {
                 var card    = this.cards.first (),
                     card_id = this.element + '-' + card
                 ;
-                new Insertion.Top (this.element, '<img id="'+card_id+'" style="position:absolute;left:5px;top:' +
-                                   (this.host?-113:113)+'px;" src="../-/cards/back.png" width="71" height="96" '+
-                                   'alt="'+card+'" />'
+                new Insertion.Top (
+                        this.element,
+                        '<div id="'+card_id+'" class="card card-bk" style="left:5px;top:'+(this.host?-113:113)+'px;" ></div>'
                 );
                 cardanims.push (new Effect.Move(card_id, {sync:true, x:cardpos[0], y:0, mode:'absolute', afterFinish:function(o_effect){
                         //flip the card over by switching to the face image (playerMe only)
-                        if (this.host) {$(o_effect.element.id).src = "../-/cards/" + card + ".png";}
+                        if (this.host) {$(o_effect.element.id).className = "card card-" + card;}
                 }.bind(this)}));
                 
                 new Effect.Parallel (cardanims, {
                         duration    : 0.3,
                         afterFinish : function(){
-                                $("game-deck").innerHTML = "";
+                                $("game-deck").update ();
                                 //if there's a penalty, take one from the penalty total
                                 if (game.run.penalty) {game.run.updatePenalty (game.run.penalty-1);}
                                 //more cards to draw?
@@ -149,7 +149,7 @@ Hand.prototype = {
         /* > clear : clear the cards in the hand (will also remove any cards in the run too!)
            =============================================================================================================== */
         clear : function () {
-                $(this.element).innerHTML = "";  //!/change to .update(); for prototype 1.5.0.rc2
+                $(this.element).update ();
                 this.cards.clear ();
         },
         
@@ -182,7 +182,7 @@ Hand.prototype = {
                                 var move_to = cardpos[n_index] - parseInt ($("game-run-"+s_card).getStyle("left"), 10);
                                 anims.push (new Effect.Move("game-run-"+s_card, {sync:true, x:move_to, y:0}));
                         }.bind(this));
-                        new Effect.Parallel (anims);
+                        new Effect.Parallel (anims, {transition:Effect.Transitions.linear});
                 }
                 
                 //slide the card over onto the run
@@ -218,7 +218,7 @@ Hand.prototype = {
                                 $(this.element+"-"+chosencard).id = "game-run-"+chosencard;
                                 
                                 //flip the card over by switching to the face image (your cards are already face up)
-                                if (!this.host) {$("game-run-"+chosencard).src = "../-/cards/" + chosencard + ".png";}
+                                if (!this.host) {$("game-run-"+chosencard).className = "card card-" + chosencard;}
                                 
                                 f_onComplete (chosencard);
                         }.bind(this)});

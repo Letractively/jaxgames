@@ -1,6 +1,9 @@
 =============================================================================================================================
 Jax Changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+25.MAY.07
+    ADD: Depreciated "json.js" in favour of built in JSON parsing in Prototype 1.5.1
+    ADD: Upgraded to Scriptaculous 1.7.1_beta3 / Prototype 1.5.1
 06.APR.07
     NEW: 'jax/docs/changelog.txt'
 05.APR.07

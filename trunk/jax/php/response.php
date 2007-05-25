@@ -186,7 +186,7 @@ switch ($request_type) {
 //close the database
 $database->close ($database);
 
-//output the encoded string
-echo json_encode ($output);
+//output the encoded string (with Prototype security marker to help prevent XSS)
+echo "/*-secure-\n".json_encode($output)."\n*/";
 	
 /* === end of line ==================================================================================================== */ ?>

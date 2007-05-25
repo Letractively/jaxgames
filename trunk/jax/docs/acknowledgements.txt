@@ -15,7 +15,6 @@ Many thanks go to these people, and their contributions:
 [Javascript]
 * Sam Stephenson, Prototype javascript framework <prototypejs.org> and contributors
 * Thomas Fuchs <mir.aculo.us> Scriptaculous javascript framework <script.aculo.us> and contributors
-* The blogger of unfocus.com for Prototype-compatible json.js <unfocus.com/projects/source/Javascript/json.js>
 * Douglas Crockford, JSLint <jslint.com>
 
 [Server]
@@ -24,6 +23,7 @@ Many thanks go to these people, and their contributions:
 * SQLite, <sqlite.org>
 
 [Depreciated]
+* The blogger of unfocus.com for Prototype-compatible json.js <unfocus.com/projects/source/Javascript/json.js>
 * DarkCryst, SACK <twilightuniverse.com/resources/code/sack/> no longer used, but was integral to getting this far
 * Andrea Giammarchi, PHPSerializer <devpro.it/javascript_id_102.html> no longer used, but was integral early on
 

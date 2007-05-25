@@ -399,8 +399,7 @@ shared.chat = {
                 //make the chat section visible
                 $("shared-chat").show ();
                 //clear the chatbox textarea as Firefox will remember the field value on refresh
-                //TODO: change this to `.blank ();` with Prototype 1.5.1
-                if (!e_chat_input.value) {
+                if (e_chat_input.value.blank ()) {
                         e_chat_input.clear ();
                         e_chat_label.show ();
                 }
@@ -437,8 +436,7 @@ shared.chat = {
                 //when focus on the textbox is lost, put the label back if the textbox is empty
                 Event.observe (e_chat_input, "blur", function(e_event){
                         //if there's only whitespace, consider it blank
-                        //TODO: switch to using `.blank ();` with Prototype 1.5.1
-                        if (!e_chat_input.value.replace(/^\s*|\s*$/g,"")) {
+                        if (e_chat_input.value.blank ()) {
                                 e_chat_input.clear ();
                                 e_chat_label.show ();
                         }
