@@ -4,9 +4,6 @@
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 */
-function include (s_filename) {
-    document.write ('\t<script type="text/javascript" src="'+s_filename+'"></script>\n');
-}
 
 var config = {
         //configurations we'll apply to jax (see 'jax/jax.js')
@@ -17,9 +14,6 @@ var config = {
                 interval : 3
         },
         
-        //array of javascript files to include (ignoring Prototype & Scriptaculous)
-        boot_scripts : ["jax/jax.js", "js/_shared.js"],
-        
         //Scriptaculous settings...
         scriptaculous : {
                 //use the version of Scriptaculous & Prototype provided with Jax Games:
@@ -28,10 +22,10 @@ var config = {
                 use_defaults : true,
                 
                 //location to your own copy of prototype to use
-                //?/custom_prototype : "js/libs/scriptaculous/scriptaculous-js-svn/lib/prototype.js",
-                custom_prototype : "js/libs/scriptaculous/prototype-svn/dist/prototype.js",
+                //?/custom_prototype : "js/_libs/scriptaculous/scriptaculous-js-svn/lib/prototype.js",
+                custom_prototype : "js/_libs/scriptaculous/prototype-svn/dist/prototype.js",
                 //location to your own folder containing a copy of scriptaculous to use (always include end slash)
-                custom_src : "js/libs/scriptaculous/scriptaculous-js-svn/src/",
+                custom_src : "js/_libs/scriptaculous/scriptaculous-js-svn/src/",
                 //you'll have to specify the version number of your own copy
                 custom_version : "1.7.1",
                 

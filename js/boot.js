@@ -17,17 +17,20 @@
    + jax.js        : establish a bridge between two computer users to send AJAX back and forth
    + shared.js     : shared code between all the games
 */
+function include (s_filename) {
+    document.write ('\t<script type="text/javascript" src="'+s_filename+'"></script>\n');
+}
 
 //disable the bsod for developers only. you are expected to use Firebug <getfirebug.com> to trap and view errors
 config.use_bsod = false;
 
 //load Scriptaculous (and Prototype)
 var i = 0, boot_files = [];
-boot_files.push ("js/libs/scriptaculous/scriptaculous.js");
+boot_files.push ("js/_libs/scriptaculous/scriptaculous.js");
 if (config.scriptaculous.use_defaults) {
         //use the provided Scriptaculous bundled with jax (stable)
-        boot_files.push ("js/libs/scriptaculous/prototype.js");
-        boot_files.push ("js/libs/scriptaculous/effects.js");
+        boot_files.push ("js/_libs/scriptaculous/prototype.js");
+        boot_files.push ("js/_libs/scriptaculous/effects.js");
 } else {
         //use user-provided Prototype & Scriptaculous (see 'js/CONFIG.js' for details on this)
         boot_files.push (config.scriptaculous.custom_prototype);
@@ -44,18 +47,17 @@ if (config.scriptaculous.use_defaults) {
 //liberally use Firebug features in the code (except `debugger;`) without breaking the release version
 if (!IN_RHINO) {
         if (!("console" in window) || !("firebug" in console)) {
-                boot_files.push ("js/libs/firebug/firebug.js");
+                boot_files.push ("js/_libs/firebug/firebug.js");
         }
         
         //include Shuns excellent dump script. use `dump (any_var);` to get a block display of an object/array
-        boot_files.push ("js/libs/dump_src.js");
+        boot_files.push ("js/_libs/dump_src.js");
 } else {
-        boot_files.push ("js/libs/firebug/firebugx.js");
+        boot_files.push ("js/_libs/firebug/firebugx.js");
 }
 
-
-//load the rest of the boot scripts (see 'js/CONFIG.js')
-for (i=0; i<config.boot_scripts.length; i++) {boot_files.push (config.boot_scripts[i]);}
+//load the rest of the boot scripts
+boot_files.push ("jax/jax.js", "js/_shared.js");
 
 //---------------------------------------------------------------------------------------------------------------------------
 //now include all the scripts chosen above:
