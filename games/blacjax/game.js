@@ -54,9 +54,6 @@ var game = {
         /* > load : called for you on page load (see shared.js)
            =============================================================================================================== */
         load : function () {
-                //write out all the cards to the page to load the images ready for when they need to appear. this reduces
-                //flicker as the card images are cached and do not have to load on each new appearance
-                this.pack.cache ();
         },
         
         /* ===============================================================================================================
@@ -476,7 +473,8 @@ game.events = {
                 ;
                 
                 //alert the other player to the card you chose. this is the most important, and most confusing aspect of this
-                //game. see the function underneath the game object for where the other player picks up this signal
+                //game. see the "game card chosen" listen function underneath the game object for where the other player
+                //picks up this signal
                 jax.sendToQueue ("game_card_chosen", {card: card_name});
                 
                 //first, move all the cards in the hand back to normal places

@@ -9,6 +9,8 @@
 h1      {border-bottom: solid 1px #010801;}
 h1 span {visibility: hidden;}
 
+#cache  {position: absolute; top: -4999px; left: -4999px;}
+
 #shared-gamearea 
         {position: absolute; top: 45px; left: 0; width: 512px; height: 384px; overflow: hidden;}
 
