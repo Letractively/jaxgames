@@ -18,7 +18,7 @@ var config = {
         },
         
         //array of javascript files to include (ignoring Prototype & Scriptaculous)
-        boot_scripts : ["jax/jax.js", "js/shared.js"],
+        boot_scripts : ["jax/jax.js", "js/_shared.js"],
         
         //Scriptaculous settings...
         scriptaculous : {
