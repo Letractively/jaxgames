@@ -2,13 +2,12 @@
 Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 26.MAY.07
-    ADD: [Project] Build system overhaul (still in progress). game.js now chains together the scripts for the game so that
-         1) only one script entry is needed in index.php, and 2) the build system can now read those included scripts from
-         game.js and replace game.js with the merged copy - reducing the number of js files to load separately in the
-         compressed site. This also works for CSS files, merging in any @import commands. Files that exist only in the source
-         code, and not in the compressed output (because of said merging) are prefixed with underscore. Where before, we were
-         loading "cards.js", "classes.js" & "game.js" for Blacjax, we are now only loading a single merged "game.js" (in the 
-         compressed site)
+    ADD: [Project] Build system overhaul (still in progress). game.js now simply "includes" the scripts for the game so that
+         the build system can read those included scripts from game.js and replace game.js with the merged copy - reducing 
+         the number of js files to load in the compressed site. This also works for CSS files, merging in any @import
+         commands. Files that exist only in the source code, and not in the compressed output (because of said merging) are
+         prefixed with underscore. Where before, we were loading "cards.js", "classes.js" & "game.js" for Blacjax, we are now
+         only loading a single merged "game.js" (in the compressed site)
     ADD: [Blacjax] Used Thomas Fuch's improved shuffle routine
 25.MAY.07
     ADD: [Blacjax] Switched to using a sprite sheet for the cards for quicker load times
@@ -81,7 +80,7 @@ Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing
 09.MAR.07
     ADD: [Project] Upgraded to Creative Commons 3.0 licence
     FIX: [Build] Updated '_build/headers/boot.js' for Scriptaculous 1.7.0
-    FIX: [Blacjax] Hand cursor when mouse over card, but not when in `:hover` state (occurs when flicking between two windows)
+    FIX: [Blacjax] Hand cursor when mouse over card, but not when in `:hover` state (occurs when flicking between windows)
     FIX: [Blacjax, Othello] Clicking Resign at the end left the screen blank for the local player
     ADD: [Blacjax, Othello] Changed the game over message to be on the heads-up message instead of the playerStatus
     NEW: [Project] New release on Google Code

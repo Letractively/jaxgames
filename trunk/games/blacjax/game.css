@@ -33,6 +33,6 @@ h1 {background-image: url("images/title.png");}
 .card-hover     {top: -5px !important;}
 .card-disabled  {cursor: not-allowed !important;}
 
-@import "../../css/cards.css";
+@import "../../css/_cards.css";
 
 /* === end of line ======================================================================================================= */
