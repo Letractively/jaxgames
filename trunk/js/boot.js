@@ -34,7 +34,7 @@ if (config.scriptaculous.use_defaults) {
 } else {
         //use user-provided Prototype & Scriptaculous (see 'js/CONFIG.js' for details on this)
         boot_files.push (config.scriptaculous.custom_prototype);
-        for (i=0; i<config.boot_scripts.length; i++) {
+        for (i=0; i<config.scriptaculous.includes.length; i++) {
                 boot_files.push (config.scriptaculous.custom_src+config.scriptaculous.includes[i]+".js");
         }
 }

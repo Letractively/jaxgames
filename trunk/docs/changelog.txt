@@ -2,6 +2,7 @@
 Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 26.MAY.07
+    FIX: boot.js incorrectly using length of `boot_scripts` to inject `config.scriptaculous.includes`
     ADD: [Project] Build system overhaul (still in progress). game.js now simply "includes" the scripts for the game so that
          the build system can read those included scripts from game.js and replace game.js with the merged copy - reducing 
          the number of js files to load in the compressed site. This also works for CSS files, merging in any @import
