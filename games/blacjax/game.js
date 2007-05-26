@@ -1,3 +1,3 @@
-include ("../../js/cards.js");
-include ("classes.js");
-include ("blacjax.js");
+include ("../../js/_cards.js");
+include ("_classes.js");
+include ("_blacjax.js");
