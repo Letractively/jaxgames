@@ -1,2 +1,2 @@
 include ("../../js/_board.js");
-include ("othello.js");
+include ("_othello.js");
