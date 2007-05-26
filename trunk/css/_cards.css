@@ -1,8 +1,4 @@
 /* === css sprite sheet references for cards ============================================================================= */
-.card    {position:absolute; width: 71px; height: 96px;
-	  background-image: url("../games/-/cards/cards.png");
-	  background-repeat: no-repeat;}
-
 .card-bk {background-position: -923px  -96px;}
 
 .card-AS {background-position:    0      0;}
