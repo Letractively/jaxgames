@@ -18,7 +18,7 @@
 # change directory, to the directory of this script
 # (because double clicking on this script uses home directory instead)
 cd "`dirname "$0"`"
-# pwd always gives absolute paths.
+# 'Present Working Directory' always gives absolute paths.
 WORKING_DIR="`pwd`"
 
 # log to file, and display on stdout at the same time
@@ -153,19 +153,19 @@ cd ../..
 echo "-------------------------------------------------------------------------------"
 
 # [4]:
-# merge together scripts and css into one to increase speed and reduce file sizes
-echo "[4] merge javascript and css files"
+# combine together scripts and css into one to increase speed and reduce file sizes
+echo "[4] combine javascript and css files"
 echo "-------------------------------------------------------------------------------"
-echo "* merge libraries for boot.js..."
-java -jar ./libs/custom_rhino.jar ./libs/makeboot.js
-if [ $? -gt 0 ]; then echo "! merging of libraries for boot.js failed"; exit 4; fi
+echo "* combine libraries for boot.js..."
+java -jar ./libs/custom_rhino.jar ./libs/rhino_makeboot.js
+if [ $? -gt 0 ]; then echo "! combining of libraries for boot.js failed"; exit 4; fi
 
 echo ""
-echo "* merge game javascripts and css..."
-for FILE in `find ./release/source -regex "\.\/[^_]*game\..*"`
+echo "* combine game javascripts and css..."
+for FILE in `find -E ./release/source -regex "\.\/[^_]*\.(js|css)"`
 do
-	java -jar ./libs/custom_rhino.jar ./libs/flatten.js "$FILE"
-	if [ $? -gt 0 ]; then echo "! merging of $FILE's dependecies failed"; exit 4; fi
+	java -jar ./libs/custom_rhino.jar ./libs/rhino_include.js "$FILE"
+	if [ $? -gt 0 ]; then echo "! combining of $FILE's dependecies failed"; exit 4; fi
 done
 echo "-------------------------------------------------------------------------------"
 
@@ -182,8 +182,8 @@ mkdir ./jaxgames
 # -r = recurse into directories
 # --times = keep modified times (makes syncing a copy with FTP easier)
 # --delete-excluded = delete any files in release folder that are no longer in the original
-# --exclude-from = list of files/folders to ignore when copying (read excludes.txt)
-rsync -r --times --delete-excluded --exclude-from=./../libs/excludes.txt ./source/* ./jaxgames
+# --exclude-from = list of files/folders to ignore when copying (read rsync_excludes.txt)
+rsync -r --times --delete-excluded --exclude-from=./../libs/rsync_excludes.txt ./source/* ./jaxgames
 if [ $? -gt 0 ]; then echo "! copying of source to release directory failed"; exit 5; fi
 # make the database directory writeable, in case you want to run the release locally to test
 chmod -R 777 ./jaxgames/jax/db
@@ -213,7 +213,7 @@ echo "--------------------------------------------------------------------------
 # the packer will generally producer _larger_ files when feeding it very small files to begin with
 for FILE in `find ./release/jaxgames -size +4000c -regex "\.\/[^_]*\.js"`
 do
-	java -jar ./libs/custom_rhino.jar ./libs/packer.js "$FILE" "$FILE"
+	java -jar ./libs/custom_rhino.jar ./libs/rhino_packer.js "$FILE" "$FILE"
 	if [ $? -gt 0 ]; then echo "! compressing of $FILE failed"; exit 7; fi
 done
 echo "-------------------------------------------------------------------------------"
@@ -223,12 +223,12 @@ echo "--------------------------------------------------------------------------
 echo "[8] add headers"
 echo "-------------------------------------------------------------------------------"
 # boot.js has its own header as it contains all the third party libraries
-java -jar ./libs/custom_rhino.jar ./libs/merge.js ./headers/boot.js ./release/jaxgames/js/boot.js ./release/jaxgames/js/boot.js
+java -jar ./libs/custom_rhino.jar ./libs/rhino_combine.js ./headers/boot.js ./release/jaxgames/js/boot.js ./release/jaxgames/js/boot.js
 if [ $? -gt 0 ]; then echo "! adding header to boot.js failed"; exit 8; fi
 # find all javascript files (ignoring boot.js and folders starting with underscore). these use the standard header
 for FILE in `find ./release/jaxgames -regex "\.\/[^_]*[^(?:boot)]\.js"`
 do
-	java -jar ./libs/custom_rhino.jar ./libs/merge.js ./headers/jaxgames.js "$FILE" "$FILE"
+	java -jar ./libs/custom_rhino.jar ./libs/rhino_combine.js ./headers/jaxgames.js "$FILE" "$FILE"
 	if [ $? -gt 0 ]; then echo "! adding header to $FILE failed"; exit 8; fi
 done
 echo "-------------------------------------------------------------------------------"

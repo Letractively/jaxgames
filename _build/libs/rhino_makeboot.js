@@ -12,4 +12,4 @@ for (i=0; i<boot_files.length; i++) {
 
 argv.push ("./release/source/js/boot.js");
 
-load ('./libs/merge.js');
+load ('./libs/rhino_combine.js');

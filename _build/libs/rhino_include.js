@@ -18,7 +18,7 @@ var path  = argv[0].substr (0, argv[0].lastIndexOf("/")+1),
 //read specified file
 var read_file = readFile (argv[0]);
 if (read_file.match (regex)) {
-        print ("  merging "+argv[0]+" ("+formatFileSize(read_file.length)+") dependencies...");
+        print ("  combining "+argv[0]+" ("+formatFileSize(read_file.length)+") dependencies...");
 
         //replace any include / @import commands with the actual files referenced
         read_file = read_file.replace (
