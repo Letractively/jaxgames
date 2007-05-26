@@ -4,6 +4,10 @@
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 */
+function include (s_filename) {
+    document.write ('\t<script type="text/javascript" src="'+s_filename+'"></script>\n');
+}
+
 var config = {
         //configurations we'll apply to jax (see 'jax/jax.js')
         jax : {
@@ -41,6 +45,8 @@ var config = {
         //error has actually occured, instead of the game just hanging mid-play with no indication that it has failed
         use_bsod : true
 };
+
+IN_RHINO = false;
 
 //=== end of line ===========================================================================================================
 //                                                                                                        next » 'js/boot.js'

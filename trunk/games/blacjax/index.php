@@ -8,12 +8,17 @@
 	<!-- === this game ============================================================================================== -->
 	<link rel="stylesheet" type="text/css" href="game.css" /><!-- ........... styles for this game .................. -->
 	<link rel="stylesheet" type="text/css" href="../../css/cards.css" /><!--  sprite slices for cards ............... -->
-	<script type="text/javascript" src="../../js/cards.js">/* ............... playing cards classes ......... */</script>
+<!--	<script type="text/javascript" src="../../js/cards.js">/* ............... playing cards classes ......... */</script>
 	<script type="text/javascript" src="classes.js">/* ...................... game classes .................. */</script>
-	<script type="text/javascript" src="game.js">/* ......................... game logic .................... */</script>
+	<script type="text/javascript" src="game.js">/* ......................... game logic .................... */</script>-->
+	<script type="text/javascript" src="boot.js">/* ......................... game logic .................... */</script>
 </head>
 <body><div id="body">
 	<h1><span>Blacjax</span></h1>
+	<div id="cache">
+		<img src="../-/cards/place.png" width="71" height="96" alt="place" />
+		<img src="../-/cards/cards.png" width="994" height="384" alt="cards" />
+	</div>
 	<div id="shared-gamearea">
 		<!-- === title = title screen, start or join a game ===================================================== -->
 		<div id="page-title" style="display:none;">

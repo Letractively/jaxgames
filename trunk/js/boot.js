@@ -13,7 +13,6 @@
 
    + Prototype     : extends core javascript functionality to reduce the amount of genereal code everywhere
    + Scriptaculous : provides animation and effects
-   + json          : turn an array/object in a string and back again - for sending and receiving javascript over AJAX
    + Firebug Lite  : javascript logger and command line
    + jax.js        : establish a bridge between two computer users to send AJAX back and forth
    + shared.js     : shared code between all the games
@@ -36,8 +35,6 @@ if (config.scriptaculous.use_defaults) {
                 boot_files.push (config.scriptaculous.custom_src+config.scriptaculous.includes[i]+".js");
         }
 }
-//load the rest of the boot scripts (see 'js/CONFIG.js')
-for (i=0; i<config.boot_scripts.length; i++) {boot_files.push (config.boot_scripts[i]);}
 
 
 /* developer only tools:
@@ -45,17 +42,27 @@ for (i=0; i<config.boot_scripts.length; i++) {boot_files.push (config.boot_scrip
 //if Firebug is not installed in Firefox, use Firebug Lite
 //in the compressed release, firebugx.js would be included instead to ignore the `console.*` calls. therefore you can
 //liberally use Firebug features in the code (except `debugger;`) without breaking the release version
-if (!("console" in window) || !("firebug" in console)) {
-        boot_files.push ("js/libs/firebug/firebug.js");
+if (!IN_RHINO) {
+        if (!("console" in window) || !("firebug" in console)) {
+                boot_files.push ("js/libs/firebug/firebug.js");
+        }
+        
+        //include Shuns excellent dump script. use `dump (any_var);` to get a block display of an object/array
+        boot_files.push ("js/libs/dump_src.js");
+} else {
+        boot_files.push ("js/libs/firebug/firebugx.js");
 }
 
-//include Shuns excellent dump script. use `dump (any_var);` to get a block display of an object/array
-boot_files.push ("js/libs/dump_src.js");
+
+//load the rest of the boot scripts (see 'js/CONFIG.js')
+for (i=0; i<config.boot_scripts.length; i++) {boot_files.push (config.boot_scripts[i]);}
 
 //---------------------------------------------------------------------------------------------------------------------------
 //now include all the scripts chosen above:
-for (i=0; i<boot_files.length; i++) {
-        document.write('\t<script type="text/javascript" src="../../'+boot_files[i]+'"></script>\n');
+if (!IN_RHINO) {
+        for (i=0; i<boot_files.length; i++) {
+                include ("../../"+boot_files[i]);
+        }
 }
 
 //=== end of line ===========================================================================================================

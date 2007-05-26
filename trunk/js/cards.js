@@ -66,20 +66,6 @@ Pack.prototype = {
                 return (suit == "J") ? (s_card.substr (0,1) == "B" ? "black" : "red")
                                      : (suit == "S" || suit == "C" ? "black" : "red")  //else Spades or Clubs = Black
                 ;
-        },
-        
-        /* > cache : inject all card images into the page, hidden off screen
-           =============================================================================================================== */
-        cache : function () {
-                var html = '\t<div style="position:absolute;top:-4999px;">\n'
-                         + '\t\t<img src="../-/cards/place.png" width="71" height="96" alt="place" />\n'  //place holder
-                ;
-                /*!/this.cards.each (function(s_card){
-                        html += '\t\t<img src="../-/cards/'+s_card+'.png" width="71" height="96" alt="'+s_card+'" />\n';
-                });*/
-                html += '\t\t<img src="../-/cards/cards.png" width="994" height="384" alt="cards" />\n';
-                html += "\t</div>\n";
-                new Insertion.Top ("body", html);
         }
 };
 
@@ -129,13 +115,7 @@ Deck.prototype = {
         /* > shuffle : shuffle the cards in the deck
            =============================================================================================================== */
         shuffle : function () {
-                var i = this.cards.length, j, t;
-                while (i) {
-                        j = Math.floor ((i--) * Math.random ());
-                        t = this.cards[i];
-                        this.cards[i] = this.cards[j];
-                        this.cards[j] = t;
-                }
+                this.cards = this.cards.sortBy (Math.random);
         },
         
         /* > jax_deck.drawCard : take a card off of the deck

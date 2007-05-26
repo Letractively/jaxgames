@@ -180,6 +180,7 @@ java -jar ./libs/custom_rhino.jar ./libs/makeboot.js
 if [ $? -gt 0 ]; then echo "! merging of libraries for boot.js failed"; exit 5; fi
 echo "-------------------------------------------------------------------------------"
 
+
 # [6]:
 # run it through the dojo compressor, this will strip the comments and do other optimisations
 echo "[6] compact scripts"

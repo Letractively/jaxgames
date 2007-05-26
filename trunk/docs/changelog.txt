@@ -1,6 +1,8 @@
 =============================================================================================================================
 Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+26.MAY.07
+	ADD: [Blacjax] Used Thomas Fuch's improved shuffle routine
 25.MAY.07
     ADD: [Blacjax] Switched to using a sprite sheet for the cards for quicker load times
     FIX: [Blacjax] Empty message on headsup when 8 is put down on same suit, now says "Another Go"
