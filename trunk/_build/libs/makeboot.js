@@ -10,6 +10,6 @@ for (i=0; i<boot_files.length; i++) {
         argv.push ("../"+boot_files[i]);
 }
 
-argv.push ("./release/jaxgames/js/boot.js");
+argv.push ("./release/source/js/boot.js");
 
 load ('./libs/merge.js');
