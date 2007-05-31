@@ -508,7 +508,7 @@ shared.chat = {
                     }
                 ;
                 //parse the message for markup, emoticons and urls
-                chat_msg.text = this.applyMarkup( this.applyEmoticons( this.linkURLs(chat_msg.text) ) );
+                chat_msg.text = this.applyFormatting (chat_msg.text);
                 
                 //add the message to the chat history. `Insertion.Bottom` is used (instead of `.innerHTML+=`) so that 
                 //multiple messages coming in at the same time don't overwrite each other
@@ -521,6 +521,41 @@ shared.chat = {
                         //and again on the last frame
                         e.scrollTop = e.scrollHeight;
                 }});
+        },
+        
+        /* > applyFormatting : parse the text for markup to be replaced with HTML (URLs, emoticons &c.)
+           ================================================================================================================
+           params * s_msg  : text to parse for formatting
+           return * string : same text, but formatted with HTML
+           =============================================================================================================== */
+        applyFormatting : function (s_msg) {
+                //first of all, find any URLs and turn into HTML hyperlinks
+                s_msg = this.linkURLs (s_msg);
+                
+                //this private function runs a given function on the messages, sans HTML tags
+                //this is needed to prevent letters in a hyperlink turning into an emoticon &c.
+                var _applySansTags = function (s_text, f_apply) {
+                        var regex = /<[^<>]+>/gi,        //regex to find only html tags
+                            tags  = s_text.match (regex)  //find all html tags and remember them for later
+                        ;
+                        if (tags) {
+                                //temporarily replace all html tags with "<^>" so that the emoticon replace will not
+                                //accidently break the ":/" in "http://" etc. just don't create an "<^>" emoticon!
+                                s_text = s_text.replace (regex, "<^>");
+                        }
+                        //run the provided function on the message, now without legible HTML tags
+                        s_text = f_apply (s_text);
+                        //put the html tags back (if there were any)
+                        if (tags) {
+                                tags.each (function(s_html){ s_text = s_text.replace ("<^>", s_html); });
+                        }
+                        return s_text;
+                }.bind(this);
+                
+                s_msg = _applySansTags (s_msg, this.applyEmoticons.bind(this));  //parse for emoticons
+                s_msg = _applySansTags (s_msg, this.applyMarkup.bind(this));     //parse for markup
+                
+                return s_msg;
         },
         
         /* > linkURLs : change raw urls in a message into html hyperlinks
@@ -555,9 +590,9 @@ shared.chat = {
            return * string : same text, but with markup replaced with relevant html tags
            =============================================================================================================== */
         applyMarkup : function (s_msg) {
-                return s_msg.replace (/\*(.*)\*(?!.*>)/, '<strong>$1</strong>')        //"*bold*"
-                            .replace (/\/(.*)\/(?!.*>)/, '<em>$1</em>')                //"/italic/"
-                            .replace (/_(.*)_(?!.*>)/,   '<span class="u">$1</span>')  //"_underline_"
+                return s_msg.replace (/\*(.*)\*/, '<strong>$1</strong>')        //"*bold*"
+                            .replace (/\/(.*)\//, '<em>$1</em>')                //"/italic/"
+                            .replace (/_(.*)_/,   '<span class="u">$1</span>')  //"_underline_"
                 ;
         },
         
@@ -567,23 +602,11 @@ shared.chat = {
            return * string : same text, but with ascii emoticons replaced with html images
            =============================================================================================================== */
         applyEmoticons : function (s_msg) {
-                var regex = /<[^<>]+>/gi,        //regex to find only html tags
-                    tags  = s_msg.match (regex)  //find all html tags and remember them for later
-                ;
-                if (tags) {
-                        //temporarily replace all html tags with "<^>" so that the emoticon replace will not accidently
-                        //break the ":/" in "http://" etc. just don't create an "<^>" emoticon!
-                        s_msg = s_msg.replace (regex, "<^>");
-                }
                 //loop over each emote and replace any instances of it
                 this.emotes.each (function(o_emote){
                         //replace the emote with the image
                         s_msg = s_msg.replace (o_emote.regex, shared.templates.chat_emote.evaluate(o_emote));
                 });
-                if (tags) {
-                        //put the html tags back
-                        tags.each (function(s_html){ s_msg = s_msg.replace ("<^>", s_html); });
-                }
                 return s_msg;
         }
 };

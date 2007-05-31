@@ -83,7 +83,7 @@ function isConnectionIDValid ($s_connid) {
 	if (empty ($s_connid) || strlen ($s_connid) != 6) {return false;}
 	//check if the letters are valid
 	for ($n=0; $n<6; $n++) {
-		if (strpos ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', substr($s_connid, $n, 1)) == false) {
+		if (strpos ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', substr($s_connid, $n, 1)) === false) {
 			return false;
 		}
 	}

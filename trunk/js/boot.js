@@ -16,12 +16,25 @@
    + Firebug Lite  : javascript logger and command line
    + jax.js        : establish a bridge between two computer users to send AJAX back and forth
    + shared.js     : shared code between all the games
+*//*
+   also, the build system actually loads and runs this very page itself to select which javascripts to merge. this is where
+   the `IN_RHINO` flag states whether this page is running in the browser, or inside the build system. this flag is only
+   valid on this page, and has no effect anywhere else in the codebase
 */
+
+/* > include : load another javascript file
+   ======================================================================================================================= */
 function include (s_filename) {
-    document.write ('\t<script type="text/javascript" src="'+s_filename+'"></script>\n');
+        //this function (or at least its name) is vital to the build process. files that call this function will have the
+        //referenced file injected at that point, reducing the number of javascript files loaded in the compiled project.
+        //this increases the compression factor, and reduces the number of http requests, speeding up loading times
+        document.write ('\t<script type="text/javascript" src="'+s_filename+'"></script>\n');
 }
 
-//disable the bsod for developers only. you are expected to use Firebug <getfirebug.com> to trap and view errors
+
+//disable the bsod for developers only. you are expected to use Firebug <getfirebug.com> to trap and view errors. the bsod
+//is, as its name implies, a replica blue screen of death that appears when a fatal javascript error occurs. this is so that
+//the end user can see the game has crashed, instead of 
 config.use_bsod = false;
 
 //load Scriptaculous (and Prototype)
@@ -40,19 +53,19 @@ if (config.scriptaculous.use_defaults) {
 }
 
 
-/* developer only tools:
-   ======================================================================================================================= */
-//if Firebug is not installed in Firefox, use Firebug Lite
-//in the compressed release, firebugx.js would be included instead to ignore the `console.*` calls. therefore you can
-//liberally use Firebug features in the code (except `debugger;`) without breaking the release version
+/* === developer only tools: ============================================================================================= */
+//if running in the browser...
 if (!IN_RHINO) {
+        //if Firebug is not installed in Firefox, use Firebug Lite
         if (!("console" in window) || !("firebug" in console)) {
                 boot_files.push ("js/_libs/firebug/firebug.js");
         }
-        
         //include Shuns excellent dump script. use `dump (any_var);` to get a block display of an object/array
         boot_files.push ("js/_libs/dump_src.js");
+        
 } else {
+        //in the compressed release, firebugx.js is included instead to ignore the `console.*` calls. therefore you can
+        //liberally use Firebug features in the code (except `debugger;`) without breaking the release version
         boot_files.push ("js/_libs/firebug/firebugx.js");
 }
 
@@ -60,7 +73,8 @@ if (!IN_RHINO) {
 boot_files.push ("jax/jax.js", "js/_shared.js");
 
 //---------------------------------------------------------------------------------------------------------------------------
-//now include all the scripts chosen above:
+//now include all the scripts chosen above. not required in the build system, as it will take the `boot_files` array we've
+//built and compress them together. see "/_build/libs/rhino_makeboot.js"
 if (!IN_RHINO) {
         for (i=0; i<boot_files.length; i++) {
                 include ("../../"+boot_files[i]);
