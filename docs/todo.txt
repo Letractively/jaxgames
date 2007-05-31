@@ -19,7 +19,7 @@ Website:
 Shared:
 -----------------------------------------------------------------------------------------------------------------------------
 * P1 * Entering the join key should not be case sensitive. Join key must be validated locally and on server
-* P1 * Bug: If last card is a red jack, the cancel headsup interferes with the "You Lost" message.  
+* P1 * Bug: If last card is a red jack, the cancel headsup interferes with the "You Lost" message.
 * P2 * 4 games created
 * P2 * Start Game should disable "Cancel"/"Start Game" buttons whilst checking for result, and show a spinner
 * P2 * Join Game should disable "Cancel"/"Join Game" buttons whilst checking for result, and show a spinner

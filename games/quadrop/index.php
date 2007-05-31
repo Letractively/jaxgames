@@ -7,7 +7,6 @@
 	<?php include ("../-/inc/head.html");?>
 	<!-- === this game ============================================================================================== -->
 	<link rel="stylesheet" type="text/css" href="game.css" /><!-- ........... styles for this game .................. -->
-	<script type="text/javascript" src="../../js/board.js">/* ............... game board class .............. */</script>
 	<script type="text/javascript" src="game.js">/* ......................... game logic .................... */</script>
 </head>
 <body><div id="body">

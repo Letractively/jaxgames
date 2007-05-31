@@ -1,8 +1,17 @@
 =============================================================================================================================
 Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+31.MAY.07
+    FIX: Issue #16. Unable to join game with '0' (Zero) in key
+    FIX: Issue #6. "/"s in html tags triggering "/italic/" in chatbox messages. Also now supports formatting within
+         formatting. e.g. "*bold /italic _underline_ italic/ bold*"
+27.MAY.07
+    FIX: [Quadrop] Updated files to use the "include" build system
+    ADD: [Project] Correct headers for the "game.js" files
+    NEW: [Build] Added "about.txt" describing build process
+    ADD: [Build] "_build" now included in the source code distribution archive "jax-games-src.zip/rar"
 26.MAY.07
-    FIX: boot.js incorrectly using length of `boot_scripts` to inject `config.scriptaculous.includes`
+    FIX: [Shared] "boot.js" incorrectly using length of `boot_scripts` to inject `config.scriptaculous.includes`
     ADD: [Project] Build system overhaul (still in progress). game.js now simply "includes" the scripts for the game so that
          the build system can read those included scripts from game.js and replace game.js with the merged copy - reducing 
          the number of js files to load in the compressed site. This also works for CSS files, merging in any @import

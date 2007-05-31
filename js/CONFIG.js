@@ -15,7 +15,7 @@ var config = {
         
         //Script.aculo.us animation settings...
         scriptaculous : {
-                //use the version of Scriptaculous & Prototype provided with Jax Games:
+                //use the version of Scriptaculous & Prototype provided with Jax Games?
                 //if set to false, the custom locations below will be used to load them. this is so you can test with
                 //unreleased/custom versions of scriptaculous & prototype with little hassle
                 use_defaults : true,
@@ -29,7 +29,7 @@ var config = {
                 custom_version : "1.7.1.svn",
                 
                 //an array of which Scriptaculous libraries to include, sans extension (if use_defaults = false)
-                //?/includes : ["builder", "effects", "dragdrop", "controls", "slider"]  //all of Scriptaculous
+                //?/includes : ["builder", "effects", "dragdrop", "controls", "slider", "sound"]  //all of Scriptaculous
                 includes : ["effects"]  //just the effects only please
         },
         
@@ -39,6 +39,9 @@ var config = {
         use_bsod : true
 };
 
+//do not change this value. rhino is the java based javascript engine the build process runs on, which includes this script,
+//then overrides the below value (see "/_build/libs/rhino_makeboot.js") so that boot.js may use a different configuration
+//when building the compressed version of the project
 IN_RHINO = false;
 
 //=== end of line ===========================================================================================================
