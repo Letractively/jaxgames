@@ -73,11 +73,10 @@ A: The best way to know is to look at the source code, but here is an overview o
           
           If a game only requires one Javascript file for everything, then "game.js" will contain all the code for the game.
           However, in most instances "games.js" is much like "boot.js", in that its only function is to load the other
-          Javascript files the game actually uses. In the exmaple of Blacjax, the file looks like this:
+          Javascript files the game actually uses. In the exmaple of Othello, the file looks like this:
           
-          include ("../../js/_cards.js");
-          include ("_classes.js");
-          include ("_blacjax.js");
+          include ("../-/_js/_board.js");
+          include ("_othello.js");
           
           The `include` Javascript function is defined in "boot.js", and simply loads another Javascript file.
           In the build process however, Javascript files are scanned for this include function, and where it appears the

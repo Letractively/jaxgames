@@ -37,7 +37,7 @@ var game = {
         name    : "Othello",  //a user-seen name for your game. required, as used in shared.js
         version : "0.3.0",
         
-        board   : new Board ("game-board"),  //the game board (default size of 8x8 will be used), see board.js
+        board   : new Board ("game-board"),  //the game board (default size of 8x8 will be used), see '_board.js'
         pieces  : [],                        //the layout of pieces on the board
         
         templates : {

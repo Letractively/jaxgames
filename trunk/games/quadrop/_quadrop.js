@@ -33,7 +33,7 @@ var game = {
         name    : "Quadrop",
         version : "0.1.0",
         
-        grid   : new Board ("game-grid", 7, 6),  //the game grid, a board of 7x6. see board.js
+        grid   : new Board ("game-grid", 7, 6),  //the game grid, a board of 7x6. see '_board.js'
         pieces  : [],                            //the layout of pieces on the grid
         
         /* > load : called for you on page load (see shared.js)
