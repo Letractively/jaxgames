@@ -4,7 +4,7 @@
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 */
-@import "../../css/_cards.css";
+@import "../-/css/_cards.css";
 
 h1 {background-image: url("images/title.png");}
 
