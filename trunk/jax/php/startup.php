@@ -37,7 +37,7 @@ $session_id = session_id ();
 //get what is requested
 $request_type = request ('request_type');
 
-require_once 'CONFIG.php';  //user configuration, edit that page to change database location etc.
+require_once 'CONFIG.php';  //user configuration, edit that page to change database location &c.
 require_once 'sqlite.php';  //include the database class
 //---------------------------------------------------------------------------------------------------------------------------
 

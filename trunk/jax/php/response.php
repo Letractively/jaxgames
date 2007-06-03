@@ -12,7 +12,7 @@
 	+ purge the database of unused entries when it grows above specified size (64Kb?)
 	+ impose a 4kb (configurable) limit on each incoming message
 	+ thorough error handling and validation
-	+ try to prevent request abuse / hijacking others connections / XSS etc.
+	+ try to prevent request abuse / hijacking others connections / XSS &c.
 */
 //do all the common startup
 require_once "startup.php";

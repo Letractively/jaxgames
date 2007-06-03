@@ -157,7 +157,7 @@ Jax.prototype = {
                 this._.callbax[s_datatype] = f_callback;
         },
 
-        /* > sendRequest : send a direct request to the server (to setup and join games, etc.)
+        /* > sendRequest : send a direct request to the server (to setup and join games, &c.)
            ==============================================================================================================
            params * s_type       : a string labelling the data being sent. e.g. jax_chat_message
                     o_request    : an object literal containing key:value pairs to send to the server 

@@ -1,6 +1,6 @@
 #rsync_excludes.txt - files/folders to exclude when copying to "_build/release/source/" folder (using rsync)
 
-#ignore hidden files starting with a '.', e.g. SVN, .DS_STORE etc. also ignore Windows Thumbs.db files
+#ignore hidden files starting with a '.', e.g. SVN, .DS_STORE &c. also ignore Windows Thumbs.db files
 .*
 *.db
 

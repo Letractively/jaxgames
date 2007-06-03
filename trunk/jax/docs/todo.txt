@@ -16,11 +16,11 @@ P5 - A niggle
 * P2 * The database should auto-prune old data when it grows too large
 * P2 * If the server times out, give a warning message and try again
 * P3 * PHP4 Compatibility. Ideally detect version, and use a PHP4 json class as appropriate (or output the string directly)
-* P3 * If the server responds with a 403, 404, 500 etc, throw an error message
+* P3 * If the server responds with a 403, 404, 500 &c, throw an error message
 
 
 [2] Feature Suggestions:
 =============================================================================================================================
-* Extra server backends, Ruby, ASP etc. (Somebody else to implement)
+* Extra server backends, Ruby, ASP &c. (Somebody else to implement)
 
 === end of line =============================================================================================================
