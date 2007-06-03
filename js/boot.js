@@ -5,15 +5,15 @@
    jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 *//*
    the code in this page only exists in the source code for jax games. the build system will create a 'release' version of
-   jax games where most of the scripts will be merged and compressed into a single file, replacing boot.js (see '_build/').
-   this means that users will have to download a lot less scripts, speeding up load times. also, this means that additional
-   developer only code and scripts can be loaded here, and will not appear in the release version.
+   jax games where most of the scripts will be merged and compressed into a single file, replacing 'boot.js'
+   (see '_build/about.txt'). this means that users will have to download a lot less scripts, speeding up load times. also,
+   this means that additional developer only code and scripts can be loaded here, and will not appear in the release version.
 *//*
    the build system will take the following scripts and merge them into a replacement boot.js:
 
    + Prototype     : extends core javascript functionality to reduce the amount of genereal code everywhere
    + Scriptaculous : provides animation and effects
-   + Firebug Lite  : javascript logger and command line
+   + Firebug Lite  : javascript logger and command line (ignored if you have Firebug installed in Firefox)
    + jax.js        : establish a bridge between two computer users to send AJAX back and forth
    + shared.js     : shared code between all the games
 *//*
@@ -21,25 +21,26 @@
    the `IN_RHINO` flag states whether this page is running in the browser, or inside the build system. this flag is only
    valid on this page, and has no effect anywhere else in the codebase
 */
+var i = 0, boot_files = [];
 
 /* > include : load another javascript file
    ======================================================================================================================= */
 function include (s_filename) {
         //this function (or at least its name) is vital to the build process. files that call this function will have the
         //referenced file injected at that point, reducing the number of javascript files loaded in the compiled project.
-        //this increases the compression factor, and reduces the number of http requests, speeding up loading times
+        //this increases the compression factor, and reduces the number of http requests, speeding up loading times. for
+        //more details, read '_build/about.txt'
         document.write ('\t<script type="text/javascript" src="'+s_filename+'"></script>\n');
 }
 
 
-//disable the bsod for developers only. you are expected to use Firebug <getfirebug.com> to trap and view errors. the bsod
-//is, as its name implies, a replica blue screen of death that appears when a fatal javascript error occurs. this is so that
-//the end user can see the game has crashed, instead of 
-config.use_bsod = false;
-
-//load Scriptaculous (and Prototype)
-var i = 0, boot_files = [];
+/* === load Scriptaculous (and Prototype) ================================================================================ */
+//load our custom Scriptaculous header. Scriptaculous normally auto-loads its dependencies, which we do not want to do as the
+//compressed version of the site will have everything merged into one. therefore this file just defines the version number
+//and we will load 'effects.js' &c manually to allow complete flexibility
 boot_files.push ("js/_libs/scriptaculous/scriptaculous.js");
+
+//are we going to load the versions provided with jax?
 if (config.scriptaculous.use_defaults) {
         //use the provided Scriptaculous bundled with jax (stable)
         boot_files.push ("js/_libs/scriptaculous/prototype.js");
@@ -54,6 +55,11 @@ if (config.scriptaculous.use_defaults) {
 
 
 /* === developer only tools: ============================================================================================= */
+//disable the bsod for developers only. you are expected to use Firebug <getfirebug.com> to trap and view errors. the bsod
+//is, as its name implies, a replica blue screen of death that appears when a fatal javascript error occurs. this is so that
+//the end user can see the game has crashed, instead of the page just hanging uselessly
+config.use_bsod = false;
+
 //if running in the browser...
 if (!IN_RHINO) {
         //if Firebug is not installed in Firefox, use Firebug Lite
@@ -69,16 +75,15 @@ if (!IN_RHINO) {
         boot_files.push ("js/_libs/firebug/firebugx.js");
 }
 
+
+//---------------------------------------------------------------------------------------------------------------------------
 //load the rest of the boot scripts
 boot_files.push ("jax/jax.js", "js/_shared.js");
 
-//---------------------------------------------------------------------------------------------------------------------------
 //now include all the scripts chosen above. not required in the build system, as it will take the `boot_files` array we've
-//built and compress them together. see "/_build/libs/rhino_makeboot.js"
+//built and compress them together. see '/_build/libs/rhino_makeboot.js'
 if (!IN_RHINO) {
-        for (i=0; i<boot_files.length; i++) {
-                include ("../../"+boot_files[i]);
-        }
+        for (i=0; i<boot_files.length; i++) { include ("../../"+boot_files[i]); }
 }
 
 //=== end of line ===========================================================================================================

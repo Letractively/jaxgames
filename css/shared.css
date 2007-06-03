@@ -1,5 +1,5 @@
 /* =======================================================================================================================
-   css/shared.css - styles shared between all the games (chatcol, etc)
+   css/shared.css - styles shared between all the games (chatcol, &c)
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
@@ -68,7 +68,7 @@ h1 span {visibility: hidden;}
 #shared-chatcol           {position: absolute; top: 45px; left: 512px; width: 127px; height: 384px;
                            border-left: solid 1px #010801; background-color: #dada96;}
 #shared-chat              {font-size: 11px; color: #6E654D;}
-#shared-chat-history      {height: 321px; overflow: auto;}
+#shared-chat-history      {height: 321px; overflow: auto; overflow-x: hidden;}
 
 /* --- the individual messages --- */
 #shared-chat p            {padding: 3px 2px 0 2px; margin: 0; font-style: italic; color: #7f7e45;}

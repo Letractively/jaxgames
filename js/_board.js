@@ -12,7 +12,7 @@
    
    where `var board = new Board ('element');`:
    <table> = #element-table    (class: .board)
-   <col>   = #element-col-X    (where X is column number - 1, 2, 3 etc)
+   <col>   = #element-col-X    (where X is column number - 1, 2, 3 &c)
    <tr>    = #element-row-Y    (where Y is the row number 1 to number of rows)
    <td>    = #element-cell-XxY (where X is the column number and Y is the row number. e.g. #element-cell-3x6)
 */

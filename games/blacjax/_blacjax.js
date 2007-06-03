@@ -44,7 +44,7 @@ var game = {
         deck    : new Deck (),      //create a deck of cards
         
         /* ===============================================================================================================
-           OBJECT pages - show/hide actions for the screens in the game (title screen, game screen, rules screen etc)
+           OBJECT pages - show/hide actions for the screens in the game (title screen, game screen, rules screen &c)
            =============================================================================================================== */
         pages : [
              {name : "title"},

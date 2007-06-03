@@ -80,16 +80,16 @@ var shared = {
            =============================================================================================================== */
         templates : {
                 //template when the player clicks "Start Game" on title screen and must enter their name
-                start_game : '<p><label for="user-name">Name: </label>'+
-                             '<input type="text" name="user-name" id="user-name" maxlength="20" /></p>'+
-                             '<p><a href="#" onclick="javascript:shared.events.titleCancelClick();">Cancel</a> '+
+                start_game : '<p><label for="user-name">Name: </label><input type="text" name="user-name" id="user-name" '+
+                             'maxlength="20" onkeypress="javascript:if(event.keyCode==13){shared.events.startGame();}" />'+
+                             '</p><p><a href="#" onclick="javascript:shared.events.titleCancelClick();">Cancel</a> '+
                              '<a href="#" onclick="javascript:shared.events.startGame();">Start Game</a></p><br />'
                 ,
                 //template when the player clicks "Join Game" on title screen and must enter their name and join key
                 join_game : '<p><label for="user-name">Name: </label>'+
-                            '<input type="text" name="user-name" id="user-name" maxlength="20" />'+
-                            '<label for="join-key">Join Key: </label>'+
-                            '<input type="text" name="join-key" id="join-key" size="6" maxlength="6" /></p>'+
+                            '<input type="text" name="user-name" id="user-name" maxlength="20" /><label for="join-key">'+
+                            'Join Key: </label><input type="text" name="join-key" id="join-key" size="6" maxlength="6" '+
+                            'onkeypress="javascript:if(event.keyCode==13){shared.events.joinGame();}" /></p>'+
                             '<p><a href="#" onclick="javascript:shared.events.titleCancelClick();">Cancel</a> '+
                             '<a href="#" onclick="javascript:shared.events.joinGame();">Join Game</a></p>'
                 ,
@@ -112,7 +112,7 @@ var shared = {
                 )
         },
         
-        /* > showPage : display a particular page in a game (like the title screen, join page etc)
+        /* > showPage : display a particular page in a game (like the title screen, join page &c)
            ===============================================================================================================
            params * s_page : page name to show (as from `game.pages` array, see `game.js` for relevant game for details)
            =============================================================================================================== */
@@ -450,11 +450,12 @@ shared.chat = {
                 Event.observe (e_chat_input, "keypress", function(e_event){
                         //if they press Return
                         if(e_event.keyCode == 13) {
-                                //disable the chat textbox and send the message...
-                                var msg = e_chat_input.value.replace (/^\s*|\s*$/g,"");
+                                //remove leading and trailing whitespace)
+                                var msg = e_chat_input.value.strip ();
+                                //clear the text box
                                 e_chat_input.value = "";
+                                //send the message (ignore if the message was just whitespace)
                                 if (msg.length) {
-                                        e_chat_input.readOnly = true;
                                         this.sendMessage (msg);
                                 }
                         }
@@ -482,7 +483,7 @@ shared.chat = {
                 //send the message to the server
                 jax.sendToQueue ("game_chat_message", {msg:s_msg}, function(o_response){
                         var e = $("shared-chat-input");
-                        e.readOnly = false;
+                        e.value = "";
                         e.focus ();
                 });
         },
@@ -540,7 +541,7 @@ shared.chat = {
                         ;
                         if (tags) {
                                 //temporarily replace all html tags with "<^>" so that the emoticon replace will not
-                                //accidently break the ":/" in "http://" etc. just don't create an "<^>" emoticon!
+                                //accidently break the ":/" in "http://" &c. just don't create an "<^>" emoticon!
                                 s_text = s_text.replace (regex, "<^>");
                         }
                         //run the provided function on the message, now without legible HTML tags
@@ -569,19 +570,19 @@ shared.chat = {
                 var regex = new RegExp (
                         "(?:http(s)?:\\/\\/)?"+  //.................................  = http/https (remember "s" in $1)
                         "("+  //....................................................  = remember url in $2 ("www.test.com")
-                           "(?:[0-9A-Z_!~\\*'\\(\\)-]+\\.)?"+  //...................  = subdomain. e.g. "www."
+                           "(?:www.|([0-9A-Z_!~\\*'\\(\\)-]+\\.))?"+  //...................  = subdomain. e.g. "www."
                            "("+  //.................................................  = remember short url in $3 ("test.com")
                               "[0-9A-Z-]{2,63}"+  //................................  = domain name ("test")
-                              "\\.[A-Z\\.]+"+  //...................................  = tld. i.e. ".com", ".co.uk" etc.
+                              "\\.(?:com|co.uk|[A-Z]{2,3}(?:\\.[A-Z]{2,3})?)"+  //..  = tld. i.e. ".com", ".co.uk" &c.
                            ")"+
-                           "(?::[0-9]{1,4})?"+  //..................................  = optional port. e.g. "test.com:80"
+                           "(?::[0-9]{1,6})?"+  //..................................  = optional port. e.g. "test.com:80"
                            "(?:\\/[\\/0-9a-z_!~\\*'\\(\\)\\.;\\?:@&=\\+\\$,%-]*)?"+ //= folder/files "test.com/e/index.html"
                            "(?:#[0-9a-z-_]+)?"+  //.................................  = bookmark i.e. "index.html#stuff"
                         ")",
                         "gi"  //'global+ignore', replace all instances, ignore case sensitivity
                 );
                 //replace urls in the text with hyperlinks
-                return s_msg.replace (regex, '<a href="http$1://$2" target="_blank">&lt;$3&hellip;&gt;</a>');
+                return s_msg.replace (regex, '<a href="http$1://$2" target="_blank">&lt;$3$4&hellip;&gt;</a>');
         },
         
         /* > applyMarkup : replace simple text markup with relevant html tags

@@ -1,13 +1,20 @@
 =============================================================================================================================
 Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+02.JUN.07
+    FIX: Issue #14. Ellipses in chat box being parsed into a URL. Have improved URL parsing to better handle subdomains and
+         double TLD's like ".co.uk". Subdomains will be shown, but "www" not displayed. `overflow-x: hidden;` CSS added to
+         the chat history so that long domain names will never cause a horizontal scrollbar to appear
+01.JUN.07
+    FIX: Issue #7. Chat box very often remaining disabled after typing a message. Whilst a workaround has been used, it
+         appears that the callback to `jax.sendToQueue` may not be firing on rare occasions
 31.MAY.07
     FIX: Issue #16. Unable to join game with '0' (Zero) in key
     FIX: Issue #6. "/"s in html tags triggering "/italic/" in chatbox messages. Also now supports formatting within
          formatting. e.g. "*bold /italic _underline_ italic/ bold*"
 27.MAY.07
     FIX: [Quadrop] Updated files to use the "include" build system
-    ADD: [Project] Correct headers for the "game.js" files
+    ADD: [Project] Correct headers for the 'game.js' files
     NEW: [Build] Added "about.txt" describing build process
     ADD: [Build] "_build" now included in the source code distribution archive "jax-games-src.zip/rar"
 26.MAY.07
@@ -45,7 +52,7 @@ Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing
 06.APR.07
     ADD: [Shared] Emoticon replacement is now a separate function, and ignores html tags
     NEW: [Shared] URLs in the chatbox are turned into hyperlinks
-    ADD: [Project] Added tags to the changelog "[Project],[Shared],[Build],[Othello]" etc. and cleaned up everything
+    ADD: [Project] Added tags to the changelog "[Project],[Shared],[Build],[Othello]" &c. and cleaned up everything
     ADD: [Shared] Removed 'barbg.png' by extending 'barme.png' to account for slide up height too
     ADD: [Shared] Split `shared.connect` into `shared.startConnection` and `shared.joinConnection`
     ADD: [Shared] Moved the UI to enter name/join key for title screen "Start/Join Game" buttons to templates in `shared`.
