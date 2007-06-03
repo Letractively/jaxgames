@@ -1,5 +1,5 @@
 /* =======================================================================================================================
-   games/othello/game.js - the logic for this game
+   games/othello/_othello.js - the logic for this game
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
@@ -490,8 +490,8 @@ var game = {
                 ;
                 //increase the number of games played
                 shared.played ++;
-                shared.setTitle ((b_winner?"YOU WIN":"YOU LOSE")+playerMe.name+" v. "+playerThem.name+" - ");
-                shared.headsup.show ((b_winner?"YOU WIN":"YOU LOSE")+"<br />"+html);
+                shared.setTitle ((b_winner?"YOU WIN":"YOU LOSE ")+" - ");
+                shared.headsup.show ((b_winner?"YOU WIN":"YOU LOSE ")+"<br />"+html);
                 //update the player info display
                 winner.wins ++;
                 $("player-status-me-wins").innerHTML   = playerMe.wins;

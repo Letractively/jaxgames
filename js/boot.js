@@ -78,7 +78,7 @@ if (!IN_RHINO) {
 
 //---------------------------------------------------------------------------------------------------------------------------
 //load the rest of the boot scripts
-boot_files.push ("jax/jax.js", "js/_shared.js");
+boot_files.push ("jax/jax.js", "js/_shared.js", "js/_chat.js");
 
 //now include all the scripts chosen above. not required in the build system, as it will take the `boot_files` array we've
 //built and compress them together. see '/_build/libs/rhino_makeboot.js'
@@ -87,4 +87,4 @@ if (!IN_RHINO) {
 }
 
 //=== end of line ===========================================================================================================
-//'js/CONFIG.js' « previous                                                                             next » 'js/shared.js'
+//'js/CONFIG.js' « previous                                                                            next » 'js/_shared.js'

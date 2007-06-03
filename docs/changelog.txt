@@ -2,7 +2,11 @@
 Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 03.JUN.07
-    ADD: [Shared] Reorganised the shared resources folder for the game 'games/-/'
+    ADD: [Project] Split some files to make the code pages shorter. Added 'games/blacjax/_run.js' and 'js/_chat.js'
+    FIX: [Othello] Issue #8. A space missing in title bar when you win/lose 
+    FIX: [Build] Build script now ignores "Icon " files created by having customised folder icons in Mac OS X
+    ADD: [Shared] Reorganised the shared resources folder for the game 'games/-/'. The existing CSS has been moved into this
+         folder so that the CSS containing game-only definitions is in a more logical place
 02.JUN.07
     FIX: [Shared] Issue #14. Ellipses in chat box being parsed into a URL. Have improved URL parsing to better handle
          subdomains and double TLD's like ".co.uk". Subdomains will be shown, but "www" not displayed. `overflow-x: hidden;`
