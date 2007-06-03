@@ -12,7 +12,7 @@ for (i in arguments) {
 
 //get the path of the passed file
 var path  = argv[0].substr (0, argv[0].lastIndexOf("/")+1),
-    regex = /(?:include|@import) ?\(?["']?([a-z0-9_\.\/]+\.(?:js|css))["']?\)?;?/gi
+    regex = /(?:include|@import) ?\(?["']?([a-z0-9_\.\/\-]+\.(?:js|css))["']?\)?;?/gi
 ;
 
 //read specified file

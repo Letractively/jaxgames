@@ -7,7 +7,7 @@
    the build process will replace this file with the files below combined into one, and then compressed so that end users
    only have to download one compressed javascript file for the game
 */
-include ("../../js/_board.js");
+include ("../-/_js/_board.js");
 include ("_quadrop.js");
 
 //=== end of line ===========================================================================================================

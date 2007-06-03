@@ -1,5 +1,5 @@
 /* =======================================================================================================================
-   js/board.js - create and manage a game board/grid
+   js/_board.js - create and manage a game board/grid
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
