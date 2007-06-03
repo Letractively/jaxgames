@@ -41,14 +41,14 @@
 		<!-- === common game elements =========================================================================== -->
 		<div id="player-status-them" class="player-status" style="display:none;">
 			<div id="player-status-them-info" class="player-info">
-				<div id="player-status-them-win"><img src="../-/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /> Wins: <span id="player-status-them-wins">0</span></div>
-				<span id="player-them-name" class="player-name">Player 2</span> <img src="../-/icons/user_red.png" id="player-them-icon" width="16" height="16" alt="User Icon" align="top" />
+				<div id="player-status-them-win"><img src="../-/img/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /> Wins: <span id="player-status-them-wins">0</span></div>
+				<span id="player-them-name" class="player-name">Player 2</span> <img src="../-/img/icons/user_red.png" id="player-them-icon" width="16" height="16" alt="User Icon" align="top" />
 			</div>
 		</div>
 		<div id="player-status-me" class="player-status" style="display:none;">
 			<div id="player-status-me-info" class="player-info">
-				<div id="player-status-me-win">Wins: <span id="player-status-me-wins">0</span> <img src="../-/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /></div>
-				<img src="../-/icons/user.png" id="player-me-icon" width="16" height="16" alt="User Icon" align="top" /> <span id="player-me-name" class="player-name">Player 1</span>
+				<div id="player-status-me-win">Wins: <span id="player-status-me-wins">0</span> <img src="../-/img/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /></div>
+				<img src="../-/img/icons/user.png" id="player-me-icon" width="16" height="16" alt="User Icon" align="top" /> <span id="player-me-name" class="player-name">Player 1</span>
 			</div><div id="player-status-me-msg" class="player-msg" style="display:none;">
 				&nbsp;
 			</div>

@@ -12,8 +12,8 @@
 <body><div id="body">
 	<h1><span>Blacjax</span></h1>
 	<div id="cache">
-		<img src="../-/cards/place.png" width="71" height="96" alt="place" />
-		<img src="../-/cards/cards.png" width="994" height="384" alt="cards" />
+		<img src="../-/img/cards/place.png" width="71" height="96" alt="place" />
+		<img src="../-/img/cards/cards.png" width="994" height="384" alt="cards" />
 	</div>
 	<div id="shared-gamearea">
 		<!-- === title = title screen, start or join a game ===================================================== -->
@@ -33,16 +33,16 @@
 		<!-- === common game elements =========================================================================== -->
 		<div id="player-status-them" class="player-status" style="display:none;">
 		        <div id="player-status-them-info" class="player-info">
-		                <div id="player-status-them-win"><img src="../-/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /> <strong>Wins:</strong> <span id="player-status-them-wins">0</span></div>
-		                <div id="player-status-them-score"><img src="../-/icons/coins.png" width="16" height="16" align="top" alt="Points" /> <strong>Points:</strong> <span id="player-status-them-points">0</span></div>
-			        <span id="player-them-name" class="player-name">Player 2</span> <img src="../-/icons/user_red.png" id="player-them-icon" width="16" height="16" alt="User Icon" align="top" />
+		                <div id="player-status-them-win"><img src="../-/img/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /> <strong>Wins:</strong> <span id="player-status-them-wins">0</span></div>
+		                <div id="player-status-them-score"><img src="../-/img/icons/coins.png" width="16" height="16" align="top" alt="Points" /> <strong>Points:</strong> <span id="player-status-them-points">0</span></div>
+			        <span id="player-them-name" class="player-name">Player 2</span> <img src="../-/img/icons/user_red.png" id="player-them-icon" width="16" height="16" alt="User Icon" align="top" />
 			</div>
 		</div>
 		<div id="player-status-me" class="player-status" style="display:none;">
 		        <div id="player-status-me-info" class="player-info">
-		                <div id="player-status-me-win"><strong>Wins:</strong> <span id="player-status-me-wins">0</span> <img src="../-/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /></div>
-		                <div id="player-status-me-score"><strong>Points:</strong> <span id="player-status-me-points">0</span> <img src="../-/icons/coins.png" width="16" height="16" align="top" alt="Points" /></div>
-			        <img src="../-/icons/user.png" id="player-me-icon" width="16" height="16" alt="User Icon" align="top" /> <span id="player-me-name" class="player-name">Player 1</span>
+		                <div id="player-status-me-win"><strong>Wins:</strong> <span id="player-status-me-wins">0</span> <img src="../-/img/icons/award_star_gold_1.png" width="16" height="16" align="top" alt="Wins" /></div>
+		                <div id="player-status-me-score"><strong>Points:</strong> <span id="player-status-me-points">0</span> <img src="../-/img/icons/coins.png" width="16" height="16" align="top" alt="Points" /></div>
+			        <img src="../-/img/icons/user.png" id="player-me-icon" width="16" height="16" alt="User Icon" align="top" /> <span id="player-me-name" class="player-name">Player 1</span>
 			</div><div id="player-status-me-msg" class="player-msg" style="display:none;">
 			        &nbsp;
 			</div>
