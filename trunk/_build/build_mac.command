@@ -53,7 +53,7 @@ trap 'die "! script terminated"' INT TERM  #clean up if the user presses ^c
 
 clear 2>/dev/null  #ignore, as errors when running from TextMate
 echo "==============================================================================="
-echo "jaxgames build process                                                   v0.4.1"
+echo "jaxgames build process                                                   v0.4.2"
 echo "==============================================================================="
 
 # [1]:
@@ -119,8 +119,7 @@ rm ./jax-games-src.zip 2>/dev/null
 # -X = exclude Mac OS only file attributes (MS-DOS Compatible)
 # -9 = maximum compression
 # -x \*.db = exclude Windows Thumbs.db files
-# -x \*.sqlite = exclude the sqlite database
-zip -r -X -9 ./jax-games-src.zip ./source -x \*.db -x \*.sqlite
+zip -r -X -9 ./jax-games-src.zip ./source -x \*.db
 if [ $? -gt 0 ]; then echo "! creation of source zip file failed"; exit 2; fi
 # RAR
 # a = create new archive ('add')
@@ -255,7 +254,7 @@ rm ./release/jax-games-dist.zip 2>/dev/null  #ignore error from this
 # -x \*.db = exclude Windows Thumbs.db files
 # -x \*.sqlite = exclude the sqlite database
 echo "@ creating ZIP archive..."
-zip -r -X -9 ./release/jax-games-dist.zip ./release/jaxgames -x \*.db -x \*.sqlite
+zip -r -X -9 ./release/jax-games-dist.zip ./release/jaxgames -x \*.db
 if [ $? -gt 0 ]; then echo "! creating zip of release failed"; exit 9; fi
 # RAR
 if [ "$USE_RAR" = "true" ]
