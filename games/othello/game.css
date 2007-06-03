@@ -24,7 +24,7 @@ h1            {background-image: url("images/title.png");}
 #title-fg a img.right {float: right;}
 /*#title-fg a:hover img {display: block;}*/
 
-#shared-gamearea {background-color: #008000; background-image: url("../-/felt.jpg");}
+#shared-gamearea {background-color: #008000; background-image: url("../-/img/felt.jpg");}
 
 /* === board ============================================================================================================= */
 #game-board, #title-board

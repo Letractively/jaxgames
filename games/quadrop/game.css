@@ -5,7 +5,7 @@
    jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 */
 
-h1      {/*background-image: url("-/title.png");*/}
+h1      {/*background-image: url("images/title.png");*/}
 
 #page-title, #page-join
 	{padding: 15px; width: 482px; height: 354px;}
@@ -13,7 +13,7 @@ h1      {/*background-image: url("-/title.png");*/}
 #game-grid-table {margin-top: 28px; border-collapse: collapse; border: 0;}
 #game-grid td {border: solid 1px black; width: 55px; height: 55px;}
 
-#shared-gamearea {background-color: #008000; background-image: url("../-/felt.jpg");}
+#shared-gamearea {background-color: #008000; background-image: url("../-/img/felt.jpg");}
 
 .hover {background-color: red;}
 

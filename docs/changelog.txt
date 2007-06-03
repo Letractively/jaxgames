@@ -1,16 +1,18 @@
 =============================================================================================================================
 Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+03.JUN.07
+    ADD: [Shared] Reorganised the shared resources folder for the game 'games/-/'
 02.JUN.07
-    FIX: Issue #14. Ellipses in chat box being parsed into a URL. Have improved URL parsing to better handle subdomains and
-         double TLD's like ".co.uk". Subdomains will be shown, but "www" not displayed. `overflow-x: hidden;` CSS added to
-         the chat history so that long domain names will never cause a horizontal scrollbar to appear
+    FIX: [Shared] Issue #14. Ellipses in chat box being parsed into a URL. Have improved URL parsing to better handle
+         subdomains and double TLD's like ".co.uk". Subdomains will be shown, but "www" not displayed. `overflow-x: hidden;`
+         CSS added to the chat history so that long domain names will never cause a horizontal scrollbar to appear
 01.JUN.07
-    FIX: Issue #7. Chat box very often remaining disabled after typing a message. Whilst a workaround has been used, it
+    FIX: [Shared] Issue #7. Chat box very often remaining disabled after typing a message. Whilst a workaround has been used, it
          appears that the callback to `jax.sendToQueue` may not be firing on rare occasions
 31.MAY.07
-    FIX: Issue #16. Unable to join game with '0' (Zero) in key
-    FIX: Issue #6. "/"s in html tags triggering "/italic/" in chatbox messages. Also now supports formatting within
+    FIX: [Shared] Issue #16. Unable to join game with '0' (Zero) in key
+    FIX: [Shared] Issue #6. "/"s in html tags triggering "/italic/" in chatbox messages. Also now supports formatting within
          formatting. e.g. "*bold /italic _underline_ italic/ bold*"
 27.MAY.07
     FIX: [Quadrop] Updated files to use the "include" build system

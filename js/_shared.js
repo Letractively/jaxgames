@@ -71,8 +71,8 @@ var shared = {
            =============================================================================================================== */
         icons  : {
                 //override these values in your `game.load` function if you want something custom
-                host     : "../-/icons/user.png",     //default: player 1 is blue
-                opponent : "../-/icons/user_red.png"  //default: player 2 is red
+                host     : "../-/img/icons/user.png",     //default: player 1 is blue
+                opponent : "../-/img/icons/user_red.png"  //default: player 2 is red
         },
         
         /* ===============================================================================================================
@@ -97,8 +97,8 @@ var shared = {
                 join_key : new Template (
                         '<p>Copy the key code below and give it<br />to your friend so that they can join the game</p><p>'+
                         '<input id="shared-key" type="text" readonly="readonly" value="#{conn_id}" /></p><p><br />Waiting '+
-                        'for the other player to join&hellip;</p><p><img src="../-/waiting.gif" width="16" height="16" alt'+
-                        '="Waiting..." /></p>'
+                        'for the other player to join&hellip;</p><p><img src="../-/img/waiting.gif" width="16" height="16" '+
+                        'alt="Waiting..." /></p>'
                 ),
                 //template for chat messages
                 chat_msg : new Template (
@@ -108,7 +108,7 @@ var shared = {
                 ),
                 //template for emoticons
                 chat_emote : new Template (
-                        '<img src="../-/emotes/#{file}.png" width="16" height="16" alt="#{symbol}" title="#{symbol}" />'
+                        '<img src="../-/img/emotes/#{file}.png" width="16" height="16" alt="#{symbol}" title="#{symbol}" />'
                 )
         },
         
@@ -362,7 +362,7 @@ var shared = {
    OBJECT shared.chat - manage the chatbox aside the game
    ======================================================================================================================= */
 shared.chat = {
-        //list of emotes. the file name matches the image file name (sans extension) in 'games/-/emotes/'
+        //list of emotes. the file name matches the image file name (sans extension) in 'games/-/img/emotes/'
         //refer to: http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Guide:Regular_Expressions for regex rules
         emotes : [
                 //note: add a "hide: true" pair to an emote object to hide the emote from the pull up list
