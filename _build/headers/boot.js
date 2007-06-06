@@ -1,7 +1,7 @@
 /* jaxgames - boot.js - go to http://code.google.com/p/jaxgames/ for full source code
 =============================================================================================================================
 licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 This is a compressed version, visit the website for full source code
 
 Prototype JavaScript framework, version 1.5.1 (c) 2005-2007 Sam Stephenson

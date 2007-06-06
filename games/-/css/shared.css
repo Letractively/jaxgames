@@ -2,9 +2,10 @@
    css/shared.css - styles shared between all the games (chatcol, &c)
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+   Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 */
 @import "_global.css";
+@import "_chat.css";
 
 #body   {width: 642px; max-width: 640px; height: 429px; overflow: hidden;}
 h1      {border-bottom: solid 1px #010801;}
@@ -63,35 +64,6 @@ h1 span {visibility: hidden;}
                            z-index: 998;}
 #system-status .hv1       {height: 450px; width: 640px;}
 #system-status-text       {font-size: 11px; text-align: center; color: white;}
-
-/* === chat ============================================================================================================== */
-#shared-chatcol           {position: absolute; top: 45px; left: 512px; width: 127px; height: 384px;
-                           border-left: solid 1px #010801; background-color: #dada96;}
-#shared-chat              {font-size: 11px; color: #6E654D;}
-#shared-chat-history      {height: 321px; overflow: auto; overflow-x: hidden;}
-
-/* --- the individual messages --- */
-#shared-chat p            {padding: 3px 2px 0 2px; margin: 0; font-style: italic; color: #7f7e45;}
-#shared-chat .timestamp   {display: block; float: right;}
-#shared-chat p img        {vertical-align: middle;}
-#shared-chat blockquote   {margin: 0; padding: 0 3px 0 3px;}
-#shared-chat blockquote p {font-style: normal; padding: 0;}
-.chat-them                {background-color: #caca86;}
-
-/* --- the input area --- */
-#shared-chat-text         {background-color: #393939;}
-#shared-chat-label        {position: absolute; width: 127px; margin-top: 16px;
-                           text-align: center; font: italic 10px Tahoma, sans-serif; cursor: text;}
-#shared-chat textarea     {width: 125px; height: 41px; margin: 0; padding: 0 0 0 2px; border: 0;
-                           border-top: solid 1px #404040; font-family: tahoma, sans-serif; font-size: 10px; color: #404040;
-                           background-image: url("../img/chatbg.png");}
-#shared-chat-text p       {width: 124px; height: 21px; margin: 0; padding: 0 3px 0 0; text-align: right;
-                           background-image: url("../img/barme.png");}
-
-/* --- emote list --- */
-#shared-chat-emote        {cursor: pointer;}
-#shared-chat-emotes       {text-align: center; padding: 2px 0 2px 0; background-color: #171717;}
-#shared-chat-emotes img   {padding: 2px; cursor: pointer;}
 
 /* === error screen ====================================================================================================== */
 #bsod        {display: none;}

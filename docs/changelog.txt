@@ -1,11 +1,23 @@
 =============================================================================================================================
 Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+06.JUN.07
+    ADD: [Shared] Re-factored `shared.chat` to be more self contained:
+         + no longer binds events on the `show` function, but instead does so only once `onload`
+         + no longer uses `shared.events` to store the event handlers
+         + no longer uses `shared.templates` to store the chat templates
+         + private storage added `_` to contain this stuff.
+         This makes it simple to remove the chat component completely from Jax Games, should someone want to do that; or to
+         port the chat component to some other web application. Also moved chat CSS to a separate file '_chat.css'
+04.JUN.07
+    Add: [Shared] Moved `game.queue` from Othello to Shared and redesigned to hold functions and arguments
+    NEW: [Shared] Created `shared.end` to allow you to utilise some simple shared UI for restarting games, or roll your own
+    ADD: [Shared] removed `var i` from 'boot.js' to avoid polluting the global space with a counter >:[
 03.JUN.07
     ADD: [Project] Created 'games/-/_js/' folder and moved '_board.js' and '_cards.js' there as these files are very specific
          to the games and should be stored in a more logical location. The folder is prefixed with an underscore because all
          the JS files in the folder will be combined with the main 'game.js' files and thus not required in the release
-    FIX: [Build] Build system not detecting @import/include files in the games shared resource folder 'games/-/'
+    FIX: [Build] Build system not detecting `@import`/`include` files in the games shared resource folder 'games/-/'
     ADD: [Project] Split some files to make the code pages shorter. Added 'games/blacjax/_run.js' and 'js/_chat.js'
     FIX: [Othello] Issue #8. A space missing in title bar when you win/lose 
     FIX: [Build] Build script now ignores "Icon " files created by having customised folder icons in Mac OS X

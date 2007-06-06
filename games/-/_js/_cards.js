@@ -2,16 +2,16 @@
    js/_cards.js - a set of classes for using playing cards in your game
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+   Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 */
 
 /* =======================================================================================================================
-   CLASS Pack - a standard 54 card pack of playing cards. decks can be made of one or more of these
+   CLASS Pack - a standard pack of 54 playing cards. decks can be made of one or more of these
    ======================================================================================================================= */
 var Pack = Class.create ();
 Pack.prototype = {
         cards : [],
-        //10 is X because a card must be two letters only, face+suit
+        //10 is "X" because a card must be two letters only, face+suit
         faces : ["A", "2", "3", "4", "5", "6", "7", "8", "9", "X", "J", "Q", "K"],
         
         /* > initialize : constructor function, create the pack of cards
@@ -118,7 +118,7 @@ Deck.prototype = {
                 this.cards = this.cards.sortBy (Math.random);
         },
         
-        /* > jax_deck.drawCard : take a card off of the deck
+        /* > drawCard : take a card off of the deck
            ===============================================================================================================
            return * string : card name
            =============================================================================================================== */

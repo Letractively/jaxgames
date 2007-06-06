@@ -2,7 +2,7 @@
    games/blacjax/_run.js - the run of cards in the centre of the table (and the discard pile)
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+   Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 */
 
 /* =======================================================================================================================
@@ -15,7 +15,7 @@ game.run = {
         
         //the spacing in pixels between each card on the run, given the number of cards present. these numbers allow for the
         //cards on the run to compact together to always stay within the run's area. this could be calculated as needed
-        //in `.getCardPositions`, but I couldn't get the math right
+        //in `getCardPositions`, but I couldn't get the math right
         spacing : [
                 0, 5, 5, 5, 5,  //0, no spacing. 1-4 cards, normal spacing between cards
                 -2.8,    /* 5  cards */  -16.3,  /* 6  cards */  -25.5,  /* 7  cards */  -32,    /* 8 cards */
@@ -36,10 +36,8 @@ game.run = {
            return * boolean : true if the top card is a Two or Black Jack, false otherwise
            =============================================================================================================== */
         armed : function () {
-                return (this.cards.length) && (
-                        game.pack.value (this.cards.last()) == 11 ||
-                        game.pack.value (this.cards.last()) == 2
-                );
+                var card_value = game.pack.value (this.cards.last());
+                return (this.cards.length) && (card_value == 11 || card_value == 2);
         },
         
         /* > combo : if the card on top of the run is a combo card (Ace, Eight or Joker)

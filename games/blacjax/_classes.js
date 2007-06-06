@@ -2,11 +2,11 @@
    games/blacjax/_classes.js - extra classes unique to this game
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+   Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 */
 
 /* =======================================================================================================================
-   EXTEND CLASS Pack - add Black Jack specific functions to the standard pack class
+   EXTEND CLASS Pack - add BlackJack specific functions to the standard pack class
    ======================================================================================================================= */
 /* isCombo : is the card a wild card?
    =======================================================================================================================
@@ -25,9 +25,8 @@ Pack.prototype.isCombo = function (s_card) {
    ======================================================================================================================= */
 Pack.prototype.isArmed = function (s_card) {
         //a Two, or a Black Jack are armed cards
-        var colour = this.colour (s_card);
         var value  = this.value (s_card);
-        return (value == 2 || (value == 11 && colour == "black"));
+        return (value == 2 || (value == 11 && this.colour(s_card) == "black"));
 };
 
 /* =======================================================================================================================
@@ -35,7 +34,7 @@ Pack.prototype.isArmed = function (s_card) {
    ======================================================================================================================= */
 /* initialize : constructor function for Player class
    =======================================================================================================================
-   params * s_element : html id to inject the player's hand into
+   params * s_element : HTML ID to inject the player's hand into
           * boolean   : if this player instance is the game's host or not (i.e. the near or far hand on screen)
    ======================================================================================================================= */
 Player.prototype.initialize = function (s_element, b_host) {
@@ -53,7 +52,7 @@ function Hand (s_element, b_host) {
         //and thus both player's hands will point to the same array
         this.cards = [];
         
-        this.element = s_element;  //the id of an html element the cards will be injected into
+        this.element = s_element;  //the ID of an HTML element the cards will be injected into
         this.host    = b_host;     //if the player is the local player (and not the opponent)
 }
 Hand.prototype = {
@@ -71,7 +70,7 @@ Hand.prototype = {
            ===============================================================================================================
            params * (n_count)      : number of cards to take from the deck
                     (f_onComplete) : a function to call once the animation is complete
-           return * string         : returns the first card taken, regardless of n_count
+           return * string         : returns the first card taken, regardless of `n_count`
            =============================================================================================================== */
         takeCard : function (n_count, f_onComplete) {
                 if (!n_count)      {n_count      = 1;}                        //default: take 1 card
@@ -155,7 +154,7 @@ Hand.prototype = {
         
         /* > useCard : take a card from the hand and move it onto the run
            ===============================================================================================================
-           params * s_card         : name of the card to take from the player's hand (e.g. KC)
+           params * s_card         : name of the card to take from the player's hand (e.g. "KC")
                     (f_onComplete) : function to call once the animation is complete
                                      param * s_card : name of chosen card
            =============================================================================================================== */
@@ -163,7 +162,7 @@ Hand.prototype = {
                 if (!f_onComplete) {f_onComplete = Prototype.emptyFunction;}  //default: no callback
                 
                 var card_id = this.cards.indexOf (s_card),
-                    elid    = this.element + '-' + s_card,              //the html id of the card
+                    elid    = this.element + '-' + s_card,              //the HTML ID of the card
                     curpos  = parseInt($(elid).getStyle ("left"), 10),  //get the X position of the chosen card...
                     cardpos = game.run.getCardPositions (game.run.cards.length+1),
                     newpos  = cardpos.last ()
