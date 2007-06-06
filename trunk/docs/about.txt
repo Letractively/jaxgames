@@ -48,4 +48,4 @@ Compatibility:
 
 === end of line =============================================================================================================
 licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/

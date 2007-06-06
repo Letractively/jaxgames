@@ -2,7 +2,7 @@
    js/boot.js - load the libraries needed for the games
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+   Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 *//*
    the code in this page only exists in the source code for jax games. the build system will create a 'release' version of
    jax games where most of the scripts will be merged and compressed into a single file, replacing 'boot.js'
@@ -21,7 +21,7 @@
    the `IN_RHINO` flag states whether this page is running in the browser, or inside the build system. this flag is only
    valid on this page, and has no effect anywhere else in the codebase
 */
-var i = 0, boot_files = [];
+var boot_file = "", boot_files = [];
 
 /* > include : load another javascript file
    ======================================================================================================================= */
@@ -48,8 +48,8 @@ if (config.scriptaculous.use_defaults) {
 } else {
         //use user-provided Prototype & Scriptaculous (see 'js/CONFIG.js' for details on this)
         boot_files.push (config.scriptaculous.custom_prototype);
-        for (i=0; i<config.scriptaculous.includes.length; i++) {
-                boot_files.push (config.scriptaculous.custom_src+config.scriptaculous.includes[i]+".js");
+        for (boot_file in config.scriptaculous.includes) {
+                boot_files.push (config.scriptaculous.custom_src+config.scriptaculous.includes[boot_file]+".js");
         }
 }
 
@@ -78,12 +78,12 @@ if (!IN_RHINO) {
 
 //---------------------------------------------------------------------------------------------------------------------------
 //load the rest of the boot scripts
-boot_files.push ("jax/jax.js", "js/_shared.js", "js/_chat.js");
+boot_files.push ("jax/jax.js", "js/_shared.js", "js/_chat.js", "js/_global.js");
 
 //now include all the scripts chosen above. not required in the build system, as it will take the `boot_files` array we've
 //built and compress them together. see '/_build/libs/rhino_makeboot.js'
 if (!IN_RHINO) {
-        for (i=0; i<boot_files.length; i++) { include ("../../"+boot_files[i]); }
+        for (boot_file in boot_files) { include ("../../"+boot_files[boot_file]); }
 }
 
 //=== end of line ===========================================================================================================

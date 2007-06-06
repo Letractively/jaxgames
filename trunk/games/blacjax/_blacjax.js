@@ -2,7 +2,7 @@
    games/blacjax/_blacjax.js - the logic for this game
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+   Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 *//*
    name   : blacjax
    author : Kroc Camen | kroccamen@gmail.com | kroc.deviantart.com
@@ -51,91 +51,10 @@ var game = {
              {name : "game"}
         ],
         
-        /* > load : called for you on page load (see shared.js)
+        /* > load : called for you on page load (see '_shared.js')
            =============================================================================================================== */
         load : function () {
         },
-        
-        /* ===============================================================================================================
-           OBJECT queue - when you receive ajax calls for cards the opponent clicked on, queue them for processing
-           =============================================================================================================== */
-        queue  : {
-                cards : [],  //cards yet to be processed
-                
-                /* > doNext : process the next card (on the queue) that the opponent clicked
-                   ======================================================================================================= */
-                doNext : function () {
-                        //if there's 1 or more cards queued, process the first one
-                        if (this.cards.length) {
-                                this.opponentCardClick (this.cards.first());
-                        }
-                },
-                
-                /* > opponentCardClick : move the card onto the run
-                   =======================================================================================================
-                   params * s_card : name of the card to remove from the opponents hand and place on the run
-                   ======================================================================================================= */
-                opponentCardClick : function (s_card) {
-                        //get the card currently on the run that you're about to place a card over. this is needed to
-                        //compare the suit of the new card with the previous, in the case that an Eight is placed on a card
-                        //that is already the same suit, and thus, no heads-up message needs to be displayed
-                        var face      = game.run.getFaceCard(),
-                            _continue = function () {
-                                    //preempt the next move
-                                    game.preempt (true);
-                            }
-                        ;
-                        
-                        //pluck the card from their hand, and move it onto the run
-                        playerThem.hand.useCard (s_card, function(s_card){
-                                //decide course of action:
-                                //if the card played was a Two or Black Jack...
-                                if (game.pack.isArmed(s_card)) {
-                                        //Two is pickup two, Black Jack is pickup five
-                                        var penalty = (game.pack.value(s_card) == 2 ? 2 : 5);
-                                        //add the penalty to the penalty total
-                                        game.run.updatePenalty (game.run.penalty+penalty);
-                                        //display the heads-up
-                                        shared.headsup.show ("Pickup "+game.run.penalty+"!", 0.5, _continue);
-                                        
-                                } else if (game.pack.isCombo (s_card)) {
-                                        //the player put down an Ace (another go), Eight (change suit) or Joker (any card)
-                                        var msg = "";
-                                        switch (game.pack.value (s_card)) {
-                                                case 0: msg = "Any Card&hellip;";   break;  //Joker (any card)
-                                                case 1: msg = "Another Go&hellip;"; break;  //Ace (another go)
-                                                case 8:
-                                                        //Eight. don't announce "change suit" if suit didn't change
-                                                        msg = (game.pack.suit (face) != game.pack.suit (s_card))
-                                                            ? "Change Suit&hellip;" : "Another Go"
-                                                        ; 
-                                                        break;
-                                        }
-                                        //display the message
-                                        shared.headsup.show (msg, 0.5, function(){
-                                                //take no action, the player gets to choose another card (if they have any)
-                                                game.preempt (false);
-                                        });
-                                        
-                                } else {
-                                        //if the player put down a Red Jack, check if it is cancelling a penalty...
-                                        if (game.run.penalty && game.pack.value(s_card) == 11 &&
-                                            game.pack.colour(s_card) == "red"
-                                        ) {
-                                                //...cancel the penalty
-                                                game.run.updatePenalty (0);
-                                                //display the heads up!
-                                                //FIXME: there is a bug that starts here; if you finish a game by cancelling
-                                                //       a penalty, then this heads up will conflict with the "WIN/LOSE"
-                                                //       message. fix seems to lie with accurately managing headsup
-                                                shared.headsup.show ("Penalty Cancelled!", 0.5, _continue);
-                                        }
-                                        //file the cards onto the discard pile
-                                        game.run.fileCards (_continue);
-                                }
-                        });
-                }
-        }, //end game.queue <
         
         /* > start : begin playing
            ===============================================================================================================
@@ -143,9 +62,9 @@ var game = {
                     (n_cards)   : number of cards to draw for each player (default 7)
            =============================================================================================================== */
         start : function (b_mefirst, n_cards) {
-                //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
-                //entering their name / join key, `shared.(start/join)Connection` is called. when a connection is established
-                //between the two players, `game.start` is called for you
+                //please note: this function is called for you. when the user clicks the "Start Game" or "Join Game" button
+                //after entering their name & join key, `shared.(start/join)Connection` is called. when a connection is
+                //established between the two players, `game.start` is called for you
                 if (typeof b_mefirst == "undefined") {b_mefirst = shared.host;}  //default: host goes first
                 if (!n_cards)                        {n_cards   = 7;}            //default: 7 cards each
                 
@@ -226,7 +145,7 @@ var game = {
                                         new Effect.Opacity (e, {sync:true, from:1.0, to:0.9}),
                                         new Effect.Move    (e, {sync:true, x:0, y:15})
                                 ], {duration: 0.5});
-                                //use a no-sign(/) cursor (IE6, Firefox 1.5+)
+                                //use a no-sign "(/)" cursor (IE6+, Firefox 1.5+)
                                 e.addClassName ("card-disabled");
                                 
                         } else {
@@ -346,8 +265,7 @@ var game = {
                                 //will have placed another card, which will have been added to the queue. now that the
                                 //animation moving the previous card is over, the next card can be plucked. this is done so
                                 //that we do not try to move two cards onto the run at the same time (it breaks)
-                                game.queue.cards.shift ();  //remove the previous card from the queue
-                                game.queue.doNext ();       //pluck the next card (if there is one)
+                                shared.queue.declareTaskFinished ();
                         }
                 }
         },
@@ -357,9 +275,7 @@ var game = {
            params * b_winner : if you are the winner or not
            =============================================================================================================== */
         end : function (b_winner) {
-                var html   = '<a href="javascript:game.playAgain('+b_winner+');">Play Again?</a> ' +
-                             '<a href="javascript:game.resign();">Resign</a>',
-                    winner = b_winner ? playerMe : playerThem,
+                var winner = b_winner ? playerMe : playerThem,
                     loser  = b_winner ? playerThem : playerMe,
                     onDrop = function () {
                             //add a point for each card left in the opponent's hand
@@ -378,20 +294,7 @@ var game = {
                         });
                 }
                 
-                //increase the number of games played
-                shared.played ++;
-                shared.setTitle ((b_winner?"YOU WIN":"YOU LOSE ")+" - ");
-                shared.headsup.show ((b_winner?"YOU WIN":"YOU LOSE")+"<br />"+html);
-                //update the player info display
-                winner.wins ++;
-                $("player-status-me-wins").innerHTML   = playerMe.wins;
-                $("player-status-them-wins").innerHTML = playerThem.wins;
-                
-                //listen out for the "play again" signal from the other person
-                jax.listenFor ("game_again", function(o_response){
-                        game.start (!b_winner);
-                });
-                
+                shared.end (b_winner);
         },
         
         playAgain : function (b_winner) {
@@ -415,137 +318,17 @@ var game = {
         }
 };
 
-/* =======================================================================================================================
-   OBJECT game.events : event functions, so that multiple elements may use a single pointer
-   ======================================================================================================================= */
-game.events = {
-        /* > cardMouseOver : when the player moves the mouse on a card (in their hand)
-           =============================================================================================================== */
-        cardMouseOver : function () {
-                //on mouse over, nudge the card up a little by using a CSS class
-                this.addClassName ("card-hover");
-                
-                //the card's name is stored in the img tag's alt property
-                var card = this.id.split ("-").last (),
-                    msg  = ""
-                ;
-                //find action cards (Joker, Ace, Two, Eight, Black/Red Jack) and label them on mouseover
-                switch (game.pack.value (card)) {
-                        case 0:  msg = "Any Card";    break;  //a Joker goes on any card, followed by any card
-                        case 1:  msg = "Another Go";  break;  //an Ace allows another card matched by suit/rank
-                        case 2:  msg = "Pickup 2";    break;  //Two is pickup two
-                        case 8:
-                                //Eight goes on any card, followed by suit/rank match
-                                msg = (game.pack.suit (game.run.getFaceCard()) != game.pack.suit (card)) ? "Change Suit" : "Another Go";
-                                break;
-                        case 11:
-                                //a Black Jack is pickup 5, a Red Jack is cancel pickup
-                                msg = (game.pack.colour (card) == "black")
-                                    ? "Pickup 5" : (game.run.armed () ? "Cancel Penalty" : "")
-                                ;
-                                break;
-                }
-                //if any of the above matched
-                if (msg != "") {
-                        //put the text in the label
-                        $("game-label").update (msg).setStyle ({left: Element.getStyle(this,'left')}).show ();
-                }
-        },
-        
-        /* > cardMouseOut : when the player moves the mouse off of a card (in their hand)
-           =============================================================================================================== */
-        cardMouseOut : function () {
-                //remove the CSS class to move it back to normal position
-                this.removeClassName ("card-hover");
-                //hide the label (for action cards)
-                $("game-label").hide ();
-        },
-        
-        /* > cardClick : when the player clicks on a card
-           =============================================================================================================== */
-        cardClick : function () {
-                //hide the label
-                $("game-label").hide ();
-                
-                //which card was clicked?
-                var card_name      = this.id.split ("-").last ();
-                    playable_cards = playerMe.hand.playableCards ()
-                ;
-                
-                //alert the other player to the card you chose. this is the most important, and most confusing aspect of this
-                //game. see the "game card chosen" listen function underneath the game object for where the other player
-                //picks up this signal
-                jax.sendToQueue ("game_card_chosen", {card: card_name});
-                
-                //first, move all the cards in the hand back to normal places
-                playerMe.hand.cards.each (function(s_card,n_index){
-                        //construct the html id of the card in question
-                        var e = $(playerMe.hand.element+'-'+s_card);
-                        //remove click event from card to prevent player running this code twice!
-                        e.onclick = Prototype.emptyFunction;
-                        
-                        //if the card is disabled...
-                        if (playable_cards.indexOf (n_index) < 0) {
-                                //make opaque and move back to normal position
-                                new Effect.Parallel ([
-                                        new Effect.Opacity (e, {sync:true, from:0.9, to:1.0}),
-                                        new Effect.Move    (e, {sync:true, x:0, y:-15})
-                                ], {
-                                        transition:Effect.Transitions.linear}
-                                );
-                                e.removeClassName ("card-disabled");
-                        } else {
-                                //enabled cards, remove the interactivity
-                                e.onmouseover = Prototype.emptyFunction;
-                                e.onmouseout  = Prototype.emptyFunction;
-                                e.removeClassName ("card-playable").removeClassName ("card-hover");
-                        }
-                });
-                //take the chosen card out of the hand, and move it onto the run
-                playerMe.hand.useCard (card_name, function(s_card){
-                        //decide course of action:
-                        //a: if armed, switch players
-                        //b: if a combo, let the player continue
-                        //c: if only a plain card, file the run onto the discard, and change players
-                        if (game.pack.isArmed (s_card)) {
-                                //add the penalty to the total and switch players
-                                game.run.updatePenalty (
-                                        game.run.penalty + (game.pack.value (s_card) == 2 ? 2 : 5)
-                                );
-                                game.preempt (false);
-                                
-                        } else if (game.pack.isCombo (s_card)) {
-                                //let the player choose another card
-                                game.preempt (true);
-                                
-                        } else {
-                                //was this a Red Jack cancelling the penalty?
-                                if (game.run.penalty && game.pack.value (s_card) == 11 &&
-                                    game.pack.colour (s_card) == "red"
-                                ) {
-                                        //cancel the penalty
-                                        game.run.updatePenalty (0);
-                                }
-                                //file the cards onto the discard pile
-                                game.run.fileCards (function(){
-                                        //once filed, switch players
-                                        game.preempt (false);
-                                });
-                        }
-                });
-        }
-};
 
 /* =======================================================================================================================
    < game_card_chosen : the other player clicked on a card, mirror the animation locally
    ======================================================================================================================= */
 jax.listenFor ("game_card_chosen", function(o_response){
-        //queue it
-        game.queue.cards.push (o_response.data.card);
+        //queue it - call this function, with this argument
+        shared.queue.addTask (game.events.opponentCardClick, o_response.data.card);
         
-        //if there's only one item in the queue, run it
-        //after each card has completed its action, the next one will be taken (see game.preempt)
-        if (game.queue.cards.length == 1) {game.queue.doNext ();}
+        //if there's only one task in the queue, run it
+        //after each card has completed its action, the next one will be taken (see `game.preempt`)
+        if (shared.queue.tasks.length == 1) {shared.queue.startNextTask ();}
 });
 
 //=== end of line ===========================================================================================================

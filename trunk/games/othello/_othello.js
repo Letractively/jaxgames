@@ -2,12 +2,12 @@
    games/othello/_othello.js - the logic for this game
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+   Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 *//*
    name   : othello
    author : Kroc Camen | kroccamen@gmail.com | kroc.deviantart.com
    type   : board game
-   desc   : also known in America as 'Reversi', and sometimes 'Turncoat'.
+   desc   : also known in America as "Reversi", and sometimes "Turncoat".
             each player is in competition to have the most pieces remaining at the end.
             the straight forward nature of this game makes it an ideal sample for programming your own Jax Games
             
@@ -20,12 +20,12 @@ rules of play:
  
 -------------------------------------------------------------------------------------------------------------------------- */
 
-//add to the Player class the ability to set who plays white "O" and who plays black "X"
+//add to the `Player` class the ability to set who plays white "O" and who plays black "X"
 Player.prototype.piece = "";
 
-//create the players. they must use these names, as they are referenced in shared.js. the reason the Player instances are not
-//created automatically for you, is because you could extend the Player class to include a constructor function requiring
-//parameters. an example of this can be seen in /games/blacjax/classes.js
+//create the players. they must use these names, as they are referenced in `shared`. the reason the `Player` instances are
+//not created automatically for you, is because you could extend the `Player` class to include a constructor function
+//requiring parameters. an example of this can be seen in blacjax
 var playerMe   = new Player (),  //the player on this computer
     playerThem = new Player ()   //the opponent is always the opposite player from either end
 ;
@@ -34,7 +34,7 @@ var playerMe   = new Player (),  //the player on this computer
    OBJECT game : this game
    ======================================================================================================================= */
 var game = {
-        name    : "Othello",  //a user-seen name for your game. required, as used in shared.js
+        name    : "Othello",  //a user-seen name for your game. required, as used in `shared`
         version : "0.3.0",
         
         board   : new Board ("game-board"),  //the game board (default size of 8x8 will be used), see '_board.js'
@@ -42,9 +42,7 @@ var game = {
         
         templates : {
                 //the player's black or white piece icon on the paper at the sides
-                paper_piece : new Template (
-                        '<img src="images/#{colour}.png" width="40" height="40" alt="#{colour}" />'
-                )
+                paper_piece : new Template ('<img src="images/#{colour}.png" width="40" height="40" alt="#{colour}" />')
         },
         
         /* ===============================================================================================================
@@ -130,10 +128,10 @@ var game = {
                 name : "game"
         }],
         
-        /* > load : called for you on page load (see shared.js)
+        /* > load : called for you on page load (see `shared`)
            =============================================================================================================== */
         load : function () {
-                //set the icons for the players that will be used in this game (replacing the default Blue vs. Red ones)
+                //set the icons for the players that will be used in this game (replacing the default blue vs. red ones)
                 shared.icons.host     = "images/iconblack.png";
                 shared.icons.opponent = "images/iconwhite.png";
                 //create the empty board
@@ -160,9 +158,9 @@ var game = {
            params * (b_mefirst) : who begins play (yourself, or the opponent)
            =============================================================================================================== */
         start : function (b_mefirst) {
-                //please note: this function is called for you. when the user clicks the Start Game or Join Game button after
-                //entering their name / join key, `shared.(start/join)Connection` is called. when a connection is established
-                //between the two players, `game.start` is called for you
+                //please note: this function is called for you. when the user clicks the "Start Game" or "Join Game" button
+                //after entering their name & join key, `shared.(start/join)Connection` is called. when a connection is
+                //established between the two players, `game.start` is called for you
                 if (typeof b_mefirst == "undefined") {b_mefirst = shared.host;}  //default: host goes first
                 
                 shared.setTitle (playerMe.name+" v. "+playerThem.name+" - ");
@@ -260,10 +258,10 @@ var game = {
         /* > findBridge : check if a direction will give a playable square
            =============================================================================================================== 
            params * b_self       : if checking your pieces (false to check theirs, used in preempt)
-                    n_x          : x coordinate of the cell
-                    n_y          : y coordinate of the cell
+                    n_x          : x coordinate of the cell to start from
+                    n_y          : y coordinate of the cell to start from
                     n_dir        : direction to proceed checking (0-7 clockwise)
-                    (f_piece)    : optional, function to call with each opponent piece along the way
+                    (f_piece)    : optional, function to call with each opponent piece found along the way
                                    params * n_dir  : direction (0-7 clockwise)
                                             n_x    : x position of cell
                                             n_y    : y position of cell
@@ -278,17 +276,17 @@ var game = {
            =============================================================================================================== */
         findBridge : function (b_self, n_x, n_y, n_dir, f_piece, b_reverse, n_distance) {
                 /* this function will traverse the board in a given direction, checking for:
-                   1) b_reverse = false, this function will continue to check cells in the specified direction until
+                   1) b_reverse = false: this function will continue to check cells in the specified direction until
                       an empty cell is found. in othello, you must place a piece so that it comes between any number of
                       opponent pieces and one of your own. this function will return an object with the x and y coordinates
-                      of the playable cell found, otherwise false
-                   2) b_reverse = true, used to backtrack from an empty cell, over opponent pieces, to one of your pieces.
+                      of the playable cell found, otherwise `false`
+                   2) b_reverse = true: used to backtrack from an empty cell, over opponent pieces, to one of your pieces.
                       this is used when you click on a playable cell, to then flip the opponent pieces along the way
                 *//*
-                   if a callback function is provided as f_piece, it will be called on each opponent piece encountered along
-                   the way - *only if the specified direction turns out to be playable*. therefore you do not need to check
-                   beforehand if the direction is playable, before using this function with the callback. examples of use in
-                   this game are: flipping the pieces over and highlighting the cells on mouseover
+                   if a callback function is provided as `f_piece`, it will be called on each opponent piece encountered
+                   along the way - *only if the specified direction turns out to be playable*. therefore you do not need to
+                   check  beforehand if the direction is playable, before using this function with the callback. examples of
+                   use in this game are: flipping the pieces over, and highlighting the cells on mouseover
                 */
                 if (!n_distance) {n_distance = 0;}                        //default: start counting number of steps
                 if (!f_piece)    {f_piece    = Prototype.emptyFunction;}  //default: no callback
@@ -371,7 +369,7 @@ var game = {
         
         /* > flipPiece : animate in, or flipping over a piece on the board
            ===============================================================================================================
-           params * s_htmlid     : html id of the element containing the image to flip
+           params * s_htmlid     : HTML ID of the element containing the image to flip
                     (s_piece)    : the piece ("X" or "O") to place if the cell specified is empty
                     (f_callback) : function to call after the flip animation is complete
            =============================================================================================================== */
@@ -482,26 +480,8 @@ var game = {
            params * b_winner : if you are the winner or not
            =============================================================================================================== */
         end : function (b_winner) {
-                //!/TODO: this
-                var html = '<a href="javascript:game.playAgain('+b_winner+');">Play Again?</a> ' +
-                           '<a href="javascript:game.resign();">Resign</a></p>',
-                   winner = b_winner ? playerMe : playerThem,
-                   loser  = b_winner ? playerThem : playerMe
-                ;
-                //increase the number of games played
-                shared.played ++;
-                shared.setTitle ((b_winner?"YOU WIN":"YOU LOSE ")+" - ");
-                shared.headsup.show ((b_winner?"YOU WIN":"YOU LOSE ")+"<br />"+html);
-                //update the player info display
-                winner.wins ++;
-                $("player-status-me-wins").innerHTML   = playerMe.wins;
-                $("player-status-them-wins").innerHTML = playerThem.wins;
-                
-                //listen out for the "play again" signal from the other person
-                jax.listenFor("game_again", function(o_response){
-                        jax.listenFor ("game_again");
-                        game.start (!b_winner);
-                });
+                //use standard shared "game over" UI to restart the game
+                shared.end (b_winner);
         },
         
         playAgain : function (b_winner) {
@@ -541,7 +521,7 @@ game.events = {
            =============================================================================================================== */
         playableCellClick : function () {
                 for (var y=0; y<game.board.height; y++) { for (var x=0; x<game.board.width; x++) {
-                        //get the html element for this cell
+                        //get the HTML element for this cell
                         var e = $(game.board.getCellId(x,y));
                         if (game.pieces[x][y] == "" && e.innerHTML != "") {
                                 e.update ();
@@ -577,7 +557,7 @@ game.events = {
         
         /* > playableCellMouseHover : when you hover over an available cell
            ===============================================================================================================
-           params * s_cellid    : html element id of the cell to highlight from
+           params * s_cellid    : HTML element id of the cell to highlight from
                     b_highlight : whether to highlight the cells, or remove existing highlighting
            =============================================================================================================== */
        playableCellMouseHover : function (s_cellid, b_highlight) {
@@ -602,7 +582,7 @@ game.events = {
                        return $(game.board.getCellId(o_cell.x, o_cell.y));
                }).invoke (
                        //depending whether highlighting is being enabled or not, invoke "addClassName" or "removeClassName"
-                       //function on each of the html elements in the array using the .hover CSS class (see game.css)
+                       //function on each of the html elements in the array using the `.hover` CSS class (see 'game.css')
                        (b_highlight?"add":"remove")+"ClassName", "hover"
                );
        },

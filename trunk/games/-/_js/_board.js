@@ -2,13 +2,13 @@
    js/_board.js - create and manage a game board/grid
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
-   jax, jax games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+   Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 *//*
    css guide:
    ----------
-   when you create an instance of the board class, you must provide an id of an html element that currently exists (ideally
-   a div) that the baord table will be injected into. the board will use the following html ids for the various table
-   elements, where 'element' is the html id you created the board class with.
+   when you create an instance of the board class, you must provide the ID of an HTML element that currently exists (ideally
+   a <div>) that the board table will be injected into. the board will use the following HTML IDs for the various table
+   elements, where 'element' is the HTML ID you created the board class with.
    
    where `var board = new Board ('element');`:
    <table> = #element-table    (class: .board)
@@ -18,10 +18,10 @@
 */
 var Board = Class.create ();
 Board.prototype = {
-        element : "",  //html id to inject the board into
+        element : "",  //HTML ID to inject the board into
         width   : 0,   //number of columns in the table
         height  : 0,   //number of rows
-        cells   : [],  //an array of html content to go in each cell (as a two dimensional array, e.g. [x][y])
+        cells   : [],  //an array of HTML content to go in each cell (as a two dimensional array, e.g. [x][y])
         
         //this is a set of vectors to move in the eight directions. you can use this in your own logic to traverse the 
         //board for your own reasons. refer to othello for good examples. it isn't used internally at all
@@ -38,7 +38,7 @@ Board.prototype = {
         
         /* > intialize : constructor function
            ===============================================================================================================
-           params * s_element  : html element id to inject the board into
+           params * s_element  : HTML element ID to inject the board into
                     (n_width)  : width of the board in cells (1-based). default: 8
                     (n_height) : height of the board in cells (1-based). default: 8
            =============================================================================================================== */
@@ -50,7 +50,7 @@ Board.prototype = {
                 this.width   = n_width;
                 this.height  = n_height;
                 
-                //create the two-dimensional array to store html content for each cell. e.g. cells[x][y] = "blah";
+                //create the two-dimensional array to store HTML content for each cell. e.g. cells[x][y] = "blah";
                 this.clear ();
         },
         
@@ -64,9 +64,9 @@ Board.prototype = {
         /* > injectHTML : inserts the initial empty html table for the board
            =============================================================================================================== */
         injectHTML : function () {
-                //this function cannot be called in initialize () because html cannot be editied before the page has 
+                //this function cannot be called in `initialize` because HTML cannot be editied before the page has 
                 //finished loading. you can either call this function when you need it, or it will be called automatically
-                //in display () if the table is not already present
+                //in `display` if the table is not already present
                 
                 //start the table
                 var html = '<table id="'+this.element+'-table" class="board"><cols>\n';
@@ -93,32 +93,32 @@ Board.prototype = {
                 }
                 //finish the table
                 html += "\t\t\t</tbody></table>";
-                //put the table to screen. the Prototype `.update` function is used instead of `.innerHTML` so that it will
-                //work in IE (which has no `.innerHTML` for some elements) also as a bonus for l33t programmers, any <script>
+                //put the table to screen. the Prototype `update` function is used instead of `innerHTML` so that it will
+                //work in IE (which has no `innerHTML` for some elements) also as a bonus for l33t programmers, any <script>
                 //blocks in any cells will be executed (but not included)
                 $(this.element).update (html);
         },
         
-        /* > getCellId : return the html element id for a cell, given the x/y
+        /* > getCellId : return the HTML element ID for a cell, given the x/y
            ===============================================================================================================
            params * n_x    : x cell reference
                     n_y    : y cell reference
-           return * string : html element id of the cell requested 
+           return * string : HTML element ID of the cell requested 
            =============================================================================================================== */
         getCellId : function (n_x, n_y) {
                 return this.element + '-cell-' + n_x + "x" + n_y;
         },
         
-        /* > getCoordsFromId : return x/y position given a html id for a cell
+        /* > getCoordsFromId : return x/y position given a HTML ID for a cell
            ===============================================================================================================
-           params * s_id   : html element id of the cell in question
+           params * s_id   : HTML element ID of the cell in question
            return * object : {
                                      x : column of cell
                                      y : row of cell
                              }
            =============================================================================================================== */
         getCoordsFromId : function (s_id) {
-                var id  = s_id.split ("-").last (),              //get the cell reference from the cell id
+                var id  = s_id.split ("-").last (),              //get the cell reference from the cell ID
                     col = parseInt (id.split("x").first(), 10),  //the first reference is the col
                     row = parseInt (id.split("x").last(), 10)    //row is the second reference
                 ;
@@ -133,9 +133,9 @@ Board.prototype = {
                 
                 //loop over each row...              //loop over each column...
                 for (var y=0; y<this.height; y++) { for (var x=0; x<this.width; x++) {
-                        //get the html element for this cell (x, y)
+                        //get the HTML element for this cell (x, y)
                         var e = $(this.getCellId(x,y));
-                        //if the html in the cell is not the same as in memory, update it
+                        //if the HTML in the cell is not the same as in memory, update it
                         if (e.innerHTML != this.cells[x][y]) {e.update (this.cells[x][y]);}
                 } }
         }
