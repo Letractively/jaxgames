@@ -46,8 +46,10 @@ game.run = {
            return * boolean : true if the top card is a Two or Black Jack, false otherwise
            =============================================================================================================== */
         armed : function () {
-                var card_value = game.pack.value (this.cards.last());
-                return (this.cards.length) && (card_value == 11 || card_value == 2);
+                return (this.cards.length) && (
+                        game.pack.value (this.cards.last()) == 11 ||
+                        game.pack.value (this.cards.last()) == 2
+                );
         },
         
         /* > combo : if the card on top of the run is a combo card (Ace, Eight or Joker)

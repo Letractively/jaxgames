@@ -2,6 +2,7 @@
 Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
 07.JUN.07
+    FIX: [Blacjax] "s_card has no properties" error, caused by 'run.js' `isArmed`
     ADD: [Shared] Renamed '_board.js' to '_grid.js' and the class therein from `Board` to `Grid`
     ADD: [Shared] Moved `game.playAgain` and `game.resign` to `shared`
     NEW: [Project] Map of dependencies added to the top of most scripts. Not certain how helpful this is to people, and it
