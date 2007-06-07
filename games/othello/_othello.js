@@ -4,6 +4,13 @@
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 *//*
+   + js/CONFIG.js
+   + js/boot.js [ + jax/jax.js + js/_shared.js + js/_chat.js + js/_global.js ]
+   + games/othello/game.js [
+        + games/-/_js/_grid.js
+        » games/othello/_othello.js
+   ]
+*//*
    name   : othello
    author : Kroc Camen | kroccamen@gmail.com | kroc.deviantart.com
    type   : board game
@@ -37,8 +44,8 @@ var game = {
         name    : "Othello",  //a user-seen name for your game. required, as used in `shared`
         version : "0.3.0",
         
-        board   : new Board ("game-board"),  //the game board (default size of 8x8 will be used), see '_board.js'
-        pieces  : [],                        //the layout of pieces on the board
+        board   : new Grid ("game-board"),  //the game board (default size of 8x8 will be used), see '_grid.js'
+        pieces  : [],                       //the layout of pieces on the board
         
         templates : {
                 //the player's black or white piece icon on the paper at the sides
@@ -482,26 +489,6 @@ var game = {
         end : function (b_winner) {
                 //use standard shared "game over" UI to restart the game
                 shared.end (b_winner);
-        },
-        
-        playAgain : function (b_winner) {
-                //stop listening for the play again signal from the other player
-                jax.listenFor ("game_again");
-                //if you won, the loser starts, display a message whilst you wait for them to start
-                if (b_winner) {
-                        shared.setSystemStatus ("Waiting for the other player to start, Please Wait...");
-                }
-                //notify the opponent that the game is starting again
-                jax.sendToQueue ("game_again", {winner: b_winner});
-                //start the game for yourself (loser goes first)
-                this.start (!b_winner);
-        },
-        
-        resign : function () {
-                jax.disconnect ({reason: "unload"});
-                shared.setPlayerStatus ();
-                shared.headsup.hide ();
-                shared.setSystemStatus ();
         }
 };
 

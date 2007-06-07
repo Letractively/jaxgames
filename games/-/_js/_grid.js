@@ -1,30 +1,30 @@
 /* =======================================================================================================================
-   js/_board.js - create and manage a game board/grid
+   js/_grid.js - create and manage a game grid/board
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 *//*
    css guide:
    ----------
-   when you create an instance of the board class, you must provide the ID of an HTML element that currently exists (ideally
-   a <div>) that the board table will be injected into. the board will use the following HTML IDs for the various table
-   elements, where 'element' is the HTML ID you created the board class with.
+   when you create an instance of the grid class, you must provide the ID of an HTML element that currently exists (ideally
+   a <div>) that the grid table will be injected into. the grid will use the following HTML IDs for the various table
+   elements, where 'element' is the HTML ID you created the grid class with.
    
-   where `var board = new Board ('element');`:
-   <table> = #element-table    (class: .board)
+   where `var grid = new Grid ('element');`:
+   <table> = #element-table    (class: .grid)
    <col>   = #element-col-X    (where X is column number - 1, 2, 3 &c)
    <tr>    = #element-row-Y    (where Y is the row number 1 to number of rows)
    <td>    = #element-cell-XxY (where X is the column number and Y is the row number. e.g. #element-cell-3x6)
 */
-var Board = Class.create ();
-Board.prototype = {
-        element : "",  //HTML ID to inject the board into
+var Grid = Class.create ();
+Grid.prototype = {
+        element : "",  //HTML ID to inject the grid into
         width   : 0,   //number of columns in the table
         height  : 0,   //number of rows
         cells   : [],  //an array of HTML content to go in each cell (as a two dimensional array, e.g. [x][y])
         
         //this is a set of vectors to move in the eight directions. you can use this in your own logic to traverse the 
-        //board for your own reasons. refer to othello for good examples. it isn't used internally at all
+        //grid for your own reasons. refer to othello for good examples. it isn't used internally at all
         directions : [
                 {x:  0, y: -1},  //0 - up
                 {x:  1, y: -1},  //1 - right-up
@@ -38,9 +38,9 @@ Board.prototype = {
         
         /* > intialize : constructor function
            ===============================================================================================================
-           params * s_element  : HTML element ID to inject the board into
-                    (n_width)  : width of the board in cells (1-based). default: 8
-                    (n_height) : height of the board in cells (1-based). default: 8
+           params * s_element  : HTML element ID to inject the grid into
+                    (n_width)  : width of the grid in cells (1-based). default: 8
+                    (n_height) : height of the grid in cells (1-based). default: 8
            =============================================================================================================== */
         initialize : function (s_element, n_width, n_height) {
                 if (!n_width)  {n_width  = 8;}  //default: eight squares wide
@@ -54,14 +54,14 @@ Board.prototype = {
                 this.clear ();
         },
         
-        /* > clear: empty the board
+        /* > clear: empty the grid
            =============================================================================================================== */
         clear : function () {
                 //create the two dimensional array to represent the html content of each cell
                 this.cells = create2DArray (this.width, this.height, "");
         },
         
-        /* > injectHTML : inserts the initial empty html table for the board
+        /* > injectHTML : inserts the initial empty html table for the grid
            =============================================================================================================== */
         injectHTML : function () {
                 //this function cannot be called in `initialize` because HTML cannot be editied before the page has 
@@ -69,7 +69,7 @@ Board.prototype = {
                 //in `display` if the table is not already present
                 
                 //start the table
-                var html = '<table id="'+this.element+'-table" class="board"><cols>\n';
+                var html = '<table id="'+this.element+'-table" class="grid"><cols>\n';
                 //add the cols (so that you can style a whole coulmn in one go)
                 for (x=0; x<this.width; x++) {
                         html += '\t\t\t\t<col id="'+this.element+'-col-'+x+'"></col>\n';
@@ -81,7 +81,7 @@ Board.prototype = {
                         html += '\t\t\t\t<tr id="'+this.element+'-row-'+y+'">\n';
                         //loop over each column...
                         for (x=0; x<this.width; x++) {
-                                //chequer the board by alternating classes horizontally and vertically
+                                //chequer the grid by alternating classes horizontally and vertically
                                 var chequer = (y%2 + x%2 == 1) ? "B" : "A";  
                                 //create the table cell and put the content in
                                 html += '\t\t\t\t\t<td id="'+this.getCellId(x,y)+'" class="'+chequer+'">'+
@@ -125,10 +125,10 @@ Board.prototype = {
                 return {x: col, y: row};
         },
         
-        /* > display: refresh the board
+        /* > display: refresh the grid
            =============================================================================================================== */
         display : function () {
-                //if the element that the board is (supposed to be) in is empty, create the board
+                //if the element that the grid is (supposed to be) in is empty, create the grid
                 if (!$(this.element)) {this.injectHTML ();}
                 
                 //loop over each row...              //loop over each column...

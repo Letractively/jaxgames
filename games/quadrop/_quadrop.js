@@ -33,8 +33,8 @@ var game = {
         name    : "Quadrop",
         version : "0.1.0",
         
-        grid   : new Board ("game-grid", 7, 6),  //the game grid, a board of 7x6. see '_board.js'
-        pieces  : [],                            //the layout of pieces on the grid
+        grid   : new Grid ("game-grid", 7, 6),  //the game grid, a board of 7x6. see '_grid.js'
+        pieces  : [],                         //the layout of pieces on the grid
         
         /* > load : called for you on page load (see shared.js)
            =============================================================================================================== */
@@ -122,53 +122,12 @@ var game = {
                 }
         },
         
-        /* > preempt : switch players, but preempt the rare occassion of not being able to take a turn
-           ===============================================================================================================
-           params * b_self : if you or them should be checked (true = you)
-           =============================================================================================================== */
-        preempt : function (b_self) {
-        },
-        
         /* > endGame : play is complete, someone won or lost
            ===============================================================================================================
            params * b_winner : if you are the winner or not
            =============================================================================================================== */
         end : function (b_winner) {
-                //!/TODO: this
-                var html = '<a href="javascript:game.playAgain('+b_winner+');">Play Again?</a> ' +
-                           '<a href="javascript:game.resign();">Resign</a></p>'
-                ;
-                //increase the number of games played
-                shared.played ++;
-                (b_winner?playerMe:playerThem).wins ++;  //increase the tally for the winner
-                shared.setPlayerStatus ("<p>"+(b_winner?"YOU WIN":"YOU LOSE")+"<br />"+html);
-                $("player-status-me-wins").innerHTML   = playerMe.wins;
-                $("player-status-them-wins").innerHTML = playerThem.wins;
-                
-                //listen out for the "play again" signal from the other person
-                jax.listenFor("game_again", function(o_response){
-                        jax.listenFor ("game_again");
-                        game.start (!b_winner);
-                });
-        },
-        
-        playAgain : function (b_winner) {
-                //stop listening for the play again signal from the other player
-                jax.listenFor ("game_again");
-                //if you won, the loser starts, display a message whilst you wait for them to start
-                if (b_winner) {
-                        shared.setSystemStatus ("Waiting for the other player to start, Please Wait...");
-                }
-                //notify the opponent that the game is starting again
-                jax.sendToQueue ("game_again", {winner: b_winner});
-                //start the game for yourself (loser goes first)
-                this.start (!b_winner);
-        },
-        
-        resign : function () {
-                jax.disconnect ({reason: "unload"});
-                shared.setPlayerStatus ();
-                shared.setSystemStatus ();
+                shared.end (b_winner);
         }
 };
 

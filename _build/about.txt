@@ -75,7 +75,7 @@ A: The best way to know is to look at the source code, but here is an overview o
           However, in most instances "games.js" is much like "boot.js", in that its only function is to load the other
           Javascript files the game actually uses. In the exmaple of Othello, the file looks like this:
           
-          include ("../-/_js/_board.js");
+          include ("../-/_js/_grid.js");
           include ("_othello.js");
           
           The `include` Javascript function is defined in "boot.js", and simply loads another Javascript file.
