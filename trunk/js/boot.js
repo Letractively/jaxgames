@@ -4,6 +4,10 @@
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 *//*
+   + js/CONFIG.js
+   » js/boot.js [ - jax/jax.js - js/_shared.js - js/_chat.js - js/_global.js ]
+   - games/?/game.js (game dependent)
+*//*
    the code in this page only exists in the source code for jax games. the build system will create a 'release' version of
    jax games where most of the scripts will be merged and compressed into a single file, replacing 'boot.js'
    (see '_build/about.txt'). this means that users will have to download a lot less scripts, speeding up load times. also,
@@ -87,4 +91,3 @@ if (!IN_RHINO) {
 }
 
 //=== end of line ===========================================================================================================
-//'js/CONFIG.js' « previous                                                                            next » 'js/_shared.js'

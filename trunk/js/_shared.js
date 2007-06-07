@@ -4,6 +4,10 @@
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 *//*
+   + js/CONFIG.js
+   + js/boot.js [ + jax/jax.js » js/_shared.js - js/_chat.js - js/_global.js ]
+   - games/?/game.js (game dependent)
+*//*
    '_shared.js' contains functions shared between all of the games; in particular `shared`: an object containing core
    functions to power the games and make the shared UI function (e.g. chat box, which is in '_chat.js')
 */
@@ -391,8 +395,8 @@ var shared = {
            =============================================================================================================== */
         end : function (b_winner) {
                 //TODO: this should be templated and presented better
-                var html   = '<a href="javascript:game.playAgain('+b_winner+');">Play Again?</a> ' +
-                             '<a href="javascript:game.resign();">Resign</a>',
+                var html   = '<a href="#" onclick="javascript:shared.playAgain('+b_winner+');">Play Again?</a> ' +
+                             '<a href="#" onclick="javascript:shared.resign();">Resign</a>',
                     winner = b_winner ? playerMe : playerThem,
                     loser  = b_winner ? playerThem : playerMe
                 ;
@@ -411,6 +415,26 @@ var shared = {
                 jax.listenFor ("game_again", function(o_response){
                         game.start (!b_winner);
                 });
+        },
+        
+        playAgain : function (b_winner) {
+                //stop listening for the play again signal from the other player
+                jax.listenFor ("game_again");
+                //if you won, the loser starts, display a message whilst you wait for them to start
+                if (b_winner) {
+                        this.setSystemStatus ("Waiting for the other player to start, Please Wait...");
+                }
+                //notify the opponent that the game is starting again
+                jax.sendToQueue ("game_again", {winner: b_winner});
+                //start the game for yourself (loser goes first)
+                game.start (!b_winner);
+        },
+        
+        resign : function () {
+                jax.disconnect ({reason: "unload"});
+                this.setPlayerStatus ();
+                this.headsup.hide ();
+                this.setSystemStatus ('You have resigned.<br /><a href="javascript:location.reload ();">Play Again</a>');
         }
 };
 
@@ -522,4 +546,3 @@ jax.listenFor ("jax_disconnect", function(o_response) {
 });
 
 //=== end of line ===========================================================================================================
-//'js/boot.js' « previous                                                                                next » 'js/_chat.js'

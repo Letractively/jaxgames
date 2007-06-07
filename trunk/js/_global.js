@@ -3,6 +3,10 @@
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
+*//*
+   + js/CONFIG.js
+   + js/boot.js [ + jax/jax.js + js/_shared.js + js/_chat.js » js/_global.js ]
+   - games/?/game.js (game dependent)
 */
 
 /* > create2DArray : javascript has no built in method for creating 2D arrays
@@ -50,4 +54,3 @@ function bsod (s_message, s_url, n_line) {
 if (config.use_bsod) {window.onerror = bsod;}
 
 //=== end of line ===========================================================================================================
-//'js/_chat.js' « previous

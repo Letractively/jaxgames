@@ -4,6 +4,16 @@
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 *//*
+   + js/CONFIG.js
+   + js/boot.js [ + jax/jax.js + js/_shared.js + js/_chat.js + js/_global.js ]
+   + games/blacjax/game.js [
+     + games/-/_js/_cards.js
+     + games/blacjax/_classes.js
+     » games/blacjax/_blacjax.js
+     - games/blacjax/_events.js
+     - games/blacjax/_run.js
+   ]
+*//*
    name   : blacjax
    author : Kroc Camen | kroccamen@gmail.com | kroc.deviantart.com
    type   : card game
@@ -214,9 +224,10 @@ var game = {
                                 game.playTurn ();
                         }
                                 
-                } else if (!this.run.combo () && !armed_run &&
+                } //---------------------------------------------------------------------------------------------------------
+                  else if (!this.run.combo () && !armed_run &&
                            (!playerMe.hand.cards.length || !playerThem.hand.cards.length)
-                ) {  //------------------------------------------------------------------------------------------------------
+                ) {  
                         //either person has no cards left, and there is no continuation (armed / combo cards),
                         //the other player has won in this situation
                         game.end (!b_self);
@@ -295,26 +306,6 @@ var game = {
                 }
                 
                 shared.end (b_winner);
-        },
-        
-        playAgain : function (b_winner) {
-                //stop listening for the play again signal from the other player
-                jax.listenFor ("game_again");
-                //if you won, the loser starts, display a message whilst you wait for them to start
-                if (b_winner) {
-                        shared.setSystemStatus ("Waiting for the other player to start, Please Wait...");
-                }
-                //notify the opponent that the game is starting again
-                jax.sendToQueue ("game_again", {winner: b_winner});
-                //start the game for yourself (loser goes first)
-                game.start (!b_winner);
-        },
-        
-        resign : function () {
-                jax.disconnect ({reason: "unload"});
-                shared.setPlayerStatus ();
-                shared.headsup.hide ();
-                shared.setSystemStatus ('You have resigned.<br /><a href="javascript:location.reload ();">Play Again</a>');
         }
 };
 
