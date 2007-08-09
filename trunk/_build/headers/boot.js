@@ -4,10 +4,10 @@ licenced under the Creative Commons Attribution 3.0 License: http://creativecomm
 Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 This is a compressed version, visit the website for full source code
 
-Prototype JavaScript framework, version 1.5.1 (c) 2005-2007 Sam Stephenson
+Prototype JavaScript framework, version 1.6.0_pre1 (c) 2005-2007 Sam Stephenson
 http://prototypejs.org/
 
-script.aculo.us scriptaculous.js v1.7.1_beta3, Fri May 25 17:19:41 +0200 2007
+script.aculo.us scriptaculous.js v1.8.0_pre1
 Copyright (c) 2005-2007 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation

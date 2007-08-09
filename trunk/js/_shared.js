@@ -4,10 +4,6 @@
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 *//*
-   + js/CONFIG.js
-   + js/boot.js [ + jax/jax.js » js/_shared.js - js/_chat.js - js/_global.js ]
-   - games/?/game.js (game dependent)
-*//*
    '_shared.js' contains functions shared between all of the games; in particular `shared`: an object containing core
    functions to power the games and make the shared UI function (e.g. chat box, which is in '_chat.js')
 */
@@ -21,6 +17,7 @@ var jax = new Jax ("../../"+config.jax.path, config.jax.interval);
 
 /* EVENT > onload - when everything is loaded and we are ready to go...
    ======================================================================================================================= */
+//TODO: Prototype 1.6.0 will offer "contentloaded" event to run when the DOM is ready
 Event.observe (window, 'load', function(){
         //this is essentially the starting point for Jax Games. after all the scripts have been loaded, this function will
         //put everything into motion. read further down this page for the definition of the `shared` object and functions
@@ -50,15 +47,14 @@ Event.observe (window, 'load', function(){
 /* =======================================================================================================================
    CLASS Player - a base class, your game can extend this to add more player properties
    ======================================================================================================================= */
-var Player = Class.create ();
-Player.prototype = {
+var Player = Class.create ({
         //override this in your game to add a constructor to the class. see 'games/blacjax/_classes.js' for an example
         initialize : Prototype.emptyFunction,
         
         name : "",  //display name
         icon : "",  //the little avatar of the person
         wins : 0    //number of games won by the player
-};
+});
 
 /* =======================================================================================================================
    OBJECT shared - functions/properties shared by different games on the site
@@ -283,8 +279,8 @@ var shared = {
                                       shared.headsup.show ("and then this afterwards", 1);
                               });
                         */
-                        if (!f_timeout) {f_timeout = Prototype.emptyFunction;}  //default: no callback
-                        if (!s_html)    {this.hide ();}  //if no text is provided, hide the heads-up message
+                        if (!f_timeout)       {f_timeout = Prototype.emptyFunction;}  //default: no callback
+                        if (s_html === false) {this.hide ();}  //if no text is provided, hide the heads-up message
                         
                         var e1 = $("shared-headsup"),      //the outside wrapper (that vertically centres the heads-up bar)
                             e2 = $("shared-headsup-text")  //the heads-up bar itself
@@ -293,10 +289,10 @@ var shared = {
                         e2.update ("<p>"+s_html+"</p>");
                         
                         //cancel any existing timeout
-                        /*!/var queue = Effect.Queues.get ('headsup');
+                        var queue = Effect.Queues.get ('headsup');
                         queue.each (function(o_item){
                                 o_item.cancel ();
-                        });*/
+                        });
                         //if the status message is hidden, fade it in
                         if (!this.visible) {
                                 //hide the message, and the wrapper; the animation will unhide automatically. these two lines
@@ -329,27 +325,29 @@ var shared = {
                    params * (f_callback) : optional function to call after hide is complete, used by `.show` above
                    ======================================================================================================= */
                 hide : function (f_callback) {
-                        if (this.visible) {
+                        //?/if (this.visible) {
                                 this.visible = false;
                                 var e1 = $("shared-headsup"),
                                     e2 = $("shared-headsup-text")
                                 ;
-                                new Effect.Parallel ([
-                                        new Effect.BlindUp (e2, {sync:true, scaleFromCenter:true}),
-                                        new Effect.Fade    (e1, {sync:true})
-                                ], {
-                                        duration    : 0.3,
-                                        transition  : Effect.Transitions.linear,
-                                        queue       : {position:'end', scope:'headsup', limit:3},
-                                        afterFinish : function(){
-                                                //hide and blank
-                                                e1.hide ();
-                                                e2.update ("<p></p>");
-                                                //if a callback was provided, call it now
-                                                if (f_callback) {f_callback ();}
-                                        }.bind(this)
-                                });
-                        }
+                                if (e2.innerHTML != "<p></p>") {
+                                        new Effect.Parallel ([
+                                                new Effect.BlindUp (e2, {sync:true, scaleFromCenter:true}),
+                                                new Effect.Fade    (e1, {sync:true})
+                                        ], {
+                                                duration    : 0.3,
+                                                transition  : Effect.Transitions.linear,
+                                                queue       : {position:'end', scope:'headsup', limit:3},
+                                                afterFinish : function(){
+                                                        //hide and blank
+                                                        e1.hide ();
+                                                        e2.update ("<p></p>");
+                                                        //if a callback was provided, call it now
+                                                        if (f_callback) {f_callback ();}
+                                                }.bind(this)
+                                        });
+                                }
+                        //?/}
                 }
         }, //end shared.headsup <
         
@@ -422,7 +420,7 @@ var shared = {
                 jax.listenFor ("game_again");
                 //if you won, the loser starts, display a message whilst you wait for them to start
                 if (b_winner) {
-                        this.setSystemStatus ("Waiting for the other player to start, Please Wait...");
+                        //?/this.setSystemStatus ("Waiting for the other player to start, Please Wait...");
                 }
                 //notify the opponent that the game is starting again
                 jax.sendToQueue ("game_again", {winner: b_winner});
@@ -440,7 +438,7 @@ var shared = {
 
 
 /* =======================================================================================================================
-   OBJECT shared.events - storage for element events (so that one function pointer can be used for multiple element events)
+   OBJECT shared.events - event bindings and functions for "events" that happen in game
    ======================================================================================================================= */
 shared.events = {
         /* > gameBegins : the moment when actual gameplay begins (this is an AJAX event)

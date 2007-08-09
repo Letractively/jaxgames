@@ -50,7 +50,7 @@ A: The best way to know is to look at the source code, but here is an overview o
       To reduce the number of files, select javascript and css files are combined. This is split into two main sections:
       
       i)  The Libraries are all the javascripts required for any game to be written for Jax Games, but not the game itself.
-          "/js/boot.js" loads these files as per the configuration in "/js/CONFIG.js"
+          "/js/_bootfiles.js" loads these files as per the configuration in "/js/_CONFIG.js"
           These are:
             + /js/_libs/scriptaculous/prototype.js     - javascript extension library - <prototypejs.org>
             + /js/_libs/scriptaculous/scriptaculous.js - animation library, boot strap file
@@ -60,8 +60,8 @@ A: The best way to know is to look at the source code, but here is an overview o
             + /jax/shared.js                           - shared code for all games, and where the `onload` function is
             
           Rhino is a Java implementation of Mozilla's SpiderMonkey Javascript engine. It allows you to run javascript files
-          in stand-alone fashion, without the browser. The build scripts execute Rhino using "boot.js" to list the files
-          above in an array, which are then combined together into a single file, replacing "boot.js".
+          in stand-alone fashion, without the browser. The build scripts execute Rhino using "_bootfiles.js" to list the
+          files above in an array, which are then combined together into a single file, replacing "boot.js".
           See "/_build/libs/rhino_makeboot.js" for this process.
           
           Therefore, where normally "boot.js" would be loaded in Firefox, and all the other scripts called in, the combined

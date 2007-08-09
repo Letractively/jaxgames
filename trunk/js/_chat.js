@@ -3,10 +3,6 @@
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
-*//*
-   + js/CONFIG.js
-   + js/boot.js [ + jax/jax.js + js/_shared.js » js/_chat.js - js/_global.js ]
-   - games/?/game.js (game dependent)
 */
 
 /* =======================================================================================================================
@@ -259,7 +255,7 @@ shared.chat = {
                 var regex = new RegExp (
                         "(?:http(s)?:\\/\\/)?"+  //.................................  = http/https (remember "s" in $1)
                         "("+  //....................................................  = remember url in $2 ("www.test.com")
-                           "(?:www.|([0-9A-Z_!~\\*'\\(\\)-]+\\.))?"+  //...................  = subdomain. e.g. "www."
+                           "(?:www.|([0-9A-Z_!~\\*'\\(\\)-]+\\.))?"+  //............  = subdomain. e.g. "www."
                            "("+  //.................................................  = remember short url in $3 ("test.com")
                               "[0-9A-Z-]{2,63}"+  //................................  = domain name ("test")
                               "\\.(?:com|co.uk|[A-Z]{2,3}(?:\\.[A-Z]{2,3})?)"+  //..  = tld. i.e. ".com", ".co.uk" &c.
@@ -271,6 +267,7 @@ shared.chat = {
                         "gi"  //'global+ignore', replace all instances, ignore case sensitivity
                 );
                 //replace URLs in the text with hyperlinks
+		//TODO: Prototype 1.6.0 will offer regex.escape
                 return s_msg.replace (regex, '<a href="http$1://$2" target="_blank">&lt;$3$4&hellip;&gt;</a>');
         },
         
