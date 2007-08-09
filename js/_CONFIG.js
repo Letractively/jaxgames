@@ -3,10 +3,6 @@
    =======================================================================================================================
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
-*//*
-   » js/CONFIG.js
-   - js/boot.js [ - jax/jax.js - js/_shared.js - js/_chat.js - js/_global.js ]
-   - games/?/game.js (game dependent)
 */
 var config = {
         //configurations we'll apply to jax, the browser-to-browser AJAX lib (see 'jax/jax.js')
@@ -28,9 +24,9 @@ var config = {
                 //?/custom_prototype : "js/_libs/scriptaculous/scriptaculous-js-svn/lib/prototype.js",
                 custom_prototype : "js/_libs/scriptaculous/prototype-svn/dist/prototype.js",
                 //location to your own folder containing a copy of scriptaculous to use (always include end slash)
-                custom_src : "js/_libs/scriptaculous/scriptaculous-js-svn/src/",
+                custom_src       : "js/_libs/scriptaculous/scriptaculous-js-svn/src/",
                 //you'll have to specify the version number of your own copy
-                custom_version : "1.7.1.svn",
+                custom_version   : "1.8.0.svn",
                 
                 //an array of which Scriptaculous libraries to include, sans extension (if use_defaults = false)
                 //?/includes : ["builder", "effects", "dragdrop", "controls", "slider", "sound"]  //all of Scriptaculous

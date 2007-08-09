@@ -1,6 +1,14 @@
 =============================================================================================================================
 Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+09.AUG.07
+    ADD: [Project] Renamed 'boot.js' to '_bootfiles.js', and 'CONFIG.js' to '_CONFIG.js', then created new 'boot.js' to
+         bootstrap the two. This now means that the entire libraries are in just one javascript file, not two
+    ADD: [Shared] Upgraded to Prototype v1.6.0_pre1 and Scriptaculous 1.8.0_pre1 for defaults
+08.JUN.07
+    NEW: [Blacjax] Announcement on screen whilst deck is being received
+    FIX: [Shared] `shared.headsup.hide`'s callback not firing because an immediate previous `show` command would not have
+         finished yet and set the `shared.headsup.visible` property to `true`
 07.JUN.07
     FIX: [Blacjax] "s_card has no properties" error, caused by 'run.js' `isArmed`
     ADD: [Shared] Renamed '_board.js' to '_grid.js' and the class therein from `Board` to `Grid`

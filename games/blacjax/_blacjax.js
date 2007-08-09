@@ -4,16 +4,6 @@
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 *//*
-   + js/CONFIG.js
-   + js/boot.js [ + jax/jax.js + js/_shared.js + js/_chat.js + js/_global.js ]
-   + games/blacjax/game.js [
-     + games/-/_js/_cards.js
-     + games/blacjax/_classes.js
-     » games/blacjax/_blacjax.js
-     - games/blacjax/_events.js
-     - games/blacjax/_run.js
-   ]
-*//*
    name   : blacjax
    author : Kroc Camen | kroccamen@gmail.com | kroc.deviantart.com
    type   : card game
@@ -90,19 +80,22 @@ var game = {
                         //prepare a new deck. the person who is going first, shuffles a deck of cards and sends the order to
                         //the other player so that both players are playing off of the same order of cards
                         this.deck.cards.clear ();
-                        //note: if you want to setup a fake deck of cards for forcing order of play, do it here
-                        //      the order is: face, them:1-7, you: 1-7, rest of deck - reversed
-                        //?/n_cards = 1;
-                        //?/this.deck.cards = ["AC", "JH", "JC", "3S", "4S", "3D", "4D", "8H", "5H", "6H", "5S", "6S", "5D", "6D", "8C"].reverse ();
                         this.deck.addPack (
                                 this.pack,  //which pack to use in the deck
                                 1,          //add one pack to the deck
                                 true        //shuffle the deck each time a pack is added
                         );
+                        //note: if you want to setup a fake deck of cards for forcing order of play, do it here
+                        //      the order is: face, them:1-7, you: 1-7, rest of deck - reversed
+                        /*n_cards = 1;
+                        //this order sets up the complex end scenario of two last cards cancelling each other out
+                        this.deck.cards = ["AC", "JH", "JC", "3S", "4S", "3D", "4D", "8H", "5H", "6H", "5S", "6S", "5D", "6D", "8C"].reverse ();
+                        */
                         //send the deck to the other player...
                         jax.sendToQueue ("game_start", {deck: game.deck.cards, cards: n_cards}, startComplete);
                 } else {
                         //wait to receive the deck to play with...
+                        shared.headsup.show ("Receiving pack of cards&hellip;");
                         jax.listenFor ("game_start", startComplete);
                 }
                 
@@ -116,6 +109,7 @@ var game = {
                         
                         shared.setSystemStatus ();  //hide any status messages being displayed
                         shared.chat.show ();        //show the chat box
+                        shared.headsup.hide ();
                         
                         //draw the face card to start with
                         game.run.discard = game.deck.drawCard ();
@@ -209,7 +203,6 @@ var game = {
                     armed_run = this.run.armed (),                  //if the run is topped by a Black Jack or Two
                     count     = (armed_run ? this.run.penalty : 1)  //if there's a penalty, take that many cards
                 ;
-                
                 //an Eight, Ace or Joker was put down, it is a combo card, have another go:
                 if (b_self && this.run.combo ()) {  //-----------------------------------------------------------------------
                         //if no playable cards to do so (e.g. put down an Ace of Spades, but have no more Spades)...
@@ -223,7 +216,7 @@ var game = {
                                 //else, there is a playable card, have your go
                                 game.playTurn ();
                         }
-                                
+                        
                 } //---------------------------------------------------------------------------------------------------------
                   else if (!this.run.combo () && !armed_run &&
                            (!playerMe.hand.cards.length || !playerThem.hand.cards.length)

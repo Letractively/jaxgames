@@ -1,11 +1,11 @@
 #!/usr/bin/env rhino
 ; //this semilcolon is here to allow the script to pass JSLint, which thinks the bang above is a javascript line
 
-load ('../js/CONFIG.js');
+load ('../js/_CONFIG.js');
 IN_RHINO = true;
-load ('../js/boot.js');
+load ('../js/_bootfiles.js');
 
-var argv = [];
+var argv = ["../js/_CONFIG.js"];
 for (i=0; i<boot_files.length; i++) {
         argv.push ("../"+boot_files[i]);
 }

@@ -1,5 +1,3 @@
-// script.aculo.us effects.js v1.7.1_beta3, Fri May 25 17:19:41 +0200 2007
-
 // Copyright (c) 2005-2007 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
 // Contributors:
 //  Justin Palmer (http://encytemedia.com/)
@@ -61,13 +59,6 @@ Element.forceRerendering = function(element) {
     element.removeChild(n);
   } catch(e) { }
 };
-
-/*--------------------------------------------------------------------------*/
-
-Array.prototype.call = function() {
-  var args = arguments;
-  this.each(function(f){ f.apply(this, args) });
-}
 
 /*--------------------------------------------------------------------------*/
 
@@ -158,6 +149,9 @@ Effect.Transitions = {
         1 - ((pos * pulses * 2) - Math.floor(pos * pulses * 2))
       );
   },
+  spring: function(pos) { 
+    return 1 - (Math.cos(pos * 4.5 * Math.PI) * Math.exp(-pos * 6)); 
+  },
   none: function(pos) {
     return 0;
   },
@@ -168,8 +162,7 @@ Effect.Transitions = {
 
 /* ------------- core effects ------------- */
 
-Effect.ScopedQueue = Class.create();
-Object.extend(Object.extend(Effect.ScopedQueue.prototype, Enumerable), {
+Effect.ScopedQueue = Class.create(Class.mixin({
   initialize: function() {
     this.effects  = [];
     this.interval = null;    
@@ -221,7 +214,7 @@ Object.extend(Object.extend(Effect.ScopedQueue.prototype, Enumerable), {
     for(var i=0, len=this.effects.length;i<len;i++) 
       this.effects[i] && this.effects[i].loop(timePos);
   }
-});
+}, Enumerable));
 
 Effect.Queues = {
   instances: $H(),
@@ -247,7 +240,7 @@ Effect.DefaultOptions = {
   queue:      'parallel'
 }
 
-Effect.Base = function() {};
+Effect.Base = Class.create();
 Effect.Base.prototype = {
   position: null,
   start: function(options) {
@@ -257,7 +250,7 @@ Effect.Base.prototype = {
         (options[eventName] ? 'this.options.'+eventName+'(this);' : '')
       );
     }
-    if(options.transition === false) options.transition = Effect.Transitions.linear;
+    if(options && options.transition === false) options.transition = Effect.Transitions.linear;
     this.options      = Object.extend(Object.extend({},Effect.DefaultOptions), options || {});
     this.currentFrame = 0;
     this.state        = 'idle';
@@ -269,15 +262,15 @@ Effect.Base.prototype = {
     
     eval('this.render = function(pos){ '+
       'if(this.state=="idle"){this.state="running";'+
-      codeForEvent(options,'beforeSetup')+
+      codeForEvent(this.options,'beforeSetup')+
       (this.setup ? 'this.setup();':'')+ 
-      codeForEvent(options,'afterSetup')+
+      codeForEvent(this.options,'afterSetup')+
       '};if(this.state=="running"){'+
       'pos=this.options.transition(pos)*'+this.fromToDelta+'+'+this.options.from+';'+
       'this.position=pos;'+
-      codeForEvent(options,'beforeUpdate')+
+      codeForEvent(this.options,'beforeUpdate')+
       (this.update ? 'this.update(pos);':'')+
-      codeForEvent(options,'afterUpdate')+
+      codeForEvent(this.options,'afterUpdate')+
       '}}');
     
     this.event('beforeStart');
@@ -321,8 +314,7 @@ Effect.Base.prototype = {
   }
 }
 
-Effect.Parallel = Class.create();
-Object.extend(Object.extend(Effect.Parallel.prototype, Effect.Base.prototype), {
+Effect.Parallel = Class.create(Effect.Base, {
   initialize: function(effects) {
     this.effects = effects || [];
     this.start(arguments[1]);
@@ -341,8 +333,22 @@ Object.extend(Object.extend(Effect.Parallel.prototype, Effect.Base.prototype), {
   }
 });
 
-Effect.Event = Class.create();
-Object.extend(Object.extend(Effect.Event.prototype, Effect.Base.prototype), {
+Effect.Tween = Class.create(Effect.Base, {
+  initialize: function(object, from, to) {
+    object = Object.isString(object) ? $(object) : object;
+    var args = $A(arguments), method = args.last(), 
+      options = args.length == 5 ? args[3] : null;
+    this.method = Object.isFunction(method) ? method.bind(object) :
+      Object.isFunction(object[method]) ? object[method].bind(object) : 
+      function(value) { object[method] = value };
+    this.start(Object.extend({ from: from, to: to }, options || {}));
+  },
+  update: function(position) {
+    this.method(position);
+  }
+});
+
+Effect.Event = Class.create(Effect.Base, {
   initialize: function() {
     var options = Object.extend({
       duration: 0
@@ -352,8 +358,7 @@ Object.extend(Object.extend(Effect.Event.prototype, Effect.Base.prototype), {
   update: Prototype.emptyFunction
 });
 
-Effect.Opacity = Class.create();
-Object.extend(Object.extend(Effect.Opacity.prototype, Effect.Base.prototype), {
+Effect.Opacity = Class.create(Effect.Base, {
   initialize: function(element) {
     this.element = $(element);
     if(!this.element) throw(Effect._elementDoesNotExistError);
@@ -371,8 +376,7 @@ Object.extend(Object.extend(Effect.Opacity.prototype, Effect.Base.prototype), {
   }
 });
 
-Effect.Move = Class.create();
-Object.extend(Object.extend(Effect.Move.prototype, Effect.Base.prototype), {
+Effect.Move = Class.create(Effect.Base, {
   initialize: function(element) {
     this.element = $(element);
     if(!this.element) throw(Effect._elementDoesNotExistError);
@@ -384,15 +388,10 @@ Object.extend(Object.extend(Effect.Move.prototype, Effect.Base.prototype), {
     this.start(options);
   },
   setup: function() {
-    // Bug in Opera: Opera returns the "real" position of a static element or
-    // relative element that does not have top/left explicitly set.
-    // ==> Always set top and left for position relative elements in your stylesheets 
-    // (to 0 if you do not need them) 
     this.element.makePositioned();
     this.originalLeft = parseFloat(this.element.getStyle('left') || '0');
     this.originalTop  = parseFloat(this.element.getStyle('top')  || '0');
     if(this.options.mode == 'absolute') {
-      // absolute movement, so we need to calc deltaX and deltaY
       this.options.x = this.options.x - this.originalLeft;
       this.options.y = this.options.y - this.originalTop;
     }
@@ -411,8 +410,7 @@ Effect.MoveBy = function(element, toTop, toLeft) {
     Object.extend({ x: toLeft, y: toTop }, arguments[3] || {}));
 };
 
-Effect.Scale = Class.create();
-Object.extend(Object.extend(Effect.Scale.prototype, Effect.Base.prototype), {
+Effect.Scale = Class.create(Effect.Base, {
   initialize: function(element, percent) {
     this.element = $(element);
     if(!this.element) throw(Effect._elementDoesNotExistError);
@@ -486,8 +484,7 @@ Object.extend(Object.extend(Effect.Scale.prototype, Effect.Base.prototype), {
   }
 });
 
-Effect.Highlight = Class.create();
-Object.extend(Object.extend(Effect.Highlight.prototype, Effect.Base.prototype), {
+Effect.Highlight = Class.create(Effect.Base, {
   initialize: function(element) {
     this.element = $(element);
     if(!this.element) throw(Effect._elementDoesNotExistError);
@@ -522,10 +519,22 @@ Object.extend(Object.extend(Effect.Highlight.prototype, Effect.Base.prototype), 
   }
 });
 
-Effect.ScrollTo = Class.create();
-Object.extend(Object.extend(Effect.ScrollTo.prototype, Effect.Base.prototype), {
-  initialize: function(element) {
-    this.element = $(element);
+Effect.ScrollTo = function(element) {
+  var options = arguments[1] || {},
+    scrollOffsets = document.viewport.getScrollOffsets(),
+    elementOffsets = $(element).cumulativeOffset(),
+    max = (window.height || document.body.scrollHeight) - document.viewport.getHeight();  
+
+  if(options.offset) elementOffsets[1] += options.offset;
+
+  return new Effect.Tween(null,
+    scrollOffsets.top,
+    elementOffsets[1] > max ? max : elementOffsets[1],
+    options,
+    function(p){ scrollTo(scrollOffsets.left, p.round()) }
+  );
+};
+/*    this.element = $(element);
     this.start(arguments[1] || {});
   },
   setup: function() {
@@ -545,7 +554,7 @@ Object.extend(Object.extend(Effect.ScrollTo.prototype, Effect.Base.prototype), {
     window.scrollTo(Position.deltaX, 
       this.scrollStart + (position*this.delta));
   }
-});
+});*/
 
 /* ------------- combination effects ------------- */
 
@@ -926,40 +935,37 @@ Effect.Fold = function(element) {
   }}, arguments[1] || {}));
 };
 
-Effect.Morph = Class.create();
-Object.extend(Object.extend(Effect.Morph.prototype, Effect.Base.prototype), {
+Effect.Morph = Class.create(Effect.Base, {
   initialize: function(element) {
     this.element = $(element);
     if(!this.element) throw(Effect._elementDoesNotExistError);
     var options = Object.extend({
       style: {}
     }, arguments[1] || {});
-    if (typeof options.style == 'string') {
-      if(options.style.indexOf(':') == -1) {
-        var cssText = '', selector = '.' + options.style;
-        $A(document.styleSheets).reverse().each(function(styleSheet) {
-          if (styleSheet.cssRules) cssRules = styleSheet.cssRules;
-          else if (styleSheet.rules) cssRules = styleSheet.rules;
-          $A(cssRules).reverse().each(function(rule) {
-            if (selector == rule.selectorText) {
-              cssText = rule.style.cssText;
-              throw $break;
-            }
-          });
-          if (cssText) throw $break;
+    
+    if (typeof options.style != 'string') this.style = $H(options.style);
+    else {
+      if (options.style.include(':'))
+        this.style = options.style.parseStyle();
+      else {
+        this.element.addClassName(options.style);
+        this.style = $H(this.element.getStyles());
+        this.element.removeClassName(options.style);
+        var css = this.element.getStyles();
+        this.style = this.style.reject(function(style) {
+          return style.value == css[style.key];
         });
-        this.style = cssText.parseStyle();
-        options.afterFinishInternal = function(effect){
+        options.afterFinishInternal = function(effect) {
           effect.element.addClassName(effect.options.style);
           effect.transforms.each(function(transform) {
-            if(transform.style != 'opacity')
-              effect.element.style[transform.style] = '';
+            effect.element.style[transform.style] = '';
           });
         }
-      } else this.style = options.style.parseStyle();
-    } else this.style = $H(options.style)
+      }
+    }
     this.start(options);
   },
+  
   setup: function(){
     function parseColor(color){
       if(!color || ['rgba(0, 0, 0, 0)','transparent'].include(color)) color = '#ffffff';
@@ -1012,14 +1018,13 @@ Object.extend(Object.extend(Effect.Morph.prototype, Effect.Base.prototype), {
             (transform.targetValue[1]-transform.originalValue[1])*position)).toColorPart() +
           (Math.round(transform.originalValue[2]+
             (transform.targetValue[2]-transform.originalValue[2])*position)).toColorPart() :
-        transform.originalValue + Math.round(
-          ((transform.targetValue - transform.originalValue) * position) * 1000)/1000 + transform.unit;
+        (transform.originalValue +
+          (transform.targetValue - transform.originalValue) * position).toFixed(3) + transform.unit;
     this.element.setStyle(style, true);
   }
 });
 
-Effect.Transform = Class.create();
-Object.extend(Effect.Transform.prototype, {
+Effect.Transform = Class.create({
   initialize: function(tracks){
     this.tracks  = [];
     this.options = arguments[1] || {};
@@ -1060,35 +1065,74 @@ Element.CSS_PROPERTIES = $w(
   
 Element.CSS_LENGTH = /^(([\+\-]?[0-9\.]+)(em|ex|px|in|cm|mm|pt|pc|\%))|0$/;
 
+String.__parseStyleElement = document.createElement('div');
 String.prototype.parseStyle = function(){
-  var element = document.createElement('div');
-  element.innerHTML = '<div style="' + this + '"></div>';
-  var style = element.childNodes[0].style, styleRules = $H();
+  String.__parseStyleElement.innerHTML = '<div style="' + this + '"></div>';
+  var style = String.__parseStyleElement.childNodes[0].style, styleRules = $H();
   
   Element.CSS_PROPERTIES.each(function(property){
     if(style[property]) styleRules[property] = style[property]; 
   });
-  if(Prototype.Browser.IE && this.indexOf('opacity') > -1) {
+  
+  if(Prototype.Browser.IE && this.include('opacity'))
     styleRules.opacity = this.match(/opacity:\s*((?:0|1)?(?:\.\d*)?)/)[1];
-  }
+
   return styleRules;
 };
 
-Element.morph = function(element, style) {
-  new Effect.Morph(element, Object.extend({ style: style }, arguments[2] || {}));
-  return element;
+if (document.defaultView && document.defaultView.getComputedStyle) {
+  Element.getStyles = function(element) {
+    var css = document.defaultView.getComputedStyle($(element), null);
+    return Element.CSS_PROPERTIES.inject({}, function(styles, property) {
+      styles[property] = css[property];
+      return styles;
+    });
+  };
+} else {
+  Element.getStyles = function(element) {
+    element = $(element);
+    var css = element.currentStyle, styles;
+    styles = Element.CSS_PROPERTIES.inject({}, function(hash, property) {
+      hash[property] = css[property];
+      return hash;
+    });
+    if (!styles.opacity) styles.opacity = element.getOpacity();
+    return styles;
+  };
+}
+
+Effect.Methods = {
+  morph: function(element, style) {
+    element = $(element);
+    new Effect.Morph(element, Object.extend({ style: style }, arguments[2] || {}));
+    return element;
+  },
+  visualEffect: function(element, effect, options) {
+    element = $(element)
+    var s = effect.dasherize().camelize(), klass = s.charAt(0).toUpperCase() + s.substring(1);
+    new Effect[klass](element, options);
+    return element;
+  },
+  highlight: function(element, options) {
+    element = $(element);
+    new Effect.Highlight(element, options);
+    return element;
+  }
 };
 
-['getInlineOpacity','forceRerendering','setContentZoom',
- 'collectTextNodes','collectTextNodesIgnoreClass','morph'].each( 
-  function(f) { Element.Methods[f] = Element[f]; }
+$w('fade appear grow shrink fold blindUp blindDown slideUp slideDown '+
+  'pulsate shake puff squish switchOff dropOut').each(
+  function(effect) { 
+    Effect.Methods[effect] = function(element, options){
+      element = $(element);
+      Effect[effect.charAt(0).toUpperCase() + effect.substring(1)](element, options);
+      return element;
+    }
+  }
 );
 
-Element.Methods.visualEffect = function(element, effect, options) {
-  s = effect.dasherize().camelize();
-  effect_class = s.charAt(0).toUpperCase() + s.substring(1);
-  new Effect[effect_class](element, options);
-  return $(element);
-};
+$w('getInlineOpacity forceRerendering setContentZoom collectTextNodes collectTextNodesIgnoreClass getStyles').each( 
+  function(f) { Effect.Methods[f] = Element[f]; }
+);
 
-Element.addMethods();
+Element.addMethods(Effect.Methods);
