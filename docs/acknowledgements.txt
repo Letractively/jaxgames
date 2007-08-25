@@ -29,7 +29,7 @@ Many thanks go to these people, and their contributions:
 * Travis Hartwell <www.travishartwell.net/blog>, logging in the build script <www.travishartwell.net/blog/2006/08/19_2220>
 
 [Depreciated]
-* Thomas Peri, htmlEncode.js <tumuski.com> used for html escapement before switching to Prototype
+* Thomas Peri, htmlEncode.js <tumuski.com> used for HTML escapement before switching to Prototype
 
 [People]
 * William Hollister, the original concept

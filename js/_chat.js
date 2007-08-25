@@ -103,14 +103,14 @@ shared.chat = {
                                 //add the emoticon image to the collection
                                 html += this._.templates.chat_emote.evaluate (o_emote);
                         }
-                }.bind(this));
+                }, this);
                 //put the images into the panel
                 e_chat_emotes.update (html);
                 
                 //add an onclick event to each of the emotes in the panel
                 $A(e_chat_emotes.getElementsByTagName("img")).each (function(o_element){
                         Event.observe (o_element, "click", this._.events.chatEmoteClick);
-                }.bind(this));
+                }, this);
                 
                 //function the emote button to open the emote panel
                 Event.observe ("shared-chat-emote", "click", this.toggleEmoteList);
@@ -138,7 +138,7 @@ shared.chat = {
                 //clear the chatbox textarea as Firefox will remember the field value on refresh
                 if (e_chat_input.value.blank ()) {
                         e_chat_input.clear ();
-                        e_chat_label.show ();
+                        e_chat_label.show  ();
                 }
         },
         
@@ -196,9 +196,9 @@ shared.chat = {
                 //parse the message for markup, emoticons and urls
                 chat_msg.text = this.applyFormatting (chat_msg.text);
                 
-                //add the message to the chat history. `Insertion.Bottom` is used (instead of `.innerHTML+=`) so that 
+                //add the message to the chat history. `insert...bottom` is used (instead of `.innerHTML+=`) so that 
                 //multiple messages coming in at the same time don't overwrite each other
-                new Insertion.Bottom (e, this._.templates.chat_msg.evaluate(chat_msg));
+                e.insert ({bottom : this._.templates.chat_msg.evaluate(chat_msg)});
                 //animate the message appearing (and scroll down to meet it)
                 new Effect.SlideDown ("chat-"+chat_msg.time_id, {duration: 0.3, afterUpdate: function(){
                         //scroll to the bottom of the chat history
@@ -253,21 +253,21 @@ shared.chat = {
                 //regex to find anything shaped like a URL in the text:
                 //refer to http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:RegExp
                 var regex = new RegExp (
-                        "(?:http(s)?:\\/\\/)?"+  //.................................  = http/https (remember "s" in $1)
-                        "("+  //....................................................  = remember url in $2 ("www.test.com")
-                           "(?:www.|([0-9A-Z_!~\\*'\\(\\)-]+\\.))?"+  //............  = subdomain. e.g. "www."
-                           "("+  //.................................................  = remember short url in $3 ("test.com")
-                              "[0-9A-Z-]{2,63}"+  //................................  = domain name ("test")
-                              "\\.(?:com|co.uk|[A-Z]{2,3}(?:\\.[A-Z]{2,3})?)"+  //..  = tld. i.e. ".com", ".co.uk" &c.
+                        "(?:http(s)?:\\/\\/)?"+  //................................... http/https (remember "s" in $1)
+                        "("+  //...................................................... remember url in $2 ("www.test.com")
+                           "(?:www.|([0-9A-Z_!~\\*'\\(\\)-]+\\.))?"+  //.............. subdomain. e.g. "www."
+                           "("+  //................................................... remember short url in $3 ("test.com")
+                              "[0-9A-Z-]{2,63}"+  //.................................. domain name ("test")
+                              "\\.(?:com|co.uk|[A-Z]{2,3}(?:\\.[A-Z]{2,3})?)"+  //.... tld. i.e. ".com", ".co.uk" &c.
                            ")"+
-                           "(?::[0-9]{1,6})?"+  //..................................  = optional port. e.g. "test.com:80"
-                           "(?:\\/[\\/0-9a-z_!~\\*'\\(\\)\\.;\\?:@&=\\+\\$,%-]*)?"+ //= folder/files "test.com/e/index.html"
-                           "(?:#[0-9a-z-_]+)?"+  //.................................  = bookmark i.e. "index.html#stuff"
-                        ")",
-                        "gi"  //'global+ignore', replace all instances, ignore case sensitivity
+                           "(?::[0-9]{1,6})?"+  //.................................... optional port. e.g. "test.com:80"
+                           "(?:\\/[\\/0-9a-z_!~\\*'\\(\\)\\.;\\?:@&=\\+\\$,%-]*)?"+  //folder/files "test.com/e/index.html"
+                           "(?:#[0-9a-z-_]+)?"+  //................................... bookmark i.e. "index.html#stuff"
+                        ")(?=\\s|$)",  //............................................. must be followed by space or end line
+                        //'global+ignore', replace all instances, ignore case sensitivity
+                        "gi"
                 );
                 //replace URLs in the text with hyperlinks
-		//TODO: Prototype 1.6.0 will offer regex.escape
                 return s_msg.replace (regex, '<a href="http$1://$2" target="_blank">&lt;$3$4&hellip;&gt;</a>');
         },
         
@@ -277,9 +277,9 @@ shared.chat = {
            return * string : same text, but with markup replaced with relevant HTML tags
            =============================================================================================================== */
         applyMarkup : function (s_msg) {
-                return s_msg.replace (/\*(.*)\*/, '<strong>$1</strong>')        //"*bold*"
-                            .replace (/\/(.*)\//, '<em>$1</em>')                //"/italic/"
-                            .replace (/_(.*)_/,   '<span class="u">$1</span>')  //"_underline_"
+                return s_msg.replace (/\*(?!\s)([^\*]*?[^\s])\*/, '<strong>$1</strong>')        //"*bold*"
+                            .replace (/\/(?!\s)([^\/]*?[^\s])\//, '<em>$1</em>')                //"/italic/"
+                            .replace (/_(?!\s)([^_]*?[^\s])_/,    '<span class="u">$1</span>')  //"_underline_"
                 ;
         },
         
@@ -293,7 +293,7 @@ shared.chat = {
                 this._.emotes.each (function(o_emote){
                         //replace the emote with the image
                         s_msg = s_msg.replace (o_emote.regex, this._.templates.chat_emote.evaluate(o_emote));
-                }.bind(this));
+                }, this);
                 return s_msg;
         },
         

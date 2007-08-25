@@ -85,7 +85,7 @@ Hand.prototype = {
                         this.cards.each (function(s_card,n_index){
                                 //assign an animation to each card to shift it to the new position
                                 cardanims.push (new Effect.Move(this.element+'-'+s_card, {sync:true, x:cardpos[n_index+1], y:0, mode:'absolute'}));
-                        }.bind(this));
+                        }, this);
                 }
                 
                 //slide the card from the deck to the hand
@@ -93,10 +93,9 @@ Hand.prototype = {
                 var card    = this.cards.first (),
                     card_id = this.element + '-' + card
                 ;
-                new Insertion.Top (
-                        this.element,
-                        '<div id="'+card_id+'" class="card card-bk" style="left:5px;top:'+(this.host?-113:113)+'px;" ></div>'
-                );
+                $(this.element).insert ({
+                        top : '<div id="'+card_id+'" class="card card-bk" style="left:5px;top:'+(this.host?-113:113)+'px;" ></div>'
+                });
                 cardanims.push (new Effect.Move(card_id, {sync:true, x:cardpos[0], y:0, mode:'absolute', afterFinish:function(o_effect){
                         //flip the card over by switching to the face image (playerMe only)
                         if (this.host) {$(o_effect.element.id).className = "card card-" + card;}
@@ -180,8 +179,8 @@ Hand.prototype = {
                                 $("game-run-"+s_card).style.zIndex = n_index + 1;
                                 var move_to = cardpos[n_index] - parseInt ($("game-run-"+s_card).getStyle("left"), 10);
                                 anims.push (new Effect.Move("game-run-"+s_card, {sync:true, x:move_to, y:0}));
-                        }.bind(this));
-                        new Effect.Parallel (anims, {transition:Effect.Transitions.linear});
+                        }, this);
+                        new Effect.Parallel (anims);
                 }
                 
                 //slide the card over onto the run
@@ -204,7 +203,7 @@ Hand.prototype = {
                                         anims.push (new Effect.Move (this.element+'-'+s_card, {sync:true, x:cardpos[d], y:0, mode:'absolute'}));
                                         d++;
                                 }
-                        }.bind(this));
+                        }, this);
                         //animate all the cards at the same time
                         new Effect.Parallel (anims, {duration:0.5, afterFinish:function(){
                                 //once the animation is complete...

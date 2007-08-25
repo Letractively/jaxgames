@@ -35,6 +35,7 @@ var playerMe   = new Player (),  //the player on this computer
    ======================================================================================================================= */
 var game = {
         name    : "Othello",  //a user-seen name for your game. required, as used in `shared`
+        context : "othello",
         version : "0.3.0",
         
         board   : new Grid ("game-board"),  //the game board (default size of 8x8 will be used), see '_grid.js'
@@ -140,13 +141,13 @@ var game = {
                 //prepare the menu items: loop over each menu link
                 $("title-menu").immediateDescendants ().each (function(e_item){
                         //insert 2 white / 2 black pieces into each link
-                        new Insertion.Top (e_item,
-                                '<image src="images/black.png" width="40" height="40" class="left black" /><img src="images'+
+                        e_item.insert ({
+                                top : '<image src="images/black.png" width="40" height="40" class="left black" /><img src="images'+
                                 '/white.png" width="40" height="40" class="left white" style="position:absolute;left:136px;'+
                                 '" /><img src="images/white.png" width="40" height="40" class="right white" style="position'+
                                 ':absolute;left:336px;" /><image src="images/black.png" width="40" height="40" class="right'+
                                 ' black" />'
-                        );
+                        });
                 });
                 
                 //?/debug: leap straight into the game screen
@@ -161,7 +162,7 @@ var game = {
                 //please note: this function is called for you. when the user clicks the "Start Game" or "Join Game" button
                 //after entering their name & join key, `shared.(start/join)Connection` is called. when a connection is
                 //established between the two players, `game.start` is called for you
-                if (typeof b_mefirst == "undefined") {b_mefirst = shared.host;}  //default: host goes first
+                if (Object.isUndefined (b_mefirst)) {b_mefirst = shared.host;}  //default: host goes first
                 
                 shared.setTitle (playerMe.name+" v. "+playerThem.name+" - ");
                 shared.setPlayerStatus ();
@@ -240,9 +241,9 @@ var game = {
                                         if (result) {
                                                 //put a mark in the cell to show it as playable
                                                 var e = $(this.board.getCellId(result.x, result.y));
-                                                e.innerHTML = '<img src="images/spot.png" width="3" height="3" alt="Click '+
-                                                              'to place your piece here" />'
-                                                ;
+                                                e.update ('<img src="images/spot.png" width="3" height="3" alt="Click '+
+                                                          'to place your piece here" />'
+                                                );
                                                 //make the empty cell clickable so you can choose that square
                                                 //see `game.events` further down to continue following program flow
                                                 e.onclick     = this.events.playableCellClick;
@@ -297,7 +298,7 @@ var game = {
                     new_y      = n_y + this.board.directions[n_dir].y           //y location after step forward
                 ;
                 //is the next step out of range?
-                if ((new_x >= 0 && new_x < this.board.width) && (new_y >= 0 && new_y < this.board.height)) {
+                if ($R(0, this.board.width-1).include (new_x) && $R(0, this.board.height-1).include (new_y)) {
                         switch (this.pieces[new_x][new_y]) {
                                 //if the next square is the opponents, keep searching
                                 case piece_them:
@@ -337,31 +338,50 @@ var game = {
                 //change the cell first
                 var piece     = (b_self) ? playerMe.piece : playerThem.piece,
                     centre_id = this.board.getCellId (n_x,n_y),
-                    anims     = []
+                    anims     = [[], [], [], [], [], [], [centre_id]]
                 ;
                 //set your piece to the specified cell
                 this.pieces[n_x][n_y] = piece;
                 
-                //search all directions for bridges built, and change the pieces between into your own
-                for (var dir=0; dir<8; dir++) {
+                (8).times (function(n_dir){
                         //flip each piece in each direction that yields a valid move
-                        this.findBridge (b_self, n_x, n_y, dir, function(n_dir,n_x,n_y,n_dist){
+                        this.findBridge (b_self, n_x, n_y, n_dir, function(n_dir,n_x,n_y,n_dist){
                                 //set the piece to this cell
                                 this.pieces[n_x][n_y] = piece;
                                 //queue the cell for animation
-                                anims.push (this.board.getCellId(n_x,n_y));
+                                anims[6-n_dist].push (this.board.getCellId(n_x,n_y));
                                 //?/this.updateBoard ();
                         }.bind(this), true);
-                }
-                //loop over each cell in the queue...
-                anims.each (function(s_item){
-                        //...and animate the pieces being flipped
-                        this.flipPiece (s_item, piece);
                 }.bind(this));
-                //animate in the original piece this function was called for. this 
-                this.flipPiece (centre_id, piece);
+                
+                anims.each (function(a_cells){
+                        if (a_cells.length) {
+                                new Effect.Parallel (
+                                        a_cells.collect (function(s_cellid){
+                                                return this.flipPiece (s_cellid, piece);
+                                        }, this), {
+                                                duration : 1,
+                                                queue    : {position:'end', scope:'flipQueue'}
+                                        }
+                                );
+                        }
+                        
+                        // a_cells.each (function(s_cellid){
+                        //         this.flipPiece (s_cellid, piece);
+                        // }, this);
+                        
+                }, this);
+                
+                
+                // //loop over each cell in the queue...
+                // anims.each (function(s_item){
+                //         //...and animate the pieces being flipped
+                //         this.flipPiece (s_item, piece);
+                // }, this);
+                //animate in the original piece this function was called for.
+                //?/this.flipPiece (centre_id, piece);
                 //wait until all peices have flipped before continuing
-                new Effect.Event ({queue:{position:'end', scope:'flipPiece'}, afterFinish:function(){
+                new Effect.Event ({queue:{position:'end', scope:'flipQueue'}, afterFinish:function(){
                         //preempt the next move
                         this.preempt (!b_self);
                 }.bind(this)});
@@ -379,34 +399,32 @@ var game = {
                 var e = $(s_htmlid);
                 if (e.innerHTML == "") {
                         var piece = (s_piece == "X" ? "black" : "white");
-                        new Effect.Event ({afterFinish:function(){
-                                new Insertion.Top (e, '<image src="images/'+piece+'.png" width="40" height="40" alt="'+piece+'" />');
+                        return new Effect.Event ({sync:true, afterFinish:function(){
+                                e.insert ({top : '<image src="images/'+piece+'.png" width="40" height="40" alt="'+piece+'" />'});
                                 var e2 = e.down ();
-                                new Effect.Puff (e2, {transition:Effect.Transitions.reverse, duration:0.4, afterFinish:function(){
+                                new Effect.Puff (e2, {transition:Effect.Transitions.reverse, duration:0.5, afterFinish:function(){
                                         e2.show ();
                                         f_callback ();
-                                }, queue:{position:'end',scope:'flipPiece'}});
-                        }, queue:{position:'end',scope:'flipPiece'}});
+                                }});
+                        }});
                 } else {
                         var e1      = e.down (),
                             flip_to = (e1.alt == "white") ? "black" : "white"
                         ;
-                        new Insertion.After (e1, '<image src="images/'+flip_to+'.png" width="40" height="40" alt="'+flip_to+'" />');
+                        e1.insert ({after : '<image src="images/'+flip_to+'.png" width="40" height="40" alt="'+flip_to+'" />'});
                         var e2 = e1.next ();
-                        new Effect.Parallel ([
+                        return new Effect.Parallel ([
                                 new Effect.Puff (e1, {sync:true, beforeStart:function(o_effect){
                                         o_effect.render ();
                                 }}),
                                 new Effect.Puff (e2, {sync:true, transition: Effect.Transitions.reverse, afterFinish:function(){
-                                        e2.show ();
                                         e1.remove ();
+                                        e2.show ();
                                 }})
                         ], {
-                                duration    : 0.4,
-                                queue       : {position:'end',scope:'flipPiece'},
-                                afterFinish : function(){
-                                        f_callback ();
-                                }
+                                sync        : true,
+                                duration    : 1,
+                                afterFinish : f_callback
                         });
                 }
         },
@@ -461,7 +479,7 @@ var game = {
                         
                 } else if (!count.moves) {
                         //if there are no playable moves, skip go
-                        shared.headsup.show ("No available moves, turn skipped", 2);
+                        shared.headsup.show ("Opponent has no available moves, turn skipped", 3);
                         //TODO: apparently there is a rare condition where neither player can play
                         this.preempt (!b_self);
                         

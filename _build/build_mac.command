@@ -19,7 +19,7 @@
 # [1]: check dependencies - ensure everything this script needs to run is present, and any optional extras
 # [2]: create archive of source code - copy the current source to a new folder, and create an archive from it
 # [3]: create jax distribution - create an archive of just the jax library
-# [4]: combine javascript and css files - find files using `include`\`@import` and inject referenced files
+# [4]: combine javascript and css files - find files using `$import`\`@import` and inject referenced files
 # [5]: copy source to release directory - copy to release folder, removing all developer-only files
 # [6]: compact scripts - strip scripts of comments and spaces
 # [7]: compress scripts - heavily compress the scripts with Dean Edward's Packer
@@ -53,7 +53,7 @@ trap 'die "! script terminated"' INT TERM  #clean up if the user presses ^c
 
 clear 2>/dev/null  #ignore, as errors when running from TextMate
 echo "==============================================================================="
-echo "jaxgames build process                                                   v0.4.2"
+echo "jaxgames build process                                                   v0.4.3"
 echo "==============================================================================="
 
 # [1]:
@@ -172,7 +172,7 @@ echo ""
 echo "* combine game javascripts and css..."
 for FILE in `find -E ./release/source -regex "\.\/[^_]*\.(js|css)"`
 do
-	java -jar ./libs/custom_rhino.jar ./libs/rhino_include.js "$FILE"
+	java -jar ./libs/custom_rhino.jar ./libs/rhino_import.js "$FILE"
 	if [ $? -gt 0 ]; then echo "! combining of $FILE's dependecies failed"; exit 4; fi
 done
 echo "-------------------------------------------------------------------------------"
@@ -223,6 +223,8 @@ echo "--------------------------------------------------------------------------
 for FILE in `find ./release/jaxgames -size +4000c -regex "\.\/[^_]*\.js"`
 do
 	java -jar ./libs/custom_rhino.jar ./libs/rhino_packer.js "$FILE" "$FILE"
+	##YUICompressor can be used instead of DOJO's custom_rhino.jar
+	#java -jar ./libs/YUICompressor/Build/yuicompressor-1.0.jar --warn -o "$FILE" "$FILE"
 	if [ $? -gt 0 ]; then echo "! compressing of $FILE failed"; exit 7; fi
 done
 echo "-------------------------------------------------------------------------------"

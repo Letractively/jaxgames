@@ -16,8 +16,7 @@
    <tr>    = #element-row-Y    (where Y is the row number 1 to number of rows)
    <td>    = #element-cell-XxY (where X is the column number and Y is the row number. e.g. #element-cell-3x6)
 */
-var Grid = Class.create ();
-Grid.prototype = {
+var Grid = Class.create ({
         element : "",  //HTML ID to inject the grid into
         width   : 0,   //number of columns in the table
         height  : 0,   //number of rows
@@ -139,6 +138,6 @@ Grid.prototype = {
                         if (e.innerHTML != this.cells[x][y]) {e.update (this.cells[x][y]);}
                 } }
         }
-};
+});
    
 //=== end of line ===========================================================================================================

@@ -31,6 +31,7 @@ var playerMe   = new Player (),  //the player on this computer
    ======================================================================================================================= */
 var game = {
         name    : "Quadrop",
+        context : "quadrop",
         version : "0.1.0",
         
         grid   : new Grid ("game-grid", 7, 6),  //the game grid, a board of 7x6. see '_grid.js'

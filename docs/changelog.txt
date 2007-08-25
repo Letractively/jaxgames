@@ -1,7 +1,18 @@
 =============================================================================================================================
 Jax Games Changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+25.AUG.07
+    ADD: [Project] Renamed `include` function to `$import` (`$import`\`@import` is more consistent)
+    ADD: [Shared] Moved script tags to include game and shared near the bottom of the HTML, this will speed up page display
+         as the HTML will not be blocked by waiting for the download of the scripts
+    NEW: [Shared] Connection contexts used to prevent someone playing Othello, joining a Blacjax game, &c.
+    ADD: [Build] Upgraded to Packer 3.1a2
 09.AUG.07
+    FIX: [Shared] `Insertion.*` depreciated for `Element.insert` instead
+    FIX: [Shared] Removed focus rectangle from links! :D
+    ADD: [Shared] Improved URL linker to prevent "document.getElementID" appearing as hyperlink
+    ADD: [Shared] Improved chat formatting to ignore if spaces before delimiters e.g. "/ not italic/"
+    ADD: [Shared] Now using "contentloaded" event for onload, faster start up times
     ADD: [Project] Renamed 'boot.js' to '_bootfiles.js', and 'CONFIG.js' to '_CONFIG.js', then created new 'boot.js' to
          bootstrap the two. This now means that the entire libraries are in just one javascript file, not two
     ADD: [Shared] Upgraded to Prototype v1.6.0_pre1 and Scriptaculous 1.8.0_pre1 for defaults

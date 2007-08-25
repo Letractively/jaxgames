@@ -75,17 +75,17 @@ A: The best way to know is to look at the source code, but here is an overview o
           However, in most instances "games.js" is much like "boot.js", in that its only function is to load the other
           Javascript files the game actually uses. In the exmaple of Othello, the file looks like this:
           
-          include ("../-/_js/_grid.js");
-          include ("_othello.js");
+          $import ("../-/_js/_grid.js");
+          $import ("_othello.js");
           
-          The `include` Javascript function is defined in "boot.js", and simply loads another Javascript file.
-          In the build process however, Javascript files are scanned for this include function, and where it appears the
+          The `$import` Javascript function is defined in "boot.js", and simply loads another Javascript file.
+          In the build process however, Javascript files are scanned for this import function, and where it appears the
           line is replaced with the actual contents of the file referenced - therefore combining the Javascript files for
           the game into one file.
           
           The underscore before a filename is to denote that the file is source-code-only, and will not be included in the
           release build of the project since those particular files will have been combined into "game.js" and thus no longer
-          needed. Therefore, remember to always name files on the disk from the `include` function, with an underscore.
+          needed. Therefore, remember to always name files on the disk from the `$import` function, with an underscore.
           
           CSS files are also scanned, and if an `@import "_filename.css";` command is found then the referenced file is
           injected at that point.

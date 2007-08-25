@@ -39,9 +39,4 @@ var config = {
         use_bsod : true
 };
 
-//do not change this value. rhino is the java based javascript engine the build process runs on, which includes this script,
-//then overrides the below value (see "/_build/libs/rhino_makeboot.js") so that boot.js may use a different configuration
-//when building the compressed version of the project
-IN_RHINO = false;
-
 //=== end of line ===========================================================================================================

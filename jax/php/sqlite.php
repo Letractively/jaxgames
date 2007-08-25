@@ -27,6 +27,7 @@ $database = new SQLiteDB ($db_file);
 if ($request_type == "purge") {
 	if (sqlite_table_exists ("queue"))       $database->query ("DROP TABLE queue;");
 	if (sqlite_table_exists ("connections")) $database->query ("DROP TABLE connections;");
+	exit ();
 	
 } elseif ($request_type == "dump") {
 	dump_table ("queue");
@@ -48,6 +49,7 @@ if (sqlite_table_exists ("connections") == false) {
 	//create the connections table
 	$database->query ("CREATE TABLE connections (".
 		"connid   CHAR(6),".   //connection id for the player-to-payer connection
+		"context  CHAR(12),".  //connection context
 		"userid1  CHAR(32),".  //user id of host
 		"userid2  CHAR(32)".   //user id of client
 	");");

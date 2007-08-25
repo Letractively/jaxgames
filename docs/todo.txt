@@ -79,5 +79,6 @@ Website:
 =============================================================================================================================
 * A (Mac OS X Tiger) Dashboard Widget version that can play on a LAN hosted server, or public Internet server
 * A localisation system using PHP/JS to define the strings
+* iPhone version?
 
 === end of line =============================================================================================================

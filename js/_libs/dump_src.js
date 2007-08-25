@@ -27,7 +27,7 @@ var dump = function(o_var, b_showtypes, n_width, n_height) {
 	    leftPos = screen.width  ? (screen.width  - n_width)  / 2 : 0,
 	    topPos  = screen.height ? (screen.height - n_height) / 2 : 0,
 	    //list of Prototype functions to ignore. there may be a way to generate this automatically
-	    proto   = (!Prototype) ? "" : /each|eachSlice|all|any|collect|detect|findAll|grep|include|inGroupsOf|inject|invoke|max|min|partition|pluck|reject|sortBy|toArray|zip|inspect|find|select|member|entries|_reverse|clear|first|last|compact|flatten|without|reduce|uniq|clone|size/,
+	    proto   = (!Prototype) ? "" : /each|eachSlice|all|any|collect|detect|findAll|grep|include|inGroupsOf|inject|intersect|invoke|max|min|partition|pluck|reject|sortBy|toArray|toJSON|zip|inspect|find|select|member|entries|_reverse|clear|first|last|compact|flatten|without|reduce|uniq|clone|size/,
 	    //the javascript in the popup to open/close the blocks when you click them
 	    script  = 'function tRow(s){t=s.parentNode.lastChild;tTarget(t,tSource(s));}function tTable(s){var switchToState=tSource(s);var table=s.parentNode.parentNode;for (var i=1;i<table.childNodes.length;i++){t=table.childNodes[i];if(t.style){tTarget(t,switchToState);}}}function tSource(s){if(s.style.fontStyle=="italic"||s.style.fontStyle==null){s.style.fontStyle="normal";s.title="click to collapse";return "open";}else{s.style.fontStyle="italic";s.title="click to expand";return "closed";}}function tTarget(t,switchToState){if(switchToState=="open"){t.style.display="";}else{t.style.display="none";}}',
 	    //the CSS in the popup

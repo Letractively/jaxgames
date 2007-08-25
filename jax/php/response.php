@@ -25,9 +25,10 @@ switch ($request_type) {
 		//create an open slot for the new user. a connection id is generated, and the other person can join with this
 		$user_id = registerSession ();
 		$conn_id = getConnectionID ();
+		$context = request ('context');
 		
 		//save this to the database
-		$sql = "INSERT INTO connections (connid, userid1) VALUES ('$conn_id', '$user_id');";
+		$sql = "INSERT INTO connections (connid, context, userid1) VALUES ('$conn_id', '$context', '$user_id');";
 		$database->query ($sql) or die (json_encode(array(
 			'result' => 'false',
 			'error'  => "SQL error creating a jax connection: ".$database->error
@@ -52,6 +53,7 @@ switch ($request_type) {
 	case "jax_connect":  //==============================================================================================
 		$user_id = registerSession ();   //register your user id
 		$conn_id = request ('conn_id');  //the connection you wish to join
+		$context = request ('context');
 		
 		if (isConnectionIDValid ($conn_id) == false) {
 			$output['response'] = array (
@@ -60,42 +62,42 @@ switch ($request_type) {
 			
 		} else {
 			//find the connection to join in the database
-			$result = $database->query ("SELECT connid FROM connections WHERE connid='$conn_id';");
+			$result = $database->query ("SELECT connid FROM connections WHERE connid='$conn_id' AND context='$context';");
 			if ($database->num_rows ($result) == 0) {
 				//the connection was not found, return false
 				$output['response'] = array (
-					'result'  => false   //there was a problem with the request
+					'result' => false  //there was a problem with the request
 				);
-
+				
 			} else {
 				//join the host's connection
 				$database->query ("UPDATE connections SET userid2='$user_id' WHERE connid='$conn_id';");
-
+				
 				//get the other user's id
 				$result = $database->query ("SELECT userid1 FROM connections WHERE connid='$conn_id';");
 				list ($host_id) = $database->fetch_row ($result);
-
+				
 				//generate a response to the caller, passing back:
 				$output['response'] = array (
 					'result'  => true,
 					'user_id' => $user_id,
 					'host_id' => $host_id
 				);
-
+				
 				$data = json_decode ($_REQUEST['data']);
 				$data->user_id = $user_id;
 				$data = json_encode ($data);
-
+				
 				//put a message on the queue for them to say you've joined
 				addToQueue ($conn_id, $host_id, 'jax_join', $data);
-
+				
 				//get the data the host provided when the connection was created
 				$sql = "SELECT data FROM queue WHERE connid='$conn_id' AND whoto='AWAITING' AND type='init';";
 				$result = $database->query ($sql);
 				if ($database->num_rows ($result) > 0) {
 					list ($output['response']['data']) = $database->fetch_row ($result);
 					$output['response']['data'] = json_decode ($output['response']['data']);
-
+					
 					$sql = "DELETE FROM queue WHERE connid='$conn_id' AND whoto='AWAITING' AND type='init';";
 					$database->query ($sql);
 				};

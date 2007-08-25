@@ -1,9 +1,13 @@
 =============================================================================================================================
 Jax Changelog | NEW : New feature/code | ADD : Addition/change to existing code | FIX : Bug/problem fixed
 =============================================================================================================================
+25.AUG.07
+    BUG: Not disconnecting on window close
+    NEW: Connection context to prevent users joining the wrong game in Jax Games
+    ADD: Upgraded to Prototype 1.5.1.1
 25.MAY.07
     ADD: Depreciated "json.js" in favour of built in JSON parsing in Prototype 1.5.1
-    ADD: Upgraded to Scriptaculous 1.7.1_beta3 / Prototype 1.5.1
+    ADD: Upgraded to Prototype 1.5.1
 06.APR.07
     NEW: 'jax/docs/changelog.txt'
 05.APR.07

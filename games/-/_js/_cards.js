@@ -8,8 +8,7 @@
 /* =======================================================================================================================
    CLASS Pack - a standard pack of 54 playing cards. decks can be made of one or more of these
    ======================================================================================================================= */
-var Pack = Class.create ();
-Pack.prototype = {
+var Pack = Class.create ({
         cards : [],
         //10 is "X" because a card must be two letters only, face+suit
         faces : ["A", "2", "3", "4", "5", "6", "7", "8", "9", "X", "J", "Q", "K"],
@@ -25,7 +24,7 @@ Pack.prototype = {
                 ["S", "C", "D", "H"].each (function(s_suit){ this.faces.each (function(s_face){
                         //add the card to the deck
                         this.cards.push(s_face + s_suit);
-                }.bind(this)); }.bind(this));
+                }, this); }, this);
                 
                 //include Jokers?
                 if (b_jokers) {
@@ -67,14 +66,13 @@ Pack.prototype = {
                                      : (suit == "S" || suit == "C" ? "black" : "red")  //else Spades or Clubs = Black
                 ;
         }
-};
+});
 
 
 /* =======================================================================================================================
    CLASS Deck - a playing deck, which can have any number of cards
    ======================================================================================================================= */
-var Deck = Class.create ();
-Deck.prototype = {
+var Deck = Class.create ({
         cards : [],
         
         /* > initialize : constructor function, allow adding of packs to the deck upon class creation
@@ -106,7 +104,7 @@ Deck.prototype = {
                         //!/TODO: use merge or some better method here
                         o_pack.cards.each (function(s_card){
                                 this.cards.push (s_card);
-                        }.bind(this));
+                        }, this);
                         //if the parameter to shuffle each time is true, then.
                         if (b_shuffle) {this.shuffle ();}
                 }
@@ -125,6 +123,6 @@ Deck.prototype = {
         drawCard : function() {
                 return this.cards.pop ();
         }
-};
+});
 
 //=== end of line ===========================================================================================================

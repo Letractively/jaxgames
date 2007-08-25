@@ -7,10 +7,10 @@
    the build process will replace this file with the files below combined into one, and then compressed so that end users
    only have to download one compressed javascript file for the game
 */
-include ("../-/_js/_cards.js");
-include ("_classes.js");
-include ("_blacjax.js");
-include ("_events.js");
-include ("_run.js");
+$import ("../-/_js/_cards.js");
+$import ("_classes.js");
+$import ("_blacjax.js");
+$import ("_events.js");
+$import ("_run.js");
 
 //=== end of line ===========================================================================================================
