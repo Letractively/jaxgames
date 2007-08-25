@@ -7,7 +7,7 @@
    the build process will replace this file with the files below combined into one, and then compressed so that end users
    only have to download one compressed javascript file for the game
 */
-include ("../-/_js/_grid.js");
-include ("_othello.js");
+$import ("../-/_js/_grid.js");
+$import ("_othello.js");
 
 //=== end of line ===========================================================================================================

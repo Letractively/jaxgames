@@ -4,11 +4,6 @@
    licenced under the Creative Commons Attribution 3.0 License: http://creativecommons.org/licenses/by/3.0/
    Jax, Jax Games (c) copyright Kroc Camen 2005-2007. http://code.google.com/p/jaxgames/
 *//*
-   the code in this page only exists in the source code for jax games. the build system will create a 'release' version of
-   jax games where most of the scripts will be merged and compressed into a single file, replacing 'boot.js'
-   (see '_build/about.txt'). this means that users will have to download a lot less scripts, speeding up load times. also,
-   this means that additional developer only code and scripts can be loaded here, and will not appear in the release version.
-*//*
    the build system will take the following scripts and merge them into a replacement boot.js:
 
    + Prototype     : extends core javascript functionality to reduce the amount of genereal code everywhere
@@ -72,7 +67,7 @@ boot_files.push ("jax/jax.js", "js/_shared.js", "js/_chat.js", "js/_global.js");
 //now include all the scripts chosen above. not required in the build system, as it will take the `boot_files` array we've
 //built and compress them together. see '/_build/libs/rhino_makeboot.js'
 if (!IN_RHINO) {
-        for (boot_file in boot_files) { include ("../../"+boot_files[boot_file]); }
+        for (boot_file in boot_files) { $import ("../../"+boot_files[boot_file]); }
 }
 
 //=== end of line ===========================================================================================================

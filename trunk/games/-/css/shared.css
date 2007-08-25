@@ -51,7 +51,8 @@ h1 span {visibility: hidden;}
 #shared-headsup a         {margin: 2px 8px 8px 2px; padding: 4px 15px 4px 15px; font-size: 12px; font-weight: bold;
                            color: #49d; text-align: center; text-decoration: none; border: solid 2px #49d;
                            -moz-border-radius: 15px; -webkit-border-radius: 15px;}
-#shared-headsup a:hover   {background-color: #49d; color: black;}
+#shared-headsup a:hover,
+#shared-headsup a:focus   {background-color: #49d; color: black;}
 
 #shared-headsup input     {padding: 4px 8px 4px 8px; font: bold 14px "Courier New", monospace; color: #49d;
                            border: solid 2px #49d; -moz-border-radius: 15px; -webkit-border-radius: 15px;

@@ -1,6 +1,14 @@
 #!/usr/bin/env rhino
 ; //this semilcolon is here to allow the script to pass JSLint, which thinks the bang above is a javascript line
 
+importPackage (java.io);
+
+function writeFile (file, stream) {
+	var buffer = new PrintWriter (new FileWriter(file));
+	buffer.print (stream);
+	buffer.close ();
+}
+
 function formatFileSize (n_bytes) {
         if (n_bytes < 1024 ) {
                 return n_bytes + " b";

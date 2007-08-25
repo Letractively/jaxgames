@@ -38,6 +38,7 @@ var playerMe   = new Player ("game-nearhand", true),  //the player on this compu
    ======================================================================================================================= */
 var game = {
         name    : "Blacjax",
+        context : "blacjax",
         version : "0.5.0", 
         
         pack    : new Pack (true),  //the pack of cards that decks are made from (include Jokers)
@@ -65,8 +66,8 @@ var game = {
                 //please note: this function is called for you. when the user clicks the "Start Game" or "Join Game" button
                 //after entering their name & join key, `shared.(start/join)Connection` is called. when a connection is
                 //established between the two players, `game.start` is called for you
-                if (typeof b_mefirst == "undefined") {b_mefirst = shared.host;}  //default: host goes first
-                if (!n_cards)                        {n_cards   = 7;}            //default: 7 cards each
+                if (Object.isUndefined (b_mefirst)) {b_mefirst = shared.host;}  //default: host goes first
+                if (!n_cards)                       {n_cards   = 7;}            //default: 7 cards each
                 
                 shared.setTitle (playerMe.name+" v. "+playerThem.name+" - ");
                 shared.setPlayerStatus ();
@@ -249,7 +250,7 @@ var game = {
                         if (!b_self && !armed_run) {
                                 //display a heads-up message when the opponent has no playable cards, and the run is not
                                 //armed (they are not drawing a penalty, but a single card instead)
-                                shared.headsup.show ("No playable cards", 0.5, _drawCard);
+                                shared.headsup.show ("Opponent has no playable cards", 0.5, _drawCard);
                         } else {
                                 //otherwise just take a card
                                 _drawCard ();

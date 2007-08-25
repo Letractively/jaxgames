@@ -80,9 +80,7 @@ game.events = {
                                 new Effect.Parallel ([
                                         new Effect.Opacity (e, {sync:true, from:0.9, to:1.0}),
                                         new Effect.Move    (e, {sync:true, x:0, y:-15})
-                                ], {
-                                        transition:Effect.Transitions.linear}
-                                );
+                                ]);
                                 e.removeClassName ("card-disabled");
                         } else {
                                 //enabled cards, remove the interactivity

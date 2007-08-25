@@ -17,8 +17,7 @@ var jax = new Jax ("../../"+config.jax.path, config.jax.interval);
 
 /* EVENT > onload - when everything is loaded and we are ready to go...
    ======================================================================================================================= */
-//TODO: Prototype 1.6.0 will offer "contentloaded" event to run when the DOM is ready
-Event.observe (window, 'load', function(){
+document.observe ("contentloaded", function(){
         //this is essentially the starting point for Jax Games. after all the scripts have been loaded, this function will
         //put everything into motion. read further down this page for the definition of the `shared` object and functions
         
@@ -159,13 +158,13 @@ var shared = {
                         //if this is the page to be shown...
                         if (o_item.name == s_page) {
                                 //if there is a show function present for this page, run it
-                                if (typeof o_item.show == "function") {o_item.show ();}
+                                if (Object.isFunction (o_item.show)) {o_item.show ();}
                                 e.show ();
                         } else {
                                 //if the page is visible (thus needs to be hidden)
                                 if (e.visible ()) {
                                         //if there is a hide function present for this page, run it
-                                        if (typeof o_item.hide == "function") {o_item.hide ();}
+                                        if (Object.isFunction (o_item.hide)) {o_item.hide ();}
                                         e.hide ();
                                 }
                         }
@@ -181,6 +180,7 @@ var shared = {
                 
                 //create the game on the server
                 jax.open (
+                        game.context,
                         {name:playerMe.name},  //your chosen name
                         function(o_response){  //when the game starts, but the other player has not yet joined
                                 //if the server okay'd the new slot
@@ -213,9 +213,10 @@ var shared = {
                 this.headsup.show ("<p>Joining Game</p><p>Please Wait&hellip;</p>");
                 
                 //connect to the other player
-                jax.connect (s_joinkey,             //the connection key the user pasted into the text box
-                            {name: playerMe.name},  //your nickname to send to the other player
-                            this.events.gameBegins  //function to call once you've joined the game (see below)
+                jax.connect (s_joinkey,              //the connection key the user pasted into the text box
+                             game.context,           //the name of the game to restict the connection to
+                             {name: playerMe.name},  //your nickname to send to the other player
+                             this.events.gameBegins  //function to call once you've joined the game (see below)
                 );
         },
         
@@ -336,7 +337,6 @@ var shared = {
                                                 new Effect.Fade    (e1, {sync:true})
                                         ], {
                                                 duration    : 0.3,
-                                                transition  : Effect.Transitions.linear,
                                                 queue       : {position:'end', scope:'headsup', limit:3},
                                                 afterFinish : function(){
                                                         //hide and blank

@@ -7,7 +7,6 @@
 	<?php include ("../-/inc/head.html");?>
 	<!-- === this game ============================================================================================== -->
 	<link rel="stylesheet" type="text/css" href="game.css" /><!-- ........... styles for this game .................. -->
-	<script type="text/javascript" src="game.js">/* ......................... game logic .................... */</script>
 </head>
 <body><div id="body">
 	<h1><span>Quadrop</span></h1>
@@ -38,5 +37,6 @@
 		</div>
 	</div>
 	<?php include ("../-/inc/footer.html")?>
+	<script type="text/javascript" src="game.js">/* ......................... game logic .................... */</script>
 </div></body>
 <!-- === end of line ============================================================================================= --></html>

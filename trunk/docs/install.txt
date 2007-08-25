@@ -16,12 +16,12 @@ Note: Better support for Microsoft Windows will be coming at a later stage.
 [1] Instructions for Apple Mac OS X 'Tiger' users:
 =============================================================================================================================
 i)   Download the Mac OS X PHP 5 bundle from <http://www.entropy.ch/software/macosx/php/#install>
-     Choose the download labelled 'PHP 5.?.? for Apache 1.3' (version numbers will change over time)
+     Choose the download labelled 'PHP 5.2.? for Apache 1.3' (version numbers will change over time)
 
-ii)  Open the .tar.gz file (may happen automatically if you're using Safari)   
-     Open the "entropy-php.mpkg" installer and follow the steps to install PHP5 using the default options
+ii)  Open the '.tar.gz' file (may happen automatically if you're using Safari)   
+     Open the 'entropy-php.mpkg' installer and follow the steps to install PHP5 using the default options
 
-iii) Move the jaxgames folder that you unzipped/checked-out (and are looking at now ) to
+iii) Move the 'jaxgames' folder that you unzipped/checked-out (and are looking at now ) to
      'Macintosh HD > Library > WebServer > Documents'.
 
 iv)  The database folder must be write-able for Jax Games to function. Navigate into the 'jax' folder.
